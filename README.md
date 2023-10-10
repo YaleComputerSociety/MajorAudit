@@ -20,4 +20,6 @@ TODO
 
 ## Roadmap:
 
-TODO
+We use GitHub issues to track bugs and feature requests: [https://github.com/YaleComputerSociety/MajorAudit/issues](https://github.com/YaleComputerSociety/MajorAudit/issues).
+
+We use GitHub projects to manage everything and do planning: [https://github.com/orgs/YaleComputerSociety/projects/2/](https://github.com/orgs/YaleComputerSociety/projects/2/).
