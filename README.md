@@ -25,5 +25,5 @@ We use GitHub issues to track bugs and feature requests: [https://github.com/Yal
 We use GitHub projects to manage everything and do planning: [https://github.com/orgs/YaleComputerSociety/projects/2/](https://github.com/orgs/YaleComputerSociety/projects/2/).
 
 ## Tech Stack:
-Backend: Flask
+Backend: Flask  
 Frontend: React
