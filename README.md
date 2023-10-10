@@ -1,5 +1,14 @@
 # MajorAudit
 
+## Repository Layout
+
+The various functions of the website are compartmentalized as follows:
+
+- `/frontend`: The current face of the site, built with React.
+- `/backend`: The backend logic for the site, built with Flask.
+- `/docs`: Documentation
+
+
 ## Contributing
 
 ### Contributing code:
