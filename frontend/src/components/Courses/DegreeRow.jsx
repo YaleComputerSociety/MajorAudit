@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Row} from "react-bootstrap";
 import Course from "./Course";
-import DegreeData from "../data/DegreeData.json";
+import DegreeData from "../../data/DegreeData.json";
 
 function DegreeRow() {
     const Data = [

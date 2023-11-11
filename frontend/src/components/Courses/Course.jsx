@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { Col, Row, Modal, Button, Container } from "react-bootstrap";
-import CourseData from "../data/Courses.json";
+import CourseData from "../../data/Courses.json";
 
 // const Courses = [
 //     {
