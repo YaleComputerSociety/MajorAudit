@@ -60,18 +60,18 @@ function MajorRequirements() {
             <Card.Body>
                 <Tab.Container id="tabs" defaultActiveKey="first">
                     <Row>
-                    <Col><h1>Requirements</h1></Col>
-                    <Col>
-                        <Nav variant="pills" className="nav-pills" id="pills-tab">
-                            <Nav.Item>
-                                <Nav.Link eventKey="first">List View</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="second">Graph View</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
+                        <Col><h1>Requirements</h1></Col>
+                        <Col>
+                            <Nav variant="pills" className="nav-pills" id="pills-tab">
+                                <Nav.Item>
+                                    <Nav.Link eventKey="first">List View</Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link eventKey="second">Graph View</Nav.Link>
+                                </Nav.Item>
+                            </Nav>
                         </Col>
-                        </Row>
+                    </Row>
                     <Tab.Content>
                         <Tab.Pane eventKey="first">
                             <div className="requirements-tab">
