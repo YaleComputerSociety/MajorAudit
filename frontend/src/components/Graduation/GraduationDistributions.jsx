@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button, ButtonGroup, ButtonToolbar, Row, Col, Tab, Container, Nav } from "react-bootstrap";
+import { Card, Button, ButtonGroup, ButtonToolbar, Row, Col, Tab, Container, Nav, Badge } from "react-bootstrap";
 
 function GraduationDistributions() {
 
@@ -28,9 +28,9 @@ function GraduationDistributions() {
                     </Row>
                     <Tab.Content>
                         <Tab.Pane eventKey="first-year">
-                            <Container>
+                            <Container id="areas">
                                 <Row>
-                                    <Col>
+                                    <Col md="3">
                                         <Row>
                                             <h2>
                                                 Areas
@@ -38,21 +38,27 @@ function GraduationDistributions() {
                                         </Row>
                                         <Row>
                                             <b>
-                                                Hu - Humanities & Art
+                                                <Badge bg="secondary">
+                                                    Hu - Humanities & Art
+                                                </Badge>
                                             </b>
                                         </Row>
                                         <Row>
                                             <b>
-                                                So - Social Sciences
+                                                <Badge bg="secondary">
+                                                    So - Social Sciences
+                                                </Badge>
                                             </b>
                                         </Row>
                                         <Row>
                                             <b>
-                                                Sc - Sciences
+                                                <Badge bg="secondary">
+                                                    Sc - Sciences
+                                                </Badge>
                                             </b>
                                         </Row>
                                     </Col>
-                                    <Col>
+                                    <Col md="2">
                                         <Row>
                                             <h2>
                                                 Credits
@@ -74,7 +80,7 @@ function GraduationDistributions() {
                                             </b>
                                         </Row>
                                     </Col>
-                                    <Col>
+                                    <Col md="6">
                                         <Row>
                                             <h2>
                                                 Courses
@@ -82,28 +88,146 @@ function GraduationDistributions() {
                                         </Row>
                                         <Row>
                                             <Container>
-                                                <Col>
-                                                    <b>
-                                                        LING 191
-                                                    </b>
-                                                </Col>
-                                                <Col>
-                                                    <b>
-                                                        ARCH 306
-                                                    </b>
-                                                </Col>
+                                                <Row>
+                                                    <Col md="3">
+                                                        <b>
+                                                            LING 191
+                                                        </b>
+                                                    </Col>
+                                                    <Col md="3">
+                                                        <b>
+                                                            ARCH 306
+                                                        </b>
+                                                    </Col>
+                                                </Row>
                                             </Container>
                                         </Row>
                                         <Row>
-
+                                            <Container>
+                                                <Row>
+                                                    <Col>
+                                                        <b>
+                                                            &nbsp;
+                                                        </b>
+                                                    </Col>
+                                                </Row>
+                                            </Container>
                                         </Row>
                                         <Row>
                                             <Container>
-                                                <Col>
-                                                    <b>
-                                                        CGSC 274
-                                                    </b>
-                                                </Col>
+                                                <Row>
+                                                    <Col>
+                                                        <b>
+                                                            CGSC 274
+                                                        </b>
+                                                    </Col>
+                                                </Row>
+                                            </Container>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                </Row>
+                            </Container>
+                            <Container id="skills">
+                                <Row>
+                                    <Col md="3">
+                                        <Row>
+                                            <h2>
+                                                Skills
+                                            </h2>
+                                        </Row>
+                                        <Row>
+                                            <b>
+                                                <Badge bg="secondary">
+                                                    QR - Quantitative Reasoning
+                                                </Badge>
+                                            </b>
+                                        </Row>
+                                        <Row>
+                                            <b>
+                                                <Badge bg="secondary">
+                                                    WR - Writing
+                                                </Badge>
+                                            </b>
+                                        </Row>
+                                        <Row>
+                                            <b>
+                                                <Badge bg="secondary">
+                                                    L - Language
+                                                </Badge>
+                                            </b>
+                                        </Row>
+                                    </Col>
+                                    <Col md="2">
+                                        <Row>
+                                            <h2>
+                                                Credits
+                                            </h2>
+                                        </Row>
+                                        <Row>
+                                            <b>
+                                                1/1
+                                            </b>
+                                        </Row>
+                                        <Row>
+                                            <b>
+                                                0/1
+                                            </b>
+                                        </Row>
+                                        <Row>
+                                            <b>
+                                                1/1
+                                            </b>
+                                        </Row>
+                                    </Col>
+                                    <Col md="6">
+                                        <Row>
+                                            <h2>
+                                                Courses
+                                            </h2>
+                                        </Row>
+                                        <Row>
+                                            <Container>
+                                                <Row>
+                                                    <Col md="3">
+                                                        <b>
+                                                            NCSI 258
+                                                        </b>
+                                                    </Col>
+                                                    <Col md="3">
+                                                        <b>
+                                                            CPSC 223
+                                                        </b>
+                                                    </Col>
+                                                </Row>
+                                            </Container>
+                                        </Row>
+                                        <Row>
+                                            <Container>
+                                                <Row>
+                                                    <Col>
+                                                        <b>
+                                                            &nbsp;
+                                                        </b>
+                                                    </Col>
+                                                </Row>
+                                            </Container>
+                                        </Row>
+                                        <Row>
+                                            <Container>
+                                                <Row>
+                                                    <Col md="3">
+                                                        <b>
+                                                            KREN 110
+                                                        </b>
+                                                    </Col>
+                                                    <Col md="3">
+                                                        <b>
+                                                            KREN 120
+                                                        </b>
+                                                    </Col>
+                                                </Row>
                                             </Container>
                                         </Row>
                                     </Col>
