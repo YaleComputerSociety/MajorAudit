@@ -33,7 +33,7 @@ function Course({ course }) {
                             <h1>{course}</h1>
                         </div>
                     </button>
-                    {console.log(findCourse(course)[0].title)}
+                    {/* {console.log(findCourse(course)[0].title)} */}
                 </div>
                 {/* {Courses.map(course => (
                     <div className="course-item">

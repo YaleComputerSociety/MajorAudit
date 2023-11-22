@@ -1,1 +1,5 @@
-{"CPSC 223": [{ "title": "CPSC 223", "description": "Blah blah 223", "prereqs": "CPSC 201"}], "CPSC 365": [{ "title": "CPSC 365", "description": "Blah blah 365", "prereqs": "CPSC 223"}]}
+{"CPSC 223": [{ "title": "CPSC 223", "description": "Blah blah 223", "prereqs": "CPSC 201"}], 
+"CPSC 202/MATH 244": [{ "title": "CPSC 202/MATH 224", "description": "Blah blah 223", "prereqs": "CPSC 201"}],
+"CPSC 323": [{ "title": "CPSC 323", "description": "Blah blah 223", "prereqs": "CPSC 201"}],
+"CPSC 365 / CPSC 366 / CPSC 368": [{ "title": "CPSC 365/CPSC 366/CPSC 368", "description": "Blah blah 223", "prereqs": "CPSC 201"}],
+"CPSC 201": [{ "title": "CPSC 201", "description": "Blah blah 223", "prereqs": "CPSC 201"}]}

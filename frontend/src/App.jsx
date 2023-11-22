@@ -2,7 +2,6 @@ import React from "react";
 import DegreeDropdown from "./components/Courses/DegreeDropdown";
 import NavBar from "./components/NavBar";
 import Majors from "./pages/Majors";
-import Graduation from "./pages/Graduation";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Graduation from "./components/Graduation/Graduation";
 

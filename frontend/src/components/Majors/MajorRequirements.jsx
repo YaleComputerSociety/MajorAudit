@@ -2,6 +2,7 @@ import React from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Card from 'react-bootstrap/Card';
 import { Row, Col, Nav } from 'react-bootstrap';
+import Course from '../Courses/Course';
 
 function MajorRequirements() {
     const electiveDescription = 'The field of computer science has broadened substantially in the last few decades and the Computer Science department advises its majors to choose intermediate and advanced electives covering the breadth of computer science, including theoretical computer science; computer systems and languages(e.g., database, networking, operating systems, programming languages, and systems security); and computer applications (e.g., artificial intelligence, computer graphics, computer vision, human-computer interactions, machine learning, natural language processing, and robotics).'; // add in code for backend
@@ -42,28 +43,36 @@ function MajorRequirements() {
                             <div className="requirements-tab">
                                 <h1>CORE</h1>
                                 <ul>
-                                    {courses.map((course => 
-                                        <li>{course}</li>
+                                    {courses.map((course =>
+                                        <Row>
+                                            <Course course={course} />
+                                        </Row>
                                     ))}
                                 </ul>
                                 <h1>Electives</h1>
                                 <p>{electiveDescription}</p>
                                 <h2>Likely</h2>
                                 <ul>
-                                    {likely.map((course => 
-                                        <li>{course}</li>
+                                    {likely.map((course =>
+                                        <Row>
+                                            <Course course={course} />
+                                        </Row>
                                     ))}
                                 </ul>
                                 <h2>Popular</h2>
                                 <ul>
-                                    {popular.map((course => 
-                                        <li>{course}</li>
+                                    {popular.map((course =>
+                                        <Row>
+                                            <Course course={course} />
+                                        </Row>
                                     ))}
                                 </ul>
                                 <h1>SENIOR REQUIREMENT</h1>
                                 <ul>
-                                    {seniorRequirement.map((course => 
-                                        <li>{course}</li>
+                                    {seniorRequirement.map((course =>
+                                        <Row>
+                                            <Course course={course} />
+                                        </Row>
                                     ))}
                                 </ul>
                             </div>
