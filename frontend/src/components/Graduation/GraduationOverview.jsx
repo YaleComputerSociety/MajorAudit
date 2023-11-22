@@ -1,13 +1,204 @@
 import React from "react";
-import { Card } from "react-bootstrap";
+import { Card, Container, Row, Col, Tab, Badge } from "react-bootstrap";
 
 function GraduationOverview() {
-  return (
-    <Card style={{ width: "50rem" }}>
-      <Card.Title>Overview</Card.Title>
-      <Card.Body>This is some text within a card body.</Card.Body>
-    </Card>
-  );
+    return (
+        <Card>
+            <Card.Body>
+                <Container>
+                    <Row>
+                        <h1>
+                            Overview
+                        </h1>
+                    </Row>
+                    <Row>
+                        <Row>
+                            <Col>
+                                <h3>
+                                    MAJOR
+                                </h3>
+                            </Col>
+                            <Col>
+                                <h3>
+                                    5/12
+                                </h3>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <h4>
+                                <Badge bg="secondary">COGNITIVE SCIENCE</Badge>
+                            </h4>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <b>
+                                    PREQ
+                                </b>
+                            </Col>
+                            <Col>
+                                <b>
+                                    BREADTH
+                                </b>
+                            </Col>
+                            <Col>
+                                <b>
+                                    DEPTH
+                                </b>
+                            </Col>
+                            <Col>
+                                <b>
+                                    SKILLS
+                                </b>
+                            </Col>
+                            <Col>
+                                <b>
+                                    JUN
+                                </b>
+                            </Col>
+                            <Col>
+                                <b>
+                                    SEN
+                                </b>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <b>
+                                    1/1
+                                </b>
+                            </Col>
+                            <Col>
+                                <b>
+                                    1/4
+                                </b>
+                            </Col>
+                            <Col>
+                                <b>
+                                    2/6
+                                </b>
+                            </Col>
+                            <Col>
+                                <b>
+                                    1/1
+                                </b>
+                            </Col>
+                            <Col>
+                                <b>
+                                    0/0.5
+                                </b>
+                            </Col>
+                            <Col>
+                                <b>
+                                    0/0.5
+                                </b>
+                            </Col>
+                        </Row>
+                    </Row>
+                    <Row>
+                        <Row>
+                            <Col>
+                                <h3>
+                                    DISTRIBUTIONS
+                                </h3>
+                            </Col>
+                            <Col>
+                                <h3>
+                                    7/13
+                                </h3>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Row>
+                                    <h4>
+                                        AREAS
+                                    </h4>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <b>
+                                            <Badge bg="secondary">Hu</Badge>
+                                        </b>
+                                    </Col>
+                                    <Col>
+                                        <b>
+                                            <Badge bg="secondary">So</Badge>
+                                        </b>
+                                    </Col>
+                                    <Col>
+                                        <b>
+                                            <Badge bg="secondary">Sc</Badge>
+                                        </b>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <b>
+                                            2/2
+                                        </b>
+                                    </Col>
+                                    <Col>
+                                        <b>
+                                            0/2
+                                        </b>
+                                    </Col>
+                                    <Col>
+                                        <b>
+                                            1/2
+                                        </b>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col>
+                                <Row>
+                                    <h4>
+                                        SKILLS
+                                    </h4>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <b>
+                                            <Badge bg="secondary">QR</Badge>
+                                        </b>
+                                    </Col>
+                                    <Col>
+                                        <b>
+                                            <Badge bg="secondary">WR</Badge>
+                                        </b>
+                                    </Col>
+                                    <Col>
+                                        <b>
+                                            <Badge bg="secondary">L</Badge>
+                                        </b>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <b>
+                                            2/2
+                                        </b>
+                                    </Col>
+                                    <Col>
+                                        <b>
+                                            0/2
+                                        </b>
+                                    </Col>
+                                    <Col>
+                                        <b>
+                                            2/3
+                                        </b>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                    </Row>
+                    <Row>
+
+                    </Row>
+                </Container>
+            </Card.Body>
+        </Card>
+    );
 }
 
 export default GraduationOverview;

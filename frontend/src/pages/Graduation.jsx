@@ -1,9 +1,21 @@
-import React from "react";
-import Graduation from "../components/Graduation/Graduation";
+import React from 'react';
+import GraduationDistributions from '../components/Graduation/GraduationDistributions';
+import GraduationOverview from '../components/Graduation/GraduationOverview';
+import { Container, Row, Col } from "react-bootstrap";
 
-function GraduationPage() {
+function Graduation() {
     return (
-        <Graduation />
+        <section classname='Graduation' id='graduation'>
+            <Container>
+                <Col>
+                    <GraduationOverview></GraduationOverview>
+                </Col>
+                <Col>
+                    <GraduationDistributions></GraduationDistributions>
+                </Col>
+            </Container>
+        </section>
     );
-};
-export default GraduationPage;
+}
+
+export default Graduation;
