@@ -1,35 +1,41 @@
 import React from "react";
 import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
 import Card from 'react-bootstrap/Card';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Nav } from 'react-bootstrap';
 
 function MajorTitle() {
+    const majorName = 'Computer Science'; //add in code for backend
+    const dus = 'Y. Richard Yang, 432-6400, AKW 208A; cpsc.yale.edu'; //add in code for backend
+    const majorOptions = ["B.A", "B.S"]; // add in code for backend
+
     return (
         <Card>
             <Card.Body>
-                <Card.Title>
+                <Tab.Container id="tabs" defaultActiveKey="first">
                     <Row>
+                        <Col><h1>{majorName}</h1></Col>
                         <Col>
-                            <h1>Computer Science</h1>
-                        </Col>
-                        <Col>
-                            <Tabs
-                                dafaultActiveKey="B.S"
-                                id="bs-tab"
-                            >
-                                <Tab eventKey="B.A" title="B.A">
-                                    <h1>DUS</h1>
-                                    <h2>Y.Richard Yang, 432-6400, AKW 208A; cpsc.yale.edu</h2>
-                                </Tab>
-                                <Tab eventKey="B.S" title="B.S">
-                                    <h1>DUS</h1>
-                                    <h2>Y.Richard Yang, 432-6400, AKW 208A; cpsc.yale.edu</h2>
-                                </Tab>
-                            </Tabs>
+                            <Nav variant="pills" className="nav-pills" id="pills-tab">
+                                <Nav.Item>
+                                    <Nav.Link eventKey="first">{majorOptions[0]}</Nav.Link>
+                                </Nav.Item>
+                                {majorOptions.length == 2 ? <Nav.Item>
+                                    <Nav.Link eventKey="second">{majorOptions[1]}</Nav.Link>
+                                </Nav.Item> : <></>}
+                            </Nav>
                         </Col>
                     </Row>
-                </Card.Title>
+                    <Tab.Content>
+                        <Tab.Pane eventKey="first">
+                            <h1>DUS</h1>
+                            <h2>{dus}</h2>
+                        </Tab.Pane>
+                        {majorOptions.length == 2 ? <Tab.Pane eventKey="second">
+                            <h1>DUS</h1>
+                            <h2>{dus}</h2>
+                        </Tab.Pane> : <></>}
+                    </Tab.Content>
+                </Tab.Container>
             </Card.Body>
         </Card>
     );
