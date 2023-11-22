@@ -3,6 +3,7 @@ import DegreeDropdown from "./components/Courses/DegreeDropdown";
 import NavBar from "./components/NavBar";
 import Majors from "./pages/Majors";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Graduation from "./components/Graduation/Graduation";
 
 function App() {
     return (
@@ -10,7 +11,7 @@ function App() {
             <div className="App">
                 <NavBar />
                 <Routes>
-                    <Route path='/' element={<DegreeDropdown />} />
+                    <Route path='/' element={<Graduation />} />
                     <Route path='/majors' element = {<Majors />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
