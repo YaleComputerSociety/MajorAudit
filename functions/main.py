@@ -75,7 +75,10 @@ def login():
             #     cookies['user_name']=info[1]
             # else:
             #     redirect_url='/new_user'
-            return make_response(f'Hello {session["CAS_USERNAME"]}. Login Successful.')
+            if '127.0.0.1' in service:
+                redirect_url='http://127.0.0.1:5000'
+            else:
+                redirect_url='https://majoraudit.web.app/'
             # cookies['user_name'] = info[1]
         else:
             token=session['CAS_TOKEN']
