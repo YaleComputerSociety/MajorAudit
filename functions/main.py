@@ -87,6 +87,11 @@ def login():
     return resp
 
 
+@app.get('/url_test')
+def url_test():
+    return make_response(request.url)
+
+
 # @https_fn.on_request()
 # def validate(req: https_fn.Request) -> https_fn.Response:
 def validate(ticket):
@@ -133,3 +138,14 @@ def validate(ticket):
 def functions(req: https_fn.Request) -> https_fn.Response:
     with app.request_context(req.environ):
         return app.full_dispatch_request()
+
+
+@https_fn.on_request()
+def get_url(req: https_fn.Request) -> https_fn.Response:
+    response = https_fn.Response(req.url)
+    return response
+
+@https_fn.on_request()
+def hello_world(req: https_fn.Request) -> https_fn.Response:
+    response = https_fn.Response('hello world')
+    return response
