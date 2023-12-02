@@ -9,6 +9,7 @@ from flask import redirect, session, current_app, make_response, Flask, request,
 from xmltodict import parse
 import secrets
 import datetime
+import re
 
 initialize_app()
 
@@ -37,8 +38,10 @@ def login():
 
     # redirect_url = '''https://secure.its.yale.edu/cas/login?service=http%3A%2F%2F127.0.0.1%3A5001%2Fmajoraudit%2Fus-central1%2Fvalidate'''
     # return redirect(redirect_url)
+    service=get_redirect_url()
+    # login_url=f'''https://secure.its.yale.edu/cas/login?service=http%3A%2F%2F127.0.0.1%3A5001%2Fmajoraudit%2Fus-central1%2Ffunctions%2Fuser_login'''
+    login_url=f'''https://secure.its.yale.edu/cas/login?service={service}'''
 
-    login_url='''https://secure.its.yale.edu/cas/login?service=http%3A%2F%2F127.0.0.1%3A5001%2Fmajoraudit%2Fus-central1%2Ffunctions%2Fuser_login'''
     redirect_url=login_url
     cookies={}
 
@@ -65,7 +68,8 @@ def login():
 
     if 'CAS_TOKEN' in session:
         redirect_url = '/'
-        if validate(session['CAS_TOKEN']):
+        validation=validate(session['CAS_TOKEN'], service)
+        if validation[0]:
             # if info:=get_player_info(session['CAS_USERNAME']):
             #     redirect_url='/'
             #     cookies['user_name']=info[1]
@@ -78,7 +82,7 @@ def login():
             del session['CAS_TOKEN']
             if "CAS_USERNAME" in session:
                 del session["CAS_USERNAME"]
-            return make_response(f'failure to validate: {token}')
+            return make_response(f'failure to validate: {token} at url {validation[1]}')
 
     current_app.logger.info(f'redirecting to {redirect_url}')
     resp=make_response(redirect(redirect_url))
@@ -89,28 +93,52 @@ def login():
 
 @app.get('/url_test')
 def url_test():
-    return make_response(request.url)
+    return make_response(f'{request.url}\n {get_base_url()}')
 
 
 # @https_fn.on_request()
 # def validate(req: https_fn.Request) -> https_fn.Response:
-def validate(ticket):
-    validation_url = f'https://secure.its.yale.edu/cas/serviceValidate?service=http%3A%2F%2F127.0.0.1%3A5001%2Fmajoraudit%2Fus-central1%2Ffunctions%2Fuser_login&ticket={ticket}'
+def validate(ticket, service):
+    validation_url = f'https://secure.its.yale.edu/cas/serviceValidate?service={service}&ticket={ticket}'
     current_app.logger.info(f'attempting to validate login credentials at {validation_url}')
     val_xml = urlopen(validation_url).read().strip().decode('utf8', 'ignore')
     val_dic = parse(val_xml)
 
     if "cas:authenticationSuccess" not in val_dic["cas:serviceResponse"]:
-        return False
+        return False, validation_url
 
     val_dic = val_dic["cas:serviceResponse"]["cas:authenticationSuccess"]
     username = val_dic["cas:user"]
     session["CAS_USERNAME"] = username
     session['CAS_ATTRIBUTES'] = val_dic["cas:attributes"]
 
-    return True
+    return True,
 
 
+def get_base_url():
+     url=request.url
+
+     base_url=re.search('https?://[^/]+', url)
+
+     if base_url:
+         return base_url.group()
+
+     return 'no url found'
+
+
+def get_redirect_url():
+    url = request.url
+    if '?' in url:
+        url=url[:url.find('?')]
+
+    function_loc=url.rfind('/')
+
+    if '127.0.0.1' in url:
+        url = url[:function_loc] + '/majoraudit/us-central1/functions' + url[function_loc:]
+    else:
+        url=url[:function_loc]+'/functions'+url[function_loc:]
+
+    return url
 # @https_fn.on_request()
 # @app.get('/session_login')
 # def session_login(req: https_fn.Request) -> https_fn.Response:
@@ -140,12 +168,10 @@ def functions(req: https_fn.Request) -> https_fn.Response:
         return app.full_dispatch_request()
 
 
-@https_fn.on_request()
-def get_url(req: https_fn.Request) -> https_fn.Response:
-    response = https_fn.Response(req.url)
-    return response
+
 
 @https_fn.on_request()
 def hello_world(req: https_fn.Request) -> https_fn.Response:
     response = https_fn.Response('hello world')
     return response
+
