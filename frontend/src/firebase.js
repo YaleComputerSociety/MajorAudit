@@ -1,16 +1,17 @@
 // Import the functions you need from the SDKs you need
+require('dotenv/config');
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDzG2qKNQr81aZ1R5E-RUEiBiQE0UvD-5Q",
+  apiKey: process.env.API_KEY,
   authDomain: "majoraudit.firebaseapp.com",
   databaseURL: "https://majoraudit-default-rtdb.firebaseio.com",
   projectId: "majoraudit",
   storageBucket: "majoraudit.appspot.com",
-  messagingSenderId: "86576012950",
-  appId: "1:86576012950:web:0741ea8799220ec7796cb7",
-  measurementId: "G-72S8M8XKQ6"
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  appId: process.env.APP_ID,
+  measurementId: process.env.MEASUREMENT_ID
 };
 
 // Initialize Firebase
