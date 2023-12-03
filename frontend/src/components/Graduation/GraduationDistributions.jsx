@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Button, ButtonGroup, ButtonToolbar, Row, Col, Tab, Container, Nav, Badge } from "react-bootstrap";
+import SkillBadge from "../SkillBadge";
 
 function GraduationDistributions() {
 
@@ -38,23 +39,17 @@ function GraduationDistributions() {
                                         </Row>
                                         <Row>
                                             <b>
-                                                <Badge bg="secondary">
-                                                    Hu - Humanities & Art
-                                                </Badge>
+                                                <SkillBadge text="Hu - Humanities" />
                                             </b>
                                         </Row>
                                         <Row>
                                             <b>
-                                                <Badge bg="secondary">
-                                                    So - Social Sciences
-                                                </Badge>
+                                                <SkillBadge text="So - Social Sciences" />
                                             </b>
                                         </Row>
                                         <Row>
                                             <b>
-                                                <Badge bg="secondary">
-                                                    Sc - Sciences
-                                                </Badge>
+                                                <SkillBadge text="Sc - Sciences" />
                                             </b>
                                         </Row>
                                     </Col>
@@ -139,23 +134,17 @@ function GraduationDistributions() {
                                         </Row>
                                         <Row>
                                             <b>
-                                                <Badge bg="secondary">
-                                                    QR - Quantitative Reasoning
-                                                </Badge>
+                                                <SkillBadge text="QR - Quantitative Reasoning" />
                                             </b>
                                         </Row>
                                         <Row>
                                             <b>
-                                                <Badge bg="secondary">
-                                                    WR - Writing
-                                                </Badge>
+                                                <SkillBadge text="WR - Writing" />
                                             </b>
                                         </Row>
                                         <Row>
                                             <b>
-                                                <Badge bg="secondary">
-                                                    L - Language
-                                                </Badge>
+                                                <SkillBadge text="L - Language" />
                                             </b>
                                         </Row>
                                     </Col>

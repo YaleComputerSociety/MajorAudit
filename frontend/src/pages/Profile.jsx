@@ -1,13 +1,13 @@
 import React from "react";
 
-function Courses() {
+function Profile() {
     return (
         <div>
             <b>
-                courses page
+                profile page
             </b>
         </div>
     );
 }
 
-export default Courses;
+export default Profile;

@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Container, Row, Col, Tab, Badge } from "react-bootstrap";
+import SkillBadge from "../SkillBadge";
 
 function GraduationOverview() {
     return (
@@ -115,38 +116,16 @@ function GraduationOverview() {
                                     </h4>
                                 </Row>
                                 <Row>
-                                    <Col>
-                                        <b>
-                                            <Badge bg="secondary">Hu</Badge>
-                                        </b>
-                                    </Col>
-                                    <Col>
-                                        <b>
-                                            <Badge bg="secondary">So</Badge>
-                                        </b>
-                                    </Col>
-                                    <Col>
-                                        <b>
-                                            <Badge bg="secondary">Sc</Badge>
-                                        </b>
-                                    </Col>
+                                    <b>
+                                        <SkillBadge text="Hu" />
+                                        <SkillBadge text="So" />
+                                        <SkillBadge text="Sc" />
+                                    </b>
                                 </Row>
                                 <Row>
-                                    <Col>
-                                        <b>
-                                            2/2
-                                        </b>
-                                    </Col>
-                                    <Col>
-                                        <b>
-                                            0/2
-                                        </b>
-                                    </Col>
-                                    <Col>
-                                        <b>
-                                            1/2
-                                        </b>
-                                    </Col>
+                                    <b>
+                                        2/2 0/2 1/2
+                                    </b>
                                 </Row>
                             </Col>
                             <Col>
@@ -158,17 +137,17 @@ function GraduationOverview() {
                                 <Row>
                                     <Col>
                                         <b>
-                                            <Badge bg="secondary">QR</Badge>
+                                            <SkillBadge text="QR" />
                                         </b>
                                     </Col>
                                     <Col>
                                         <b>
-                                            <Badge bg="secondary">WR</Badge>
+                                            <SkillBadge text="WR" />
                                         </b>
                                     </Col>
                                     <Col>
                                         <b>
-                                            <Badge bg="secondary">L</Badge>
+                                            <SkillBadge text="L" />
                                         </b>
                                     </Col>
                                 </Row>

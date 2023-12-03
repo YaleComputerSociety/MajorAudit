@@ -4,6 +4,7 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 // import { HashLink } from 'react-router-hash-link';
 
 
+
 function NavBar() {
     const [isDarkMode, setIsDarkMode] = useState('dark');
 
@@ -54,6 +55,7 @@ function NavBar() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
+
         </section>
     );
 };

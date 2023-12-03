@@ -7,12 +7,14 @@ function Graduation() {
     return (
         <section classname='Graduation' id='graduation'>
             <Container>
-                <Col>
-                    <GraduationOverview></GraduationOverview>
-                </Col>
-                <Col>
-                    <GraduationDistributions></GraduationDistributions>
-                </Col>
+                <Row>
+                    <Col md="8">
+                        <GraduationOverview></GraduationOverview>
+                    </Col>
+                    <Col md="10">
+                        <GraduationDistributions></GraduationDistributions>
+                    </Col>
+                </Row>
             </Container>
         </section>
     );
