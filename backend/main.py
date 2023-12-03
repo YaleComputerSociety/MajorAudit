@@ -1,85 +1,79 @@
-# Welcome to Cloud Functions for Firebase for Python!
-# To get started, simply uncomment the below code or create your own.
-# Deploy with `firebase deploy`
 from urllib.request import urlopen
+import sys
+import datetime
 
 from firebase_functions import https_fn
 from firebase_admin import initialize_app,  auth, exceptions
-from flask import redirect, session, current_app, make_response, Flask, request, jsonify, abort
+from flask import redirect, session, current_app, make_response, Flask, request, jsonify, abort, render_template
 from xmltodict import parse
 import secrets
 import datetime
 import re
 
-initialize_app()
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
+# Use a service account.
+cred = credentials.Certificate('D:\\code\\firebase_key\\majoraudit-firebase-adminsdk-bc6kc-6d9a0c8214.json')
+app = firebase_admin.initialize_app(cred)
+
+db = firestore.client()
+
+class User:
+    def __init__(self, netID, courses):
+        self.netID = netID
+        self.courses = courses
 
 app = Flask(__name__)
 
 app.secret_key = secrets.token_urlsafe(16)
-# app.run()
-# print('TESTTESTTETSTETSTETSTESTETST')
-# raise Exception(app.secret_key)
 
 @app.get('/sanity')
 def sanity():
     return make_response('sanity')
 
-# @app.get('/login')
-# def log():
-#     return make_response('login')
-
-
-# @https_fn.on_request()
 @app.get('/user_login')
 def login():
-# def login(req: https_fn.Request) -> https_fn.Response:
-#     return make_response('logging in')
-    # response=https_fn.Response()
+    print(request.cookies, flush=True)
+    netid = request.cookies.get('netid')
+    print("netid", netid)
+    if netid:
+        return redirect('/dashboard')
 
-    # redirect_url = '''https://secure.its.yale.edu/cas/login?service=http%3A%2F%2F127.0.0.1%3A5001%2Fmajoraudit%2Fus-central1%2Fvalidate'''
-    # return redirect(redirect_url)
     service=get_redirect_url()
-    # login_url=f'''https://secure.its.yale.edu/cas/login?service=http%3A%2F%2F127.0.0.1%3A5001%2Fmajoraudit%2Fus-central1%2Ffunctions%2Fuser_login'''
     login_url=f'''https://secure.its.yale.edu/cas/login?service={service}'''
 
     redirect_url=login_url
     cookies={}
 
     if 'ticket' in request.args:
-        # try:
-        #     # session['CAS_TOKEN']=req.args['ticket']
-        #     cas_token=auth.create_session_cookie(req.args['ticket'])
-        #     cookies['CAS_TOKEN']=cas_token
-        # except Exception:
-        #     return https_fn.Response(app.secret_key)
         session['CAS_TOKEN'] = request.args['ticket']
-        # return make_response(str(session))
-        # return make_response('success')
-
-        # try:
-        #     session['CAS_TOKEN'] = req.args['ticket']
-        # except Exception:
-        #     return make_response(session)
-
-        # id_token = request.form['idToken']
-        # # cas_token = auth.create_session_cookie(req.args['ticket'], expires_in=datetime.timedelta(days=5))
-        # cas_token = auth.create_session_cookie(id_token, expires_in=datetime.timedelta(days=5))
-        # cookies['CAS_TOKEN'] = cas_token
+        print(session['CAS_TOKEN'], file=sys.stderr)
 
     if 'CAS_TOKEN' in session:
         redirect_url = '/'
         validation=validate(session['CAS_TOKEN'], service)
         if validation[0]:
-            # if info:=get_player_info(session['CAS_USERNAME']):
-            #     redirect_url='/'
-            #     cookies['user_name']=info[1]
-            # else:
-            #     redirect_url='/new_user'
+            print("username", validation[1])
+            
+            user = User(validation[1], "")
+            if db.collection("Users").document(validation[1]).get().exists:
+                pass
+            else:
+                db.collection("Users").document(validation[1]).set(user.__dict__)
+
             if '127.0.0.1' in service:
                 redirect_url='http://127.0.0.1:5000'
             else:
                 redirect_url='https://majoraudit.web.app/'
-            # cookies['user_name'] = info[1]
+
+            response = make_response(redirect('/dashboard'))
+            expires = datetime.datetime.now() + datetime.timedelta(days=30)
+            response.set_cookie('netid', user.netID, expires=expires, path='/')
+
+            return response
+
         else:
             token=session['CAS_TOKEN']
             del session['CAS_TOKEN']
@@ -93,19 +87,62 @@ def login():
         resp.set_cookie(c, cookies[c])
     return resp
 
+@app.get('/dashboard')
+def dashboard():
+    netid = request.cookies.get('netid')
+    if not netid:
+        return redirect('/user_login')
+    return render_template('dashboard.html', netid=netid)
+
+@app.route('/sync_data', methods=['POST'])
+def sync_data():
+    netid = request.cookies.get('netid')
+    if not netid:
+        return redirect('/user_login')
+    data = request.json
+    user = User(netid, data)
+    db.collection("Users").document(netid).set(user.__dict__)
+    print(data, flush=True)
+
+    return 'Data received'
+
+@app.route('/get_data', methods=['GET'])
+def get_data():
+    netid = request.cookies.get('netid')
+    if not netid:
+        return jsonify({'error': 'User not logged in'}), 401
+    data = db.collection("Users").document(netid).get()
+    if not data.exists:
+        data = "No data"
+    data = data._data['courses']
+    if data == "":
+        data = "No data"
+    print("get", data, flush=True)
+    return data
+
+@app.route('/logout')
+def logout():
+    service="127.0.0.1:5000/login"
+    response = make_response(redirect(f'https://secure.its.yale.edu/cas/logout'))
+    response.set_cookie('netid', '', expires=0, path='/') 
+    return response
+
 
 @app.get('/url_test')
 def url_test():
     return make_response(f'{request.url}\n {get_base_url()}')
 
+@app.get('/sync')
+def sync():
+    True
 
-# @https_fn.on_request()
-# def validate(req: https_fn.Request) -> https_fn.Response:
 def validate(ticket, service):
     validation_url = f'https://secure.its.yale.edu/cas/serviceValidate?service={service}&ticket={ticket}'
     current_app.logger.info(f'attempting to validate login credentials at {validation_url}')
     val_xml = urlopen(validation_url).read().strip().decode('utf8', 'ignore')
     val_dic = parse(val_xml)
+
+    print("valid ",val_dic, flush=True)
 
     if "cas:authenticationSuccess" not in val_dic["cas:serviceResponse"]:
         return False, validation_url
@@ -115,7 +152,7 @@ def validate(ticket, service):
     session["CAS_USERNAME"] = username
     session['CAS_ATTRIBUTES'] = val_dic["cas:attributes"]
 
-    return True,
+    return True, username
 
 
 def get_base_url():
@@ -130,11 +167,20 @@ def get_base_url():
 
 
 def get_redirect_url():
+    return "http://127.0.0.1:5000/user_login"
     url = request.url
+    #return url
     if '?' in url:
+        return "http://127.0.0.1:5000/"
         url=url[:url.find('?')]
+    else:
+        return "http://127.0.0.1:5000/user_login"
+#    else:
+#        return url
 
     function_loc=url.rfind('/')
+
+    #return url[:function_loc]
 
     if '127.0.0.1' in url:
         url = url[:function_loc] + '/majoraudit/us-central1/functions' + url[function_loc:]
@@ -142,6 +188,7 @@ def get_redirect_url():
         url=url[:function_loc]+'/functions'+url[function_loc:]
 
     return url
+
 # @https_fn.on_request()
 # @app.get('/session_login')
 # def session_login(req: https_fn.Request) -> https_fn.Response:
@@ -169,9 +216,6 @@ def get_redirect_url():
 def functions(req: https_fn.Request) -> https_fn.Response:
     with app.request_context(req.environ):
         return app.full_dispatch_request()
-
-
-
 
 @https_fn.on_request()
 def hello_world(req: https_fn.Request) -> https_fn.Response:
