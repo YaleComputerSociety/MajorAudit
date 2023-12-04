@@ -36,7 +36,7 @@ def sanity():
 @app.get('/user_login')
 def login():
     print(request.cookies, flush=True)
-    netid = request.cookies.get('netid')
+    netid = session['NETID']
     print("netid", netid)
     if netid:
         return redirect('/dashboard')
@@ -77,8 +77,8 @@ def login():
         else:
             token=session['CAS_TOKEN']
             del session['CAS_TOKEN']
-            if "CAS_USERNAME" in session:
-                del session["CAS_USERNAME"]
+            if "NETID" in session:
+                del session["NETID"]
             return make_response(f'failure to validate: {token} at url {validation[1]}')
 
     current_app.logger.info(f'redirecting to {redirect_url}')
@@ -89,14 +89,14 @@ def login():
 
 @app.get('/dashboard')
 def dashboard():
-    netid = request.cookies.get('netid')
+    netid = session['NETID']
     if not netid:
         return redirect('/user_login')
     return render_template('dashboard.html', netid=netid)
 
 @app.route('/sync_data', methods=['POST'])
 def sync_data():
-    netid = request.cookies.get('netid')
+    netid = session['NETID']
     if not netid:
         return redirect('/user_login')
     data = request.json
@@ -108,7 +108,7 @@ def sync_data():
 
 @app.route('/get_data', methods=['GET'])
 def get_data():
-    netid = request.cookies.get('netid')
+    netid = session['NETID']
     if not netid:
         return jsonify({'error': 'User not logged in'}), 401
     data = db.collection("Users").document(netid).get()
@@ -149,7 +149,7 @@ def validate(ticket, service):
 
     val_dic = val_dic["cas:serviceResponse"]["cas:authenticationSuccess"]
     username = val_dic["cas:user"]
-    session["CAS_USERNAME"] = username
+    session["NETID"] = username
     session['CAS_ATTRIBUTES'] = val_dic["cas:attributes"]
 
     return True, username
