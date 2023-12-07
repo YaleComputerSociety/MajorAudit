@@ -8,7 +8,7 @@ function Graduation() {
         <section classname='Graduation' id='graduation'>
             <Container>
                 <Row>
-                    <Col md="8">
+                    <Col md="6">
                         <GraduationOverview></GraduationOverview>
                     </Col>
                     <Col md="10">

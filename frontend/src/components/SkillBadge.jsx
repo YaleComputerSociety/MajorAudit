@@ -7,7 +7,6 @@ import styles from "./SkillBadge.module.css"
 export default function SkillBadge({ text, hidden }) {
 
     var skill = text.substring(0, 2).replace(" ", "");
-    console.log(skill);
     return (
         <Badge
             variant="secondary"

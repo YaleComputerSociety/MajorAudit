@@ -1,0 +1,38 @@
+.font1 {
+    font-size: 2rem;
+}
+
+.font2 {
+    color: grey;
+    font-size: 1.4rem;
+}
+
+.majorBadge {
+    color: black;
+    font-weight: 500;
+    bg: red;
+}
+
+.font3 {
+    color: grey;
+    font-weight: 350;
+}
+
+.font4 {
+    font-weight: 350;
+}
+
+.font5 {
+    color: grey;
+    font-size: 1rem;
+}
+
+.card {
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 25px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
