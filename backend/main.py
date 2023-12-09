@@ -15,7 +15,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 
 # Use a service account.
-cred = credentials.Certificate('D:\\code\\firebase_key\\majoraudit-firebase-adminsdk-bc6kc-6d9a0c8214.json')
+cred = credentials.Certificate(r'C:\YCS\majoraudit-firebase-adminsdk-bc6kc-28ffa999e0.json')
 app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -25,7 +25,7 @@ class User:
         self.netID = netID
         self.courses = courses
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 app.secret_key = secrets.token_urlsafe(16)
 
@@ -35,11 +35,12 @@ def sanity():
 
 @app.get('/user_login')
 def login():
-    print(request.cookies, flush=True)
-    netid = session['NETID']
-    print("netid", netid)
-    if netid:
-        return redirect('/dashboard')
+    # print(request.cookies, flush=True)
+    # netid = session['NETID']
+    # print("netid", netid)
+    if 'NETID' in session:
+        print('sanity', file=sys.stderr)
+        return redirect('/majoraudit/us-central1/functions/dashboard')
 
     service=get_redirect_url()
     login_url=f'''https://secure.its.yale.edu/cas/login?service={service}'''
@@ -68,9 +69,9 @@ def login():
             else:
                 redirect_url='https://majoraudit.web.app/'
 
-            response = make_response(redirect('/dashboard'))
+            response = make_response(redirect('/majoraudit/us-central1/functions/dashboard'))
             expires = datetime.datetime.now() + datetime.timedelta(days=30)
-            response.set_cookie('netid', user.netID, expires=expires, path='/')
+            # response.set_cookie('netid', user.netID, expires=expires, path='/')
 
             return response
 
@@ -167,20 +168,11 @@ def get_base_url():
 
 
 def get_redirect_url():
-    return "http://127.0.0.1:5000/user_login"
     url = request.url
-    #return url
     if '?' in url:
-        return "http://127.0.0.1:5000/"
         url=url[:url.find('?')]
-    else:
-        return "http://127.0.0.1:5000/user_login"
-#    else:
-#        return url
 
     function_loc=url.rfind('/')
-
-    #return url[:function_loc]
 
     if '127.0.0.1' in url:
         url = url[:function_loc] + '/majoraudit/us-central1/functions' + url[function_loc:]
