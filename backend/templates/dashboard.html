@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <button onclick="syncData()">Sync Data</button>
+    <button onclick="getData()">Get Data</button>
+    <button onclick="window.location.href='/logout'">Log Out</button>
+    <h1>Hello, {{ netid }}</h1>
+    <div id="dataDisplay"></div>
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+</body>
+</html>

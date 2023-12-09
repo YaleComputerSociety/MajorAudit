@@ -1,0 +1,23 @@
+{
+	"manifest_version": 3,
+	"name": "Degree Audit Scraper",
+	"version": "1.0",
+	"permissions": ["tabs", "activeTab", "scripting"],
+	"content_scripts": [
+		{
+			"matches": ["https://degreeaudit.yale.edu/responsive/worksheets/WEB31"],
+			"js": ["degreeAuditContent.js"]
+		},
+		{
+			"matches": ["http://127.0.0.1:5000/dashboard"],
+			"js": ["majorAuditContent.js"]
+		}
+	],
+	"host_permissions": [
+		"https://degreeaudit.yale.edu/responsive/worksheets/WEB31",
+		"http://localhost:8000/*"
+	],
+	"background": {
+	  "service_worker": "background.js"
+	}
+  }
