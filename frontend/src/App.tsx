@@ -1,10 +1,13 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import Providers from "./Providers";
 import Router from "./Router";
 
 function App() {
-  return <Router />;
+  return (
+    <Providers>
+      <Router />
+    </Providers>
+  );
 }
 
 export default App;
