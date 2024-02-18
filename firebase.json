@@ -9,7 +9,7 @@
         "firebase-debug.log",
         "firebase-debug.*.log"
       ],
-      "requirements": "functions/requirements.txt"
+      "requirements": "backend/requirements.txt"
     }
   ],
   "database": {

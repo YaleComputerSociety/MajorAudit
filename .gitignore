@@ -164,3 +164,4 @@ courses.json
 
 # firebase stuff
 .firebase
+secrets

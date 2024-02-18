@@ -56,7 +56,12 @@
 
       function setup(){
         $('#login').click(function (){
-          location.href = "http://127.0.0.1:5001/majoraudit/us-central1/functions/user_login";
+          if (window.location.href.includes("127.0.0.1")){
+            location.href = "http://127.0.0.1:5001/majoraudit/us-central1/functions/user_login";
+          }
+          else{
+            location.href = "https://us-central1-majoraudit.cloudfunctions.net/functions/user_login"
+          }
         });
       }
 

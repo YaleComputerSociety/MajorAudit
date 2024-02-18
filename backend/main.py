@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 import sys
 import datetime
+import os
 
 from firebase_functions import https_fn
 from firebase_admin import initialize_app,  auth, exceptions
@@ -15,7 +16,11 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 
 # Use a service account.
-cred = credentials.Certificate(r'C:\YCS\majoraudit-firebase-adminsdk-bc6kc-28ffa999e0.json')
+# with open(r'C:\YCS\MajorAudit/cwd.txt', 'w') as outfile:
+#     outfile.write(os.getcwd())
+
+
+cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-f15a5f23e2.json')
 app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -65,15 +70,15 @@ def login():
                 db.collection("Users").document(validation[1]).set(user.__dict__)
 
             if '127.0.0.1' in service:
-                redirect_url='http://127.0.0.1:5000'
+                redirect_url='http://127.0.0.1:5000/dashboard'
             else:
-                redirect_url='https://majoraudit.web.app/'
+                redirect_url='https://majoraudit.web.app/dashboard'
 
-            response = make_response(redirect('/majoraudit/us-central1/functions/dashboard'))
-            expires = datetime.datetime.now() + datetime.timedelta(days=30)
+            # response = make_response(redirect('/majoraudit/us-central1/functions/dashboard'))
+            # expires = datetime.datetime.now() + datetime.timedelta(days=30)
             # response.set_cookie('netid', user.netID, expires=expires, path='/')
 
-            return response
+            # return response
 
         else:
             token=session['CAS_TOKEN']
@@ -207,6 +212,7 @@ def get_redirect_url():
 @https_fn.on_request()
 def functions(req: https_fn.Request) -> https_fn.Response:
     with app.request_context(req.environ):
+        pass
         return app.full_dispatch_request()
 
 @https_fn.on_request()
