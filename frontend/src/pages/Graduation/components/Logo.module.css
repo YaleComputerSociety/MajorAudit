@@ -1,0 +1,17 @@
+.majorauditLogo {
+  font-family: YaleDesign, Garamond, "Palatino Linotype", Palatino, Bookman,
+    serif;
+  display: inline-block;
+  line-height: 1rem;
+}
+
+.majorauditLogoImg {
+  height: 1em;
+  width: auto;
+}
+
+.majorauditLogoWordmark {
+  height: 0.6em;
+  width: auto;
+  margin-top: -0.1em;
+}

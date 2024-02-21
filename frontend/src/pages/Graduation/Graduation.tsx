@@ -1,10 +1,12 @@
 import React from "react";
 import DistributionBox from "./components/DistributionBox";
+import Navbar from "./components/Navbar";
 import { skillsAreasColors } from './utilities/constants';
 
 export default function Graduation() {
   return (
     <div>
+      <Navbar />
       <DistributionBox
         text="Hu - Humanities & Arts"
         textColor={skillsAreasColors["Hu"]}
