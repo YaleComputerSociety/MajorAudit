@@ -1,0 +1,9 @@
+
+.Requirements {
+    display: flex;
+    border-radius: 25px;
+    width: 400px;
+    height: 800px;
+    background-color: aquamarine;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}

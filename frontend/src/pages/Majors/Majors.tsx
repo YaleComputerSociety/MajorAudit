@@ -1,5 +1,13 @@
 import React from "react";
+import styles from "./Majors.module.css";
 
-export default function Majors() {
-  return <div>Majors Page Darwin waz here</div>;
-}
+export const Majors = () => 
+{
+  return (
+    <div className={styles.Requirements}>
+        Hello
+    </div>
+  );
+};
+
+export default Majors;
