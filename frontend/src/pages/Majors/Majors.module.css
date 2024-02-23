@@ -2,8 +2,18 @@
 .Requirements {
     display: flex;
     border-radius: 25px;
-    width: 400px;
-    height: 800px;
-    background-color: aquamarine;
+    width: 450px;
+    height: 450px;
+    background-color: white;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.FloatRight {
+    float: right;
+    margin-right: 100px;
+    margin-top: 200px;
+}
+
+.ReqSub {
+    color: grey;
 }
