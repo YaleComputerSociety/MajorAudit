@@ -29,12 +29,22 @@ export const MockData: Major = {
       coursesTotal: 5,
       subsections: [
         {
+          courses: [{ name: "CPSC 201" }],
+        },
+        {
+          courses: [{ name: "CPSC 202" }, { name: "MATH 244" }],
+        },
+        {
+          courses: [{ name: "CPSC 223" }],
+        },
+        {
+          courses: [{ name: "CPSC 323" }],
+        },
+        {
           courses: [
-            { name: "CPSC 201" },
-            { name: "CPSC 202" },
-            { name: "CPSC 223" },
-            { name: "CPSC 323" },
             { name: "CPSC 365" },
+            { name: "CPSC 366" },
+            { name: "CPSC 368" },
           ],
         },
       ],
