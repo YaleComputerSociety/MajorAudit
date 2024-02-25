@@ -1,42 +1,45 @@
-
-interface Course{
-
+interface Course {
+  name: string;
 }
 
-interface DUS{
-    name: string;
-    address: string;
-    email: string;
+interface DUS {
+  name: string;
+  address: string;
+  email: string;
 }
 
-interface MajorMetadata{
-    name: string;
-    courses: number;
-    rating: number;
-    workload: number;
-    type: string;
-    students: number;
-    about: string;
-    dus: DUS;
-    catologLink: string;
-    wesbiteLink: string;
+interface MajorMetadataStats {
+  courses: number;
+  rating: number;
+  workload: number;
+  type: string;
 }
 
-interface MajorRequirementsSubsection{
-    type: string;
-    courses: Array<Course>;
+interface MajorMetadata {
+  name: string;
+  abbreviation: string;
+  stats: MajorMetadataStats;
+  students: number;
+  about: string;
+  dus: DUS;
+  catologLink: string;
+  wesbiteLink: string;
 }
 
-interface MajorRequirements{
-    name: string;
-    coursesCompleted: number;
-    coursesTotal: number;
-    description: string;
-    subsections: Array<MajorRequirementsSubsection>;
+interface MajorRequirementsSubsection {
+  name?: string;
+  courses: Array<Course>;
 }
 
-export interface Major{
-    metadata: MajorMetadata;
-    requirements: MajorRequirements;
+interface MajorRequirements {
+  name: string;
+  coursesCompleted: number;
+  coursesTotal: number;
+  description?: string;
+  subsections: Array<MajorRequirementsSubsection>;
 }
 
+export interface Major {
+  metadata: MajorMetadata;
+  requirements: Array<MajorRequirements>;
+}
