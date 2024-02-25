@@ -3,6 +3,13 @@ import sys
 import datetime
 import os
 
+from flask import make_response
+
+from firebase_functions import firestore_fn, https_fn 
+from firebase_admin import initialize_app, firestore 
+import google.cloud.firestore
+from firebase_functions import https_fn, options
+
 from firebase_functions import https_fn
 from firebase_admin import initialize_app,  auth, exceptions
 from flask import redirect, session, current_app, make_response, Flask, request, jsonify, abort, render_template
@@ -20,7 +27,7 @@ from firebase_admin import firestore
 #     outfile.write(os.getcwd())
 
 
-cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-f15a5f23e2.json')
+cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-7f4d0e1e3b.json')
 app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -220,3 +227,52 @@ def hello_world(req: https_fn.Request) -> https_fn.Response:
     response = https_fn.Response('hello world')
     return response
 
+@https_fn.on_request()
+def get_data(req: https_fn.Request) -> https_fn.Response:
+    if req.method == 'OPTIONS':
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '3600',
+        }
+        return make_response('', 204, headers)
+    headers = {
+        'Access-Control-Allow-Origin': '*',
+    }
+    response_body = "DEFAULT"
+
+    data = db.collection("Users").document("jy692").get()
+
+    if not data.exists:
+        response_body = jsonify("No data")
+    else:
+        response_body = jsonify(data.to_dict())
+
+    return make_response((response_body, 200, headers))
+
+@https_fn.on_request()
+def sync_data(req: https_fn.Request) -> https_fn.Response:
+
+    if req.method == 'OPTIONS':
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '3600',
+        }
+        return make_response('', 204, headers)
+    
+    headers = {
+        'Access-Control-Allow-Origin': '*',
+    }
+
+    #netid = session['NETID']
+    #if not netid:
+    #    return redirect('/user_login')
+    data = request.json
+    user = User("jy692", data)
+    db.collection("Users").document("jy692").set(user.__dict__)
+    print(data, flush=True)
+
+    return make_response(('Data received', 200, headers))
