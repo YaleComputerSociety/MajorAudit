@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.Container {
+    margin: 2% 0% 3% 2%;
+}
+.Row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.5%;
+}
+
+.Column {
+    display: flex;
+    flex-direction: column;
+    margin-right: 2%;
+    width: 100%;
+}
+
+.Grade {
+    font-weight: 600;
+    font-size:larger;
+    margin-right: 0.5%;
+}
+
+.Year {
+    font-size:small;
+    font-weight: 600;
+    color: #727272;
+    vertical-align: bottom;
+}
+
+.Course {
+    border-radius: 25px;
+    background-color: #E1E9F8;
+    margin-bottom: 0.5%;
+    padding: 1%;
+}
