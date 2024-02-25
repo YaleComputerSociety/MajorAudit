@@ -6,11 +6,13 @@ import MajorBox from "./components/MajorBox";
 export const Majors = () => 
 {
   return(
-    <div>
-    <MajorBox/>
-    <div>
-      <ReqBoxAll/>
-    </div>
+    <div className={styles.container}>
+      <div className={styles.majorContent}>
+        <MajorBox/>
+      </div>
+      <div className={styles.reqsContent}>
+        <ReqBoxAll/>
+      </div>
     </div>
   );
 };
