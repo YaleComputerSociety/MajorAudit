@@ -95,7 +95,7 @@ def login():
 
 @app.get('/dashboard')
 def dashboard():
-    netid = session['NETID']
+    netid = session['NETID'] 
     if not netid:
         return redirect('/user_login')
     return render_template('dashboard.html', netid=netid)
@@ -220,3 +220,8 @@ def hello_world(req: https_fn.Request) -> https_fn.Response:
     response = https_fn.Response('hello world')
     return response
 
+@https_fn.on_request()
+def check_login(req: https_fn.Request) -> https_fn.Response:
+    if 'NETID' in session:
+        return jsonify(session['NETID'])
+    return jsonify()
