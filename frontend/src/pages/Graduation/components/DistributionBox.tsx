@@ -1,12 +1,13 @@
 import React from "react";
 import chroma from "chroma-js"
+import { skillsAreasColors } from '../utilities/constants';
 
 type Props = {
   readonly text: string;
-  readonly textColor: string;
 };
 
-export default function DistributionBox({ text, textColor }: Props) {
+export default function DistributionBox({ text }: Props) {
+  const textColor = skillsAreasColors[text];
   return (
     <div
       style={{
