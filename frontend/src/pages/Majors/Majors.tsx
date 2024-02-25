@@ -7,10 +7,10 @@ export const Majors = () =>
 {
   return(
     <div className={styles.container}>
-      <div className={styles.majorContent}>
+      <div>
         <MajorBox/>
       </div>
-      <div className={styles.reqsContent}>
+      <div>
         <ReqBoxAll/>
       </div>
     </div>
