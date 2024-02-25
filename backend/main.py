@@ -243,3 +243,5 @@ def sync_data(req: https_fn.Request) -> https_fn.Response:
     print(data, flush=True)
 
     return make_response(('Data received', 200, headers))
+
+#test
