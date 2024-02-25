@@ -4,10 +4,10 @@ import YearBox from "./components/YearBox";
 export default function Courses() {
   return (
     <div>
-      <YearBox text="First Year"/>
-      <YearBox text="Sophmore"/>
-      <YearBox text="Junior"/>
-      <YearBox text="Senior"/>
+      <YearBox grade="First Year"/>
+      <YearBox grade="Sophomore"/>
+      <YearBox grade="Junior"/>
+      <YearBox grade="Senior"/>
     </div>
   );
 }

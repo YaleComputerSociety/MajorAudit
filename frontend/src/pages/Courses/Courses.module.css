@@ -1,12 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 .Container {
-    margin: 2% 0% 3% 2%;
+    margin: 2% 0% 2% 2%;
 }
 .Row {
     display: flex;
     flex-direction: row;
-    margin-bottom: 0.5%;
 }
 
 .Column {
@@ -16,22 +15,50 @@
     width: 100%;
 }
 
+.MetadataColumn {
+    font-size:small;
+    display: flex;
+    flex-direction: column;
+    margin-right: 1%;
+}
+
+.MetadataHeading {
+    color: #727272;
+    margin-bottom: 2px;
+}
+
+.MetadataBox {
+    border: 1px solid #C2C2C2;
+    color: #727272;
+    font-weight: 600;
+    width: 40px;
+    text-align: center
+}
+
+.Season {
+    margin-right: 1.5%;
+    margin-left: 1%;
+}
+
+.CourseCode {
+    font-size: small;
+    font-weight: 600;
+}
+
+.CourseName {
+    font-size: x-small;
+}
+
 .Grade {
     font-weight: 600;
-    font-size:larger;
+    font-size:x-large;
     margin-right: 0.5%;
 }
 
 .Year {
-    font-size:small;
+    font-size:medium;
     font-weight: 600;
     color: #727272;
-    vertical-align: bottom;
-}
-
-.Course {
-    border-radius: 25px;
-    background-color: #E1E9F8;
-    margin-bottom: 0.5%;
-    padding: 1%;
+    align-self:flex-end;
+    margin-bottom: 2.5px;
 }
