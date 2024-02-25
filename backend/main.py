@@ -100,39 +100,6 @@ def login():
         resp.set_cookie(c, cookies[c])
     return resp
 
-@app.get('/dashboard')
-def dashboard():
-    netid = session['NETID']
-    if not netid:
-        return redirect('/user_login')
-    return render_template('dashboard.html', netid=netid)
-
-@app.route('/sync_data', methods=['POST'])
-def sync_data():
-    netid = session['NETID']
-    if not netid:
-        return redirect('/user_login')
-    data = request.json
-    user = User(netid, data)
-    db.collection("Users").document(netid).set(user.__dict__)
-    print(data, flush=True)
-
-    return 'Data received'
-
-@app.route('/get_data', methods=['GET'])
-def get_data():
-    netid = session['NETID']
-    if not netid:
-        return jsonify({'error': 'User not logged in'}), 401
-    data = db.collection("Users").document(netid).get()
-    if not data.exists:
-        data = "No data"
-    data = data._data['courses']
-    if data == "":
-        data = "No data"
-    print("get", data, flush=True)
-    return data
-
 @app.route('/logout')
 def logout():
     service="127.0.0.1:5000/login"
