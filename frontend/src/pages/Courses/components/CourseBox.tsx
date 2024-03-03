@@ -36,21 +36,24 @@ export default function CourseBox({ season, course, completed }: Props) {
                     <div className={styles.MetadataBox}
                         style={{
                             borderRadius: "25px",
-                            marginRight: "5%"
+                            marginRight: "5%",
+                            width: "50px"
                         }}>
                         {"~4.0"}
                     </div>
                     <div className={styles.MetadataBox}
                         style={{
                             borderRadius: "25px",
-                            marginRight: "5%"
+                            marginRight: "5%",
+                            width: "50px"
                         }}>
                         {"~4.0"}
                     </div>
                     <div className={styles.MetadataBox}
                         style={{
                             borderRadius: "25px",
-                            marginRight: "5%"
+                            marginRight: "5%",
+                            width: "50px"
                         }}>{
                             "~3.8"}
                     </div>

@@ -1,20 +1,21 @@
 import styles from "./../Courses.module.css"
 import SemesterBox from "./SemesterBox";
+import { Year } from "../courses_types";
 
 type Props = {
-  readonly grade: string;
+  readonly grade: Year;
 };
 
 export default function YearBox({ grade }: Props) {
   return (
     <div className={styles.Container}>
         <div className={styles.Row}>
-            <div className={styles.Grade}>{grade}</div>
-            <div className={styles.Year}>{"2022-2023"}</div>
+            <div className={styles.Grade}>{grade["name"]}</div>
+            <div className={styles.Year}>{grade["calendarYear"]}</div>
         </div>
         <div className={styles.Row}>
-            <SemesterBox season="fall"/>
-            <SemesterBox season="spring"/>
+            <SemesterBox semester={grade["fall"]}/>
+            <SemesterBox semester={grade["spring"]}/>
         </div>
     </div>
   );

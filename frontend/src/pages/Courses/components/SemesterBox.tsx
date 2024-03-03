@@ -1,13 +1,19 @@
 import styles from "./../Courses.module.css"
 import CourseBox from "./CourseBox";
 import MetadataBox from "./MetadataBox";
-
+import { Semester } from "../courses_types";
 
 type Props = {
-    readonly season: string;
+    readonly semester: Semester;
 };
 
-export default function SemesterBox({ season }: Props) {
+export default function SemesterBox({ semester }: Props) {
+
+    const classComponents = [];
+    for (let i=0; i <semester["courses"].length; i++) {
+        classComponents.push(<CourseBox season={semester["season"]} course={semester["courses"][i]["name"]} completed={semester["courses"][i]["hasCompleted"]}/>); 
+    }
+
     return (
         <div className={styles.Column}>
             <div className={styles.Row}>
@@ -16,8 +22,7 @@ export default function SemesterBox({ season }: Props) {
                 <MetadataBox heading="WORKLOAD" text="~3.8"/>
                 <MetadataBox heading="DISTRIBUTIONALS" text="So"/>
             </div>
-            <CourseBox season={season} course="COURSE NAME #1" completed="true"/>
-            <CourseBox season={season} course="COURSE NAME #2" completed="false"/>
+            {classComponents}
         </div>
     );
 }
