@@ -7,11 +7,11 @@
 }
 
 .majorContainer {
-  border-radius: 25px;
-  width: 450px;
-  height: 450px;
+  width: 40vw;
+  height: 70vh;
   background-color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  margin-left: -5vw;
   margin-right: auto;
 }
 
@@ -29,4 +29,21 @@
   color: grey;
   margin-left: -5%;
   margin-right: 5%;
+}
+
+.smallBox {
+  border-radius: "25px";
+  border-style: solid;
+  width: 2vw;
+  height: 2.5vh;
+  margin-top: -1.5vh;
+  text-align: center;
+}
+.wideBox {
+  border-radius: "25px";
+  border-style: solid;
+  width: 10vw;
+  height: 2.5vh;
+  margin-top: -1.5vh;
+  text-align: center;
 }
