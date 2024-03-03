@@ -1,0 +1,11 @@
+.distributionsContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+th {
+    text-align: left;
+    color: #727272;
+    font-size: 12px;
+    padding-top: 10px;
+}
