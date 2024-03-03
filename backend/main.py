@@ -142,6 +142,12 @@ def url_test():
 def sync():
     True
 
+@app.get('/check_login')
+def check_login():
+    if 'NETID' in session:
+        return jsonify(session['NETID'])
+    return jsonify()
+
 def validate(ticket, service):
     validation_url = f'https://secure.its.yale.edu/cas/serviceValidate?service={service}&ticket={ticket}'
     current_app.logger.info(f'attempting to validate login credentials at {validation_url}')
@@ -220,8 +226,11 @@ def hello_world(req: https_fn.Request) -> https_fn.Response:
     response = https_fn.Response('hello world')
     return response
 
-@https_fn.on_request()
-def check_login(req: https_fn.Request) -> https_fn.Response:
-    if 'NETID' in session:
-        return jsonify(session['NETID'])
-    return jsonify()
+
+# course_after={"CPSC 223":{'CPSC 323':1000, 'CPSC 472':100}}
+# # course_before={"CPSC 323":{'CPSC 223':1000}}
+#
+# num_taken={"CPSC 223": 10000}
+
+
+
