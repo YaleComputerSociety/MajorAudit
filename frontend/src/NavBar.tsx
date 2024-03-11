@@ -8,9 +8,9 @@ const NavBar=()=>{
     return (    
         <div className='NavBar'>
             <img src={maLogo} className="logo"/>
-            <NavLink to="/courses"     className={({ isActive }) => isActive ? "activeLink" : "dormantLink"}>Courses </NavLink>
             <NavLink to="/graduation"  className={({ isActive }) => isActive ? "activeLink" : "dormantLink"}>Graduation </NavLink>
             <NavLink to="/majors"      className={({ isActive }) => isActive ? "activeLink" : "dormantLink"}>Majors </NavLink>
+            <NavLink to="/courses"     className={({ isActive }) => isActive ? "activeLink" : "dormantLink"}>Courses </NavLink>
         </div>
     )
 }

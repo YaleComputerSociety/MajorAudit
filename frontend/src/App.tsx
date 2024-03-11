@@ -11,9 +11,10 @@ function App() {
   <>
     <Navbar/>
     <div className="App">
-      <Routes>        
+      <Routes>
+        <Route path="/"             element={<Graduation />} />
+        <Route path="/graduation"   element={<Graduation/>}/>        
         <Route path="/courses"      element={<Courses/>} />
-        <Route path="/graduation"   element={<Graduation/>}/>
         <Route path="/majors"       element={<Majors/>}/>
       </Routes>
     </div>

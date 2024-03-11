@@ -1,0 +1,11 @@
+
+.CourseBox {
+    border-radius: 15px;
+    background-color: #E4E9F8;
+    width: max-content;
+    padding: 2px 4px;
+    font-size: 14px;
+    font-weight: bold;
+    position: relative;
+    vertical-align: center;
+}

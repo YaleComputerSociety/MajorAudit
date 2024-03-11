@@ -39,7 +39,10 @@
 .Season {
     margin-right: 1.5%;
     margin-left: 1%;
-}
+
+    width: 5%;
+    height: auto; /* This maintains aspect ratio */
+} 
 
 .CourseCode {
     font-size: small;

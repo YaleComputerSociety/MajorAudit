@@ -25,7 +25,8 @@ export default function CourseBox({ season, course, completed }: Props) {
                     alt={completed}
                     style={{
                         marginLeft: "1%",
-                        display: completed === "true" ? "flow" : "none"
+                        display: completed === "true" ? "flow" : "none",
+                        
                     }}></img>
                 <img src={season === "fall" ? fall_image : spring_image} alt={season} className={styles.Season}></img>
                 <div className={styles.Column}>

@@ -24,7 +24,7 @@ export const MockData: Major = {
   },
   requirements: [
     {
-      name: "Core",
+      name: "CORE",
       coursesCompleted: 1,
       coursesTotal: 5,
       subsections: [
@@ -50,7 +50,7 @@ export const MockData: Major = {
       ],
     },
     {
-      name: "Electives",
+      name: "ELECTIVES",
       coursesCompleted: 2,
       coursesTotal: 8,
       description:
@@ -62,7 +62,7 @@ export const MockData: Major = {
       ],
     },
     {
-      name: "Senior Requirement",
+      name: "SENIOR REQUIREMENT",
       coursesCompleted: 0,
       coursesTotal: 1,
       subsections: [

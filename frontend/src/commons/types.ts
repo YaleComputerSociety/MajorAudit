@@ -8,7 +8,7 @@ interface DUS {
   email: string;
 }
 
-interface MajorMetadataStats {
+export interface MajorMetadataStats {
   courses: number;
   rating: number;
   workload: number;

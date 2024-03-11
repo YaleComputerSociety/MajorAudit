@@ -2,7 +2,7 @@ import React from "react";
 import { List } from "lodash";
 import Table from "react-bootstrap/Table";
 import DistributionBox from "./DistributionBox";
-import CourseBox from "./CourseBox";
+import CourseBox from "../../../commons/components/CourseBox";
 
 type Props = {
   readonly year: number;
