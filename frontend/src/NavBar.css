@@ -1,0 +1,41 @@
+
+.NavBar {
+    position: fixed; 
+    left: 0; 
+    width: 100%;
+    top: 0; 
+    height: 75px; 
+
+    display: flex;
+    justify-content: flex-end; /* Align items to the right */
+    align-items: center; /* Center items vertically */
+    padding: 0 20px;
+    box-sizing: border-box; /* Account for padding in width */
+
+    background-color: #ffffff; /* Setting background color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Adding a box shadow */
+}
+
+.logo {
+    width: 150px; /* Set the desired width */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: auto; /* Push the logo to the left */
+}
+
+.NavBar .activeLink {
+    color: #598FF4;
+    font-size: 20px; /* Increase font size */
+    text-decoration: none;
+    margin: 0 15px;
+    padding: 10px;
+    transition: color 0.3s;
+}
+
+.NavBar .dormantLink {
+    color: #000000;
+    font-size: 20px; /* Increase font size */
+    text-decoration: none;
+    margin: 0 15px;
+    padding: 10px;
+    transition: color 0.3s;
+}

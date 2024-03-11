@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  margin-top: 100px; /* match navbar, surely theres a better way to do this */ 
 }
 
 .App-logo {
