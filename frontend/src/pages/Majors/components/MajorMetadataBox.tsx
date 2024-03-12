@@ -18,12 +18,12 @@ function TopShelf( major: Major){
   return(
     <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
       <Button style={{ width: '30px', height: '30px', padding: 0, border: 'none', marginRight: "8px" }}>
-        <img src={plus} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+        <img src={plus} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
       </Button>
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>{major.metadata.name}</div>
-          <img src={lgsIcon} style={{ width: "35px", height: "auto", marginTop: "4px" }}/>
+          <img src={lgsIcon} alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }}/>
           <div className={styles.coursesBox} style={{ marginRight: "160px", marginTop: "4px" }}>{major.metadata.students}</div>
           <div className={styles.pinkMajorBox} style={{ marginLeft: "auto", fontSize: "16px" }}>MAJOR</div>
         </div>
@@ -87,7 +87,7 @@ function MajorMetadataBox(props: {major: Major}){
     <div>
       <div style={{ display: "flex", padding: "15px" }}>
         <Button style={{ width: '40px', height: "auto", padding: 0, border: 'none' }}>
-          <img src={upMajor} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+          <img src={upMajor} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
         </Button>
         <div style={{ color: "gray", fontWeight: "bold", fontSize: "18px" }}>Comparative Literature</div>
       </div>
@@ -96,7 +96,7 @@ function MajorMetadataBox(props: {major: Major}){
 
       <div style={{ display: "flex", padding: "15px" }}>
         <Button style={{ width: '40px', height: "auto", padding: 0, border: 'none' }}>
-          <img src={downMajor} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+          <img src={downMajor} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
         </Button>
         <div style={{ color: "gray", fontWeight: "bold", fontSize: "18px" }}>Computer Science and Economics</div>
       </div>

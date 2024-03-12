@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./Majors.module.css";
 
-import { Major } from "./../../commons/types";
 import { MockData } from "./mock/mock";
 
 import MajorMetadataBox from "./components/MajorMetadataBox";

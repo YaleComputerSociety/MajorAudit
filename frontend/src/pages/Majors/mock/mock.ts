@@ -1,5 +1,5 @@
+
 import { Major } from "../../../commons/types";
-import Courses from "../../Courses";
 
 export const MockData: Major = {
   metadata: {
