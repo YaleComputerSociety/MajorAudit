@@ -9,7 +9,7 @@
 
 .majorContainer {
   padding: 20px;
-  width: 600px;
+  width: 700px;
   height: 400px;
   background-color: white;
   /* border: 1px solid black; */
@@ -23,6 +23,14 @@
   background-color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
+
+.subsectionHeader {
+  color: grey;
+  font-size: 18px;
+  font-weight: 525;
+}
+
+/* Major Metadata ************************************************************/
 
 .pinkMajorBox {
   font-size: 12px;
@@ -83,6 +91,5 @@
   margin-right: 10px;
 }
 
-.ferrisWheelMajor {
+/* Major Requirements *********************************************************/
 
-}
