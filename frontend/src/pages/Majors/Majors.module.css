@@ -1,17 +1,18 @@
 
 .container {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
-  padding: 0 100px;
+  padding: 50px 125px;
   /* border: 1px solid black; */
 }
 
 .majorContainer {
   padding: 20px;
-  width: 700px;
+  width: 600px;
   height: 400px;
   background-color: white;
+  margin-right: 55px;
   /* border: 1px solid black; */
 }
 
@@ -89,6 +90,10 @@
   border-style: solid;
   text-align: center;
   margin-right: 10px;
+}
+
+.degreeButtons {
+  
 }
 
 /* Major Requirements *********************************************************/
