@@ -1,7 +1,7 @@
 
 import React from 'react';
 import "./NavBar.css";
-import maLogo from "./commons/ma_logo.png";
+import maLogo from "./commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
 
 const NavBar=()=>{

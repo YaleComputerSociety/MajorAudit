@@ -4,47 +4,82 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 100px;
+  border: 1px solid black;
 }
 
 .majorContainer {
   padding: 20px;
-  width: 40vw;
-  height: 70vh;
+  width: 600px;
+  height: 480px;
   background-color: white;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  margin-right: auto;
+  border: 1px solid black;
 }
 
 .reqsContainer {
   padding: 20px;
   border-radius: 25px;
-  width: 40vw;
-  height: 60vh;
+  width: 600px;
+  height: 600px;
   background-color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  margin-left: auto;
 }
 
-.containerHeader{
-  font-size: 30px;
-}
-
-/* .SubSection {
-  color: grey;
-  margin-left: -5%;
-  margin-right: 5%;
-} */
-
-.smallBox {
-  border-radius: "10px";
-  border-style: solid;
+.pinkMajorBox {
+  font-size: 12px;
+  font-weight: bold;
+  border: 1px solid #D69CD8; 
+  color: #D69CD8;
+  border-radius: 4px; 
   text-align: center;
 }
-.wideBox {
-  border-radius: "25px";
-  border-style: solid;
-  width: 10vw;
-  height: 2.5vh;
-  margin-top: -1.5vh;
+
+.coursesBox {
+  display: inline-block; /* Display as inline block */
+  width: max-content; /* Set width to maximum content size */
+  padding: 0 6px; 
+  font-size: 12px;
+  border: 1px solid grey; 
+  color: black; /* Black text */
+  border-radius: 4px; /* Rounded corners */
   text-align: center;
 }
+
+.ratingBox {
+  display: inline-block; /* Display as inline block */
+  width: max-content; /* Set width to maximum content size */
+  padding: 0 6px; 
+  font-size: 12px;
+  border: 1px solid white; 
+  color: #66C10A; /* Dark green text */
+  background-color: #D9F4CF; /* Light green background fill */
+  border-radius: 4px; /* Rounded corners */
+  text-align: center;
+}
+
+.workloadBox {
+  display: inline-block; /* Display as inline block */
+  width: max-content; /* Set width to maximum content size */
+  padding: 0 6px; 
+  font-size: 12px;
+  border: 1px solid white; 
+  color: #CA7108; /* Dark green text */
+  background-color: #F4E3CF; /* Light green background fill */
+  border-radius: 4px; /* Rounded corners */
+  text-align: center;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.linkBox {
+  font-size: 15px;
+  padding: 0 16px; 
+  border: 1px solid gray;
+  border-radius: 8px; /* Rounded corners */
+  text-decoration: none;
+  border-style: solid;
+  text-align: center;
+  margin-right: 10px;
+}
+

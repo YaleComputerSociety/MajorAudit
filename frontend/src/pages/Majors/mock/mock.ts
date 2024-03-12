@@ -13,13 +13,13 @@ export const MockData: Major = {
     },
     students: 91,
     about:
-      "The Computer Science major is an engaging and dynamic field of study that delves into the complexities of power, governance, and public affairs. It encourages students to critically analyze political systems, philosophies, and behaviors...",
+      "The Political Science major is an engaging and dynamic field of study that delves into the complexities of power, governance, and public affairs. It encourages students to critically analyze political systems, philosophies, and behaviors. The major offers diverse subfields like American government, international relations, political philosophy, and comparative politics, allowing for a broad understanding of global and domestic politics. Interdisciplinary options are available for those interested in blending political studies with other areas. It's ideal for those who are intrigued by current events, passionate about understanding the mechanisms of power and governance, and keen on developing analytical and critical thinking skills.",
     dus: {
       name: "Y. Richard Yang",
       address: "AKW 208 432-6400",
       email: "cpsc.yale.edu",
     },
-    catologLink: "Major Catalog link goes here",
+    catologLink: "https://catalog.yale.edu/ycps/subjects-of-instruction/computer-science/",
     wesbiteLink: "http://cpsc.yale.edu",
   },
   requirements: [
