@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 
 import lgsIcon from "../../../commons/images/little_guys.png";
 import plus from "../../../commons/images/plus.png";
+import upMajor from "../../../commons/images/up_major.png";
+import downMajor from "../../../commons/images/down_major.png";
 
 import { Major } from "../../../commons/types";
 import { MajorMetadataStats } from "../../../commons/types";
@@ -15,7 +17,9 @@ import { MockData } from "../mock/mock";
 function TopShelf( major: Major){
   return(
     <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
-      <Button style={{ width: '30px', height: '30px', padding: 0, border: 'none' }}><img src={plus} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/></Button>
+      <Button style={{ width: '30px', height: '30px', padding: 0, border: 'none', marginRight: "8px" }}>
+        <img src={plus} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+      </Button>
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>{major.metadata.name}</div>
@@ -57,7 +61,7 @@ function Stats(stats: MajorMetadataStats ){
 
 function MajorBoxSub(props: { major: Major }){
   return (
-    <div>
+    <div className={styles.majorContainer}>
       <TopShelf {...props.major}/>
       
       <div style={{ marginBottom: "12px" }}>BA BS</div>
@@ -80,8 +84,22 @@ function MajorBoxSub(props: { major: Major }){
 
 function MajorMetadataBox(props: {major: Major}){
   return (
-    <div className={styles.majorContainer}>
+    <div>
+      <div style={{ display: "flex", padding: "15px" }}>
+        <Button style={{ width: '40px', height: "auto", padding: 0, border: 'none' }}>
+          <img src={upMajor} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+        </Button>
+        <div style={{ color: "gray", fontWeight: "bold", fontSize: "18px" }}>Comparative Literature</div>
+      </div>
+
       <MajorBoxSub major={MockData} />
+
+      <div style={{ display: "flex", padding: "15px" }}>
+        <Button style={{ width: '40px', height: "auto", padding: 0, border: 'none' }}>
+          <img src={downMajor} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+        </Button>
+        <div style={{ color: "gray", fontWeight: "bold", fontSize: "18px" }}>Computer Science and Economics</div>
+      </div>
     </div>
   );
 }
