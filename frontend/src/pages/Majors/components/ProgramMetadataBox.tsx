@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./../Majors.module.css";
 
 import { Button } from "react-bootstrap";
@@ -36,6 +36,10 @@ function MetadataTopshelf(degree: Degree){
 function MetadataDegree(props: {program: Program, whichDegree: number, alterCurrDegree: Function}){
 
   const [activeDegree, setActiveDegree] = useState(props.whichDegree);
+
+  useEffect(() => {
+    setActiveDegree(props.whichDegree);
+  }, [props.whichDegree]);
 
   const handleDegreeClick = (degree: number) => {
     setActiveDegree(degree);

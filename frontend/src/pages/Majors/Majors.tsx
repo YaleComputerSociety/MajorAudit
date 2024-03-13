@@ -13,9 +13,10 @@ export const Majors = () => {
   // Which Program
   const [currdex, setCurrdex] = useState(0);
   const alterCurrdex = (dir: number) => { 
-    setCurrdex((currdex + dir + programs.length) % programs.length); 
+    setCurrdex((currdex + dir + programs.length) % programs.length);
+    setCurrDegree(0); 
   };
-  const seeProgram= (dir: number) => { 
+  const seeProgram = (dir: number) => { 
     return programs[(currdex + dir + programs.length) % programs.length]; 
   };
 

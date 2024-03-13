@@ -1,6 +1,26 @@
-.distributionsContainer {
-    display: flex;
-    flex-direction: column;
+
+.container {
+    /* justify-content: space-between; */
+    align-items: center;
+    padding: 25px 125px;
+}
+
+.containerRecommendations {
+    width: 1200px;
+    height: 200px;
+    margin-bottom: 30px;
+}
+
+.containerDistributions {
+    margin-right: 40px;
+}
+
+.containerOverview {
+    width: 350px;
+    height: 300px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 25px;
+    padding: 20px;
 }
 
 th {
