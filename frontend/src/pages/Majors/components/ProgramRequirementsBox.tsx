@@ -31,7 +31,7 @@ function RequirementsContent(degree: Degree) {
               <div style={{ display: "flex" }}>
                 {sub.courses.map((course, courseIndex) => (
                   <div key={courseIndex} style={{ display: "flex" }}>
-                    <CourseBox text={course.name} distributions={["QR"]} />
+                    <CourseBox {...course} />
                     {courseIndex < sub.courses.length - 1 && <div>/</div>}
                   </div>
                 ))}

@@ -19,19 +19,19 @@ export const CPSC: Program = {
       {
         name: "CORE", coursesCompleted: 1, coursesTotal: 5,
         subsections: [
-          { courses: [{ name: "CPSC 201" }], },
-          { courses: [{ name: "CPSC 202" }, { name: "MATH 244" }], },
-          { courses: [{ name: "CPSC 223" }], },
-          { courses: [{ name: "CPSC 323" }], },
-          { courses: [{ name: "CPSC 365" }, { name: "CPSC 366" }, { name: "CPSC 368" },],},],
+          { courses: [{ code: "CPSC 201", distributions: ["QR"] }], },
+          { courses: [{ code: "CPSC 202", distributions: ["QR"] }], },
+          { courses: [{ code: "CPSC 223", distributions: ["QR"] }], },
+          { courses: [{ code: "CPSC 323", distributions: ["QR"] }], },
+          { courses: [{ code: "CPSC 365", distributions: ["QR"] }],},],
       },
       {
-        name: "ELECTIVES", coursesCompleted: 2, coursesTotal: 8, description: "Usually, courses with course numbers above 300 work for this requirement.",
-        subsections: [ { courses: [{ name: "LING 385" }, { name: "NSCI 258" }],},],
+        name: "ELECTIVES", coursesCompleted: 2, coursesTotal: 4, description: "Usually, courses with course numbers above 300 work for this requirement.",
+        subsections: [ { courses: [{ code: "LING 385", distributions: ["QR"] }, { code: "NSCI 258", distributions: ["QR"] }],},],
       },
       {
         name: "SENIOR REQUIREMENT", coursesCompleted: 0, coursesTotal: 1,
-        subsections: [ { courses: [{ name: "CPSC 490" }],},],
+        subsections: [ { courses: [{ code: "CPSC 490", distributions: ["QR"] }],},],
       },
     ]
   },
@@ -48,21 +48,21 @@ export const CPSC: Program = {
     },
     requirements: [
       {
-        name: "CORE", coursesCompleted: 1, coursesTotal: 5,
+        name: "CORE", coursesCompleted: 0, coursesTotal: 5,
         subsections: [
-          { courses: [{ name: "CPSC 201" }], },
-          { courses: [{ name: "CPSC 202" }, { name: "MATH 244" }], },
-          { courses: [{ name: "CPSC 223" }], },
-          { courses: [{ name: "CPSC 323" }], },
-          { courses: [{ name: "CPSC 365" }, { name: "CPSC 366" }, { name: "CPSC 368" },],},],
+          { courses: [{ code: "CPSC 201", distributions: ["QR"] }], },
+          { courses: [{ code: "MATH 244", distributions: ["QR"] }], },
+          { courses: [{ code: "CPSC 223", distributions: ["QR"] }], },
+          { courses: [{ code: "CPSC 323", distributions: ["QR"] }], },
+          { courses: [{ code: "CPSC 366", distributions: ["QR"] }],},],
       },
       {
-        name: "ELECTIVES", coursesCompleted: 2, coursesTotal: 8, description: "Usually, courses with course numbers above 300 work for this requirement.",
-        subsections: [ { courses: [{ name: "LING 385" }, { name: "NSCI 258" }],},],
+        name: "ELECTIVES", coursesCompleted: 0, coursesTotal: 4, description: "Usually, courses with course numbers above 300 work for this requirement.",
+        subsections: [ { courses: [{ code: "LING 385", distributions: ["QR"] }, { code: "NSCI 258", distributions: ["QR"] }, { code: "LING 385", distributions: ["QR"] }, { code: "NSCI 258", distributions: ["QR"] }],},],
       },
       {
-        name: "SENIOR REQUIREMENT", coursesCompleted: 0, coursesTotal: 1,
-        subsections: [ { courses: [{ name: "CPSC 490" }, { name: "CPSC 490" }],},],
+        name: "SENIOR REQUIREMENT", coursesCompleted: 0, coursesTotal: 2,
+        subsections: [ { courses: [{ code: "CPSC 490", distributions: ["QR"] }, { code: "CPSC 500", distributions: ["QR"] }],},],
       },
     ]
   }]
@@ -88,26 +88,20 @@ export const ECON: Program = {
         coursesCompleted: 0,
         coursesTotal: 2,
         subsections: [
-          { courses: [{ name: "ECON 121" }, { name: "ECON 125" }], },
-          { courses: [{ name: "ECON 122" }, { name: "ECON 126" }], },
+          { courses: [{ code: "ECON 121", distributions: ["QR", "Sc"] }, { code: "ECON 125", distributions: ["QR", "Sc"] }], },
+          { courses: [{ code: "ECON 122", distributions: ["QR", "Sc"] }, { code: "ECON 126", distributions: ["QR", "Sc"] }], },
         ],
       },
       {
         name: "ECONOMETRICS", coursesCompleted: 0, coursesTotal: 1,
         subsections: [
-          { courses: [{ name: "ECON 117" }, { name: "ECON 123" }, { name: "ECON 136" },], },
-        ],
-      },
-      {
-        name: "ELECTIVES", coursesCompleted: 0, coursesTotal: 4, 
-        subsections: [
-          { courses: [{ name: "ECON NNN" }, { name: "ECON NNN" }, { name: "ECON NNN" },], },
+          { courses: [{ code: "ECON 117", distributions: ["QR", "Sc"] }, { code: "ECON 123", distributions: ["QR", "Sc"] }, { code: "ECON 136", distributions: ["QR", "Sc"] },], },
         ],
       },
       {
         name: "SENIOR REQUIREMENT", coursesCompleted: 0, coursesTotal: 2,
         subsections: [
-          { courses: [{ name: "CPSC 490" }, { name: "CPSC 500" }], },
+          { courses: [{ code: "ECON 490", distributions: ["QR", "Sc", "WR"] }, { code: "ECON 500", distributions: ["QR", "Sc", "WR"] }], },
         ],
       },
     ],
@@ -121,7 +115,7 @@ export const HIST: Program = {
     metadata: {
       name: "History", abbreviation: "HIST",
       degreeType: "BACH_ART",
-      stats: { courses: 16, rating: 4.5, workload: 3.6, type: "QR", },
+      stats: { courses: 16, rating: 4.5, workload: 3.6, type: "Hu", },
       students: 76,
       about: "Economics is much broader than the study of recessions and inflation or stocks and bonds. Economists study decision making and incentives such as how taxes create incentives for labor market and savings behavior. Many current public policy debates concern questions of economics, including causes and consequences of inequality and gender and racial wage gaps; how to address poverty; the impact of immigration and trade on the well-being of a country’s citizens; the cause of the Great Recession; and how to predict future downturns.",
       dus: { name: "Giovanni Maggi", address: "115 Prospect St., Rosenkranz Hall, Room 334", email: "cpsc.yale.edu", },
@@ -130,30 +124,15 @@ export const HIST: Program = {
     },
     requirements: [
       {
-        name: "INTERMEDIATE ECONOMICS",
-        coursesCompleted: 0,
-        coursesTotal: 2,
+        name: "ELECTIVES", coursesCompleted: 0, coursesTotal: 3, 
         subsections: [
-          { courses: [{ name: "ECON 121" }, { name: "ECON 125" }], },
-          { courses: [{ name: "ECON 122" }, { name: "ECON 126" }], },
-        ],
-      },
-      {
-        name: "ECONOMETRICS", coursesCompleted: 0, coursesTotal: 1,
-        subsections: [
-          { courses: [{ name: "ECON 117" }, { name: "ECON 123" }, { name: "ECON 136" },], },
-        ],
-      },
-      {
-        name: "ELECTIVES", coursesCompleted: 0, coursesTotal: 4, 
-        subsections: [
-          { courses: [{ name: "ECON NNN" }, { name: "ECON NNN" }, { name: "ECON NNN" },], },
+          { courses: [{ code: "HIST NNN", distributions: ["Hu", "WR"] }, { code: "HIST NNN", distributions: ["Hu", "WR"] }, { code: "HIST NNN", distributions: ["Hu", "WR"] },], },
         ],
       },
       {
         name: "SENIOR REQUIREMENT", coursesCompleted: 0, coursesTotal: 2,
         subsections: [
-          { courses: [{ name: "CPSC 490" }, { name: "CPSC 500" }], },
+          { courses: [{ code: "HIST 490", distributions: ["Hu", "WR"] }, { code: "HIST 500", distributions: ["Hu", "WR"] }], },
         ],
       },
     ],

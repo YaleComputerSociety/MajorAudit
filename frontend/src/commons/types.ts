@@ -1,6 +1,21 @@
-interface Course {
-  name: string;
+
+export interface Course {
+  code: string;
+  semesters?: string;
+  hasCheck?: boolean;
+  distributions: Array<string>;
 }
+
+export interface ClassLists {
+  readonly clHu: Array<Course>;
+  readonly clSo: Array<Course>;
+  readonly clSc: Array<Course>;
+  readonly clQR: Array<Course>;
+  readonly clWR: Array<Course>;
+  readonly clL: Array<Course>;
+}
+
+/****************************************************************************/
 
 interface DUS {
   name: string;

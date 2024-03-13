@@ -3,20 +3,14 @@ import React from "react";
 import { List } from "lodash";
 import DistributionCircle from "./DistributionsCircle";
 import styles from "./CourseBox.module.css";
+import { Course } from "./../../types";
 
-type Props = {
-  readonly text: string;
-  readonly semesters?: string;
-  readonly hasCheck?: boolean;
-  readonly distributions: List<string>;
-};
-
-export default function CourseBox({ text, semesters, hasCheck, distributions }: Props) {
+export default function CourseBox(course: Course) {
   return (
     <div className={styles.CourseBox}>
-      {hasCheck ? "✓ " : ""}
-      {text}
-      {distributions.length > 0 ? (<DistributionCircle distributions={distributions}/>) : ("")}
+      {course.hasCheck ? "✓ " : ""}
+      {course.code}
+      {course.distributions.length > 0 ? (<DistributionCircle distributions={course.distributions}/>) : ("")}
     </div>
   );
 }
