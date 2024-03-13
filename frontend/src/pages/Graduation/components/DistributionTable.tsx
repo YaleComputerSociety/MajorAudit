@@ -1,49 +1,50 @@
 
 import React from "react";
-import { List } from "lodash";
 import Table from "react-bootstrap/Table";
+
+import styles from "./../Graduation.module.css";
+
+import { EXABC } from "./../mock/mock";
 
 import DistributionBox from "./DistributionBox";
 
 import { Course, ClassLists } from "./../../../commons/types";
 import CourseBox from "../../../commons/components/courses/CourseBox";
 
-function getRequirements({ type, year }: { readonly type: "Areas" | "Skills"; readonly year: number }) {
-  switch (type) {
-    case "Areas":
-      switch (year) {
-        case 1:
-          return 0;
-        case 2:
-        case 3:
-          return 1;
-        case 4:
-          return 2;
-      }
-      break;
-    case "Skills":
-      switch (year) {
-        case 1:
-        case 2:
-          return 1.33;
-        case 3:
-        case 4:
-          return 2;
-      }
-      break;
+function getRequirements({type, year}: { type: string; year: number;}) {
+  if (type === "Areas") {
+    if (year === 1) {
+      return 0;
+    } else if (year === 2) {
+      return 1;
+    } else if (year === 3) {
+      return 1;
+    } else if (year === 4) {
+      return 2;
+    }
+  } else if (type === "Skills") {
+    if (year === 1) {
+      return 1.33;
+    } else if (year === 2) {
+      return 1;
+    } else if (year === 3) {
+      return 2;
+    } else if (year === 4) {
+      return 2;
+    }
   }
   return 0;
 }
 
-function RenderRow(text: string, classList: Array<Course>, type: "Areas" | "Skills", year: number) {
-  const req = getRequirements({ type, year });
+function RenderRow(text: string, classList: Array<Course>, type: string, year: number) {
+  let reqNum = getRequirements({ type, year });
   return (
     <tr key={text}>
       <td>
         <DistributionBox text={text} />
       </td>
-      <td style={{ color: classList.length >= req ? "green" : "red" }}>
-        {classList.length}/{req}
+      <td style={{ color: classList.length >= reqNum ? "green" : "red" }}>
+        {classList.length}/{reqNum}
       </td>
       <td style={{ display: "flex", flexDirection: "row" }}>
         {classList.map((course, index) => (
@@ -79,4 +80,36 @@ function DistributionTable({ year, cls }: { year: number; cls: ClassLists }) {
   );
 }
 
-export default DistributionTable;
+function GraduationDistribution(props: { currYear: number; alterCurrYear: Function }) {
+  return (
+    <div className={styles.containerDistributions}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+        <div style={{ fontSize: "30px", fontWeight: "500", marginRight: "20px" }}>Distributions</div>
+        <div style={{ display: "flex", border: "1px solid #ccc", borderRadius: "5px" }}>
+          {[1, 2, 3, 4].map((year) => (
+            <button
+              key={year}
+              onClick={() => props.alterCurrYear(year)}
+              style={{
+                backgroundColor: props.currYear === year ? "#1976d2" : "white", // Set active button to blue
+                color: props.currYear === year ? "white" : "black", // Set text color based on button state
+                borderRadius: "5px",
+                padding: "5px 10px",
+                cursor: "pointer",
+                marginRight: "0", // Remove margin between buttons
+                border: "1px solid white" // Add white border
+              }}
+            >
+              {["First-Year", "Sophomore", "Junior", "Senior"][year - 1]}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <DistributionTable year={props.currYear} cls={EXABC} />
+      </div>
+    </div>
+  );
+}
+
+export default GraduationDistribution;
