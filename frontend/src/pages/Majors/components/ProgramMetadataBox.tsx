@@ -115,7 +115,7 @@ function MetadataContent(props: {program: Program, whichDegree: number, alterCur
 function MetadataAbove(props: {scrollProgram: Function, seeProgram: Function}){
   return(
     <div style={{ display: "flex", padding: "15px" }}>
-      <Button style={{ width: '40px', height: "auto", padding: 0, border: 'none', marginRight: "4px" }} onClick={() => props.scrollProgram(1)}>
+      <Button style={{ width: '40px', height: "auto", padding: 0, border: 'none', marginRight: "4px", cursor: "pointer" }} onClick={() => props.scrollProgram(1)}>
             <img src={upMajor} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
       </Button>
       <div style={{ color: "gray" }}>
@@ -129,7 +129,7 @@ function MetadataAbove(props: {scrollProgram: Function, seeProgram: Function}){
 function MetadataBelow(props: {scrollProgram: Function, seeProgram: Function}){
   return(
     <div style={{ display: "flex", padding: "15px" }}>
-      <Button style={{ width: '40px', height: "auto", padding: 0, border: 'none', marginRight: "4px" }} onClick={() => props.scrollProgram(-1)}>
+      <Button style={{ width: '40px', height: "auto", padding: 0, border: 'none', marginRight: "4px", cursor: "pointer" }} onClick={() => props.scrollProgram(-1)}>
         <img src={downMajor} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
       </Button>
       <div style={{ color: "gray" }}>

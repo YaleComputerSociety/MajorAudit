@@ -11,11 +11,7 @@ export default function Graduation() {
     <div>
       <div>
         <p style={{ fontSize: "30px" }}>Distributions</p>
-        <ToggleButtonGroup
-          color="primary"
-          onChange={(event, newYear) => {setCurrYear(newYear);}}
-          aria-label="Platform"
-        >
+        <ToggleButtonGroup color="primary" onChange={(event, newYear) => {setCurrYear(newYear);}} aria-label="Platform">
           <ToggleButton value="1">First-Year</ToggleButton>
           <ToggleButton value="2">Sophomore</ToggleButton>
           <ToggleButton value="3">Junior</ToggleButton>

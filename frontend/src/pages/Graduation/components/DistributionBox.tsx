@@ -1,6 +1,6 @@
 import React from "react";
 import chroma from "chroma-js"
-import { skillsAreasColors } from '../utilities/constants';
+import { skillsAreasColors } from '../../../commons/utilities/constants';
 
 type Props = {
   readonly text: string;

@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./../Majors.module.css";
 
 import { Degree } from "../../../commons/types"; 
-import ClassBox from "../../../commons/components/CourseBox";
+import CourseBox from "../../../commons/components/courses/CourseBox";
 
 function RequirementsTopshelf(major: Degree) {
   return(
@@ -31,7 +31,7 @@ function RequirementsContent(degree: Degree) {
               <div style={{ display: "flex" }}>
                 {sub.courses.map((course, courseIndex) => (
                   <div key={courseIndex} style={{ display: "flex" }}>
-                    <ClassBox text={course.name} distributions={["L"]} />
+                    <CourseBox text={course.name} distributions={["QR"]} />
                     {courseIndex < sub.courses.length - 1 && <div>/</div>}
                   </div>
                 ))}

@@ -31,7 +31,6 @@ export const Majors = () => {
         program={programs[currdex]} 
         scrollProgram={alterCurrdex} 
         seeProgram={seeProgram}
-
         whichDegree={currDegree}
         alterCurrDegree={alterCurrDegree}/>
       <ProgramRequirementsBox degree={programs[currdex].degrees[currDegree]}/>

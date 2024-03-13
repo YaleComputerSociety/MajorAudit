@@ -1,7 +1,7 @@
 import { List } from "lodash";
 import React, { useMemo } from "react";
 import * as d3 from "d3";
-import { skillsAreasColors } from "../utilities/constants";
+import { skillsAreasColors } from "../../utilities/constants";
 
 type Props = {
   readonly distributions: List<string>;
@@ -45,24 +45,12 @@ export default function DistributionCircle({ distributions }: Props) {
     );
   }, [radius, pie]);
 
-  return (
-    <div
-      style={{
-        position: "relative",
-        float: "right",
-        paddingLeft: "2px"
-      }}
-    >
+  return(
+    <div style={{position: "relative", float: "right", paddingLeft: "2px"}}>
       <svg width={width} height={height} style={{ display: "inline-block" }}>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
           {arcs.map((arc, i) => {
-            return (
-              <path
-                key={i}
-                d={arc}
-                fill={skillsAreasColors[distributions[i]]}
-              />
-            );
+            return (<path key={i} d={arc} fill={skillsAreasColors[distributions[i]]}/>);
           })}
         </g>
       </svg>

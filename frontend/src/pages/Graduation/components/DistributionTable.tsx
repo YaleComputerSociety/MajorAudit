@@ -2,7 +2,7 @@ import React from "react";
 import { List } from "lodash";
 import Table from "react-bootstrap/Table";
 import DistributionBox from "./DistributionBox";
-import CourseBox from "../../../commons/components/CourseBox";
+import CourseBox from "../../../commons/components/courses/CourseBox";
 
 type Props = {
   readonly year: number;
@@ -81,11 +81,7 @@ export default function Graduation({
           </td>
           <td style={{ display: "flex", flexDirection: "row" }}>
             <CourseBox text="LING 191" hasCheck={true} distributions={["Hu"]} />
-            <CourseBox
-              text="ARCH 306"
-              hasCheck={false}
-              distributions={["Hu"]}
-            />
+            <CourseBox text="ARCH 306" hasCheck={false} distributions={["Hu"]} />
           </td>
         </tr>
         <tr>
@@ -163,18 +159,8 @@ export default function Graduation({
           <td>
             <DistributionBox text="WR - Writing" />
           </td>
-          <td
-            style={{
-              color:
-                getRequirements({ type: "Skills", year: year }) <=
-                classListWR.length
-                  ? "green"
-                  : "red",
-            }}
-          >
-            {classListWR.length +
-              "/" +
-              getRequirements({ type: "Skills", year: year })}
+          <td style={{color: getRequirements({ type: "Skills", year: year }) <= classListWR.length ? "green" : "red", }}>
+            {classListWR.length + "/" + getRequirements({ type: "Skills", year: year })}
           </td>
           <td style={{ display: "flex", flexDirection: "row" }}></td>
         </tr>
@@ -182,18 +168,8 @@ export default function Graduation({
           <td>
             <DistributionBox text="L - Language" />
           </td>
-          <td
-            style={{
-              color:
-                getRequirements({ type: "Skills", year: year }) <=
-                classListL.length
-                  ? "green"
-                  : "red",
-            }}
-          >
-            {classListL.length +
-              "/" +
-              getRequirements({ type: "Skills", year: year })}
+          <td style={{color: getRequirements({ type: "Skills", year: year }) <= classListL.length ? "green" : "red", }}>
+            {classListL.length + "/" + getRequirements({ type: "Skills", year: year })}
           </td>
           <td style={{ display: "flex", flexDirection: "row" }}>
             <CourseBox text="KREN 110" distributions={["L"]} />
