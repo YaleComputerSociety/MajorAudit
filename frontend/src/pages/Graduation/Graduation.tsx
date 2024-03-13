@@ -1,23 +1,15 @@
 
 import React, { useState } from "react";
 import styles from "./Graduation.module.css";
+
 import GraduationDistribution from "./components/DistributionTable";
+import GraduationOverview from "./components/Overview";
 
 
 function GraduationRecommendations(){
   return(
     <div className={styles.containerRecommendations}>
       <div style={{ fontSize: "30px", fontWeight: "500" }}>Recomendations</div>
-    </div>
-  );
-}
-
-
-
-function GraduationOverview(){
-  return(
-    <div className={styles.containerOverview}>
-      <div style={{ fontSize: "30px", fontWeight: "500" }}>Overview</div>
     </div>
   );
 }

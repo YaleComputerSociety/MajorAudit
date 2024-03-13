@@ -6,7 +6,7 @@ import styles from "./../Graduation.module.css";
 
 import { EXABC } from "./../mock/mock";
 
-import DistributionBox from "./DistributionBox";
+import DistributionBox from "./DistributionIndivBox";
 
 import { Course, ClassLists } from "./../../../commons/types";
 import CourseBox from "../../../commons/components/courses/CourseBox";
