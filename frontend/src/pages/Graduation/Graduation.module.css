@@ -16,7 +16,7 @@
 }
 
 .containerOverview {
-    width: 350px;
+    width: 325px;
     height: 300px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     border-radius: 25px;
@@ -28,4 +28,20 @@ th {
     color: #727272;
     font-size: 12px;
     padding-top: 10px;
+}
+
+.overviewDistBox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: max-content;
+    height: 20px;
+    margin-bottom: 4px;
+    padding: 0 6px; 
+
+    font-size: 14px;
+    font-weight: 550;
+
+    border-radius: 8px; 
 }
