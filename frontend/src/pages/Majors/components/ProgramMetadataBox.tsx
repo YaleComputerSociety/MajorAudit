@@ -24,7 +24,7 @@ function MetadataTopshelf(degree: Degree){
         <div style={{ display: "flex", alignItems: "center" }}>
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>{degree.metadata.name}</div>
           <img src={lgsIcon} alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }}/>
-          <div className={styles.coursesBox} style={{ marginRight: "10px", marginTop: "4px" }}>{degree.metadata.students}</div>
+          <div className={styles.countBox} style={{ marginRight: "10px", marginTop: "4px" }}>{degree.metadata.students}</div>
           <div className={styles.pinkMajorBox} style={{ marginLeft: "auto", fontSize: "16px" }}>MAJOR</div>
         </div>
         <div>{degree.metadata.abbreviation}</div>
@@ -75,19 +75,19 @@ function MetadataStats(degree: Degree){
       <div style={{ display: "flex" }}>
         <div style={{ marginRight: "15px" }}>
           <div style={{ fontSize: "12px" }}>COURSES</div>
-          <div className={styles.coursesBox}>{degree.metadata.stats.courses}</div>
+          <div className={styles.countBox}>{degree.metadata.stats.courses}</div>
         </div>
         <div style={{ marginRight: "15px" }}>
           <div style={{ fontSize: "12px" }}>RATING</div>
-          <div className={styles.ratingBox}>{degree.metadata.stats.rating}</div>
+          <div className={styles.evaluateBox}>{degree.metadata.stats.rating}</div>
         </div>
         <div style={{ marginRight: "15px" }}>
           <div style={{ fontSize: "12px" }}>WORKLOAD</div>
-          <div className={styles.workloadBox}>{degree.metadata.stats.workload}</div>
+          <div className={styles.evaluateBox}>{degree.metadata.stats.workload}</div>
         </div>
         <div>
           <div style={{ fontSize: "12px" }}>TYPE</div>
-          <div className={styles.coursesBox}>{degree.metadata.stats.type}</div>
+          <div className={styles.countBox}>{degree.metadata.stats.type}</div>
         </div>
       </div>
     </div>

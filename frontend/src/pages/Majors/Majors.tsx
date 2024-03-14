@@ -25,8 +25,8 @@ export const Majors = () => {
   const alterCurrDegree = (num: number) => { 
     setCurrDegree(num); 
   };
-
-  return (
+  
+  return(
     <div className={styles.container}>
       <ProgramMetadataBox 
         program={programs[currdex]} 

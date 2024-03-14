@@ -1,4 +1,6 @@
+
 import React from "react";
+import styles from "./Courses.module.css";
 import YearBox from "./components/YearBox";
 import { MockStudent } from "./test";
 
@@ -9,8 +11,8 @@ export default function Courses() {
     yearboxComponents.push(<YearBox grade={MockStudent["metadata"][i]}/>); 
   }
 
-  return (
-    <div>
+  return(
+    <div className={styles.container}>
       {yearboxComponents}
     </div>
   );

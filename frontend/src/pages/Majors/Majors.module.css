@@ -1,10 +1,9 @@
 
 .container {
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
   padding: 50px 125px;
-  /* border: 1px solid black; */
+  transition: opacity 0.3s;
 }
 
 .majorContainer {
@@ -19,8 +18,8 @@
 .reqsContainer {
   padding: 20px;
   border-radius: 25px;
-  width: 500px;
-  height: 500px;
+  width: 490px;
+  height: 490px;
   background-color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
@@ -42,7 +41,7 @@
   text-align: center;
 }
 
-.coursesBox {
+.countBox {
   display: inline-block; /* Display as inline block */
   width: max-content; /* Set width to maximum content size */
   padding: 0 6px; 
@@ -53,7 +52,7 @@
   text-align: center;
 }
 
-.ratingBox {
+.evaluateBox {
   display: inline-block; /* Display as inline block */
   width: max-content; /* Set width to maximum content size */
   padding: 0 6px; 
@@ -61,18 +60,6 @@
   border: 1px solid white; 
   color: #66C10A; /* Dark green text */
   background-color: #D9F4CF; /* Light green background fill */
-  border-radius: 4px; /* Rounded corners */
-  text-align: center;
-}
-
-.workloadBox {
-  display: inline-block; /* Display as inline block */
-  width: max-content; /* Set width to maximum content size */
-  padding: 0 6px; 
-  font-size: 12px;
-  border: 1px solid white; 
-  color: #CA7108; /* Dark green text */
-  background-color: #F4E3CF; /* Light green background fill */
   border-radius: 4px; /* Rounded corners */
   text-align: center;
 }

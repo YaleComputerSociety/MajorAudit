@@ -70,10 +70,10 @@ export const CPSC: Program = {
 
 export const ECON: Program = {
   name: "Economics", 
-  abbreviation: "Econ",
+  abbreviation: "ECON",
   degrees: [{
     metadata: {
-      name: "Economics", abbreviation: "Econ",
+      name: "Economics", abbreviation: "ECON",
       degreeType: "BACH_ART",
       stats: { courses: 16, rating: 4.5, workload: 3.6, type: "QR", },
       students: 76,

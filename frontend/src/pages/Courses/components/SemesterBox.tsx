@@ -1,13 +1,52 @@
 import styles from "./../Courses.module.css"
 import CourseBox from "./CourseBox";
-import MetadataBox from "./MetadataBox";
 import { Semester } from "../courses_types";
 
 type Props = {
     readonly semester: Semester;
 };
 
-export default function SemesterBox({ semester }: Props) {
+function MetadataAll(){
+    return(
+        <div className={styles.Row} style={{ marginBottom: "10px" }}>
+            <div className={styles.MetadataColumn} style={{ marginRight: "18px" }}>
+                <div className={styles.MetadataHeading}>
+                    Credits
+                </div>
+                <div className={styles.countBox}>
+                    6
+                </div>
+            </div>
+            <div className={styles.MetadataColumn} style={{ marginRight: "18px" }}>
+                <div className={styles.MetadataHeading}>
+                    Rating
+                </div>
+                <div className={styles.evaluateBox}>
+                    4.2
+                </div>
+            </div>
+            <div className={styles.MetadataColumn} style={{ marginRight: "18px" }}>
+                <div className={styles.MetadataHeading}>
+                    Workload
+                </div>
+                <div className={styles.evaluateBox}>
+                    4.1
+                </div>
+            </div>
+            <div className={styles.MetadataColumn} style={{ marginRight: "18px" }}>
+                <div className={styles.MetadataHeading}>
+                    Distribution
+                </div>
+                <div className={styles.evaluateBox}>
+                    3.9
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+function SemesterBox({ semester }: Props) {
 
     const classComponents = [];
     for (let i=0; i <semester["courses"].length; i++) {
@@ -16,13 +55,10 @@ export default function SemesterBox({ semester }: Props) {
 
     return (
         <div className={styles.Column}>
-            <div className={styles.Row}>
-                <MetadataBox heading="CREDITS" text="5.5"/>
-                <MetadataBox heading="RATING" text="~4.0"/>
-                <MetadataBox heading="WORKLOAD" text="~3.8"/>
-                <MetadataBox heading="DISTRIBUTIONALS" text="So"/>
-            </div>
+            <MetadataAll/>
             {classComponents}
         </div>
     );
 }
+
+export default SemesterBox;

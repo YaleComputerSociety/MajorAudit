@@ -8,8 +8,8 @@ type Props = {
 
 export default function YearBox({ grade }: Props) {
   return (
-    <div className={styles.Container}>
-        <div className={styles.Row}>
+    <div className={styles.yearContainer}>
+        <div className={styles.Row} style={{ marginBottom: "4px" }}>
             <div className={styles.Grade}>{grade["name"]}</div>
             <div className={styles.Year}>{grade["calendarYear"]}</div>
         </div>

@@ -1,7 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
-.Container {
-    margin: 2% 0% 2% 2%;
+.container {
+    padding: 20px 0px 0px 50px;
+}
+
+.yearContainer {
+    height: 300px;
+    width: 1300px;
 }
 .Row {
     display: flex;
@@ -27,21 +32,12 @@
     margin-bottom: 2px;
 }
 
-.MetadataBox {
-    border: 1px solid #C2C2C2;
-    color: #727272;
-    font-weight: 600;
-    width: 40px;
-    height: 20px;
-    text-align: center
-}
-
 .Season {
     margin-right: 1.5%;
     margin-left: 1%;
 
-    width: 5%;
-    height: auto; /* This maintains aspect ratio */
+    width: 20px;
+    height: 20px; /* This maintains aspect ratio */
 } 
 
 .CourseCode {
@@ -65,4 +61,41 @@
     color: #727272;
     align-self:flex-end;
     margin-bottom: 2.5px;
+}
+
+
+.evaluateBox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+
+    width: max-content;
+    height: 90%;
+    padding: 0 6px; 
+
+    font-size: 12px;
+    font-weight: 500;
+
+    border-radius: 4px; 
+    color: #5aac08;
+    background-color: #D9F4CF; 
+}
+
+.countBox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+
+    width: max-content;
+    height: 90%;
+    padding: 0 6px; 
+
+    font-size: 12px;
+    font-weight: 500;
+
+    border: 1px solid grey; 
+    border-radius: 4px;
+    color: black;
 }
