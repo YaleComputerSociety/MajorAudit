@@ -23,6 +23,15 @@
     padding: 20px;
 }
 
+.overviewSection {
+    display: flex;
+    font-size: 18px; 
+    font-weight: 540;
+    color: grey;
+    margin-bottom: 8px;
+    justify-content: space-between;
+}
+
 th {
     text-align: left;
     color: #727272;
@@ -40,7 +49,7 @@ th {
     margin-bottom: 4px;
     padding: 0 6px; 
 
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 550;
 
     border-radius: 8px; 

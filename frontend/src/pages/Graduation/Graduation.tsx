@@ -5,6 +5,7 @@ import styles from "./Graduation.module.css";
 import GraduationDistribution from "./components/DistributionTable";
 import GraduationOverview from "./components/Overview";
 
+import { CPSC } from "./../Majors/mock/mock"
 
 function GraduationRecommendations(){
   return(
@@ -28,7 +29,7 @@ export const Graduation = () => {
       <GraduationRecommendations/>
       <div style={{ display: "flex", alignItems: "baseline" }}>
         <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
-        <GraduationOverview/>
+        <GraduationOverview degree={CPSC.degrees[0]}/>
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ import { Degree } from "../../../commons/types";
 function MetadataTopshelf(degree: Degree){
   return(
     <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
-      <Button style={{ width: '30px', height: '30px', padding: 0, border: 'none', marginRight: "8px" }}>
+      <Button style={{ width: '28px', height: '28px', padding: 0, border: 'none', marginRight: "8px" }}>
         <img src={plus} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
       </Button>
       <div>
@@ -25,7 +25,7 @@ function MetadataTopshelf(degree: Degree){
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>{degree.metadata.name}</div>
           <img src={lgsIcon} alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }}/>
           <div className={styles.countBox} style={{ marginRight: "10px", marginTop: "4px" }}>{degree.metadata.students}</div>
-          <div className={styles.pinkMajorBox} style={{ marginLeft: "auto", fontSize: "16px" }}>MAJOR</div>
+          <div className={styles.pinkMajorBox} style={{ fontSize: "16px", marginTop: "2px" }}>MAJOR</div>
         </div>
         <div>{degree.metadata.abbreviation}</div>
       </div>
@@ -148,7 +148,9 @@ function ProgramMetadataBox(props: {program: Program, scrollProgram: Function, s
   return (
     <div>
       <MetadataAbove {...props}/>
-      <MetadataContent {...props} />
+      <div style={{ marginLeft: "10px" }}>
+        <MetadataContent {...props} />
+      </div>
       <MetadataBelow {...props}/>
     </div>
   );
