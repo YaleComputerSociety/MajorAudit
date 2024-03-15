@@ -7,21 +7,27 @@ function MetadataAll(semester: Semester){
     let totalRating = 0;
     let totalWorkload = 0;
 
-    const distributionSet = new Set<string>();
+    const areaSet = new Set<string>();
+    const skillSet = new Set<string>();
 
     semester.courses.forEach(course => {
         totalRating += course.evaluation.rating;
         totalWorkload += course.evaluation.workload;
 
         course.distribution.forEach(value => {
-            distributionSet.add(value);
+            if(value === "Hu" || value === "So" || value === "Sc"){
+                areaSet.add(value);
+            }else{
+                skillSet.add(value);
+            }
         });
     });
 
     const averageRating = totalRating / semester.courses.length;
-    const averageWorkload = totalWorkload / semester.courses.length;
+    const averageWorkload = totalWorkload; // maybe not divide
 
-    const distributionArray = Array.from(distributionSet);
+    const areaArray = Array.from(areaSet);
+    const skillArray = Array.from(skillSet);
 
     const styleMapping = {
         "Hu": { backgroundColor: "#E6CFF4", color: "#9970AB", marginRight: "4px" },
@@ -58,18 +64,34 @@ function MetadataAll(semester: Semester){
                     {averageWorkload.toFixed(1)}
                 </div>
             </div>
-            <div className={styles.MetadataColumn} style={{ marginRight: "18px" }}>
-                <div className={styles.MetadataHeading}>
-                    Distribution
+            {areaArray.length > 0 && (
+                <div className={styles.MetadataColumn} style={{ marginRight: "18px" }}>
+                    <div className={styles.MetadataHeading}>
+                        Areas
+                    </div>
+                    <div className={styles.row}>
+                        {areaArray.map((value, index) => (
+                            <div className={styles.evaluateBox} key={index} style={styleMapping[value as keyof typeof styleMapping]}>
+                                {value}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <div className={styles.row}>
-                    {distributionArray.map((value, index) => (
-                        <div className={styles.evaluateBox} key={index} style={styleMapping[value as keyof typeof styleMapping]}>
-                            {value}
-                        </div>
-                    ))}
+            )}
+            {skillArray.length > 0 && (
+                <div className={styles.MetadataColumn} style={{ marginRight: "18px" }}>
+                    <div className={styles.MetadataHeading}>
+                        Skills
+                    </div>
+                    <div className={styles.row}>
+                        {skillArray.map((value, index) => (
+                            <div className={styles.evaluateBox} key={index} style={styleMapping[value as keyof typeof styleMapping]}>
+                                {value}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

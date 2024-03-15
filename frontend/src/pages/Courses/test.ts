@@ -27,17 +27,17 @@ export const MockStudent: Student = {
             calendarYear: "2023-2024",
             fall: {
                 courses: [
-                    { completed: true, season: "FALL", code: "CPSC 327", name: "Object Oriented Programming",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }, 
-                    { completed: true, season: "FALL", code: "HIST 277", name: "Memory and History in Modern Europe",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }, 
-                    { completed: true, season: "FALL", code: "E&EB 255", name: "Invertebrates",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }, 
-                    { completed: true, season: "FALL", code: "ENGL 376", name: "Theories and Histories of the Western Novel",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] },
+                    { completed: true, season: "FALL", code: "CPSC 327", name: "Object Oriented Programming",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["QR"] }, 
+                    { completed: true, season: "FALL", code: "HIST 277", name: "Memory and History in Modern Europe",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu", "WR"] }, 
+                    { completed: true, season: "FALL", code: "E&EB 255", name: "Invertebrates",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Sc"] }, 
+                    { completed: true, season: "FALL", code: "ENGL 376", name: "Theories and Histories of the Western Novel",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu", "WR"] },
                     { completed: true, season: "FALL", code: "ART 136", name: "Capturing Light: Analog 35mm Photography",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }]
             },
             spring: {
                 courses: [
                     { completed: true, season: "SPRING", code: "SPAN 385", name: "Cervantes y Don Quijote",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }, 
-                    { completed: true, season: "SPRING", code: "CPSC 323", name: "Systems Programming and Computer Architecture",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }, 
-                    { completed: true, season: "SPRING", code: "HUMS 401", name: "Proust Interpretations: Reading In Search of Lost Time",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }, 
+                    { completed: true, season: "SPRING", code: "CPSC 323", name: "Systems Programming and Computer Architecture",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["QR"] }, 
+                    { completed: true, season: "SPRING", code: "HUMS 401", name: "Proust Interpretations: Reading In Search of Lost Time",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu", "WR"] }, 
                     { completed: true, season: "SPRING", code: "HSAR 225", name: "Art in the Age of Empire, 1760-1917",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }]
             }
         }
