@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom';
 
 import lgsIcon from "../../../commons/images/little_guys.png";
 import plus from "../../../commons/images/plus.png";
-import upMajor from "../../../commons/images/up_major.png";
-import downMajor from "../../../commons/images/down_major.png";
+import img_arrowup from "../../../commons/images/arrowup.png";
+import img_arrowdown from "../../../commons/images/arrowdown.png";
 
 import { Program } from "../../../commons/types";
 import { Degree } from "../../../commons/types";
@@ -118,29 +118,37 @@ function MetadataContent(props: {program: Program, whichDegree: number, alterCur
 
 function MetadataAbove(props: {scrollProgram: Function, seeProgram: Function}){
   return(
-    <div style={{ display: "flex", padding: "15px" }}>
-      <Button style={{ width: '30px', height: "auto", padding: 0, border: 'none', marginRight: "8px", cursor: "pointer" }} onClick={() => props.scrollProgram(1)}>
-            <img src={upMajor} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
-      </Button>
-      <div style={{ color: "gray" }}>
-          <div style={{ fontWeight: "bold", fontSize: "18px" }}>{props.seeProgram(1).name}</div>
-          <div style={{ fontSize: "10px" }}>{props.seeProgram(1).abbreviation}</div>
+    <Button style={{ backgroundColor: "white", border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(1)}>
+      <div style={{ display: "flex" }}>
+        <img src={img_arrowup} alt="" style={{ width: "31px", height: "15px", marginTop: "8px", marginRight: "8px" }}/>
+        <div style={{ textAlign: "left", color: "gray" }}>
+          <div style={{ fontSize: "18px", fontWeight: "bold" }}>
+            {props.seeProgram(1).name}
+          </div>
+          <div style={{ fontSize: "10px" }}>
+            {props.seeProgram(1).abbreviation}
+          </div>
+        </div>
       </div>
-    </div>
+    </Button>
   );
 }
 
 function MetadataBelow(props: {scrollProgram: Function, seeProgram: Function}){
   return(
-    <div style={{ display: "flex", padding: "15px" }}>
-      <Button style={{ width: '30px', height: "auto", padding: 0, border: 'none', marginRight: "8px", cursor: "pointer" }} onClick={() => props.scrollProgram(-1)}>
-        <img src={downMajor} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
-      </Button>
-      <div style={{ color: "gray" }}>
-          <div style={{ fontWeight: "bold", fontSize: "18px" }}>{props.seeProgram(-1).name}</div>
-          <div style={{ fontSize: "10px" }}>{props.seeProgram(-1).abbreviation}</div>
+    <Button style={{ backgroundColor: "white", border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(-1)}>
+      <div style={{ display: "flex" }}>
+        <img src={img_arrowdown} alt="" style={{ width: "31px", height: "15px", marginTop: "8px", marginRight: "8px" }}/>
+        <div style={{ textAlign: "left", color: "gray" }}>
+          <div style={{ fontSize: "18px", fontWeight: "bold" }}>
+            {props.seeProgram(-1).name}
+          </div>
+          <div style={{ fontSize: "10px" }}>
+            {props.seeProgram(-1).abbreviation}
+          </div>
+        </div>
       </div>
-    </div>
+    </Button>
   );
 }
 
