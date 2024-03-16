@@ -8,6 +8,7 @@ export interface CourseEvaluation {
 export interface Course {
     completed: boolean;
     season: "FALL" | "SPRING";
+    letterGrade: string;
     code: string;
     name: string;
     evaluation: CourseEvaluation;

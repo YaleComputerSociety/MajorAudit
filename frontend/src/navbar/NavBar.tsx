@@ -12,15 +12,15 @@ function NavBar() {
     return (    
         <div className={styles.NavBar}>
 
-            <div style={{ marginLeft: "20px" }}>
-                <img src={img_logo} alt="" style={{ width: "150px", height: "auto" }}/>
+            <div className={styles.row} style={{ marginLeft: "20px" }}>
+                <img src={img_logo} alt="" style={{ width: "150px", height: "auto", marginRight: "10px" }}/>
             </div>
             
             <div className={styles.row} style={{ marginRight: "50px" }}>
                 <img src={img_moon} alt="" style={{ width: "40px", height: "30px", marginRight: "2px" }}/>
-                <NavLink to="/graduation"  className={({ isActive }) => isActive ? styles.activeLink : styles.dormantLink}>Graduation </NavLink>
-                <NavLink to="/courses"     className={({ isActive }) => isActive ? styles.activeLink : styles.dormantLink}>Courses </NavLink>
-                <NavLink to="/majors"      className={({ isActive }) => isActive ? styles.activeLink : styles.dormantLink}>Majors </NavLink>
+                <NavLink to="/graduation"  className={({ isActive }) => isActive ? styles.activeLink : styles.dormantLink}>Graduation</NavLink>
+                <NavLink to="/courses"     className={({ isActive }) => isActive ? styles.activeLink : styles.dormantLink}>Courses</NavLink>
+                <NavLink to="/majors"      className={({ isActive }) => isActive ? styles.activeLink : styles.dormantLink}>Majors</NavLink>
                 <img src={img_profile} alt="" style={{ width: "24px", height: "24px", marginLeft: "14px" }}/>
             </div>
 

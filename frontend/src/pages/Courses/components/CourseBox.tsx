@@ -27,21 +27,24 @@ function Evaluations(course: Course){
     );
 }
 
-function CourseBox(course: Course) {
+function CourseBox(props: {course: Course, showGPA: boolean}) {
     return (
-        <div className={styles.courseBox} style={{ backgroundColor: course.completed ? "#E1E9F8" : "#F5F5F5" }}>
+        <div className={styles.courseBox} style={{ backgroundColor: props.course.completed ? "#E1E9F8" : "#F5F5F5" }}>
             <div className={styles.row} style={{ alignItems: "center" }}>
-                <div className={course.completed ? styles.checkmark : styles.hidden}>
-                    {course.completed ? "✓" : ""}
+                <div className={props.course.completed ? styles.checkmark : styles.hidden}>
+                    {props.course.completed ? "✓" : ""}
                 </div>
-                <img style={{ width: "15px", height: "15px", marginRight: "6px" }} src={course.season === "FALL" ? img_fall : img_spring} alt={course.season}></img>
+                <img style={{ width: "15px", height: "15px", marginRight: "6px" }} src={props.course.season === "FALL" ? img_fall : img_spring} alt={props.course.season}></img>
+                <div className={props.showGPA ? styles.courseLetterGrade : styles.hidden}>
+                    {props.showGPA ? props.course.letterGrade : ""}
+                </div>
                 <div>
-                    <div style={{ fontSize: "12px", fontWeight: "500" }}>{course.code}</div>
-                    <div style={{ fontSize: "8px", fontWeight: "500" }}>{course.name}</div>
+                    <div style={{ fontSize: "12px", fontWeight: "500" }}>{props.course.code}</div>
+                    <div style={{ fontSize: "8px", fontWeight: "500" }}>{props.course.name}</div>
                 </div>
             </div>
             <div>
-                <Evaluations {...course}/>
+                <Evaluations {...props.course}/>
             </div>
         </div >
     );

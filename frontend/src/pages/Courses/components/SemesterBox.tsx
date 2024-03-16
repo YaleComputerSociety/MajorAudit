@@ -96,17 +96,16 @@ function MetadataAll(semester: Semester){
     );
 }
 
-
-function SemesterBox(semester: Semester) {
+function SemesterBox(props: { semester: Semester, showGPA: boolean }) {
 
     const classComponents = [];
-    for (let i=0; i <semester["courses"].length; i++) {
-        classComponents.push(<CourseBox {...semester["courses"][i]}/>); 
+    for (let i=0; i <props.semester["courses"].length; i++) {
+        classComponents.push(<CourseBox course={props.semester["courses"][i]} showGPA={props.showGPA}/>); 
     }
 
     return (
         <div className={styles.column}>
-            <MetadataAll {...semester}/>
+            <MetadataAll {...props.semester}/>
             {classComponents}
         </div>
     );

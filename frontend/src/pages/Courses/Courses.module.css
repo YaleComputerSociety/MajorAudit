@@ -44,6 +44,25 @@
     margin-right: 2px;
 }
 
+.courseLetterGrade {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 6px;
+
+    width: max-content;
+    height: 16px;
+    padding: 0 4px; 
+
+    font-size: 10px;
+    font-weight: 500;
+
+    border: 1px solid grey; 
+    border-radius: 4px;
+    color: black;
+    background-color: white;
+}
+
 .hidden {
 
 }
@@ -127,4 +146,42 @@
     border: 1px solid grey; 
     border-radius: 4px;
     color: black;
+}
+
+.optionsButton {
+    background-color: white;
+    border: none;
+    border-radius: 8px;
+    color: #598FF4;
+    padding-right: 10px;
+    padding-left: 10px;
+    height: 30px;
+    font-size: 18px;
+    cursor: pointer;
+}
+  
+.optionsButton:hover {
+    background-color: #fafafa; /* Grey color */
+}
+
+.optionsChoice {
+    background-color: white;
+    border: none;
+    border-radius: 8px;
+    color: black;
+    padding-right: 10px;
+    padding-left: 10px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    align-content: center;
+    text-align: center;
+}
+
+.optionsChoice:hover {
+    background-color: #fafafa; /* Grey color */
+}
+
+.activeButton {
+    background-color: #f0f0f0
 }

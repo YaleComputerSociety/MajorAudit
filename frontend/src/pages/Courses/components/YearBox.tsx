@@ -2,18 +2,18 @@ import styles from "./../Courses.module.css"
 import SemesterBox from "./SemesterBox";
 import { Year } from "../courses_types";
 
-export default function YearBox(year: Year) {
+export default function YearBox(props: {year: Year, showGPA: boolean} ) {
   return (
     <div className={styles.column}>
         <div className={styles.row} style={{ marginBottom: "4px" }}>
-            <div className={styles.Grade}>{year["grade"]}</div>
-            <div className={styles.Year}>{year["calendarYear"]}</div>
+            <div className={styles.Grade}>{props.year["grade"]}</div>
+            <div className={styles.Year}>{props.year["calendarYear"]}</div>
         </div>
         <div className={styles.row}>
             <div style={{ marginRight: "20px" }}>
-              <SemesterBox {...year["fall"]}/>
+              <SemesterBox semester={props.year["fall"]} showGPA={props.showGPA}/>
             </div>
-            <SemesterBox {...year["spring"]}/>
+            <SemesterBox semester={props.year["spring"]} showGPA={props.showGPA}/>
         </div>
     </div>
   );
