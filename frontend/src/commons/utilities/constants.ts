@@ -1,3 +1,4 @@
+
 export const skillsAreasColors: { [code: string]: string } = {
     Hu: '#9970AB',
     So: '#4393C3',
@@ -12,4 +13,4 @@ export const skillsAreasColors: { [code: string]: string } = {
     "WR - Writing": '#EC7014',
     "L - Language": '#000000',
     ...Object.fromEntries([1, 2, 3, 4, 5].map((i) => [`L${i}`, '#888888'])),
-  };
+};

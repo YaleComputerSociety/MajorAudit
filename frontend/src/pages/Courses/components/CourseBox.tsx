@@ -1,64 +1,53 @@
-import styles from "./../Courses.module.css"
 
-import fall_image from './../images/fall.png';
-import spring_image from './../images/spring.png';
-import checkmark from './../images/checkmark.png';
+import styles from "./../Courses.module.css";
 
-type Props = {
-    readonly course: string;
-    readonly season: string;
-    readonly completed: string;
-};
+import img_fall from "./../../../commons/images/fall.png";
+import img_spring from "./../../../commons/images/spring.png";
 
-export default function CourseBox({ season, course, completed }: Props) {
+import DistributionsCircle from "./../../../commons/components/courses/DistributionsCircle"
+
+import { Course } from "./../courses_types";
+
+function Evaluations(course: Course){
+    return(
+        <div className={styles.row} style={{ alignItems: "center"}}>
+            <div className={styles.evaluateBox} style={{ marginRight: "6px" }}>
+                {course.evaluation.rating}
+            </div>
+            <div className={styles.evaluateBox} style={{ marginRight: "6px" }}>
+                {course.evaluation.workload}
+            </div>
+            <div className={styles.evaluateBox} style={{ marginRight: "6px" }}>
+                {course.evaluation.professor}
+            </div>
+            <div>
+                <DistributionsCircle distributions={course.distribution}/>
+            </div>
+        </div>
+    );
+}
+
+function CourseBox(props: {course: Course, showGPA: boolean}) {
     return (
-        <div
-            style={{
-                borderRadius: "20px",
-                backgroundColor: completed === "true" ? "#E1E9F8" : "#F5F5F5",
-                marginBottom: "0.5%",
-                padding: "1%"
-            }}
-        >
-            <div className={styles.Row}>
-                <img src={checkmark}
-                    alt={completed}
-                    style={{
-                        marginLeft: "1%",
-                        display: completed === "true" ? "flow" : "none"
-                    }}></img>
-                <img src={season === "fall" ? fall_image : spring_image} alt={season} className={styles.Season}></img>
-                <div className={styles.Column}>
-                    <div className={styles.CourseCode}>{course}</div>
-                    <div className={styles.CourseName}>{"full course name"}</div>
+        <div className={styles.courseBox} style={{ backgroundColor: props.course.completed ? "#E1E9F8" : "#F5F5F5" }}>
+            <div className={styles.row} style={{ alignItems: "center" }}>
+                <div className={props.course.completed ? styles.checkmark : styles.hidden}>
+                    {props.course.completed ? "✓" : ""}
                 </div>
-                <div className={styles.Row} style={{ fontSize: "small", alignItems: "center"}}>
-                    <div className={styles.MetadataBox}
-                        style={{
-                            borderRadius: "25px",
-                            marginRight: "5%",
-                            width: "50px"
-                        }}>
-                        {"~4.0"}
-                    </div>
-                    <div className={styles.MetadataBox}
-                        style={{
-                            borderRadius: "25px",
-                            marginRight: "5%",
-                            width: "50px"
-                        }}>
-                        {"~4.0"}
-                    </div>
-                    <div className={styles.MetadataBox}
-                        style={{
-                            borderRadius: "25px",
-                            marginRight: "5%",
-                            width: "50px"
-                        }}>{
-                            "~3.8"}
-                    </div>
+                <img style={{ width: "15px", height: "15px", marginRight: "6px" }} src={props.course.season === "FALL" ? img_fall : img_spring} alt={props.course.season}></img>
+                <div className={props.showGPA ? styles.courseLetterGrade : styles.hidden}>
+                    {props.showGPA ? props.course.letterGrade : ""}
                 </div>
+                <div>
+                    <div style={{ fontSize: "12px", fontWeight: "500" }}>{props.course.code}</div>
+                    <div style={{ fontSize: "8px", fontWeight: "500" }}>{props.course.name}</div>
+                </div>
+            </div>
+            <div>
+                <Evaluations {...props.course}/>
             </div>
         </div >
     );
 }
+
+export default CourseBox;

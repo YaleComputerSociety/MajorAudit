@@ -1,49 +1,87 @@
+
 .container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  height: 100vh;
-  padding: 0 200px;
+  padding: 50px 125px;
+  transition: opacity 0.3s;
 }
 
 .majorContainer {
-  width: 40vw;
-  height: 70vh;
+  padding: 20px;
+  width: 600px;
+  height: 400px;
   background-color: white;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  margin-left: -5vw;
-  margin-right: auto;
+  margin-right: 55px;
+  /* border: 1px solid black; */
 }
 
 .reqsContainer {
+  padding: 20px;
   border-radius: 25px;
-  width: 40vw;
-  height: 60vh;
+  width: 490px;
+  height: 490px;
   background-color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  margin-left: auto;
-  margin-right: -10vw;
 }
 
-.SubSection {
+.subsectionHeader {
   color: grey;
-  margin-left: -5%;
-  margin-right: 5%;
+  font-size: 18px;
+  font-weight: 525;
 }
 
-.smallBox {
-  border-radius: "25px";
-  border-style: solid;
-  width: 2vw;
-  height: 2.5vh;
-  margin-top: -1.5vh;
+/* Major Metadata ************************************************************/
+
+.pinkMajorBox {
+  font-size: 12px;
+  font-weight: bold;
+  border: 1px solid #D69CD8; 
+  color: #D69CD8;
+  border-radius: 4px; 
   text-align: center;
 }
-.wideBox {
-  border-radius: "25px";
-  border-style: solid;
-  width: 10vw;
-  height: 2.5vh;
-  margin-top: -1.5vh;
+
+.countBox {
+  display: inline-block; /* Display as inline block */
+  width: max-content; /* Set width to maximum content size */
+  padding: 0 6px; 
+  font-size: 12px;
+  border: 1px solid grey; 
+  color: black; /* Black text */
+  border-radius: 4px; /* Rounded corners */
   text-align: center;
 }
+
+.evaluateBox {
+  display: inline-block; /* Display as inline block */
+  width: max-content; /* Set width to maximum content size */
+  padding: 0 6px; 
+  font-size: 12px;
+  border: 1px solid white; 
+  color: #66C10A; /* Dark green text */
+  background-color: #D9F4CF; /* Light green background fill */
+  border-radius: 4px; /* Rounded corners */
+  text-align: center;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.linkBox {
+  font-size: 15px;
+  padding: 0 16px; 
+  border: 1px solid gray;
+  border-radius: 8px; /* Rounded corners */
+  text-decoration: none;
+  border-style: solid;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.degreeButtons {
+  
+}
+
+/* Major Requirements *********************************************************/
+

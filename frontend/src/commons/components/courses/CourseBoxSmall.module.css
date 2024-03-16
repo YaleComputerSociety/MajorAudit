@@ -1,0 +1,14 @@
+
+.CourseBox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    border-radius: 15px;
+
+    width: max-content;
+    padding: 2px 4px;
+
+    font-size: 14px;
+    font-weight: bold;
+}

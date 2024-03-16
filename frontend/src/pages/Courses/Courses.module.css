@@ -1,25 +1,96 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
-.Container {
-    margin: 2% 0% 2% 2%;
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 110px;
 }
-.Row {
+
+
+/* util */
+
+.row {
     display: flex;
     flex-direction: row;
 }
 
-.Column {
+.column {
     display: flex;
     flex-direction: column;
-    margin-right: 2%;
-    width: 100%;
 }
+
+/* courses */
+
+.courseBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 425px;
+    height: 36px;
+
+    border-radius: 16px;
+    margin-bottom: 5px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.checkmark {
+    justify-content: center;
+    text-align: center;
+
+    font-weight: 550;
+    margin-right: 2px;
+}
+
+.courseLetterGrade {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 6px;
+
+    width: max-content;
+    height: 16px;
+    padding: 0 4px; 
+
+    font-size: 10px;
+    font-weight: 500;
+
+    border: 1px solid grey; 
+    border-radius: 4px;
+    color: black;
+    background-color: white;
+}
+
+.hidden {
+
+}
+
+/* top top */
+
+.Grade {
+    font-weight: 600;
+    font-size: 25px;
+    margin-right: 10px;
+}
+
+.Year {
+    font-size: 14px;
+    font-weight: 600;
+    color: #727272;
+    align-self: flex-end;
+    margin-bottom: 2.5px;
+}
+
+
+/* sem meta */
 
 .MetadataColumn {
     font-size:small;
     display: flex;
     flex-direction: column;
-    margin-right: 1%;
+    margin-right: 4px;
 }
 
 .MetadataHeading {
@@ -27,39 +98,90 @@
     margin-bottom: 2px;
 }
 
-.MetadataBox {
-    border: 1px solid #C2C2C2;
-    color: #727272;
-    font-weight: 600;
-    width: 40px;
+.evaluateBox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: max-content;
     height: 20px;
-    text-align: center
+    padding: 0 6px; 
+
+    font-size: 11px;
+    font-weight: 510;
+
+    border-radius: 4px; 
+    color: #5aac08; 
+    background-color: #D9F4CF; 
 }
 
-.Season {
-    margin-right: 1.5%;
-    margin-left: 1%;
+.distBox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: max-content;
+    height: 20px;
+    padding: 0 6px; 
+
+    font-size: 12px;
+    font-weight: 510;
+
+    border-radius: 4px; 
 }
 
-.CourseCode {
-    font-size: small;
-    font-weight: 600;
+.countBox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+
+    width: max-content;
+    height: 18px;
+    padding: 0 6px; 
+
+    font-size: 12px;
+    font-weight: 500;
+
+    border: 1px solid grey; 
+    border-radius: 4px;
+    color: black;
 }
 
-.CourseName {
-    font-size: x-small;
+.optionsButton {
+    background-color: white;
+    border: none;
+    border-radius: 8px;
+    color: #598FF4;
+    padding-right: 10px;
+    padding-left: 10px;
+    height: 30px;
+    font-size: 18px;
+    cursor: pointer;
+}
+  
+.optionsButton:hover {
+    background-color: #fafafa; /* Grey color */
 }
 
-.Grade {
-    font-weight: 600;
-    font-size:x-large;
-    margin-right: 0.5%;
+.optionsChoice {
+    background-color: white;
+    border: none;
+    border-radius: 8px;
+    color: black;
+    padding-right: 10px;
+    padding-left: 10px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    align-content: center;
+    text-align: center;
 }
 
-.Year {
-    font-size:medium;
-    font-weight: 600;
-    color: #727272;
-    align-self:flex-end;
-    margin-bottom: 2.5px;
+.optionsChoice:hover {
+    background-color: #fafafa; /* Grey color */
+}
+
+.activeButton {
+    background-color: #f0f0f0
 }

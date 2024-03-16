@@ -1,6 +1,23 @@
-interface Course {
-  name: string;
+
+export type Season = "FALL" | "SPRING" | "SUMMER";
+
+export interface Course {
+  code: string;
+  seasons: Array<Season>;
+  status: "NONE" | "ENROLLED" | "COMPLETED";
+  distributions: Array<string>;
 }
+
+export interface ClassLists {
+  readonly clHu: Array<Course>;
+  readonly clSo: Array<Course>;
+  readonly clSc: Array<Course>;
+  readonly clQR: Array<Course>;
+  readonly clWR: Array<Course>;
+  readonly clL: Array<Course>;
+}
+
+/****************************************************************************/
 
 interface DUS {
   name: string;
@@ -8,17 +25,20 @@ interface DUS {
   email: string;
 }
 
-interface MajorMetadataStats {
+interface DegreeMetadataStats {
   courses: number;
   rating: number;
   workload: number;
   type: string;
 }
 
-interface MajorMetadata {
+type DegreeType = 'BACH_ART' | 'BACH_SCI' | 'BACH_INTENSIVE';
+
+interface DegreeMetadata {
   name: string;
   abbreviation: string;
-  stats: MajorMetadataStats;
+  degreeType: DegreeType;
+  stats: DegreeMetadataStats;
   students: number;
   about: string;
   dus: DUS;
@@ -26,20 +46,25 @@ interface MajorMetadata {
   wesbiteLink: string;
 }
 
-interface MajorRequirementsSubsection {
-  name?: string;
+interface DegreeRequirementsSubsection {
   courses: Array<Course>;
 }
 
-interface MajorRequirements {
+interface DegreeRequirements {
   name: string;
   coursesCompleted: number;
   coursesTotal: number;
   description?: string;
-  subsections: Array<MajorRequirementsSubsection>;
+  subsections: Array<DegreeRequirementsSubsection>;
 }
 
-export interface Major {
-  metadata: MajorMetadata;
-  requirements: Array<MajorRequirements>;
+export interface Degree {
+  metadata: DegreeMetadata;
+  requirements: Array<DegreeRequirements>;
+}
+
+export interface Program {
+  name: string;
+  abbreviation: string;
+  degrees: Array<Degree>;
 }

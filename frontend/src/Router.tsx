@@ -1,3 +1,4 @@
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Courses from "./pages/Courses";
@@ -23,6 +24,8 @@ const router = createBrowserRouter([
   },
 ]);
 
-export default function Router() {
+function Router() {
   return <RouterProvider router={router} />;
 }
+
+export default Router;

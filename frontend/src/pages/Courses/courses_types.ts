@@ -1,14 +1,25 @@
-export interface Course {
-    name: string;
-    hasCompleted: string;
-    // distributional: string;
+
+export interface CourseEvaluation {
+    rating: number;
+    workload: number;
+    professor: number;
 }
+
+export interface Course {
+    completed: boolean;
+    season: "FALL" | "SPRING";
+    letterGrade: string;
+    code: string;
+    name: string;
+    evaluation: CourseEvaluation;
+    distribution: Array<string>;
+}
+
 export interface Semester {
-    season: string;
     courses: Array<Course>;
 }
 export interface Year {
-    name: string;
+    grade: "First-Year" | "Sophomore" | "Junior" | "Senior";
     calendarYear: string;
     fall : Semester;
     spring: Semester;
