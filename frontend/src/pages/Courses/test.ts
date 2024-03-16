@@ -35,10 +35,10 @@ export const MockStudent: Student = {
             },
             spring: {
                 courses: [
-                    { completed: true, season: "SPRING", code: "SPAN 385", name: "Cervantes y Don Quijote",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }, 
-                    { completed: true, season: "SPRING", code: "CPSC 323", name: "Systems Programming and Computer Architecture",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["QR"] }, 
-                    { completed: true, season: "SPRING", code: "HUMS 401", name: "Proust Interpretations: Reading In Search of Lost Time",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu", "WR"] }, 
-                    { completed: true, season: "SPRING", code: "HSAR 225", name: "Art in the Age of Empire, 1760-1917",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }]
+                    { completed: false, season: "SPRING", code: "SPAN 385", name: "Cervantes y Don Quijote",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }, 
+                    { completed: false, season: "SPRING", code: "CPSC 323", name: "Systems Programming and Computer Architecture",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["QR"] }, 
+                    { completed: false, season: "SPRING", code: "HUMS 401", name: "Proust Interpretations: Reading In Search of Lost Time",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu", "WR"] }, 
+                    { completed: false, season: "SPRING", code: "HSAR 225", name: "Art in the Age of Empire, 1760-1917",  evaluation: { rating: 4.5, workload: 3.5, professor: 5}, distribution: ["Hu"] }]
             }
         }
     ]

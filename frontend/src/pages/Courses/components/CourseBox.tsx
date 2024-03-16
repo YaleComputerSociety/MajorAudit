@@ -20,7 +20,7 @@ function Evaluations(course: Course){
             <div className={styles.evaluateBox} style={{ marginRight: "6px" }}>
                 {course.evaluation.professor}
             </div>
-            <div style={{ marginRight: "10px" }}>
+            <div>
                 <DistributionsCircle distributions={course.distribution}/>
             </div>
         </div>

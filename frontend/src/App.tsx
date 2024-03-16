@@ -1,7 +1,7 @@
 
 import "./App.css";
 import { Route, Routes } from 'react-router-dom';
-import Navbar from './NavBar';
+import Navbar from './navbar/NavBar';
 import Courses from './pages/Courses';
 import Graduation from './pages/Graduation';
 import Majors from './pages/Majors';
