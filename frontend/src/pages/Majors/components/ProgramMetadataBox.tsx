@@ -6,7 +6,7 @@ import { Button } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 
 import lgsIcon from "../../../commons/images/little_guys.png";
-import plus from "../../../commons/images/plus.png";
+import img_plus from "../../../commons/images/plus.png";
 import img_arrowup from "../../../commons/images/arrowup.png";
 import img_arrowdown from "../../../commons/images/arrowdown.png";
 
@@ -18,7 +18,7 @@ function MetadataTopshelf(degree: Degree){
   return(
     <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
       <Button style={{ width: '28px', height: '28px', padding: 0, border: 'none', marginRight: "8px" }}>
-        <img src={plus} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+        <img src={img_plus} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
       </Button>
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -116,35 +116,17 @@ function MetadataContent(props: {program: Program, whichDegree: number, alterCur
   );
 }
 
-function MetadataAbove(props: {scrollProgram: Function, seeProgram: Function}){
+function MetadataScrollButton(props: {scrollProgram: Function, seeProgram: Function, dir: number}){
   return(
-    <Button style={{ backgroundColor: "white", border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(1)}>
+    <Button style={{ backgroundColor: "white", border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(props.dir)}>
       <div style={{ display: "flex" }}>
-        <img src={img_arrowup} alt="" style={{ width: "31px", height: "15px", marginTop: "8px", marginRight: "8px" }}/>
+        <img src={props.dir > 0 ? img_arrowup : img_arrowdown} alt="" style={{ width: "31px", height: "15px", marginTop: "8px", marginRight: "8px" }}/>
         <div style={{ textAlign: "left", color: "gray" }}>
           <div style={{ fontSize: "18px", fontWeight: "bold" }}>
-            {props.seeProgram(1).name}
+            {props.seeProgram(props.dir).name}
           </div>
           <div style={{ fontSize: "10px" }}>
-            {props.seeProgram(1).abbreviation}
-          </div>
-        </div>
-      </div>
-    </Button>
-  );
-}
-
-function MetadataBelow(props: {scrollProgram: Function, seeProgram: Function}){
-  return(
-    <Button style={{ backgroundColor: "white", border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(-1)}>
-      <div style={{ display: "flex" }}>
-        <img src={img_arrowdown} alt="" style={{ width: "31px", height: "15px", marginTop: "8px", marginRight: "8px" }}/>
-        <div style={{ textAlign: "left", color: "gray" }}>
-          <div style={{ fontSize: "18px", fontWeight: "bold" }}>
-            {props.seeProgram(-1).name}
-          </div>
-          <div style={{ fontSize: "10px" }}>
-            {props.seeProgram(-1).abbreviation}
+            {props.seeProgram(props.dir).abbreviation}
           </div>
         </div>
       </div>
@@ -155,11 +137,11 @@ function MetadataBelow(props: {scrollProgram: Function, seeProgram: Function}){
 function ProgramMetadataBox(props: {program: Program, scrollProgram: Function, seeProgram: Function, whichDegree: number, alterCurrDegree: Function}){
   return (
     <div>
-      <MetadataAbove {...props}/>
+      <MetadataScrollButton scrollProgram={props.scrollProgram} seeProgram={props.seeProgram} dir={1}/>
       <div style={{ marginLeft: "10px" }}>
         <MetadataContent {...props} />
       </div>
-      <MetadataBelow {...props}/>
+      <MetadataScrollButton scrollProgram={props.scrollProgram} seeProgram={props.seeProgram} dir={-1}/>
     </div>
   );
 }

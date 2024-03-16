@@ -9,7 +9,7 @@ import { EXABC } from "./../mock/mock";
 import DistributionBox from "./DistributionIndivBox";
 
 import { Course, ClassLists } from "./../../../commons/types";
-import CourseBox from "../../../commons/components/courses/CourseBox";
+import CourseBox from "../../../commons/components/courses/CourseBoxSmall";
 
 function getRequirements({type, year}: { type: string; year: number;}) {
   if (type === "Areas") {

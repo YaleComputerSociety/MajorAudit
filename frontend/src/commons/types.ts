@@ -1,8 +1,10 @@
 
+export type Season = "FALL" | "SPRING" | "SUMMER";
+
 export interface Course {
   code: string;
-  semesters?: string;
-  hasCheck?: boolean;
+  seasons: Array<Season>;
+  status: "NONE" | "ENROLLED" | "COMPLETED";
   distributions: Array<string>;
 }
 

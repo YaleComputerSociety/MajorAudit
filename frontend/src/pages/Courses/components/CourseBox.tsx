@@ -1,8 +1,8 @@
 
 import styles from "./../Courses.module.css";
 
-import img_fall from './../images/fall.png';
-import img_spring from './../images/spring.png';
+import img_fall from "./../../../commons/images/fall.png";
+import img_spring from "./../../../commons/images/spring.png";
 
 import DistributionsCircle from "./../../../commons/components/courses/DistributionsCircle"
 

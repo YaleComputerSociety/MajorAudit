@@ -14,6 +14,7 @@ export interface Course {
     evaluation: CourseEvaluation;
     distribution: Array<string>;
 }
+
 export interface Semester {
     courses: Array<Course>;
 }

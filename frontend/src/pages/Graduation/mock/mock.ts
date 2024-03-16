@@ -3,7 +3,8 @@ import { Course, ClassLists } from "../../../commons/types";
 
 export const EXONE: Course = {
   code: "HUMS 401",
-  hasCheck: true,
+  seasons: ["FALL", "SPRING"],
+  status: "COMPLETED",
   distributions: ["L"],
 }
 
