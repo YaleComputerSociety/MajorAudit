@@ -4,12 +4,20 @@ import Table from "react-bootstrap/Table";
 
 import styles from "./../Graduation.module.css";
 
-import { EXABC } from "./../mock/mock";
-
 import DistributionBox from "./DistributionIndivBox";
-
-import { Course, ClassLists } from "./../../../commons/types";
 import CourseBox from "../../../commons/components/courses/CourseBoxSmall";
+
+import { Course, ClassLists } from "../../../commons/types/TypeCourse";
+import { MockCourses } from "../../../commons/mock/MockCourses";
+
+const EXABC: ClassLists = {
+  clHu: [MockCourses[0]],
+  clSo: [MockCourses[0], MockCourses[0]],
+  clSc: [],
+  clQR: [MockCourses[0], MockCourses[0]],
+  clWR: [MockCourses[0]],
+  clL:  [MockCourses[0], MockCourses[0]],
+}
 
 function getRequirements({type, year}: { type: string; year: number;}) {
   if (type === "Areas") {

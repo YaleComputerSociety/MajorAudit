@@ -1,7 +1,7 @@
 
 import React from "react";
 import styles from "./../Graduation.module.css";
-import { Degree } from "./../../../commons/types"
+import { Degree } from "../../../commons/types/TypeProgram"
 
 function OverviewMajor(degree: Degree){
     return(

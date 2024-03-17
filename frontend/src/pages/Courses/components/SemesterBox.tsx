@@ -1,7 +1,7 @@
 
 import styles from "./../Courses.module.css"
 import CourseBox from "./CourseBox";
-import { Semester } from "../courses_types";
+import { Semester } from "./../../../commons/types/TypeStudent";
 
 function MetadataAll(semester: Semester){
     let totalRating = 0;
@@ -11,10 +11,10 @@ function MetadataAll(semester: Semester){
     const skillSet = new Set<string>();
 
     semester.courses.forEach(course => {
-        totalRating += course.evaluation.rating;
-        totalWorkload += course.evaluation.workload;
+        totalRating += course.course.evaluation.rating;
+        totalWorkload += course.course.evaluation.workload;
 
-        course.distribution.forEach(value => {
+        course.course.distribution.forEach(value => {
             if(value === "Hu" || value === "So" || value === "Sc"){
                 areaSet.add(value);
             }else{

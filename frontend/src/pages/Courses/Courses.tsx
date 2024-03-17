@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Courses.module.css";
 import YearBox from "./components/YearBox";
-import { MockStudent } from "./test";
+import { MockStudent } from "./../../commons/mock/MockStudent";
 
 function CoursesIteration(props: { showGPA: boolean, toggleShowGPA: Function }) {
     

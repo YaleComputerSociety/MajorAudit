@@ -5,7 +5,7 @@ import styles from "./Graduation.module.css";
 import GraduationDistribution from "./components/DistributionTable";
 import GraduationOverview from "./components/Overview";
 
-import { CPSC } from "./../Majors/mock/mock"
+import { CPSC } from "./../../commons/mock/MockProgram"
 
 function GraduationRecommendations(){
   return(

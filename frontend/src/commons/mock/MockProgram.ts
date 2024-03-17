@@ -1,5 +1,6 @@
 
-import { Program } from "../../../commons/types";
+import { Program } from "./../types/TypeProgram";
+import { MockCourses } from "./../mock/MockCourses";
 
 export const CPSC: Program = {
   name: "Computer Science",
@@ -8,9 +9,9 @@ export const CPSC: Program = {
     metadata: {
       name: "Computer Science", abbreviation: "CPSC",
       degreeType: "BACH_ART",
-      stats: { courses: 10, rating: 4.0, workload: 3.8, type: "QR",},
-      students: 91,
-      about: "The Department of Computer Science offers both B.S. and B.A. degree programs, as well as four combined major programs in cooperation with other departments: Electrical Engineering and Computer Science, Computer Science and Economics, Computer Science and Mathematics, and Computer Science and Psychology. Each program not only provides a solid technical education but also allows students either to take a broad range of courses in other disciplines or to complete the requirements of a second major.",
+      stats: { courses: 10, rating: 3.9, workload: 3.8, type: "QR",},
+      students: 90,
+      about: "The Department of Computer Science offers a B.A. degree program, as well as four combined major programs in cooperation with other departments: Electrical Engineering and Computer Science, Computer Science and Economics, Computer Science and Mathematics, and Computer Science and Psychology. Each program not only provides a solid technical education but also allows students either to take a broad range of courses in other disciplines or to complete the requirements of a second major.",
       dus: { name: "Y. Richard Yang", address: "AKW 208 432-6400", email: "cpsc.yale.edu",},
       catologLink: "https://catalog.yale.edu/ycps/subjects-of-instruction/computer-science/",
       wesbiteLink: "http://cpsc.yale.edu",
@@ -19,21 +20,22 @@ export const CPSC: Program = {
       {
         name: "CORE", coursesCompleted: 1, coursesTotal: 5,
         subsections: [
-          { courses: [{ code: "CPSC 201", seasons: ["FALL", "SPRING"], status: "COMPLETED", distributions: ["QR"] }], },
-          { courses: [{ code: "CPSC 202", seasons: ["FALL", "SPRING"], status: "NONE", distributions: ["QR"] }, { code: "MATH 244", seasons: ["FALL", "SPRING"], status: "NONE", distributions: ["QR"] }], },
-          { courses: [{ code: "CPSC 223", seasons: ["FALL", "SPRING"], status: "COMPLETED", distributions: ["QR"] }], },
-          { courses: [{ code: "CPSC 323", seasons: ["FALL", "SPRING"], status: "COMPLETED", distributions: ["QR"] }], },
-          { courses: [{ code: "CPSC 365", seasons: ["FALL", "SPRING"], status: "NONE", distributions: ["QR"] }],},],
+          { courses: [MockCourses[0]], },
+          { courses: [MockCourses[1], MockCourses[2]], },
+          { courses: [MockCourses[3]], },
+          { courses: [MockCourses[4]], },
+          { courses: [MockCourses[5]],},
+        ],
       }
-      ]
+    ]
   },
   {
     metadata: {
       name: "Computer Science", abbreviation: "CPSC",
       degreeType: "BACH_SCI",
-      stats: { courses: 12, rating: 4.0, workload: 4.0, type: "QR",},
-      students: 32,
-      about: "The Computer Science major is an engaging and dynamic field of study that delves into the complexities of power, governance, and public affairs. It encourages students to critically analyze political systems, philosophies, and behaviors. The major offers diverse subfields like American government, international relations, political philosophy, and comparative politics, allowing for a broad understanding of global and domestic politics. Interdisciplinary options are available for those interested in blending political studies with other areas. It's ideal for those who are intrigued by current events, passionate about understanding the mechanisms of power and governance, and keen on developing analytical and critical thinking skills.",
+      stats: { courses: 12, rating: 3.6, workload: 4.1, type: "QR",},
+      students: 30,
+      about: "The Department of Computer Science offers a B.S. degree programs, as well as four combined major programs in cooperation with other departments: Electrical Engineering and Computer Science, Computer Science and Economics, Computer Science and Mathematics, and Computer Science and Psychology. Each program not only provides a solid technical education but also allows students either to take a broad range of courses in other disciplines or to complete the requirements of a second major.",
       dus: { name: "Y. Richard Yang", address: "AKW 208 432-6400", email: "cpsc.yale.edu",},
       catologLink: "https://catalog.yale.edu/ycps/subjects-of-instruction/computer-science/",
       wesbiteLink: "http://cpsc.yale.edu",
@@ -56,17 +58,7 @@ export const ECON: Program = {
       catologLink: "https://catalog.yale.edu/ycps/subjects-of-instruction/computer-science/",
       wesbiteLink: "http://cpsc.yale.edu",
     },
-    requirements: [
-      {
-        name: "INTERMEDIATE ECONOMICS",
-        coursesCompleted: 0,
-        coursesTotal: 2,
-        subsections: [
-          { courses: [], },
-          { courses: [], },
-        ],
-      }
-    ],
+    requirements: [],
   }]
 };
 

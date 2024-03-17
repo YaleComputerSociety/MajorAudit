@@ -10,8 +10,7 @@ import img_plus from "../../../commons/images/plus.png";
 import img_arrowup from "../../../commons/images/arrowup.png";
 import img_arrowdown from "../../../commons/images/arrowdown.png";
 
-import { Program } from "../../../commons/types";
-import { Degree } from "../../../commons/types";
+import { Program, Degree } from "../../../commons/types/TypeProgram";
 
 
 function MetadataTopshelf(degree: Degree){

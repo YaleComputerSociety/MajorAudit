@@ -2,7 +2,7 @@
 import React from "react";
 import styles from "./../Majors.module.css";
 
-import { Degree } from "../../../commons/types"; 
+import { Degree } from "../../../commons/types/TypeProgram"; 
 import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
 
 function RequirementsTopshelf(major: Degree) {

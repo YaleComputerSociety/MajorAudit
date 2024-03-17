@@ -1,6 +1,7 @@
+
 import styles from "./../Courses.module.css"
 import SemesterBox from "./SemesterBox";
-import { Year } from "../courses_types";
+import { Year } from "./../../../commons/types/TypeStudent";
 
 export default function YearBox(props: {year: Year, showGPA: boolean} ) {
   return (

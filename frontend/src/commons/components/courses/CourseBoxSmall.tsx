@@ -2,7 +2,7 @@
 import React from "react";
 import styles from "./CourseBoxSmall.module.css";
 
-import { Course, Season } from "../../types";
+import { Course, Season } from "../../types/TypeCourse";
 
 import img_fall from "./../../images/fall.png";
 import img_spring from "./../../images/spring.png";
@@ -34,11 +34,11 @@ function CourseSeasonIcon(props: { seasons: Array<Season> }) {
 
  function CourseBoxSmall(course: Course) {
   return (
-    <div className={styles.CourseBox} style={{ backgroundColor: course.status === "COMPLETED" ? "#E4E9F8" : "#F5F5F5" }}>
-      {course.status === "COMPLETED" ? "✓ " : ""}
+    <div className={styles.CourseBox} style={{ backgroundColor: course.studentCourse === true ? "#E4E9F8" : "#F5F5F5" }}>
+      {course.studentCourse === true ? "✓ " : ""}
       <CourseSeasonIcon seasons={course.seasons}/>
       {course.code}
-      {course.distributions.length > 0 ? (<DistributionCircle distributions={course.distributions}/>) : ("")}
+      {course.distribution.length > 0 ? (<DistributionCircle distributions={course.distribution}/>) : ("")}
     </div>
   );
 }

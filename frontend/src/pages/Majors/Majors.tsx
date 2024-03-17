@@ -5,7 +5,7 @@ import styles from "./Majors.module.css";
 import ProgramRequirementsBox from "./components/ProgramRequirementsBox";
 import ProgramMetadataBox from "./components/ProgramMetadataBox";
 
-import { CPSC, ECON, HIST } from "./mock/mock";
+import { CPSC, ECON, HIST } from "./../../commons/mock/MockProgram";
 const programs = [CPSC, ECON, HIST];
 
 export const Majors = () => {
