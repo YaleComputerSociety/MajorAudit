@@ -4,12 +4,28 @@ import styles from "./Courses.module.css";
 import YearBox from "./components/YearBox";
 import { MockStudent } from "./../../commons/mock/MockStudent";
 
-function CoursesIteration(props: { showGPA: boolean, toggleShowGPA: Function }) {
+export interface DisplaySetting {
+  rating: boolean,
+  workload: boolean,
+}
+
+const defaultDisplaySetting = { rating: true, workload: true };
+
+function Settings(props: { displaySetting: DisplaySetting, updateDisplaySetting: Function }) {
     
   const [isOpen, setIsOpen] = useState(false);
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleDropdown = () => { setIsOpen(!isOpen); };
+
+  const throwBack = (key: string) => {
+    if(key === "rating"){
+      const newSetting = { ...props.displaySetting, rating: !props.displaySetting.rating };
+      props.updateDisplaySetting(newSetting);
+    } else 
+    if(key === "workload"){
+      const newSetting = { ...props.displaySetting, workload: !props.displaySetting.workload };
+      props.updateDisplaySetting(newSetting);
+    }
+  }
 
   return (
     <div className={styles.row} style={{ alignItems: "center" }}>
@@ -17,7 +33,14 @@ function CoursesIteration(props: { showGPA: boolean, toggleShowGPA: Function }) 
         Options
       </button>
       {isOpen && (
-        <button className={`${styles.optionsChoice} ${props.showGPA ? styles.activeButton : ''}`} onClick={() => props.toggleShowGPA()}>GPA</button>
+        <div style={{ display: "flex" }}>
+          <button className={`${styles.optionsChoice} ${props.displaySetting.rating ? styles.activeButton : ''}`} onClick={() => throwBack("rating")}>
+            Rating
+          </button>
+          <button className={`${styles.optionsChoice} ${props.displaySetting.workload ? styles.activeButton : ''}`} onClick={() => throwBack("workload")}>
+            Workload
+          </button>
+        </div>
       )}
     </div>
   );
@@ -25,23 +48,23 @@ function CoursesIteration(props: { showGPA: boolean, toggleShowGPA: Function }) 
 
 export default function Courses() {
 
-  const [showGPA, setShowGPA] = useState(false);
-  const toggleShowGPA = () => {
-    setShowGPA(!showGPA);
+  const [displaySetting, setDisplaySetting] = useState(defaultDisplaySetting);
+  const updateDisplaySetting = (newSetting: DisplaySetting) => {
+    setDisplaySetting(newSetting);
   };
 
   useEffect(() => {
-  }, [showGPA]);
+  }, [displaySetting]);
 
   const yearboxComponents = [];
   for (let i=0; i <MockStudent["metadata"].length; i++) {
-    yearboxComponents.push(<YearBox year={MockStudent["metadata"][i]} showGPA={showGPA}/>); 
+    yearboxComponents.push(<YearBox year={MockStudent["metadata"][i]} displaySetting={displaySetting}/>); 
   }
 
   return(
     <div className={styles.container}>
       <div>
-        <CoursesIteration showGPA={showGPA} toggleShowGPA={toggleShowGPA}/>
+        <Settings displaySetting={displaySetting} updateDisplaySetting={updateDisplaySetting}/>
         {yearboxComponents}
       </div>
     </div>
