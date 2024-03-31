@@ -25,6 +25,7 @@ app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
+
 class User:
     def __init__(self, netID, courses):
         self.netID = netID
@@ -225,6 +226,14 @@ def functions(req: https_fn.Request) -> https_fn.Response:
 def hello_world(req: https_fn.Request) -> https_fn.Response:
     response = https_fn.Response('hello world')
     return response
+
+@https_fn.on_request()
+def get_courses(req: https_fn.Request) -> https_fn.Response:
+    db_course_connection = db.collection('Courses').document('courses').get()
+    courses = db_course_connection.to_dict()['json_string']
+    response = https_fn.Response(courses)
+    return response
+
 
 
 # course_after={"CPSC 223":{'CPSC 323':1000, 'CPSC 472':100}}
