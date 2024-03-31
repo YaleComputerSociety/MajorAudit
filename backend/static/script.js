@@ -6,8 +6,10 @@ function syncData() {
 }
 
 function getData() {
+    console.log("here call get data")
     fetch('/get_data', {
         method: 'GET',
+        mode: 'cors'
     }).then(response => response.json()).
     then(json => {
         document.getElementById('dataDisplay').innerText = JSON.stringify(json, null, 4)

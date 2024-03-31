@@ -25,6 +25,8 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 
 from flask_cors import CORS
+from flask_cors import cross_origin
+
 
 # Use a service account.
 # with open(r'C:\YCS\MajorAudit/cwd.txt', 'w') as outfile:
@@ -43,6 +45,7 @@ class User:
         self.courses = courses
 
 app = Flask(__name__, template_folder='templates')
+CORS(app)
 
 app.secret_key = secrets.token_urlsafe(16)
 #app.secret_key = 'Dk8q3sdxz7-3WD8QzKXHgQ'
@@ -213,21 +216,21 @@ def get_redirect_url():
 #     except exceptions.FirebaseError:
 #         return abort(401, 'Failed to create a session cookie')
 
-@https_fn.on_request()
-def get_netid(req: https_fn.Request) -> https_fn.Response:
-    print(session)
-    x = requests.get('http://127.0.0.1:5001/majoraudit/us-central1/functions/get_netid1')
-    print("here")
-    print(x.text)
-    return ''
+#@https_fn.on_request()
+#def get_netid(req: https_fn.Request) -> https_fn.Response:
+#    print(session)
+#    x = requests.get('http://127.0.0.1:5001/majoraudit/us-central1/functions/get_netid1')
+#    print("Return value of the flask function: ")
+#    print(x.text)
+#    return ''
 
-@https_fn.on_request()
-def check_login(req: https_fn.Request) -> https_fn.Response:
-    print("firebase check login")
-    print(session)
-    if 'NETID' in session:
-        return jsonify(session['NETID'])
-    return jsonify()
+#@https_fn.on_request()
+#def check_login(req: https_fn.Request) -> https_fn.Response:
+#    print("firebase check login")
+#    print(session)
+#    if 'NETID' in session:
+#        return jsonify(session['NETID'])
+#    return jsonify()
 
 @https_fn.on_request()
 def functions(req: https_fn.Request) -> https_fn.Response:
@@ -240,20 +243,23 @@ def hello_world(req: https_fn.Request) -> https_fn.Response:
     response = https_fn.Response('hello world')
     return response
 
-@https_fn.on_request()
-def get_data(req: https_fn.Request) -> https_fn.Response:
-    if req.method == 'OPTIONS':
-        headers = {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Max-Age': '3600',
-        }
-        return make_response('', 204, headers)
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-    }
-    response_body = "DEFAULT"
+@app.route('/get_data', methods = ['GET'])
+@cross_origin()
+def get_data():
+#    if req.method == 'OPTIONS':
+#        headers = {
+#            'Access-Control-Allow-Origin': '*',
+#            'Access-Control-Allow-Methods': 'GET',
+#            'Access-Control-Allow-Headers': 'Content-Type',
+#            'Access-Control-Max-Age': '3600',
+#        }
+#        return make_response('', 204, headers)
+#    headers = {
+#        'Access-Control-Allow-Origin': '*',
+#    }
+#    response_body = "DEFAULT"
+
+    print(session["NETID"])
 
     data = db.collection("Users").document("jy692").get()
 
@@ -262,30 +268,38 @@ def get_data(req: https_fn.Request) -> https_fn.Response:
     else:
         response_body = jsonify(data.to_dict())
 
-    return make_response((response_body, 200, headers))
+    return response_body
+    #return make_response((response_body, 200))
+    #return make_response((response_body, 200, headers))
 
-@https_fn.on_request()
-def sync_data(req: https_fn.Request) -> https_fn.Response:
 
-    if req.method == 'OPTIONS':
-        headers = {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Max-Age': '3600',
-        }
-        return make_response('', 204, headers)
+@app.route('/sync_data', methods = ['POST'])
+@cross_origin()
+def sync_data():
+
+#    if req.method == 'OPTIONS':
+#        headers = {
+#            'Access-Control-Allow-Origin': '*',
+#            'Access-Control-Allow-Methods': 'GET',
+#            'Access-Control-Allow-Headers': 'Content-Type',
+#            'Access-Control-Max-Age': '3600',
+#        }
+#        return make_response('', 204, headers)
     
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-    }
+#    headers = {
+#        'Access-Control-Allow-Origin': '*',
+#    }
 
     #netid = session['NETID']
     #if not netid:
     #    return redirect('/user_login')
+
+    print("here sync data")
+
     data = request.json
     user = User("jy692", data)
     db.collection("Users").document("jy692").set(user.__dict__)
     print(data, flush=True)
 
-    return make_response(('Data received', 200, headers))
+    return data
+    #return make_response(('Data received', 200, headers))

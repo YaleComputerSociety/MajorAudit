@@ -29,8 +29,10 @@
       }
 
       function getData() {
-          fetch('http://127.0.0.1:5001/majoraudit/us-central1/get_data', {
+        console.log("here get data")
+          fetch('http://127.0.0.1:5001/majoraudit/us-central1/functions/get_data', {
               method: 'GET',
+              mode: 'cors',
           }).then(response => response.json()).
           then(json => {
               document.getElementById('dataDisplay').innerText = JSON.stringify(json, null, 4)
@@ -38,7 +40,7 @@
       }
 
       document.addEventListener("getData", function(e) {
-          fetch('http://127.0.0.1:5001/majoraudit/us-central1/sync_data', {
+          fetch('http://127.0.0.1:5001/majoraudit/us-central1/functions/sync_data', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
