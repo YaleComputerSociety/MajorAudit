@@ -10,7 +10,7 @@ import { CPSC } from "./../Majors/mock/mock"
 function GraduationRecommendations(){
   return(
     <div className={styles.containerRecommendations}>
-      <div style={{ fontSize: "30px", fontWeight: "500" }}>Recomendations</div>
+      <div style={{ fontSize: "30px", fontWeight: "500" }}>Recommendations</div>
     </div>
   );
 }
@@ -20,7 +20,6 @@ export const Graduation = () => {
   const UserYear = () => { return 2; }
   const [currYear, setCurrYear] = useState(UserYear());
   const alterCurrYear = (num: number) => { 
-
     setCurrYear(num); 
   };
 

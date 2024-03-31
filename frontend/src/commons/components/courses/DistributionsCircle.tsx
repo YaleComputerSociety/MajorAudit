@@ -47,7 +47,7 @@ export default function DistributionCircle({ distributions }: Props) {
   }, [radius, pie]);
 
   return(
-    <div style={{position: "relative", float: "right", paddingLeft: "2px"}}>
+    <div style={{position: "relative", float: "right"}}>
       <svg width={width} height={height} style={{ display: "inline-block" }}>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
           {arcs.map((arc, i) => {

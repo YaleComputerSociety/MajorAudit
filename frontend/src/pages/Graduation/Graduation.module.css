@@ -38,19 +38,3 @@ th {
     font-size: 12px;
     padding-top: 10px;
 }
-
-.overviewDistBox {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: max-content;
-    height: 20px;
-    margin-bottom: 4px;
-    padding: 0 6px; 
-
-    font-size: 12px;
-    font-weight: 550;
-
-    border-radius: 8px; 
-}

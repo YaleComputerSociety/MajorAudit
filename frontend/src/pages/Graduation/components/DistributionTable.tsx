@@ -6,7 +6,7 @@ import styles from "./../Graduation.module.css";
 
 import { EXABC } from "./../mock/mock";
 
-import DistributionBox from "./DistributionIndivBox";
+import DistributionBox from "../../../commons/components/courses/DistributionBoxLarge";
 
 import { Course, ClassLists } from "./../../../commons/types";
 import CourseBox from "../../../commons/components/courses/CourseBoxSmall";
@@ -71,8 +71,8 @@ function DistributionTable({ year, cls }: { year: number; cls: ClassLists }) {
           <tr>
             <th>SKILLS</th><th>CREDITS</th><th>COURSES</th>
           </tr>
-          {RenderRow("WR - Writing", cls.clWR, "Skills", year)}
           {RenderRow("QR - Quantitative Reasoning", cls.clQR, "Skills", year)}
+          {RenderRow("WR - Writing", cls.clWR, "Skills", year)}
           {RenderRow("L - Language", cls.clL, "Skills", year)}
         </tbody>
       </Table>
