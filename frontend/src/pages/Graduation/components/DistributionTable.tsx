@@ -24,7 +24,7 @@ function getRequirements({type, year}: { type: string; year: number;}) {
     }
   } else if (type === "Skills") {
     if (year === 1) {
-      return 1.33;
+      return 1;
     } else if (year === 2) {
       return 1;
     } else if (year === 3) {
