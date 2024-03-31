@@ -3,6 +3,8 @@ import sys
 import datetime
 import os
 
+import requests
+
 from flask import make_response
 
 from firebase_functions import firestore_fn, https_fn 
@@ -22,6 +24,8 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
+from flask_cors import CORS
+
 # Use a service account.
 # with open(r'C:\YCS\MajorAudit/cwd.txt', 'w') as outfile:
 #     outfile.write(os.getcwd())
@@ -29,6 +33,7 @@ from firebase_admin import firestore
 
 cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-7f4d0e1e3b.json')
 app = firebase_admin.initialize_app(cred)
+#CORS(app)
 
 db = firestore.client()
 
@@ -40,6 +45,7 @@ class User:
 app = Flask(__name__, template_folder='templates')
 
 app.secret_key = secrets.token_urlsafe(16)
+#app.secret_key = 'Dk8q3sdxz7-3WD8QzKXHgQ'
 
 @app.get('/sanity')
 def sanity():
@@ -69,6 +75,7 @@ def login():
         validation=validate(session['CAS_TOKEN'], service)
         if validation[0]:
             print("username", validation[1])
+            print(session)
             
             user = User(validation[1], "")
             if db.collection("Users").document(validation[1]).get().exists:
@@ -100,6 +107,14 @@ def login():
         resp.set_cookie(c, cookies[c])
     return resp
 
+@app.get('/dashboard')
+def dashboard():
+    netid = session['NETID'] 
+    if not netid:
+        return redirect('/user_login')
+    return render_template('dashboard.html', netid=netid)
+
+
 @app.route('/logout')
 def logout():
     service="127.0.0.1:5000/login"
@@ -112,9 +127,26 @@ def logout():
 def url_test():
     return make_response(f'{request.url}\n {get_base_url()}')
 
+@app.get('/get_netid1')
+def get_netid():
+    print("flask get netid")
+    print(session)
+    if 'NETID' in session:
+        print(session["NETID"])
+        return session["NETID"]
+    else:
+        return ''
+
+
 @app.get('/sync')
 def sync():
     True
+
+@app.get('/check_login')
+def check_login():
+    if 'NETID' in session:
+        return jsonify(session['NETID'])
+    return jsonify()
 
 def validate(ticket, service):
     validation_url = f'https://secure.its.yale.edu/cas/serviceValidate?service={service}&ticket={ticket}'
@@ -144,7 +176,6 @@ def get_base_url():
          return base_url.group()
 
      return 'no url found'
-
 
 def get_redirect_url():
     url = request.url
@@ -182,6 +213,21 @@ def get_redirect_url():
 #     except exceptions.FirebaseError:
 #         return abort(401, 'Failed to create a session cookie')
 
+@https_fn.on_request()
+def get_netid(req: https_fn.Request) -> https_fn.Response:
+    print(session)
+    x = requests.get('http://127.0.0.1:5001/majoraudit/us-central1/functions/get_netid1')
+    print("here")
+    print(x.text)
+    return ''
+
+@https_fn.on_request()
+def check_login(req: https_fn.Request) -> https_fn.Response:
+    print("firebase check login")
+    print(session)
+    if 'NETID' in session:
+        return jsonify(session['NETID'])
+    return jsonify()
 
 @https_fn.on_request()
 def functions(req: https_fn.Request) -> https_fn.Response:
@@ -243,5 +289,3 @@ def sync_data(req: https_fn.Request) -> https_fn.Response:
     print(data, flush=True)
 
     return make_response(('Data received', 200, headers))
-
-#test
