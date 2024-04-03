@@ -2,6 +2,7 @@
 import React from "react";
 import styles from "./../Graduation.module.css";
 import { Degree } from "../../../commons/types/TypeProgram"
+import DistributionBoxSmall from "../../../commons/components/courses/DistributionBoxSmall"
 
 function OverviewMajor(degree: Degree){
     return(
@@ -31,15 +32,15 @@ function DistributionAreas(){
             </div>
             <div style={{ display: "flex", textAlign: "center" }}>
                 <div style={{ marginRight: "8px" }}>
-                    <div className={styles.overviewDistBox} style={{ backgroundColor: "#E6CFF4", color: "#9970AB" }}>Hu</div>
+                    <DistributionBoxSmall text="Hu"/>
                     <div style={{ fontSize: "12px", fontWeight: "530" }}>1/2</div>
                 </div>
                 <div style={{ marginRight: "8px" }}>
-                    <div className={styles.overviewDistBox} style={{ backgroundColor: "#CFE0F4", color: "#5493C4" }}>So</div>
+                    <DistributionBoxSmall text="So"/>
                     <div style={{ fontSize: "12px", fontWeight: "530" }}>0/2</div>
                 </div>
                 <div style={{ marginRight: "8px" }}>
-                    <div className={styles.overviewDistBox} style={{ backgroundColor: "#D0F4CF", color: "#67AE5E" }}>Sc</div>
+                    <DistributionBoxSmall text="Sc"/>
                     <div style={{ fontSize: "12px", fontWeight: "530" }}>2/2</div>
                 </div>
             </div>
@@ -55,15 +56,15 @@ function DistributionSkills(){
             </div>
             <div style={{ display: "flex", textAlign: "center" }}>
                 <div style={{ marginRight: "8px" }}>
-                    <div className={styles.overviewDistBox} style={{ backgroundColor: "#F4CFCF", color: "#C1320A" }}>QR</div>
+                    <DistributionBoxSmall text="QR"/>
                     <div style={{ fontSize: "12px", fontWeight: "530" }}>0/2</div>
                 </div>
                 <div style={{ marginRight: "8px" }}>
-                    <div className={styles.overviewDistBox} style={{ backgroundColor: "#F4DCCF", color: "#E37F1D" }}>WR</div>
+                    <DistributionBoxSmall text="WR"/>
                     <div style={{ fontSize: "12px", fontWeight: "530" }}>2/2</div>
                 </div>
                 <div style={{ marginRight: "8px" }}>
-                    <div className={styles.overviewDistBox} style={{ backgroundColor: "#D2CEDB", color: "#231861" }}>L</div>
+                    <DistributionBoxSmall text="L"/>
                     <div style={{ fontSize: "12px", fontWeight: "530" }}>2/2</div>
                 </div>
             </div>

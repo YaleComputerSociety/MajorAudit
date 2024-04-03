@@ -4,7 +4,9 @@ import Table from "react-bootstrap/Table";
 
 import styles from "./../Graduation.module.css";
 
-import DistributionBox from "./DistributionIndivBox";
+import DistributionBox from "../../../commons/components/courses/DistributionBoxLarge";
+
+import { Course, ClassLists } from "./../../../commons/types";
 import CourseBox from "../../../commons/components/courses/CourseBoxSmall";
 
 import { Course, ClassLists } from "../../../commons/types/TypeCourse";
@@ -32,7 +34,7 @@ function getRequirements({type, year}: { type: string; year: number;}) {
     }
   } else if (type === "Skills") {
     if (year === 1) {
-      return 1.33;
+      return 1;
     } else if (year === 2) {
       return 1;
     } else if (year === 3) {
@@ -79,8 +81,8 @@ function DistributionTable({ year, cls }: { year: number; cls: ClassLists }) {
           <tr>
             <th>SKILLS</th><th>CREDITS</th><th>COURSES</th>
           </tr>
-          {RenderRow("WR - Writing", cls.clWR, "Skills", year)}
           {RenderRow("QR - Quantitative Reasoning", cls.clQR, "Skills", year)}
+          {RenderRow("WR - Writing", cls.clWR, "Skills", year)}
           {RenderRow("L - Language", cls.clL, "Skills", year)}
         </tbody>
       </Table>
