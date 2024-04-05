@@ -9,8 +9,6 @@ interface CourseEvaluation {
 }
 
 export interface Course {
-  studentCourse: boolean;
-
   code: string;
   title: string;
   seasons: Array<Season>;
