@@ -5,8 +5,6 @@ import Table from "react-bootstrap/Table";
 import styles from "./../Graduation.module.css";
 
 import DistributionBox from "../../../commons/components/courses/DistributionBoxLarge";
-
-import { Course, ClassLists } from "./../../../commons/types";
 import CourseBox from "../../../commons/components/courses/CourseBoxSmall";
 
 import { Course, ClassLists } from "../../../commons/types/TypeCourse";

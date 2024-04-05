@@ -1,18 +1,18 @@
 import React from "react";
 import styles from "./CourseBoxSmall.module.css";
 
-import { List } from "lodash";
+// import { List } from "lodash";
 
-import "react-tooltip/dist/react-tooltip.css";
-import { Tooltip } from "react-tooltip";
+// import "react-tooltip/dist/react-tooltip.css";
+// import { Tooltip } from "react-tooltip";
 import { Course, Season } from "../../types/TypeCourse";
 
 import img_fall from "./../../images/fall.png";
 import img_spring from "./../../images/spring.png";
 
-import DistributionBoxSmall from "./DistributionBoxSmall"
+// import DistributionBoxSmall from "./DistributionBoxSmall"
 import DistributionCircle from "./DistributionsCircle";
-import ReactDOMServer from 'react-dom/server';
+// import ReactDOMServer from 'react-dom/server';
 
 function CourseSeasonIcon(props: { seasons: Array<Season> }) {
   const seasonImageMap = {
@@ -38,25 +38,20 @@ function CourseSeasonIcon(props: { seasons: Array<Season> }) {
   );
 }
 
-function CourseDistributionsText(props: { distributions: List<string>}) {
-  const rows = [];
-  for (let i = 0; i < props.distributions.length; i++) {
-      rows.push(<DistributionBoxSmall text={props.distributions[i]}/>);
-  }
-  return (
-    <div>Satisfies {rows} Requirement{props.distributions.length > 1 ? "s" : ""}</div>
-  );
-}
+// function CourseDistributionsText(props: { distributions: List<string>}) {
+//   const rows = [];
+//   for (let i = 0; i < props.distributions.length; i++) {
+//       rows.push(<DistributionBoxSmall text={props.distributions[i]}/>);
+//   }
+//   return (
+//     <div>Satisfies {rows} Requirement{props.distributions.length > 1 ? "s" : ""}</div>
+//   );
+// }
 
 function CourseBoxSmall(course: Course) {
   return (
-    <div
-      className={styles.CourseBox}
-      style={{
-        backgroundColor: course.status === "COMPLETED" ? "#E4E9F8" : "#F5F5F5",
-      }}
-    >
-      {course.status === "COMPLETED" ? (
+    <div className={styles.CourseBox} style={{ backgroundColor: "#F5F5F5" }}>
+      {/* {course.status === "COMPLETED" ? (
         <div
           style={{
             paddingLeft: "1px",
@@ -77,10 +72,10 @@ function CourseBoxSmall(course: Course) {
         </div>
       ) : (
         ""
-      )}
+      )} */}
       <CourseSeasonIcon seasons={course.seasons} />
       {course.code}
-      {course.distributions.length > 0 ? (<DistributionCircle distributions={course.distributions}/>) : ("")}
+      {course.distribution.length > 0 ? (<DistributionCircle distributions={course.distribution}/>) : ("")}
     </div>
   );
 }
