@@ -61,8 +61,9 @@ function Courses() {
 
   return(
     <div className={styles.CoursesMain}>
-
-
+      <div style={{ fontSize: "30px", fontWeight: "550", marginBottom: "30px"}}>
+        Your Yale Courses
+      </div>
       {/* <Settings displaySetting={displaySetting} updateDisplaySetting={updateDisplaySetting}/> */}
       <div className={styles.courseContainer}>
         {yearboxComponents}

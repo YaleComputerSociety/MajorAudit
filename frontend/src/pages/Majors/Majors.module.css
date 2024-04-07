@@ -1,15 +1,18 @@
 
-.container {
+.row {
   display: flex;
-  align-items: center;
-  padding: 50px 125px;
-  transition: opacity 0.3s;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
 }
 
 .majorContainer {
   padding: 20px;
-  width: 600px;
-  height: 400px;
+  width: 500px;
+  height: 420px;
   background-color: white;
   margin-right: 55px;
   /* border: 1px solid black; */
@@ -18,8 +21,8 @@
 .reqsContainer {
   padding: 20px;
   border-radius: 25px;
-  width: 490px;
-  height: 490px;
+  width: 500px;
+  height: 420px;
   background-color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
@@ -28,6 +31,20 @@
   color: grey;
   font-size: 18px;
   font-weight: 525;
+}
+
+/* Pinned Major ************************************************************/
+
+.PinnedMajor {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 4px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #333; 
+  background: #E1E9F8; 
+  border-radius: 25px; 
+  margin-right: 6px;
 }
 
 /* Major Metadata ************************************************************/
