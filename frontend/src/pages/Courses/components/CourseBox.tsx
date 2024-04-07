@@ -1,5 +1,7 @@
 
 import styles from "./../Courses.module.css";
+import "react-tooltip/dist/react-tooltip.css";
+import { Tooltip } from "react-tooltip";
 
 import img_fall from "./../../../commons/images/fall.png";
 import img_spring from "./../../../commons/images/spring.png";
@@ -14,7 +16,12 @@ function CourseBox(props: {course: StudentCourse, displaySetting: DisplaySetting
         <div className={styles.courseBox} style={{ backgroundColor: props.course.enrollmentStatus === "COMPLETED" ? "#E1E9F8" : "#F5F5F5" }}>
             <div className={styles.row} style={{ alignItems: "center" }}>
                 <div className={props.course.enrollmentStatus === "COMPLETED" ? styles.checkmark : styles.hidden}>
-                    {props.course.enrollmentStatus === "COMPLETED" ? "✓" : ""}
+                    {props.course.enrollmentStatus === "COMPLETED" ? 
+                    <div>
+                        <div data-tooltip-id="check-tooltip" data-tooltip-content="Credit Confirmed by Yale"
+                        data-tooltip-place="top">✓</div>
+                        <Tooltip id="check-tooltip" style={{backgroundColor: "#444444", borderRadius: "3px"}}/>
+                    </div> : ""}
                 </div>
                 <img style={{ width: "15px", height: "15px", marginRight: "6px" }} src={props.course.season === "FALL" ? img_fall : img_spring} alt={props.course.season}></img>
                 <div>

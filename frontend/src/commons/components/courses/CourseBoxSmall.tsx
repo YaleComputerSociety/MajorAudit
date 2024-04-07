@@ -1,8 +1,6 @@
 import React from "react";
 import styles from "./CourseBoxSmall.module.css";
 
-import { List } from "lodash";
-
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
 import { Season, StudentCourse, Course } from "../../types/TypeCourse";
@@ -10,9 +8,7 @@ import { Season, StudentCourse, Course } from "../../types/TypeCourse";
 import img_fall from "./../../images/fall.png";
 import img_spring from "./../../images/spring.png";
 
-import DistributionBoxSmall from "./DistributionBoxSmall"
 import DistributionCircle from "./DistributionsCircle";
-import ReactDOMServer from 'react-dom/server';
 
 function CourseSeasonIcon(props: { seasons: Array<Season> }) {
   const seasonImageMap = {
@@ -38,16 +34,6 @@ function CourseSeasonIcon(props: { seasons: Array<Season> }) {
   );
 }
 
- function CourseDistributionsText(props: { distributions: List<string>}) {
-   const rows = [];
-   for (let i = 0; i < props.distributions.length; i++) {
-       rows.push(<DistributionBoxSmall text={props.distributions[i]}/>);
-   }
-   return (
-     <div>Satisfies {rows} Requirement{props.distributions.length > 1 ? "s" : ""}</div>
-   );
- }
-
 function CourseBoxSmall(props: { studentCourse?: StudentCourse, course?: Course } ) {
   /* Depending on if you pass through a student course or a normal course,
    it will render a different coursebox, with a checkmark for studentCourse
@@ -58,19 +44,7 @@ function CourseBoxSmall(props: { studentCourse?: StudentCourse, course?: Course 
         <CourseSeasonIcon seasons={props.course.seasons} />
         {props.course.code}
         {props.course.distribution.length > 0 ? (
-          <div style={{paddingLeft: "2px"}}>
-            <div
-              data-tooltip-id="distribution-tooltip"
-              data-tooltip-html={ReactDOMServer.renderToStaticMarkup(<CourseDistributionsText distributions={props.course.distribution}/>)}
-              data-tooltip-place="top"
-            >
             <DistributionCircle distributions={props.course.distribution} />
-            </div>
-            <Tooltip id="distribution-tooltip" border="1px solid black" style={{ 
-              color: "black",
-              backgroundColor: "white",
-              borderRadius: "15px"}}/>
-          </div>
         ) : (
           ""
         )}
@@ -94,10 +68,9 @@ function CourseBoxSmall(props: { studentCourse?: StudentCourse, course?: Course 
             >
               ✓
             </div>
-            <Tooltip id="check-tooltip" border="1px solid black" style={{ 
-              color: "black",
-              backgroundColor: "white",
-              borderRadius: "15px"}}/>
+            <Tooltip id="check-tooltip" style={{ 
+            backgroundColor: "#444444",
+            borderRadius: "3px"}}/>
           </div>
         ) : (
           ""
@@ -106,17 +79,7 @@ function CourseBoxSmall(props: { studentCourse?: StudentCourse, course?: Course 
         {props.studentCourse.course.code}
         {props.studentCourse.course.distribution.length > 0 ? (
           <div style={{paddingLeft: "2px"}}>
-            <div
-              data-tooltip-id="distribution-tooltip"
-              data-tooltip-html={ReactDOMServer.renderToStaticMarkup(<CourseDistributionsText distributions={props.studentCourse.course.distribution}/>)}
-              data-tooltip-place="top"
-            >
-            <DistributionCircle distributions={props.studentCourse.course.distribution} />
-            </div>
-            <Tooltip id="distribution-tooltip" border="1px solid black" style={{ 
-              color: "black",
-              backgroundColor: "white",
-              borderRadius: "15px"}}/>
+          <DistributionCircle distributions={props.studentCourse.course.distribution}/>
           </div>
         ) : (
           ""
