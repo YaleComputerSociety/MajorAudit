@@ -93,6 +93,9 @@ function DropdownContent({
       onClick={() => {
         setIsExpanded(false);
       }}
+      style={{
+        display: isExpanded ? "flex" : "none",
+      }}
     >
       <Collapse in={isExpanded}>
         {/* This wrapper div is important for making the collapse animation
@@ -138,7 +141,7 @@ function MeDropdown() {
         />
       </button>
       <DropdownContent
-        isExpanded={false}
+        isExpanded={isComponentVisible}
         setIsExpanded={setIsComponentVisible}
       />
     </div>
