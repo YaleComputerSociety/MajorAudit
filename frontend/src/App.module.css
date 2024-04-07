@@ -69,13 +69,13 @@
   bottom: 0;
 
   left: 50px;
-  right: 50px;
+  right: 100px;
 
   overflow-y: auto; 
   overflow-x: hidden;
   
   background-color: white;
-  z-index: 2;
+  z-index: 10;
 
   transition: transform 0.5s ease-out;
   transform: translateX(-100%);
@@ -88,5 +88,39 @@
 }
 
 .coursesExit {
+  transform: translateX(-100%);
+}
+
+/*****************************************************************************/
+
+.majorsPage {
+  position: fixed;
+  
+  display: flex;
+  justify-content: center;
+
+  top: 0;
+  bottom: 0;
+
+  left: 50px;
+  right: 50px;
+
+  overflow-y: auto; 
+  overflow-x: hidden;
+  
+  background-color: white;
+  z-index: 5;
+
+  transition: transform 0.5s ease-out;
+  transform: translateX(-100%);
+
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.majorsEnter {
+  transform: translateX(0);
+}
+
+.majorsExit {
   transform: translateX(-100%);
 }
