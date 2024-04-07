@@ -6,7 +6,7 @@ import { DisplaySetting } from "./../Courses";
 
 export default function YearBox(props: {year: Year, displaySetting: DisplaySetting} ) {
   return (
-    <div className={styles.column}>
+    <div className={styles.column} style={{ marginBottom: "8px" }}>
         <div className={styles.row} style={{ marginBottom: "4px" }}>
             <div className={styles.Grade}>{props.year["grade"]}</div>
             <div className={styles.Year}>{props.year["calendarYear"]}</div>
@@ -15,7 +15,7 @@ export default function YearBox(props: {year: Year, displaySetting: DisplaySetti
             <div style={{ marginRight: "20px" }}>
               <SemesterBox semester={props.year["fall"]} displaySetting={props.displaySetting}/>
             </div>
-              <SemesterBox semester={props.year["spring"]} displaySetting={props.displaySetting}/>
+            <SemesterBox semester={props.year["spring"]} displaySetting={props.displaySetting}/>
         </div>
     </div>
   );

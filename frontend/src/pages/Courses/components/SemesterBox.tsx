@@ -102,7 +102,7 @@ function SemesterBox(props: { semester: Semester, displaySetting: DisplaySetting
 
     return (
         <div className={styles.column}>
-            <MetadataAll {...props}/>
+            {classComponents.length > 0 && <MetadataAll {...props}/>}
             {classComponents}
         </div>
     );

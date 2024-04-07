@@ -26,6 +26,16 @@ export const CPSC: Program = {
           { courses: [MockCourses[4]], },
           { courses: [MockCourses[5]],},
         ],
+      },
+      {
+        name: "ELECTIVES", coursesCompleted: 0, coursesTotal: 4,
+        subsections: [],
+      },
+      {
+        name: "SENIOR REQUIREMENT", coursesCompleted: 0, coursesTotal: 1,
+        subsections: [
+          { courses: [MockCourses[6]],},
+        ],
       }
     ]
   },

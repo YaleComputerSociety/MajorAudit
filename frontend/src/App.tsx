@@ -14,7 +14,7 @@ function NavBar(props: { setShowCourses: Function }) {
       <div className={styles.column} style={{ height: "100%", alignItems: "center", justifyContent: "space-between" }}>
         <div>
           <img src={malogo} alt="" style={{ width: "50px", height: "auto", marginTop: "10px" }}/>
-          <button className={styles.NavButton} onClick={() => props.setShowCourses((prev: boolean) => !prev)}>_-_</button>
+          <button className={styles.NavButton} onClick={() => props.setShowCourses((prev: boolean) => !prev)}>-</button>
         </div>
         <img src={prof} alt="" style={{ width: "25px", height: "auto", marginBottom: "15px" }}/>
       </div>

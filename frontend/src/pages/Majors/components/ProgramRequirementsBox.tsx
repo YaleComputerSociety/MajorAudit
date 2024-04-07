@@ -5,7 +5,7 @@ import styles from "./../Majors.module.css";
 import { Degree } from "../../../commons/types/TypeProgram"; 
 import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
 
-function RequirementsTopshelf(major: Degree) {
+function RequirementsTopshelf(degree: Degree) {
   return(
     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px" }}>
       <div style={{ fontSize: "30px" }}>Requirements</div>
@@ -14,10 +14,10 @@ function RequirementsTopshelf(major: Degree) {
   );
 }
 
-function RequirementsContent(degree: Degree) {
+export function RequirementsContent(props: { degree: Degree }) {
   return(
     <div>
-      {degree.requirements.map((req) => (
+      {props.degree.requirements.map((req) => (
         <div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div className={styles.subsectionHeader} style={{ marginBottom: "4px" }}>{req.name}</div>
@@ -48,7 +48,7 @@ function ProgramRequirementsBox(props: {degree: Degree}) {
   return (
     <div className={styles.reqsContainer}>
       <RequirementsTopshelf {...props.degree} />
-      <RequirementsContent {...props.degree} />
+      <RequirementsContent degree={props.degree} />
     </div>
   );
 }
