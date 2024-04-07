@@ -35,7 +35,6 @@ from flask_cors import cross_origin
 
 cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-7f4d0e1e3b.json')
 app = firebase_admin.initialize_app(cred)
-#CORS(app)
 
 db = firestore.client()
 
@@ -45,7 +44,7 @@ class User:
         self.courses = courses
 
 app = Flask(__name__, template_folder='templates')
-CORS(app)
+CORS(app, supports_credentials=True, origins='http://127.0.0.1:5000')
 
 app.secret_key = secrets.token_urlsafe(16)
 #app.secret_key = 'Dk8q3sdxz7-3WD8QzKXHgQ'
@@ -53,6 +52,10 @@ app.secret_key = secrets.token_urlsafe(16)
 @app.get('/sanity')
 def sanity():
     return make_response('sanity')
+
+@app.route('/hello_world')
+def hello_world():
+    return make_response(session["NETID"])
 
 @app.get('/user_login')
 def login():
@@ -259,16 +262,20 @@ def get_data():
 #    }
 #    response_body = "DEFAULT"
 
-#    print(session["NETID"])
+    headers = {
+        'Access-Control-Allow-Credentials': 'true',
+    }
 
-    data = db.collection("Users").document("jy692").get()
+    print(session["NETID"])
+
+    data = db.collection("Users").document(session["NETID"]).get()
 
     if not data.exists:
         response_body = jsonify("No data")
     else:
         response_body = jsonify(data.to_dict())
 
-    return response_body
+    return make_response((response_body, 200, headers))
     #return make_response((response_body, 200))
     #return make_response((response_body, 200, headers))
 
