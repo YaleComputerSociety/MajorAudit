@@ -259,7 +259,7 @@ def get_data():
 #    }
 #    response_body = "DEFAULT"
 
-    print(session["NETID"])
+#    print(session["NETID"])
 
     data = db.collection("Users").document("jy692").get()
 
