@@ -39,6 +39,7 @@ app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
+
 class User:
     def __init__(self, netID, courses):
         self.netID = netID
@@ -311,3 +312,4 @@ def sync_data():
 
     return data
     #return make_response(('Data received', 200, headers))
+
