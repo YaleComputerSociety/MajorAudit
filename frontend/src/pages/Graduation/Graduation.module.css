@@ -1,4 +1,21 @@
 
+.GradPageContainer {
+
+    position: fixed;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    top: 75px;
+
+    height: calc(100vh - 75px);
+    width: 100%;
+    
+    border: solid 1px red;
+}
+
 .row {
     display: flex;
     flex-direction: row;
@@ -7,10 +24,6 @@
 .column {
     display: flex;
     flex-direction: column;
-}
-
-.containerDistributions {
-    margin-right: 40px;
 }
 
 .containerOverview {

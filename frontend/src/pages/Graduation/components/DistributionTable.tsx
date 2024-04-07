@@ -2,7 +2,7 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 
-import styles from "./../Graduation.module.css";
+// import styles from "./../Graduation.module.css";
 
 import DistributionBox from "../../../commons/components/courses/DistributionBoxLarge";
 import CourseBox from "../../../commons/components/courses/CourseBoxSmall";
@@ -90,7 +90,7 @@ function DistributionTable({ year, cls }: { year: number; cls: ClassLists }) {
 
 function GraduationDistribution(props: { currYear: number; alterCurrYear: Function }) {
   return (
-    <div className={styles.containerDistributions}>
+    <div>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
         <div style={{ fontSize: "30px", fontWeight: "500", marginRight: "20px" }}>Distributions</div>
         <div style={{ display: "flex", border: "1px solid #ccc", borderRadius: "5px" }}>

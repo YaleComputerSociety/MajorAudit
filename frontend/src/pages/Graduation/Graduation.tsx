@@ -26,12 +26,14 @@ const alterCurrYear = (num: number) => {
 };
 
 return (
-  <div className={styles.row}>
-    <div className={styles.column} style={{ justifyContent: "space-between", marginRight: "30px" }}>
-      <Recommendations/>
-      <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
+  <div className={styles.GradPageContainer}>
+    <div className={styles.row}>
+      <div className={styles.column} style={{ justifyContent: "space-between", marginRight: "60px" }}>
+        <Recommendations/>
+        <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
+      </div>
+      <GraduationOverview degree={CPSC.degrees[0]}/>
     </div>
-    <GraduationOverview degree={CPSC.degrees[0]}/>
   </div>
 );
 }
