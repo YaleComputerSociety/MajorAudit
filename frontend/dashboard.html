@@ -6,10 +6,21 @@
 <body>
     <button onclick="syncData()">Sync Data</button>
     <button onclick="getData()">Get Data</button>
+    <button onclick="get_netid()">Get Netid</button>
     <button onclick="window.location.href='/logout'">Log Out</button>
-    <h1>Hello, {{ netid }}</h1>
+    <h1 id="greet">Hello, </h1>
     <div id="dataDisplay"></div>
     <script>
+
+        function get_netid() {
+            fetch('http://127.0.0.1:5001/majoraudit/us-central1/functions/get_netid1', {
+                method: 'GET',
+            }).then(response => response.json()).
+            then(json => {
+                document.getElementById('greet').textContent += netid;
+            })  
+        }
+
       function syncData() {
           var event = new CustomEvent("scrapeData", {
               detail: { action: "openWebsite" }
@@ -18,8 +29,10 @@
       }
 
       function getData() {
-          fetch('/get_data', {
+        console.log("here get data")
+          fetch('http://127.0.0.1:5001/majoraudit/us-central1/functions/get_data', {
               method: 'GET',
+              mode: 'cors',
           }).then(response => response.json()).
           then(json => {
               document.getElementById('dataDisplay').innerText = JSON.stringify(json, null, 4)
@@ -27,13 +40,15 @@
       }
 
       document.addEventListener("getData", function(e) {
-          fetch('/sync_data', {
+          fetch('http://127.0.0.1:5001/majoraudit/us-central1/functions/sync_data', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
               },
               body: e.detail
           });
+          console.log(e);
+          
       });
 
 

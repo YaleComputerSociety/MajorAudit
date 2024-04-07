@@ -48,6 +48,9 @@
 
     </div>
 
+    <button onclick="getData()">Get Data</button>
+    <div id="dataDisplay"></div>
+
     <script src=
     "https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
     </script>
@@ -63,6 +66,24 @@
             location.href = "https://us-central1-majoraudit.cloudfunctions.net/functions/user_login"
           }
         });
+
+      $.ajax({url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/hello_world",
+        xhrFields: { withCredentials:true }}).done(function(data){
+          $('#sanity').text(data)
+        })
+
+      }
+
+      function getData() {
+        console.log("here get data")
+          fetch('http://127.0.0.1:5001/majoraudit/us-central1/functions/get_data', {
+              method: 'GET',
+              mode: 'cors',
+              credentials: 'include',
+          }).then(response => response.json()).
+          then(json => {
+              document.getElementById('dataDisplay').innerText = JSON.stringify(json, null, 4)
+          })
       }
 
       $('document').ready(setup);

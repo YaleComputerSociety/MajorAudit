@@ -1,4 +1,5 @@
 document.addEventListener("scrapeData", function(e) {
+    console.log("heard the event")
     chrome.runtime.sendMessage(e.detail);
 });
 
