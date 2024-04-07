@@ -8,7 +8,7 @@ import ProgramMetadataBox from "./components/ProgramMetadataBox";
 import { CPSC, ECON, HIST } from "./../../commons/mock/MockProgram";
 const programs = [CPSC, ECON, HIST];
 
-export const Majors = () => {
+function Majors() {
 
   // Which Program
   const [currdex, setCurrdex] = useState(0);

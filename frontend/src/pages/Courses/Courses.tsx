@@ -46,7 +46,7 @@ function Settings(props: { displaySetting: DisplaySetting, updateDisplaySetting:
   );
 }
 
-export default function Courses() {
+function Courses() {
 
   const [displaySetting, setDisplaySetting] = useState(defaultDisplaySetting);
   const updateDisplaySetting = (newSetting: DisplaySetting) => {
@@ -70,3 +70,5 @@ export default function Courses() {
     </div>
   );
 }
+
+export default Courses;

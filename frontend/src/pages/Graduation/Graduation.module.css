@@ -1,18 +1,10 @@
 
-.container {
-    /* justify-content: space-between; */
-    align-items: center;
-    padding: 25px 125px;
-}
+.Graduation {
 
-.containerRecommendations {
-    width: 1200px;
-    height: 200px;
-    margin-bottom: 30px;
 }
 
 .containerDistributions {
-    margin-right: 80px;
+    margin-right: 40px;
 }
 
 .containerOverview {
