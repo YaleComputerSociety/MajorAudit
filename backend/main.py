@@ -32,22 +32,26 @@ from flask_cors import cross_origin
 # with open(r'C:\YCS\MajorAudit/cwd.txt', 'w') as outfile:
 #     outfile.write(os.getcwd())
 
+try:
+    cred = credentials.Certificate(r'secrets\majoraudit-firebase-adminsdk-bc6kc-f15a5f23e2.json')
+    app = firebase_admin.initialize_app(cred)
+    #CORS(app)
 
-cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-7f4d0e1e3b.json')
-app = firebase_admin.initialize_app(cred)
-#CORS(app)
+    db = firestore.client()
 
-db = firestore.client()
+    class User:
+        def __init__(self, netID, courses):
+            self.netID = netID
+            self.courses = courses
 
-class User:
-    def __init__(self, netID, courses):
-        self.netID = netID
-        self.courses = courses
+    app = Flask(__name__, template_folder='templates')
+    CORS(app, supports_credentials=True, origins='http://127.0.0.1:5000')
 
-app = Flask(__name__, template_folder='templates')
-CORS(app)
 
-app.secret_key = secrets.token_urlsafe(16)
+    app.secret_key = secrets.token_urlsafe(16)
+except Exception as e:
+    with open('C:\YCS\MajorAudit/wtf_error.txt', 'w') as outfile:
+        outfile.write(str(e))
 #app.secret_key = 'Dk8q3sdxz7-3WD8QzKXHgQ'
 
 @app.get('/sanity')
@@ -242,6 +246,10 @@ def functions(req: https_fn.Request) -> https_fn.Response:
 def hello_world(req: https_fn.Request) -> https_fn.Response:
     response = https_fn.Response('hello world')
     return response
+
+@app.route('/hello_world')
+def hello_world():
+    return make_response(session["NETID"])
 
 @app.route('/get_data', methods = ['GET'])
 @cross_origin()

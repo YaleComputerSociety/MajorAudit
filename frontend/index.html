@@ -63,6 +63,11 @@
             location.href = "https://us-central1-majoraudit.cloudfunctions.net/functions/user_login"
           }
         });
+
+        $.ajax({url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/hello_world",
+        xhrFields: { withCredentials:true }}).done(function(data){
+          $('#sanity').text(data)
+        })
       }
 
       $('document').ready(setup);
