@@ -1,25 +1,25 @@
-
 import React from "react";
 import Table from "react-bootstrap/Table";
 
 import styles from "./../Graduation.module.css";
 
 import DistributionBox from "../../../commons/components/courses/DistributionBoxLarge";
-import CourseBox from "../../../commons/components/courses/CourseBoxSmall";
+import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
+import InfoButton from "../../../commons/components/InfoButton";
 
-import { Course, ClassLists } from "../../../commons/types/TypeCourse";
-import { MockCourses } from "../../../commons/mock/MockCourses";
+import { StudentCourse, ClassLists } from "../../../commons/types/TypeCourse";
+import { MockStudentCourses } from "../../../commons/mock/MockCourses";
 
 const EXABC: ClassLists = {
-  clHu: [MockCourses[0]],
-  clSo: [MockCourses[0], MockCourses[0]],
+  clHu: [MockStudentCourses[0]],
+  clSo: [MockStudentCourses[3], MockStudentCourses[0]],
   clSc: [],
-  clQR: [MockCourses[0], MockCourses[0]],
-  clWR: [MockCourses[0]],
-  clL:  [MockCourses[0], MockCourses[0]],
-}
+  clQR: [MockStudentCourses[1], MockStudentCourses[2]],
+  clWR: [MockStudentCourses[0]],
+  clL: [MockStudentCourses[0], MockStudentCourses[0]],
+};
 
-function getRequirements({type, year}: { type: string; year: number;}) {
+function getRequirements({ type, year }: { type: string; year: number }) {
   if (type === "Areas") {
     if (year === 1) {
       return 0;
@@ -44,7 +44,12 @@ function getRequirements({type, year}: { type: string; year: number;}) {
   return 0;
 }
 
-function RenderRow(text: string, classList: Array<Course>, type: string, year: number) {
+function RenderRow(
+  text: string,
+  classList: Array<StudentCourse>,
+  type: string,
+  year: number
+) {
   let reqNum = getRequirements({ type, year });
   return (
     <tr key={text}>
@@ -56,7 +61,7 @@ function RenderRow(text: string, classList: Array<Course>, type: string, year: n
       </td>
       <td style={{ display: "flex", flexDirection: "row" }}>
         {classList.map((course, index) => (
-          <CourseBox key={index} {...course} />
+          <CourseBoxSmall key={index} studentCourse={course} />
         ))}
       </td>
     </tr>
@@ -69,7 +74,13 @@ function DistributionTable({ year, cls }: { year: number; cls: ClassLists }) {
       <Table style={{ borderSpacing: "5px" }}>
         <thead>
           <tr>
-            <th>AREAS</th><th>CREDITS</th><th>COURSES</th>
+            <th>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                AREAS <InfoButton text="test areas" />
+              </div>
+            </th>
+            <th>CREDITS</th>
+            <th>COURSES</th>
           </tr>
         </thead>
         <tbody>
@@ -77,7 +88,13 @@ function DistributionTable({ year, cls }: { year: number; cls: ClassLists }) {
           {RenderRow("So - Social Sciences", cls.clSo, "Areas", year)}
           {RenderRow("Sc - Sciences", cls.clSc, "Areas", year)}
           <tr>
-            <th>SKILLS</th><th>CREDITS</th><th>COURSES</th>
+            <th>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                SKILLS <InfoButton text="test skills" />
+              </div>
+            </th>
+            <th>CREDITS</th>
+            <th>COURSES</th>
           </tr>
           {RenderRow("QR - Quantitative Reasoning", cls.clQR, "Skills", year)}
           {RenderRow("WR - Writing", cls.clWR, "Skills", year)}
@@ -88,12 +105,31 @@ function DistributionTable({ year, cls }: { year: number; cls: ClassLists }) {
   );
 }
 
-function GraduationDistribution(props: { currYear: number; alterCurrYear: Function }) {
+function GraduationDistribution(props: {
+  currYear: number;
+  alterCurrYear: Function;
+}) {
   return (
     <div className={styles.containerDistributions}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-        <div style={{ fontSize: "30px", fontWeight: "500", marginRight: "20px" }}>Distributions</div>
-        <div style={{ display: "flex", border: "1px solid #ccc", borderRadius: "5px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "8px",
+        }}
+      >
+        <div
+          style={{ fontSize: "30px", fontWeight: "500", marginRight: "20px" }}
+        >
+          Distributions
+        </div>
+        <div
+          style={{
+            display: "flex",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+          }}
+        >
           {[1, 2, 3, 4].map((year) => (
             <button
               key={year}
@@ -105,7 +141,7 @@ function GraduationDistribution(props: { currYear: number; alterCurrYear: Functi
                 padding: "5px 10px",
                 cursor: "pointer",
                 marginRight: "0", // Remove margin between buttons
-                border: "1px solid white" // Add white border
+                border: "1px solid white", // Add white border
               }}
             >
               {["First-Year", "Sophomore", "Junior", "Senior"][year - 1]}
