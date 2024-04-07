@@ -75,7 +75,10 @@ function CourseBoxSmall(course: Course) {
       )} */}
       <CourseSeasonIcon seasons={course.seasons} />
       {course.code}
-      {course.distribution.length > 0 ? (<DistributionCircle distributions={course.distribution}/>) : ("")}
+      <div style={{ marginTop: "1px", marginLeft: "1px" }}>
+        {course.distribution.length > 0 ? (<DistributionCircle distributions={course.distribution}/>) : ("")}
+      </div>
+      
     </div>
   );
 }

@@ -11,7 +11,7 @@ export default function YearBox(props: {year: Year, displaySetting: DisplaySetti
             <div className={styles.Grade}>{props.year["grade"]}</div>
             <div className={styles.Year}>{props.year["calendarYear"]}</div>
         </div>
-        <div className={styles.row}>
+        <div className={props.displaySetting.semesterStack ? styles.column : styles.row}>
             <div style={{ marginRight: "20px" }}>
               <SemesterBox semester={props.year["fall"]} displaySetting={props.displaySetting}/>
             </div>

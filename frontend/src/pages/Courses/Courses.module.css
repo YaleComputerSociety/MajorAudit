@@ -1,13 +1,17 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
-.container {
+.CoursesMain {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-
+    flex-direction: column;
     background-color: white;
+    padding-top: 35px;
+}
 
+.coursesContainer {
+    display: flex;
+    flex-direction: column;
+    padding-top: 75px;
 }
 
 /* util */
@@ -145,6 +149,21 @@
     border: 1px solid grey; 
     border-radius: 4px;
     color: black;
+}
+
+
+.CourseBar {
+    position: fixed; /* Stays in place even when scrolling */
+    display: flex;
+    flex-direction: row;
+
+    top: 0;
+    left: 0; /* 50px from the left edge of the viewport */
+    right: 0; /* 50px from the right edge of the viewport */
+    height: 20px;
+
+    background-color: gray;
+    z-index: 100; /* Ensure it's above other content */
 }
 
 .optionsButton {
