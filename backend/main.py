@@ -32,6 +32,7 @@ from flask_cors import cross_origin
 # with open(r'C:\YCS\MajorAudit/cwd.txt', 'w') as outfile:
 #     outfile.write(os.getcwd())
 
+#cred = credentials.Certificate(r'secrets\majoraudit-firebase-adminsdk-bc6kc-f15a5f23e2.json')
 
 cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-7f4d0e1e3b.json')
 app = firebase_admin.initialize_app(cred)
