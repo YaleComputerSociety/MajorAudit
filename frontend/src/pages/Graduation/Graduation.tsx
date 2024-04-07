@@ -7,31 +7,34 @@ import GraduationOverview from "./components/Overview";
 
 import { CPSC } from "./../../commons/mock/MockProgram"
 
-function GraduationRecommendations(){
+function Recommendations(){
   return(
-    <div className={styles.containerRecommendations}>
-      <div style={{ fontSize: "30px", fontWeight: "500" }}>Recommendations</div>
-    </div>
-  );
-}
-
-export const Graduation = () => {
-  
-  const UserYear = () => { return 2; }
-  const [currYear, setCurrYear] = useState(UserYear());
-  const alterCurrYear = (num: number) => { 
-    setCurrYear(num); 
-  };
-
-  return (
-    <div className={styles.container}>
-      <GraduationRecommendations/>
-      <div style={{ display: "flex", alignItems: "baseline" }}>
-        <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
-        <GraduationOverview degree={CPSC.degrees[0]}/>
+    <div>
+      <div style={{ fontSize: "30px", fontWeight: "500" }}>
+        Hello, Ryan!
       </div>
     </div>
   );
 }
 
+function Graduation() {
+
+const UserYear = () => { return 2; }
+const [currYear, setCurrYear] = useState(UserYear());
+const alterCurrYear = (num: number) => { 
+  setCurrYear(num); 
+};
+
+return (
+  <div className={styles.row}>
+    <div className={styles.column} style={{ justifyContent: "space-between", marginRight: "30px" }}>
+      <Recommendations/>
+      <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
+    </div>
+    <GraduationOverview degree={CPSC.degrees[0]}/>
+  </div>
+);
+}
+
 export default Graduation;
+
