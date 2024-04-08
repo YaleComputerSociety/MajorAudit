@@ -1,18 +1,29 @@
 
-.container {
-    /* justify-content: space-between; */
+.GradPageContainer {
+
+    position: fixed;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    padding: 25px 125px;
+
+    top: 75px;
+
+    height: calc(100vh - 75px);
+    width: 100%;
+    
+    border: solid 1px red;
 }
 
-.containerRecommendations {
-    width: 1200px;
-    height: 200px;
-    margin-bottom: 30px;
+.row {
+    display: flex;
+    flex-direction: row;
 }
 
-.containerDistributions {
-    margin-right: 80px;
+.column {
+    display: flex;
+    flex-direction: column;
 }
 
 .containerOverview {
@@ -38,3 +49,13 @@ th {
     font-size: 12px;
     padding-top: 10px;
 }
+
+.reqsContainer {
+    padding: 20px;
+    border-radius: 25px;
+    width: 500px;
+    height: 500px;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+  }
+

@@ -1,7 +1,7 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 
-import styles from "./../Graduation.module.css";
+// import styles from "./../Graduation.module.css";
 
 import DistributionBox from "../../../commons/components/courses/DistributionBoxLarge";
 import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
