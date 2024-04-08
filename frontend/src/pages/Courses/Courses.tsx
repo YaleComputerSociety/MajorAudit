@@ -62,7 +62,7 @@ export default function Courses() {
   }
 
   return(
-    <div className={styles.container}>
+    <div className={styles.CoursesPage}>
       <div>
         <Settings displaySetting={displaySetting} updateDisplaySetting={updateDisplaySetting}/>
         {yearboxComponents}

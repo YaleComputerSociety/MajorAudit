@@ -1,8 +1,18 @@
-.container {
+
+.MajorsPage {
+  position: fixed;
+
   display: flex;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  padding: 50px 125px;
-  transition: opacity 0.3s;
+
+  top: 75px;
+
+  height: calc(100vh - 75px);
+  width: 100%;
+  
+  border: solid 1px red;
 }
 
 .majorContainer {

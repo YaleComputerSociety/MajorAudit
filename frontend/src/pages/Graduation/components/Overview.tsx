@@ -37,7 +37,7 @@ function DegreeContent(props: { degree: Degree }) {
                         <div style={{ display: "flex" }}>
                             {sub.courses.map((course, courseIndex) => (
                             <div key={courseIndex} style={{ display: "flex" }}>
-                                <CourseBoxSmall {...course} />
+                                <CourseBoxSmall course={course} />
                                 {courseIndex < sub.courses.length - 1 && <div>/</div>}
                             </div>
                             ))}

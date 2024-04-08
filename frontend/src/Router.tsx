@@ -7,8 +7,8 @@ import Graduation from "./pages/Graduation";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <div>MajorAudit</div>,
+    path: "",
+    element: <Graduation />,
   },
   {
     path: "/courses",
@@ -18,10 +18,7 @@ const router = createBrowserRouter([
     path: "/majors",
     element: <Majors />,
   },
-  {
-    path: "/graduation",
-    element: <Graduation />,
-  },
+
 ]);
 
 function Router() {
