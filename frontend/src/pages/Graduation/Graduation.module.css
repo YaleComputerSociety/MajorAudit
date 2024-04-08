@@ -1,12 +1,12 @@
 
 .GraduationPage {
-
     position: fixed;
 
     display: flex;
     flex-direction: row;
+
     justify-content: center;
-    align-items: center;
+    padding-top: 100px;
 
     top: 75px;
 

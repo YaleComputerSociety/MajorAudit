@@ -28,7 +28,7 @@ const alterCurrYear = (num: number) => {
 return (
   <div className={styles.GraduationPage}>
     <div className={styles.row}>
-      <div className={styles.column} style={{ justifyContent: "space-between", marginRight: "60px" }}>
+      <div className={styles.column} style={{ marginRight: "60px" }}>
         <Recommendations/>
         <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
       </div>
