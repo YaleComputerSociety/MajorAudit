@@ -1,6 +1,9 @@
 
-import "./App.css";
+import React from "react";
+// import styles from "./App.module.css";
+
 import { Route, Routes } from 'react-router-dom';
+
 import Navbar from './navbar/NavBar';
 import Courses from './pages/Courses';
 import Graduation from './pages/Graduation';
@@ -12,8 +15,7 @@ function App() {
     <Navbar/>
     <div>
       <Routes>
-        <Route path="/"             element={<Graduation />} />
-        <Route path="/graduation"   element={<Graduation/>}/>        
+        <Route path=""             element={<Graduation />} />      
         <Route path="/courses"      element={<Courses/>} />
         <Route path="/majors"       element={<Majors/>}/>
       </Routes>

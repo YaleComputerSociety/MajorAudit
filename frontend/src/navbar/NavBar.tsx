@@ -24,28 +24,13 @@ function NavBar() {
           alt=""
           style={{ width: "40px", height: "30px", marginRight: "2px" }}
         />
-        <NavLink
-          to="/graduation"
-          className={({ isActive }) =>
-            isActive ? styles.activeLink : styles.dormantLink
-          }
-        >
+        <NavLink to="" className={({ isActive }) => isActive ? styles.activeLink : styles.dormantLink }>
           Graduation
         </NavLink>
-        <NavLink
-          to="/courses"
-          className={({ isActive }) =>
-            isActive ? styles.activeLink : styles.dormantLink
-          }
-        >
+        <NavLink to="/courses" className={({ isActive }) => isActive ? styles.activeLink : styles.dormantLink }>
           Courses
         </NavLink>
-        <NavLink
-          to="/majors"
-          className={({ isActive }) =>
-            isActive ? styles.activeLink : styles.dormantLink
-          }
-        >
+        <NavLink to="/majors" className={({ isActive }) => isActive ? styles.activeLink : styles.dormantLink }>
           Majors
         </NavLink>
         <MeDropdown />

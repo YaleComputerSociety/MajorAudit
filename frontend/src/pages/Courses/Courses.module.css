@@ -1,11 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
-.container {
-    display: flex;
-    justify-content: center;
-    margin-top: 110px;
-}
+.CoursesPage {
+    position: fixed;
 
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    padding-top: 25px;
+
+    top: 75px;
+
+    height: calc(100vh - 75px);
+    width: 100%;
+    
+    border: solid 1px red;
+}
 
 /* util */
 

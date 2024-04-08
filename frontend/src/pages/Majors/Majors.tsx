@@ -27,7 +27,7 @@ export const Majors = () => {
   };
   
   return(
-    <div className={styles.container}>
+    <div className={styles.MajorsPage}>
       <ProgramMetadataBox 
         program={programs[currdex]} 
         scrollProgram={alterCurrdex} 
