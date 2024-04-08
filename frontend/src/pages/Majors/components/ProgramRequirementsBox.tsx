@@ -2,6 +2,8 @@
 import React from "react";
 import styles from "./../Majors.module.css";
 
+import InfoButton from "../../../commons/components/InfoButton";
+
 import { Degree } from "../../../commons/types/TypeProgram"; 
 import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
 
@@ -27,16 +29,19 @@ function RequirementsContent(degree: Degree) {
 
           {/* Line of Courses */}
           {req.subsections.map((sub, subIndex) => (
-            <div key={subIndex} style={{ marginBottom: subIndex === req.subsections.length - 1 ? "14px" : "4px" }}>
+              <div key={subIndex} style={{ marginBottom: subIndex === req.subsections.length - 1 ? "14px" : "4px" }}>
+              {sub.name && (
+                  <div style={{display:"flex"}}><div style={{ fontSize: "13px", fontStyle: "semibold", marginBottom: "4px" }}>{sub.name}</div> <InfoButton text="Your courses that work for this requirement" size={13}/> </div>
+              )}
               <div style={{ display: "flex" }}>
-                {sub.courses.map((course, courseIndex) => (
+                  {sub.courses.map((course, courseIndex) => (
                   <div key={courseIndex} style={{ display: "flex" }}>
-                    <CourseBoxSmall course={course} />
-                    {courseIndex < sub.courses.length - 1 && <div>/</div>}
+                      <CourseBoxSmall course={course}/>
+                      {courseIndex < sub.courses.length - 1 && <div>/</div>}
                   </div>
-                ))}
+                  ))}
               </div>
-            </div>
+              </div>
           ))}
         </div>
       ))}
