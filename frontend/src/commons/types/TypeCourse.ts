@@ -28,12 +28,12 @@ export interface StudentCourse {
 /*SoonToDeprecate*/
 
 export interface ClassLists {
-  readonly clHu: Array<Course>;
-  readonly clSo: Array<Course>;
-  readonly clSc: Array<Course>;
-  readonly clQR: Array<Course>;
-  readonly clWR: Array<Course>;
-  readonly clL: Array<Course>;
+  readonly clHu: Array<StudentCourse>;
+  readonly clSo: Array<StudentCourse>;
+  readonly clSc: Array<StudentCourse>;
+  readonly clQR: Array<StudentCourse>;
+  readonly clWR: Array<StudentCourse>;
+  readonly clL: Array<StudentCourse>;
 }
 
 // /*Other*/

@@ -3,6 +3,9 @@ import { List } from "lodash";
 import React, { useMemo } from "react";
 import * as d3 from "d3";
 import { skillsAreasColors } from "../../utilities/constants";
+import DistributionBoxSmall from "./DistributionBoxSmall";
+import { Tooltip } from "react-tooltip";
+import ReactDOMServer from 'react-dom/server';
 
 type Props = {
   readonly distributions: List<string>;
@@ -14,6 +17,16 @@ function getData({ distributions }: Props) {
     pieData.push({ name: distributions[i], value: 1 });
   }
   return pieData;
+}
+
+function CourseDistributionsText(props: { distributions: List<string>}) {
+  const rows = [];
+  for (let i = 0; i < props.distributions.length; i++) {
+      rows.push(<DistributionBoxSmall text={props.distributions[i]}/>);
+  }
+  return (
+    <div>Satisfies {rows} Requirement{props.distributions.length > 1 ? "s" : ""}</div>
+  );
 }
 
 type DataItem = {
@@ -47,6 +60,11 @@ export default function DistributionCircle({ distributions }: Props) {
   }, [radius, pie]);
 
   return(
+    <div
+      data-tooltip-id="distribution-tooltip"
+      data-tooltip-html={ReactDOMServer.renderToStaticMarkup(<CourseDistributionsText distributions={distributions}/>)}
+      data-tooltip-place="top"
+    >
     <div style={{position: "relative", float: "right"}}>
       <svg width={width} height={height} style={{ display: "inline-block" }}>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
@@ -55,6 +73,10 @@ export default function DistributionCircle({ distributions }: Props) {
           })}
         </g>
       </svg>
+    </div>
+    <Tooltip id="distribution-tooltip" style={{ 
+            backgroundColor: "#444444",
+            borderRadius: "3px"}}/>
     </div>
   );
 }

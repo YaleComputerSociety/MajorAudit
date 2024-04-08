@@ -9,8 +9,11 @@ const CPSC323: Course = { code: "CPSC 323", title: "Title CPSC323", seasons: ["F
 const CPSC365: Course = { code: "CPSC 365", title: "Title CPSC365", seasons: ["FALL", "SPRING"], evaluation: { rating: 4.1, workload: 4.2, professor: 5}, distribution: ["QR"] };
 
 const Student201: StudentCourse = { course: CPSC201, enrollmentStatus: "COMPLETED", season: "FALL", year: "2022-2023", letterGrade: "A-" };
-const Student223: StudentCourse = { course: CPSC201, enrollmentStatus: "COMPLETED", season: "SPRING", year: "2022-2023", letterGrade: "A" };
-const Student323: StudentCourse = { course: CPSC201, enrollmentStatus: "ENROLLED", season: "FALL", year: "2022-2023", letterGrade: "" };
+const Student223: StudentCourse = { course: CPSC223, enrollmentStatus: "COMPLETED", season: "SPRING", year: "2022-2023", letterGrade: "A" };
+const Student323: StudentCourse = { course: CPSC323, enrollmentStatus: "ENROLLED", season: "FALL", year: "2022-2023", letterGrade: "" };
+
+const CGSC274: Course = { code: "CGSC 274", title: "Title CGSC274", seasons: ["FALL", "SPRING"], evaluation: { rating: 4.1, workload: 4.2, professor: 5}, distribution: ["QR", "Sc", "So"] };
+const Student274: StudentCourse = { course: CGSC274, enrollmentStatus: "COMPLETED", season: "FALL", year: "2023-2024", letterGrade: "B" };
 
 export const MockCourses = [
     CPSC201,
@@ -25,4 +28,5 @@ export const MockStudentCourses = [
     Student201,
     Student223,
     Student323,
+    Student274,
 ];
