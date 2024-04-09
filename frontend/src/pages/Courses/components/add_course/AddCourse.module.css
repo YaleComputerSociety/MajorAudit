@@ -1,13 +1,35 @@
 
-.SearchBar{
+.CourseMenuContainer {
+    display: flex;
+    flex-direction: column;
 
-    width: 200px; 
+    top: 135px; 
+
+    width: 315px; 
+    height: 700px; 
+
+    box-sizing: border-box;
+    padding: 8px;
+
+    border-radius: 15px; 
+}
+
+.SearchBar {
+    width: 92.5%; 
+    height: 20px;
 
     padding: 10px;
     margin-bottom: 20px;
 
-    border: 1px solid grey;
-    border-radius: 5px;
-    
-
+    border: 1px solid rgb(214, 214, 214);
+    border-radius: 16px;
 }
+
+.SectionHeader {
+    margin-left: 8px;
+
+    color: grey;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: italic;
+  }
