@@ -25,7 +25,7 @@
 
     width: 100%;
 
-    padding-top: 25px;
+    padding-top: 50px;
     padding-bottom: 75px;
 }
 
@@ -64,13 +64,15 @@
     transform: scale(0); 
     transition: transform 0.5s, width 0.5s, height 0.5s, border-radius 0.5s;
     background-color: white;
-    border: 1px solid #61ADFE;
+    /* border: 1px solid #61ADFE; */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.125);
     z-index: 1; 
 }
 
 .AddCourseMenuActive {
-    width: 325px; 
+    top: 135px; 
+
+    width: 315px; 
     height: 700px; 
 
     border-radius: 15px; 

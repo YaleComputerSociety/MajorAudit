@@ -1,6 +1,6 @@
 
 .MajorsPage {
-  position: fixed;
+  position: absolute;
 
   display: flex;
   flex-direction: row;
