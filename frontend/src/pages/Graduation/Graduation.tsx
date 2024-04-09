@@ -7,7 +7,7 @@ import GraduationOverview from "./components/Overview";
 
 import { CPSC } from "./../../commons/mock/MockProgram"
 
-function Recommendations(){
+function Recommendations() {
   return(
     <div>
       <div style={{ fontSize: "30px", fontWeight: "500" }}>

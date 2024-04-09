@@ -13,7 +13,7 @@ export default function InfoButton(props: { text: string }) {
           >
             <GoInfo />
           </div>
-          <Tooltip id="info-tooltip" style={{ 
+          <Tooltip id="info-tooltip" openOnClick={true} style={{ 
             backgroundColor: "#444444",
             borderRadius: "3px"}}/>
         </div>
