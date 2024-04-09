@@ -51,6 +51,10 @@
     z-index: 2;
 }
 
+.AddCourseButton:active {
+    background-color: #9cccff;
+}
+
 .AddCourseMenuDormant {
     position: fixed;
 
@@ -102,25 +106,6 @@
 
     font-weight: 550;
     margin-right: 2px;
-}
-
-.courseLetterGrade {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 6px;
-
-    width: max-content;
-    height: 16px;
-    padding: 0 4px; 
-
-    font-size: 10px;
-    font-weight: 500;
-
-    border: 1px solid grey; 
-    border-radius: 4px;
-    color: black;
-    background-color: white;
 }
 
 .hidden {
@@ -206,6 +191,8 @@
     border-radius: 4px;
     color: black;
 }
+
+
 
 .optionsButton {
     background-color: white;

@@ -1,7 +1,10 @@
 
 import React, { useState, useEffect } from "react";
 import styles from "./Courses.module.css";
+
 import YearBox from "./components/YearBox";
+import AddCourseMenu from "./components/add_course/AddCourse";
+
 import { MockStudent } from "./../../commons/mock/MockStudent";
 
 export interface DisplaySetting {
@@ -68,7 +71,7 @@ function Courses() {
         +
       </button>
       <div className={`${styles.AddCourseMenuDormant} ${addCourse ? styles.AddCourseMenuActive : ''}`}>
-        {addCourse && (<div></div>)}
+        {addCourse && (<AddCourseMenu/>)}
       </div>
       <div className={styles.column}>
         {yearboxComponents}
