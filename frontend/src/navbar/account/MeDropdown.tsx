@@ -8,8 +8,8 @@ import { FaSignOutAlt } from "react-icons/fa";
 import clsx from "clsx";
 
 import styles from "./MeDropdown.module.css";
-import { scrollToTop, useComponentVisible } from "../commons/utilities/display";
-import { SurfaceComponent, TextComponent, HoverText } from "./Typography";
+import { scrollToTop, useComponentVisible } from "../../commons/utilities/display";
+import { SurfaceComponent, TextComponent, HoverText } from "../Typography";
 
 function DropdownItem({
   icon: Icon,

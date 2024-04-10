@@ -11,17 +11,18 @@ import Majors from './pages/Majors';
 
 function App() {
   return (
-  <>
-    <Navbar/>
-    <div>
+  <div>
+    <div style={{ position: "relative", zIndex: "2" }}>
+      <Navbar/>
+    </div>
+    <div style={{ position: "relative", zIndex: "1" }}>
       <Routes>
         <Route path=""             element={<Graduation />} />      
         <Route path="/courses"      element={<Courses/>} />
         <Route path="/majors"       element={<Majors/>}/>
       </Routes>
     </div>
-  </>
-  
+  </div>
   );
 }
 

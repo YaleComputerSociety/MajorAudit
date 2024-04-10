@@ -1,7 +1,10 @@
 
 import React, { useState, useEffect } from "react";
 import styles from "./Courses.module.css";
+
 import YearBox from "./components/YearBox";
+import AddCourseMenu from "./components/add_course/AddCourse";
+
 import { MockStudent } from "./../../commons/mock/MockStudent";
 
 export interface DisplaySetting {
@@ -46,27 +49,37 @@ function Settings(props: { displaySetting: DisplaySetting, updateDisplaySetting:
   );
 }
 
-export default function Courses() {
+function Courses() {
 
   const [displaySetting, setDisplaySetting] = useState(defaultDisplaySetting);
-  const updateDisplaySetting = (newSetting: DisplaySetting) => {
-    setDisplaySetting(newSetting);
-  };
+  const updateDisplaySetting = (newSetting: DisplaySetting) => { setDisplaySetting(newSetting); };
+  useEffect(() => {}, [displaySetting]);
 
-  useEffect(() => {
-  }, [displaySetting]);
+  const [addCourse, setAddCourse] = useState(false);
+  const toggleAddCourse = () => { setAddCourse(!addCourse); };
+  useEffect(() => {}, [addCourse]);
 
   const yearboxComponents = [];
-  for (let i=0; i <MockStudent["metadata"].length; i++) {
+  for(let i=0; i <MockStudent["metadata"].length; i++) 
+  {
     yearboxComponents.push(<YearBox year={MockStudent["metadata"][i]} displaySetting={displaySetting}/>); 
   }
 
   return(
     <div className={styles.CoursesPage}>
-      <div>
-        <Settings displaySetting={displaySetting} updateDisplaySetting={updateDisplaySetting}/>
+      <button className={styles.AddCourseButton} onClick={toggleAddCourse}>
+        +
+      </button>
+      <div className={`${styles.AddCourseMenuDormant} ${addCourse ? styles.AddCourseMenuActive : ''}`}>
+        {addCourse && (<AddCourseMenu/>)}
+      </div>
+      <div className={styles.column}>
         {yearboxComponents}
       </div>
     </div>
   );
 }
+
+// {/* <Settings displaySetting={displaySetting} updateDisplaySetting={updateDisplaySetting}/> */}
+
+export default Courses;

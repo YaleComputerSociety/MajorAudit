@@ -5,25 +5,16 @@ import img_logo from "./../commons/images/ma_logo.png";
 import img_moon from "./../commons/images/moon.png";
 
 import { NavLink } from "react-router-dom";
-import MeDropdown from "./MeDropdown";
+import MeDropdown from "./account/MeDropdown";
 
 function NavBar() {
   return (
     <div className={styles.NavBar}>
-      <div className={styles.row} style={{ marginLeft: "20px" }}>
-        <img
-          src={img_logo}
-          alt=""
-          style={{ width: "150px", height: "auto", marginRight: "10px" }}
-        />
+      <div style={{ marginLeft: "20px" }}>
+        <img src={img_logo} alt="" style={{ width: "150px", height: "auto", marginRight: "10px" }}/>
       </div>
 
-      <div className={styles.row} style={{ marginRight: "10px" }}>
-        <img
-          src={img_moon}
-          alt=""
-          style={{ width: "40px", height: "30px", marginRight: "2px" }}
-        />
+      <div className={styles.row} style={{ marginRight: "20px" }}>
         <NavLink to="" className={({ isActive }) => isActive ? styles.activeLink : styles.dormantLink }>
           Graduation
         </NavLink>
@@ -33,7 +24,7 @@ function NavBar() {
         <NavLink to="/majors" className={({ isActive }) => isActive ? styles.activeLink : styles.dormantLink }>
           Majors
         </NavLink>
-        <MeDropdown />
+        {/* <MeDropdown /> */}
       </div>
     </div>
   );

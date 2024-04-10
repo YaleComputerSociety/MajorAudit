@@ -1,23 +1,7 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
-.CoursesPage {
-    position: fixed;
-
-    display: flex;
-    flex-direction: row;
-
-    justify-content: center;
-    padding-top: 25px;
-
-    top: 75px;
-
-    height: calc(100vh - 75px);
-    width: 100%;
-    
-    border: solid 1px red;
-}
-
-/* util */
+/* UTIL */
 
 .row {
     display: flex;
@@ -29,7 +13,79 @@
     flex-direction: column;
 }
 
-/* courses */
+/* CONTAIN */
+
+.CoursesPage {
+    position: absolute;
+    top: 75px;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    width: 100%;
+
+    padding-top: 50px;
+    padding-bottom: 75px;
+}
+
+.AddCourseButton {
+    position: fixed;
+
+    top: 95px;
+    left: 20px;
+
+    width: 30px;
+    height: 30px;
+
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    font-size: 20px;
+
+    background-color: #61ADFE;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+
+    z-index: 2;
+}
+
+.AddCourseButton:active {
+    background-color: #9cccff;
+}
+
+.AddCourseMenuDormant {
+    position: fixed;
+
+    top: 95px; 
+    left: 20px;
+
+    width: 30px; 
+    height: 30px;
+
+    border-radius: 50%; 
+    transform: scale(0); 
+    transition: transform 0.5s, width 0.5s, height 0.5s, border-radius 0.5s;
+    background-color: white;
+    /* border: 1px solid #61ADFE; */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.125);
+    z-index: 1; 
+}
+
+.AddCourseMenuActive {
+    top: 135px; 
+
+    width: 315px; 
+    height: 700px; 
+
+    border-radius: 15px; 
+    transform: scale(1); 
+
+    /* border: 1px solid blue; */
+}
+
+/* COURSES */
 
 .courseBox {
     display: flex;
@@ -54,25 +110,6 @@
     margin-right: 2px;
 }
 
-.courseLetterGrade {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 6px;
-
-    width: max-content;
-    height: 16px;
-    padding: 0 4px; 
-
-    font-size: 10px;
-    font-weight: 500;
-
-    border: 1px solid grey; 
-    border-radius: 4px;
-    color: black;
-    background-color: white;
-}
-
 .hidden {
 
 }
@@ -92,7 +129,6 @@
     align-self: flex-end;
     margin-bottom: 2.5px;
 }
-
 
 /* sem meta */
 
@@ -157,6 +193,8 @@
     border-radius: 4px;
     color: black;
 }
+
+
 
 .optionsButton {
     background-color: white;
