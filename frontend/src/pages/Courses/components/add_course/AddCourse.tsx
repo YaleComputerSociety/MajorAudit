@@ -15,7 +15,9 @@ function AddCourseMenu(){
                     Pinned Courses
                 </div>
                 {MockCourses.map(course => (
-                    <CourseBoxSmall course={course} />
+                    <div style={{ marginBottom: "4px" }}>
+                        <CourseBoxSmall course={course} />
+                    </div>
                 ))}
             </div>
         </div>
