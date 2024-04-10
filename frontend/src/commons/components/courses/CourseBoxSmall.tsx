@@ -42,10 +42,24 @@ function DistCircDiv(props: { dist: Array<Distribution> }){
   );
 }
 
+function CheckMark(props: { studentCourse: StudentCourse }){
+  return(
+    <div>
+      {props.studentCourse.enrollmentStatus === "COMPLETED" ? (
+          <div style={{ paddingLeft: "1px", paddingRight: "3px" }}>
+            <div data-tooltip-id="check-tooltip" data-tooltip-content="Credit Confirmed by Yale" data-tooltip-place="top">
+              ✓
+            </div>
+            <Tooltip id="check-tooltip" style={{ backgroundColor: "#444444", borderRadius: "3px"}}/>
+          </div>
+        ) : (
+          ""
+        )}
+    </div>
+  );
+}
+
 function CourseBoxSmall(props: { studentCourse?: StudentCourse, course?: Course } ) {
-  /* Depending on if you pass through a student course or a normal course,
-   it will render a different coursebox, with a checkmark for studentCourse
-   and without for a normal course */
   
   if(props.course && props.studentCourse == null) 
   {
@@ -57,24 +71,17 @@ function CourseBoxSmall(props: { studentCourse?: StudentCourse, course?: Course 
       </div>
     );
   }
-  else if (props.course == null && props.studentCourse) {
+  else 
+  if(props.course == null && props.studentCourse) 
+  {
     return (
-    <div className={styles.CourseBox} style={{ backgroundColor: "#F5F5F5" }}>
-        {props.studentCourse.enrollmentStatus === "COMPLETED" ? (
-          <div style={{ paddingLeft: "1px", paddingRight: "3px" }}>
-            <div data-tooltip-id="check-tooltip" data-tooltip-content="Credit Confirmed by Yale" data-tooltip-place="top">
-              ✓
-            </div>
-            <Tooltip id="check-tooltip" style={{ backgroundColor: "#444444", borderRadius: "3px"}}/>
-          </div>
-        ) : (
-          ""
-        )}
+      <div className={styles.CourseBox} style={{ backgroundColor: "#F5F5F5" }}>
+        <CheckMark studentCourse={props.studentCourse}/>
         <CourseSeasonIcon seasons={[props.studentCourse.season]} />
         {props.studentCourse.course.code}
         {props.studentCourse.course.distribution.length > 0 ? (<DistCircDiv dist={props.studentCourse.course.distribution}/>) : ("")}
       </div>
-      );
+    );
   }
   return <div/>
 }
