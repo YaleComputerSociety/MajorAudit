@@ -19,23 +19,23 @@ function Recommendations() {
 
 function Graduation() {
 
-const UserYear = () => { return 2; }
-const [currYear, setCurrYear] = useState(UserYear());
-const alterCurrYear = (num: number) => { 
-  setCurrYear(num); 
-};
+  const UserYear = () => { return 2; }
+  const [currYear, setCurrYear] = useState(UserYear());
+  const alterCurrYear = (num: number) => { 
+    setCurrYear(num); 
+  };
 
-return (
-  <div className={styles.GraduationPage}>
-    <div className={styles.row}>
-      <div className={styles.column} style={{ justifyContent: "space-between", marginRight: "60px" }}>
-        <Recommendations/>
-        <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
+  return (
+    <div className={styles.GraduationPage}>
+      <div className={styles.row}>
+        <div className={styles.column} style={{ justifyContent: "space-between", marginRight: "60px" }}>
+          <Recommendations/>
+          <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
+        </div>
+        <GraduationOverview degree={CPSC.degrees[0]}/>
       </div>
-      <GraduationOverview degree={CPSC.degrees[0]}/>
     </div>
-  </div>
-);
+  );
 }
 
 export default Graduation;
