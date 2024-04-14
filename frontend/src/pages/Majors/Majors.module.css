@@ -1,9 +1,14 @@
-.container {
-  margin-top: 110px;
+.MajorsPage {
+  position: absolute;
+
   display: flex;
-  align-items: center;
-  padding: 20px calc(50% - 500px);
-  transition: opacity 0.3s;
+  flex-direction: row;
+
+  justify-content: center;
+  padding-top: 100px;
+
+  top: 75px;
+  width: 100%;
 }
 
 .majorContainer {
