@@ -92,7 +92,8 @@ def login():
                 db.collection("Users").document(validation[1]).set(user.__dict__)
 
             if '127.0.0.1' in service:
-                redirect_url='http://127.0.0.1:5000/dashboard'
+                #redirect_url='http://127.0.0.1:5000/dashboard'
+                redirect_url = 'http://127.0.0.1:5000'
             else:
                 redirect_url='https://majoraudit.web.app/dashboard'
 
@@ -283,7 +284,7 @@ def get_data():
 
 
 @app.route('/sync_data', methods = ['POST'])
-@cross_origin()
+@cross_origin(origins='http://127.0.0.1:5000', supports_credentials=True)
 def sync_data():
 
 #    if req.method == 'OPTIONS':
@@ -303,13 +304,19 @@ def sync_data():
     #if not netid:
     #    return redirect('/user_login')
 
+    headers = {
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Origin': 'true'
+    }
+
     print("here sync data")
+    print(session["NETID"])
 
     data = request.json
     user = User("jy692", data)
     db.collection("Users").document("jy692").set(user.__dict__)
     print(data, flush=True)
 
-    return data
+    make_response((data, 200, headers))
     #return make_response(('Data received', 200, headers))
 
