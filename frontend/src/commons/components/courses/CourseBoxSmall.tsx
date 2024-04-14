@@ -102,7 +102,9 @@ function CourseBoxSmall(props: { studentCourse?: StudentCourse, course?: Course 
           <CourseSeasonIcon seasons={props.course.seasons} />
           {props.course.code}
           {props.course.distribution.length > 0 ? (
-              <DistributionCircle distributions={props.course.distribution} />
+            <div style={{paddingLeft: "2px"}}>
+              <DistributionCircle distributions={props.course.distribution}/>
+            </div>
           ) : (
             ""
           )}
