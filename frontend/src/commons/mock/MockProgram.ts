@@ -45,10 +45,12 @@ export const CPSC: Program = {
           subsections: [
             { 
               name: "YOUR COURSES",
+              description: "Courses you have taken that work for this requirement.",
               courses: [] 
             },
             { 
               name: "POPULAR",
+              description: "Courses that are popular for this requirement.",
               courses: [] 
             }
           ],

@@ -2,16 +2,16 @@
   margin-top: 110px;
   display: flex;
   align-items: center;
-  padding: 50px 125px;
+  padding: 20px calc(50% - 500px);
   transition: opacity 0.3s;
 }
 
 .majorContainer {
   padding: 20px;
-  width: 600px;
+  width: auto;
   height: 400px;
   background-color: white;
-  margin-right: 55px;
+  margin-right: 10px;
   /* border: 1px solid black; */
 }
 
@@ -20,8 +20,17 @@
   border-radius: 25px;
   width: 490px;
   height: 490px;
+  min-width: 390px;
   background-color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.reqsList {
+  height: 430px;
+  scrollbar-color: rgb(131, 131, 131) transparent;
+  scrollbar-width: thin;
+  overflow-y: scroll;
+  padding-right: 7px;
 }
 
 .subsectionHeader {
