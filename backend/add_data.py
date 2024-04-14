@@ -41,10 +41,23 @@ db = firestore.client()
 # me=db.collection('Users').document('oag22')
 # me.set(data)
 
-db = firestore.client()
-db_course_connection=db.collection('Courses').document('courses')
-courses=db_course_connection.get().to_dict()['json_string']
+# db_course_connection=db.collection('Courses').document('courses')
+# courses=db_course_connection.get().to_dict()['json_string']
+# print(f'{courses}')
+
+
+db_course_connection=db.collection('Majors')
+
+# print(type())
+majors_to_keep=[]
+for c in db_course_connection.get():
+    major_name=c.id
+
+    if input(f'{major_name}:\n')=='y':
+        majors_to_keep.append(major_name)
+
+with open('good majors.json', 'w') as outfile:
+    json.dump(majors_to_keep, outfile)
 
 
 
-print(f'{courses}')
