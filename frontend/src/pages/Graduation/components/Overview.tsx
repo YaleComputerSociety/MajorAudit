@@ -29,15 +29,18 @@ function DegreeContent(props: { degree: Degree }) {
                         <div className={styles.subsectionHeader} style={{ marginBottom: "4px" }}>{req.name}</div>
                         <div style={{ color: "grey" }}>{req.coursesCompleted}/{req.coursesTotal}</div>
                     </div>
-                    {req.description && (<div style={{ fontSize: "9px", fontStyle: "italic", marginBottom: "8px" }}>{req.description}</div>)}
+                    {req.description && (<div style={{ fontSize: "10px", fontStyle: "italic", marginBottom: "8px" }}>{req.description}</div>)}
 
                     {/* Line of Courses */}
                     {req.subsections.map((sub, subIndex) => (
                         <div key={subIndex} style={{ marginBottom: subIndex === req.subsections.length - 1 ? "14px" : "4px" }}>
+                        {sub.name && (
+                            <div style={{ fontSize: "12px", marginBottom: "4px" }}>{sub.name}</div>
+                        )}
                         <div style={{ display: "flex" }}>
                             {sub.courses.map((course, courseIndex) => (
                             <div key={courseIndex} style={{ display: "flex" }}>
-                                <CourseBoxSmall course={course} />
+                                <CourseBoxSmall course={course}/>
                                 {courseIndex < sub.courses.length - 1 && <div>/</div>}
                             </div>
                             ))}

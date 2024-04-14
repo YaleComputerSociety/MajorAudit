@@ -2,12 +2,14 @@
 import React from "react";
 import styles from "./../Majors.module.css";
 
+import InfoButton from "../../../commons/components/InfoButton";
+
 import { Degree } from "../../../commons/types/TypeProgram"; 
 import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
 
 function RequirementsTopshelf(major: Degree) {
   return(
-    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px" }}>
+    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
       <div style={{ fontSize: "30px" }}>Requirements</div>
       <div style={{ fontSize: "18px" }}>List Graph</div>
     </div>
@@ -16,7 +18,7 @@ function RequirementsTopshelf(major: Degree) {
 
 function RequirementsContent(degree: Degree) {
   return(
-    <div>
+    <div className={styles.reqsList}>
       {degree.requirements.map((req) => (
         <div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -27,16 +29,21 @@ function RequirementsContent(degree: Degree) {
 
           {/* Line of Courses */}
           {req.subsections.map((sub, subIndex) => (
-            <div key={subIndex} style={{ marginBottom: subIndex === req.subsections.length - 1 ? "14px" : "4px" }}>
-              <div style={{ display: "flex" }}>
-                {sub.courses.map((course, courseIndex) => (
-                  <div key={courseIndex} style={{ display: "flex" }}>
-                    <CourseBoxSmall course={course} />
-                    {courseIndex < sub.courses.length - 1 && <div>/</div>}
+              <div key={subIndex} style={{ marginBottom: subIndex === req.subsections.length - 1 ? "14px" : "4px" }}>
+              {sub.name && (
+                  <div style={{display:"flex"}}><div style={{ fontSize: "13px", fontStyle: "semibold", marginBottom: "4px" }}>{sub.name}</div> 
+                  {sub.description && <InfoButton text={sub.description} size={13}/> }
                   </div>
-                ))}
+              )}
+              <div style={{ display: "flex" }}>
+                  {sub.courses.map((course, courseIndex) => (
+                  <div key={courseIndex} style={{ display: "flex" }}>
+                      <CourseBoxSmall course={course}/>
+                      {courseIndex < sub.courses.length - 1 && <div>/</div>}
+                  </div>
+                  ))}
               </div>
-            </div>
+              </div>
           ))}
         </div>
       ))}
