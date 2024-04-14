@@ -1,6 +1,7 @@
 
 .GraduationPage {
-    position: absolute;
+    position: relative;
+    z-index: 1;
 
     display: flex;
     flex-direction: row;
@@ -10,10 +11,7 @@
 
     top: 75px;
 
-    height: calc(100vh - 75px);
     width: 100%;
-    
-    border: solid 1px red;
 }
 
 .row {
