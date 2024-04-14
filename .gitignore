@@ -167,4 +167,3 @@ courses.json
 # lockfiles for frontend
 *.lock
 secrets
-*.json
