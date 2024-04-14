@@ -48,6 +48,8 @@
 
     </div>
 
+    <button onclick="syncData()">Sync Data</button>
+
     <button onclick="getData()">Get Data</button>
     <div id="dataDisplay"></div>
 
@@ -85,6 +87,27 @@
               document.getElementById('dataDisplay').innerText = JSON.stringify(json, null, 4)
           })
       }
+
+      function syncData() {
+          var event = new CustomEvent("scrapeData", {
+              detail: { action: "openWebsite" }
+          });
+          document.dispatchEvent(event);
+      }
+
+      document.addEventListener("getData", function(e) {
+          fetch('http://127.0.0.1:5001/majoraudit/us-central1/functions/sync_data', {
+              method: 'POST',
+              mode: 'cors',
+              credentials: 'include',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: e.detail
+          });
+          console.log(e);
+          
+      });
 
       $('document').ready(setup);
     </script>
