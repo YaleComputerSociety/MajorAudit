@@ -5,12 +5,12 @@ import styles from "./Majors.module.css";
 import ProgramRequirementsBox from "./components/ProgramRequirementsBox";
 import ProgramMetadataBox from "./components/ProgramMetadataBox";
 
-import { CGSC, CPSC, ECON, HIST } from "./../../commons/mock/MockProgram";
-const programs = [CGSC, CPSC, ECON, HIST];
-
 import nav_styles from "./../../commons/components/navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
+
+import { CGSC, CPSC, ECON, HIST } from "./../../commons/mock/MockProgram";
+const programs = [CGSC, CPSC, ECON, HIST];
 
 function NavBar() {
   return (

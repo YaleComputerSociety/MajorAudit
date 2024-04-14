@@ -14,11 +14,11 @@ function AddCourseMenu(){
                 <div className={styles.SectionHeader}>
                     Pinned Courses
                 </div>
-                {MockCourses.map(course => (
+                {/* {MockCourses.map(course => (
                     <div style={{ marginBottom: "4px" }}>
                         <CourseBoxSmall course={course} />
                     </div>
-                ))}
+                ))} */}
             </div>
         </div>
     );
