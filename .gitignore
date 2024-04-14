@@ -164,6 +164,7 @@ courses.json
 
 # firebase stuff
 .firebase
-
 # lockfiles for frontend
 *.lock
+secrets
+*.json

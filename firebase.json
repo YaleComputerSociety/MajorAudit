@@ -1,15 +1,14 @@
 {
   "functions": [
     {
-      "source": "functions",
+      "source": "backend",
       "codebase": "default",
       "ignore": [
         "venv",
         ".git",
         "firebase-debug.log",
         "firebase-debug.*.log"
-      ],
-      "requirements": "functions/requirements.txt"
+      ]
     }
   ],
   "database": {
