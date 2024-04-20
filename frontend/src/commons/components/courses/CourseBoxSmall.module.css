@@ -1,3 +1,4 @@
+
 .CourseBox {
     display: flex;
     flex-direction: row;
@@ -10,12 +11,4 @@
 
     font-size: 14px;
     font-weight: bold;
-}
-
-.Dialog {
-    height: 10vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 5px solid black;
 }
