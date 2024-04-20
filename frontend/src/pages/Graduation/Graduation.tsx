@@ -10,6 +10,7 @@ import { CPSC } from "./../../commons/mock/MockProgram"
 import nav_styles from "./../../commons/components/navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
+import MeDropdown from "../../navbar/account/MeDropdown"
 
 function NavBar() {
   return (
@@ -29,7 +30,7 @@ function NavBar() {
         <NavLink to="/majors" className={({ isActive }) => isActive ? nav_styles.activeLink : nav_styles.dormantLink }>
           Majors
         </NavLink>
-        {/* <MeDropdown /> */}
+        <MeDropdown />
       </div>
     </div>
   );
