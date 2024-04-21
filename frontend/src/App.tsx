@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+// import Cookies from "js-cookie";
 import { Navigate, Route, Routes  } from 'react-router-dom'; 
 
 import Login from "./pages/Login";
@@ -7,12 +8,17 @@ import Graduation from './pages/Graduation';
 import Courses from './pages/Courses';
 import Majors from './pages/Majors';
 
+import { CGSC, CPSC, ECON, HIST } from "./commons/mock/MockProgram";
 
 function App() {
 
-  const [auth] = useState(false); // Default to false, assume user is not authenticated
+  const [auth] = useState(true); 
 
+  const programs = [CGSC, CPSC, ECON, HIST];
+  const strPrograms = JSON.stringify(programs);
+  localStorage.setItem("programList", strPrograms);
 
+  
 
 
   return (
