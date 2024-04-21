@@ -109,13 +109,13 @@ function DropdownContent({
             <DropdownItem icon={FcInfo} to="/about">
               About
             </DropdownItem>
-            <DropdownItem icon={FcQuestions} to="/faq">
-              FAQ
-            </DropdownItem>
             <DropdownItem icon={FcNews} to="/releases">
               Release Notes
             </DropdownItem>
         */}
+            <DropdownItem icon={FcQuestions} to="/faq">
+              FAQ
+            </DropdownItem>
             <DropdownItem icon={FaSignOutAlt} iconColor="#ed5f5f">
               Sign Out
             </DropdownItem>
