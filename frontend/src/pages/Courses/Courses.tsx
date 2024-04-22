@@ -7,9 +7,9 @@ import AddCourseMenu from "./components/add_course/AddCourse";
 
 import { MockStudent } from "./../../commons/mock/MockStudent";
 
-import nav_styles from "./../../commons/components/navbar/NavBar.module.css";
+import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
-import { NavLink } from "react-router-dom";
+import PageLinks from "../../navbar/PageLinks";
 
 function NavBar() {
   return (
@@ -18,18 +18,7 @@ function NavBar() {
         <img src={img_logo} alt="" style={{ width: "150px", height: "auto", marginRight: "10px" }}/>
       </div>
 
-      <div className={nav_styles.row} style={{ marginRight: "20px" }}>
-        <NavLink to="/" className={({ isActive }) => isActive ? nav_styles.activeLink : nav_styles.dormantLink }>
-          Graduation
-        </NavLink>
-        <NavLink to="/courses" className={({ isActive }) => isActive ? nav_styles.activeLink : nav_styles.dormantLink }>
-          Courses
-        </NavLink>
-        <NavLink to="/majors" className={({ isActive }) => isActive ? nav_styles.activeLink : nav_styles.dormantLink }>
-          Majors
-        </NavLink>
-        {/* <MeDropdown /> */}
-      </div>
+      <PageLinks/>
     </div>
   );
 }
@@ -95,7 +84,7 @@ function Courses() {
   return(
     <div>
       <NavBar/>
-    
+      <Settings displaySetting={displaySetting} updateDisplaySetting={updateDisplaySetting}/>
       <div className={styles.CoursesPage}>
         <button className={styles.AddCourseButton} onClick={toggleAddCourse}>
           +
@@ -110,7 +99,5 @@ function Courses() {
     </div>
   );
 }
-
-// {/* <Settings displaySetting={displaySetting} updateDisplaySetting={updateDisplaySetting}/> */}
 
 export default Courses;
