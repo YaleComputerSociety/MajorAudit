@@ -1,6 +1,5 @@
 
 import { useState } from "react";
-// import Cookies from "js-cookie";
 import { Navigate, Route, Routes  } from 'react-router-dom'; 
 
 import Login from "./pages/Login";
@@ -18,9 +17,8 @@ function App() {
   const strPrograms = JSON.stringify(programs);
   localStorage.setItem("programList", strPrograms);
 
+
   
-
-
   return (
   <div>
     <Routes>
