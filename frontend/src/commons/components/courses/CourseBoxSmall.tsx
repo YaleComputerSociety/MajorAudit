@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./CourseBoxSmall.module.css";
 
 import "react-tooltip/dist/react-tooltip.css";
