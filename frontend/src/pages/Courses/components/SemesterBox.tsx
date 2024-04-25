@@ -30,6 +30,7 @@ function MetadataAll(props: { semester: Semester, displaySetting: DisplaySetting
     const areaArray = Array.from(areaSet);
     const skillArray = Array.from(skillSet);
 
+    // TO-DO: change colors: either move these to constants.ts or make these the same as constants.ts
     const styleMapping = {
         "Hu": { backgroundColor: "#E6CFF4", color: "#9970AB", marginRight: "4px" },
         "So": { backgroundColor: "#CFE0F4", color: "#5493C4", marginRight: "4px"  },

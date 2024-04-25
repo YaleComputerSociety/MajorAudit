@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Dialog } from "@headlessui/react";
 
-import { Course } from "../../types/TypeCourse";
+import { useCourseContext } from "../../contexts/CurrentCourseContext";
 
 export default function CourseModal() {
   let [isOpen, setIsOpen] = useState(true);
+  const currentCourse = useCourseContext();
 
   function closeModal() {
     setIsOpen(false);
@@ -75,7 +76,7 @@ export default function CourseModal() {
                   color: "rgb(17, 24, 39)",
                 }}
               >
-                Course Name
+                {currentCourse !== undefined ? currentCourse.title : 'No title'}
               </Dialog.Title>
               <div style={{ marginTop: "2px" }}>
                 <p
@@ -85,7 +86,7 @@ export default function CourseModal() {
                     color: "rgb(107, 114, 128)",
                   }}
                 >
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                  {currentCourse !== undefined ? currentCourse.description : 'No description'}
                 </p>
               </div>
             </Dialog.Panel>
