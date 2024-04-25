@@ -1,6 +1,7 @@
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, Route, Routes  } from 'react-router-dom'; 
+import $ from "jquery";
 
 import Login from "./pages/Login";
 import Graduation from './pages/Graduation';
@@ -11,14 +12,42 @@ import { CGSC, CPSC, ECON, HIST } from "./commons/mock/MockProgram";
 
 function App() {
 
-  const [auth] = useState(true); 
+  const [auth, setAuth] = useState(true); 
 
-  const programs = [CGSC, CPSC, ECON, HIST];
-  const strPrograms = JSON.stringify(programs);
-  localStorage.setItem("programList", strPrograms);
+  useEffect(() => {
+    $.ajax({
+      url: "https://functions-ggwttz72sa-uc.a.run.app/check_login",
+      xhrFields: { withCredentials: true }
+    }).done((data: string | null) => {
+      if(data) {
+        console.log("woo netid!");
+        setAuth(true);
+      }else{
+        console.log("boo netid!");
+        setAuth(true);
+      }
+    });
+  }, []);
 
+  useEffect(() => {
+    $.ajax({
+      url: "https://functions-ggwttz72sa-uc.a.run.app/get_majors",
+      method: "GET",
+      xhrFields: { withCredentials: true }
+    }).done((data: JSON | null) => {
+      if(data) {
+        console.log("yee!");
+        let strPrograms = JSON.stringify(data);
+        localStorage.setItem("programList", strPrograms);
+      }else{
+        const programs = [CGSC, CPSC, ECON, HIST];
+        let strPrograms = JSON.stringify(programs);
+        localStorage.setItem("programList", strPrograms);
+        console.log("noo!");
+      }
+    });
+  }, []);
 
-  
   return (
   <div>
     <Routes>
