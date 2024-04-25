@@ -21,7 +21,7 @@ import json
 #     outfile.write(os.getcwd())
 
 
-cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-f15a5f23e2.json')
+cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-9405745a46.json')
 app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -49,15 +49,18 @@ db = firestore.client()
 db_course_connection=db.collection('Majors')
 
 # print(type())
-majors_to_keep=[]
-for c in db_course_connection.get():
-    major_name=c.id
+# majors_to_keep=[]
+# for c in db_course_connection.get():
+#     major_name=c.id
+#
+#     if input(f'{major_name}:\n')=='y':
+#         majors_to_keep.append(major_name)
+#
+# with open('good majors.json', 'w') as outfile:
+#     json.dump(majors_to_keep, outfile)
 
-    if input(f'{major_name}:\n')=='y':
-        majors_to_keep.append(major_name)
-
-with open('good majors.json', 'w') as outfile:
-    json.dump(majors_to_keep, outfile)
+majors=[m.id for m in db_course_connection.get()]
+print(majors)
 
 
 
