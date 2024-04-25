@@ -4,6 +4,7 @@ import Courses from "./pages/Courses";
 import Majors from "./pages/Majors";
 import Graduation from "./pages/Graduation";
 import FAQ from "./pages/OtherPages/FAQ/FAQ";
+import About from "./pages/OtherPages/About/About";
 const router = createBrowserRouter([
   {
     path: "",
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/faq",
     element: <FAQ />,
+  },
+  {
+    path: "/about",
+    element: <About />,
   },
 ]);
 

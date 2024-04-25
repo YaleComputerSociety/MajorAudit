@@ -105,10 +105,10 @@ function DropdownContent({
           smooth */}
         <div>
           <Col className="px-3 pt-3">
-            {/*
             <DropdownItem icon={FcInfo} to="/about">
               About
             </DropdownItem>
+            {/*
             <DropdownItem icon={FcNews} to="/releases">
               Release Notes
             </DropdownItem>
