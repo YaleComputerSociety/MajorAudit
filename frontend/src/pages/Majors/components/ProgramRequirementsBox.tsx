@@ -2,7 +2,7 @@
 import React from "react";
 import styles from "./../Majors.module.css";
 
-import InfoButton from "../../../commons/components/InfoButton";
+import InfoButton from "../../../navbar/InfoButton";
 
 import { Degree } from "../../../commons/types/TypeProgram"; 
 import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
