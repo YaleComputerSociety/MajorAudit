@@ -7,7 +7,7 @@ import Graduation from "./pages/Graduation";
 
 const router = createBrowserRouter([
   {
-    path: "",
+    path: "/graduation",
     element: <Graduation />,
   },
   {

@@ -7,6 +7,23 @@ import GraduationOverview from "./components/Overview";
 
 import { CPSC } from "./../../commons/mock/MockProgram"
 
+import nav_styles from "./../../navbar/NavBar.module.css";
+import img_logo from "./../../commons/images/ma_logo.png";
+import PageLinks from "../../navbar/PageLinks";
+
+function NavBar() {
+  return (
+    <div className={nav_styles.NavBar}>
+      
+      <div style={{ marginLeft: "20px" }}>
+        <img src={img_logo} alt="" style={{ width: "150px", height: "auto", marginRight: "10px" }}/>
+      </div>
+      <PageLinks/>
+      {/* <MeDropdown /> */}
+    </div>
+  );
+}
+
 function Recommendations() {
   return(
     <div>
@@ -26,13 +43,18 @@ const alterCurrYear = (num: number) => {
 };
 
 return (
-  <div className={styles.GraduationPage}>
-    <div className={styles.row}>
-      <div className={styles.column} style={{ justifyContent: "space-between", marginRight: "60px" }}>
-        <Recommendations/>
-        <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
+  <div>
+    
+    <NavBar/>
+    
+    <div className={styles.GraduationPage}>
+      <div className={styles.row}>
+        <div className={styles.column} style={{ marginRight: "60px" }}>
+          <Recommendations/>
+          <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
+        </div>
+        <GraduationOverview degree={CPSC.degrees[0]}/>
       </div>
-      <GraduationOverview degree={CPSC.degrees[0]}/>
     </div>
   </div>
 );

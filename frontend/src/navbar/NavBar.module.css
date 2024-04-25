@@ -5,6 +5,9 @@
 
 .NavBar {
   position: fixed;
+  z-index: 2;
+
+
   left: 0;
   width: 100%;
   top: 0;

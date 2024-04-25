@@ -23,7 +23,6 @@ export interface StudentCourse {
   enrollmentStatus: "PROSPECTIVE" | "ENROLLED" | "WITHDRAWN" | "COMPLETED";
   season: Season;
   year: string;
-  letterGrade: string;
 }
 
 /*SoonToDeprecate*/

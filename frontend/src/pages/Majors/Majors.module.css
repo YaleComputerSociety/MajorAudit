@@ -1,26 +1,21 @@
-
 .MajorsPage {
-  position: fixed;
+  position: absolute;
 
   display: flex;
   flex-direction: row;
+
   justify-content: center;
-  align-items: center;
 
-  top: 75px;
-
-  height: calc(100vh - 75px);
-  width: 100%;
-  
-  border: solid 1px red;
+  padding: 20px calc(50% - 500px);
+  margin-top: 100px;
 }
 
 .majorContainer {
   padding: 20px;
-  width: 600px;
+  width: auto;
   height: 400px;
   background-color: white;
-  margin-right: 55px;
+  margin-right: 10px;
   /* border: 1px solid black; */
 }
 
@@ -29,8 +24,17 @@
   border-radius: 25px;
   width: 490px;
   height: 490px;
+  min-width: 390px;
   background-color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.reqsList {
+  height: 430px;
+  scrollbar-color: rgb(131, 131, 131) transparent;
+  scrollbar-width: thin;
+  overflow-y: scroll;
+  padding-right: 7px;
 }
 
 .subsectionHeader {
