@@ -44,9 +44,7 @@ const alterCurrYear = (num: number) => {
 
 return (
   <div>
-    
     <NavBar/>
-    
     <div className={styles.GraduationPage}>
       <div className={styles.row}>
         <div className={styles.column} style={{ marginRight: "60px" }}>
