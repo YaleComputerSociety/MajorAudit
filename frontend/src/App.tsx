@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Navigate, Route, Routes  } from 'react-router-dom'; 
 
@@ -6,6 +5,8 @@ import Login from "./pages/Login";
 import Graduation from './pages/Graduation';
 import Courses from './pages/Courses';
 import Majors from './pages/Majors';
+import FAQ from "./pages/OtherPages/FAQ/FAQ";
+import About from "./pages/OtherPages/About/About";
 
 import { CGSC, CPSC, ECON, HIST } from "./commons/mock/MockProgram";
 
@@ -32,6 +33,8 @@ function App() {
       <Route path="/graduation"   element={<Graduation/>}/> 
       <Route path="/courses"      element={<Courses/>}/> 
       <Route path="/majors"       element={<Majors/>}/>
+      <Route path="/faq" element={<FAQ />} />
+      <Route path="/about" element={<About />} />
     </Routes>
   </div>
   );
