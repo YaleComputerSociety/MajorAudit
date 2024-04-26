@@ -52,7 +52,7 @@ function NavBar() {
 }
 
 function Recommendations() {
-  return (
+  return(
     <div>
       <div style={{ fontSize: "30px", fontWeight: "500" }}>Hello, Ryan!</div>
     </div>
