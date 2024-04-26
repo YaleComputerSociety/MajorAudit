@@ -213,7 +213,7 @@ def get_redirect_url():
     if '127.0.0.1' in url:
         url = url[:function_loc] + '/majoraudit/us-central1/functions' + url[function_loc:]
     else:
-        url=url[:function_loc]+'/functions'+url[function_loc:]
+        url=url[:function_loc]+url[function_loc:]
 
     return url
 
