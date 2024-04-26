@@ -8,7 +8,7 @@ import { CPSC } from "./../../commons/mock/MockProgram";
 import MeDropdown from "../../navbar/account/MeDropdown";
 import nav_styles from "./../../commons/components/navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
-import { NavLink } from "react-router-dom";
+import PageLinks from "../../navbar/PageLinks";
 
 function NavBar() {
   return (
@@ -20,7 +20,6 @@ function NavBar() {
           style={{ width: "150px", height: "auto", marginRight: "10px" }}
         />
       </div>
-
       <div className={nav_styles.row} style={{ marginRight: "20px" }}>
         <NavLink
           to="/"

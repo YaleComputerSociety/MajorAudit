@@ -5,7 +5,7 @@ import styles from "./../Graduation.module.css";
 
 import DistributionBox from "../../../commons/components/courses/DistributionBoxLarge";
 import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
-import InfoButton from "../../../commons/components/InfoButton";
+import InfoButton from "../../../navbar/InfoButton";
 
 import { StudentCourse, ClassLists } from "../../../commons/types/TypeCourse";
 import { MockStudentCourses } from "../../../commons/mock/MockCourses";
