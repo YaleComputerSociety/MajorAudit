@@ -48,7 +48,6 @@ function NavBar() {
         </NavLink>
         <MeDropdown />
       </div>
-      <PageLinks />
     </div>
   );
 }
