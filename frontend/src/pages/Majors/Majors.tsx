@@ -23,7 +23,7 @@ function NavBar() {
       </div>
       <div className={nav_styles.row} style={{ marginRight: "20px" }}>
         <NavLink
-          to="/"
+          to="/graduation"
           className={({ isActive }) =>
             isActive ? nav_styles.activeLink : nav_styles.dormantLink
           }
