@@ -1,10 +1,10 @@
-import { ThemeProvider } from "./contexts/themeContext";
+import { ModalProvider } from "./hooks/modalContext";
 
 function Globals({ children }: { readonly children: React.ReactNode }) {
   return (
-    <ThemeProvider>
+    <ModalProvider>
       <div>{children}</div>
-    </ThemeProvider>
+    </ModalProvider>
   );
 }
 

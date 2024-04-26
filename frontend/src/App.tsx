@@ -1,5 +1,6 @@
 import Globals from './Globals';
 import Router from './Router';
+import CourseModal from './commons/components/courses/CourseModal';
 
 import { CGSC, CPSC, ECON, HIST } from "./commons/mock/MockProgram";
 
@@ -12,6 +13,7 @@ function App() {
     <div>
       <Globals>
           <Router />
+          <CourseModal />
       </Globals>
     </div>
   );

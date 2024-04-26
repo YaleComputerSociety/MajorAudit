@@ -1,16 +1,17 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom'; 
-import { useTheme } from "./contexts/themeContext";
 
 import Login from "./pages/Login";
 import Graduation from './pages/Graduation';
 import Courses from './pages/Courses';
 import Majors from './pages/Majors';
-import Themes from './pages/Themes';
+
+import Themes from './pages/OtherPages/Themes/Themes';
+import About from './pages/OtherPages/About/About';
+import FAQ from './pages/OtherPages/FAQ/FAQ';
 
 function Router() {
   const [auth] = useState(true); 
-  const { theme } = useTheme();
 
   return (
     <div>
@@ -23,6 +24,8 @@ function Router() {
         <Route path="/majors"       element={auth ? <Majors/> : <Navigate to="/login"/>}/> 
 
         <Route path="/themes"       element={auth ? <Themes/> : <Navigate to="/login"/>}/> 
+        <Route path="/about"        element={<About/>}/> 
+        <Route path="/FAQ"          element={<FAQ/>}/> 
       </Routes>
     </div>
   );

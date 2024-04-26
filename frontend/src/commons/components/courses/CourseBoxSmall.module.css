@@ -11,4 +11,12 @@
 
     font-size: 14px;
     font-weight: bold;
+
+    background-color: #F5F5F5;
+    transition: filter 0.4s ease;
+}
+
+.CourseBox:hover {
+    cursor: pointer;
+    filter: brightness(95%);
 }
