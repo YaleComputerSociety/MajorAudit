@@ -100,10 +100,14 @@
 
     padding-left: 10px;
     padding-right: 10px;
+
+    background-color: #F5F5F5;
+    transition: filter 0.4s ease;
 }
 
 .courseBox:hover {
     cursor: pointer;
+    filter: brightness(95%);
 }
 
 .checkmark {

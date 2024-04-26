@@ -4,7 +4,7 @@ import { Student } from "./../types/TypeStudent";
 
 
 const ENGL253: Course = { code: "ENGL 253", title: "Reading Ulysses: Modernist Classic and Postcolonial Epic", description: "Hi Ryan", seasons: ["FALL"], evaluation: { rating: 0, workload: 0, professor: 5 }, distribution: ["Hu"] };
-const StudentENGL253: StudentCourse = { course: ENGL253, enrollmentStatus: "COMPLETED", season: "FALL", year: "2022-2023" };
+const StudentENGL253: StudentCourse = { course: ENGL253, enrollmentStatus: "ENROLLED", season: "FALL", year: "2022-2023" };
 
 const ENGL419: Course = { code: "ENGL 419", title: "Writing about Contemporary Figurative Art", description: "Hi Ryan", seasons: ["FALL"], evaluation: { rating: 4.8, workload: 4.5, professor: 5 }, distribution: ["WR", "Hu"] };
 const StudentENGL419: StudentCourse = { course: ENGL419, enrollmentStatus: "COMPLETED", season: "FALL", year: "2022-2023" };

@@ -74,7 +74,7 @@ function CourseBoxSmall(props: { studentCourse?: StudentCourse, course?: Course 
   if(props.course && props.studentCourse == null) 
   {
     return(
-      <div className={styles.CourseBox} style={{ backgroundColor: "#F5F5F5" }} onClick={openModal}>
+      <div className={styles.CourseBox} onClick={openModal}>
         <CourseSeasonIcon seasons={props.course.seasons}/>
         {props.course.code}
         {props.course.distribution.length > 0 ? (<DistCircDiv dist={props.course.distribution}/>) : ("")}
@@ -85,7 +85,7 @@ function CourseBoxSmall(props: { studentCourse?: StudentCourse, course?: Course 
   if(props.course == null && props.studentCourse) 
   {
     return (
-      <div className={styles.CourseBox} style={{ backgroundColor: "#F5F5F5" }} onClick={openModal}>
+      <div className={styles.CourseBox} onClick={openModal}>
         <CheckMark studentCourse={props.studentCourse}/>
         <CourseSeasonIcon seasons={[props.studentCourse.season]} />
         {props.studentCourse.course.code}
