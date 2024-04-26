@@ -1,40 +1,18 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
+import { useModal } from "../../../hooks/modalContext";
 import { Dialog } from "@headlessui/react";
-
-import { useCourseContext } from "../../contexts/CurrentCourseContext";
+import { EMPTYCOURSE } from "../../mock/MockCourses";
 
 export default function CourseModal() {
-  let [isOpen, setIsOpen] = useState(true);
-  const currentCourse = useCourseContext();
+  const { isOpen, setModalOpen } = useModal();
 
   function closeModal() {
-    setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
+    setModalOpen(EMPTYCOURSE)
   }
 
   return (
     <>
-      <div
-        style={{
-          position: "fixed",
-          inset: "0",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <button
-          type="button"
-          onClick={openModal}
-          className="rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
-        >
-          Open dialog
-        </button>
-      </div>
-      <Dialog open={isOpen} onClose={closeModal} style={{ position: "relative", zIndex: "10" }}>
+      <Dialog open={isOpen !== EMPTYCOURSE} onClose={closeModal} style={{ position: "relative", zIndex: "10" }}>
         <div
           style={{
             position: "fixed",
@@ -76,7 +54,7 @@ export default function CourseModal() {
                   color: "rgb(17, 24, 39)",
                 }}
               >
-                {currentCourse !== undefined ? currentCourse.title : 'No title'}
+                {isOpen !== undefined ? isOpen.title : 'No title'}
               </Dialog.Title>
               <div style={{ marginTop: "2px" }}>
                 <p
@@ -86,7 +64,7 @@ export default function CourseModal() {
                     color: "rgb(107, 114, 128)",
                   }}
                 >
-                  {currentCourse !== undefined ? currentCourse.description : 'No description'}
+                  {isOpen !== undefined ? isOpen.description : 'No description'}
                 </p>
               </div>
             </Dialog.Panel>

@@ -12,3 +12,7 @@
     font-size: 14px;
     font-weight: bold;
 }
+
+.CourseBox:hover {
+    cursor: pointer;
+}
