@@ -4,12 +4,13 @@ import styles from "./Majors.module.css";
 import ProgramRequirementsBox from "./components/ProgramRequirementsBox";
 import ProgramMetadataBox from "./components/ProgramMetadataBox";
 
-import nav_styles from "./../../navbar/NavBar.module.css";
+import nav_styles from "./NavBar.module.css"
 import img_logo from "./../../commons/images/ma_logo.png";
 
 import { Program } from "./../../commons/types/TypeProgram";
 import MeDropdown from "../../navbar/account/MeDropdown";
 import { NavLink } from "react-router-dom";
+import SearchBar from "./components/SearchBar";
 
 function NavBar() {
   return (
@@ -20,6 +21,12 @@ function NavBar() {
           alt=""
           style={{ width: "150px", height: "auto", marginRight: "10px" }}
         />
+      </div>
+      <div className={nav_styles.column}>
+        <SearchBar/>
+        <div className ={nav_styles.row}>
+          <text className={nav_styles.subheading}>PINNED</text>
+        </div>
       </div>
       <div className={nav_styles.row} style={{ marginRight: "20px" }}>
         <NavLink
