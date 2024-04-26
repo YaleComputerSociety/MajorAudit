@@ -34,7 +34,7 @@ from flask_cors import cross_origin
 
 #cred = credentials.Certificate(r'secrets\majoraudit-firebase-adminsdk-bc6kc-f15a5f23e2.json')
 
-cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-9405745a46.json')
+cred = credentials.Certificate(r'sercrets\majoraudit-firebase-adminsdk-bc6kc-9405745a46.json')
 app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -66,15 +66,27 @@ def login():
     # print(request.cookies, flush=True)
     # netid = session['NETID']
     # print("netid", netid)
+    service=get_redirect_url()
+    cookies={}
+
+
     if 'NETID' in session:
         print('sanity', file=sys.stderr)
-        return redirect('/majoraudit/us-central1/functions/dashboard')
+        if '127.0.0.1' in service:
+            # redirect_url='http://127.0.0.1:5000/dashboard'
+            redirect_url = 'http://127.0.0.1:3000'
+        else:
+            redirect_url = 'https://majoraudit.web.app'
 
-    service=get_redirect_url()
+        current_app.logger.info(f'redirecting to {redirect_url}')
+        resp = make_response(redirect(redirect_url))
+        for c in cookies:
+            resp.set_cookie(c, cookies[c])
+        return resp
+
     login_url=f'''https://secure.its.yale.edu/cas/login?service={service}'''
 
     redirect_url=login_url
-    cookies={}
 
     if 'ticket' in request.args:
         session['CAS_TOKEN'] = request.args['ticket']
@@ -85,6 +97,9 @@ def login():
         validation=validate(session['CAS_TOKEN'], service)
         if validation[0]:
             print("username", validation[1])
+            cookies['hello']='world'
+            if 'NETID' in session:
+                cookies['wtf']=session['NETID']
             print(session)
             
             user = User(validation[1], "")
@@ -95,9 +110,9 @@ def login():
 
             if '127.0.0.1' in service:
                 #redirect_url='http://127.0.0.1:5000/dashboard'
-                redirect_url = 'http://127.0.0.1:5000'
+                redirect_url = 'http://127.0.0.1:3000'
             else:
-                redirect_url='https://majoraudit.web.app/dashboard'
+                redirect_url='https://majoraudit.web.app'
 
             # response = make_response(redirect('/majoraudit/us-central1/functions/dashboard'))
             # expires = datetime.datetime.now() + datetime.timedelta(days=30)
@@ -198,7 +213,7 @@ def get_redirect_url():
     if '127.0.0.1' in url:
         url = url[:function_loc] + '/majoraudit/us-central1/functions' + url[function_loc:]
     else:
-        url=url[:function_loc]+'/functions'+url[function_loc:]
+        url=url[:function_loc]+url[function_loc:]
 
     return url
 

@@ -16,37 +16,37 @@ function App() {
 
   useEffect(() => {
     $.ajax({
-      url: "https://functions-ggwttz72sa-uc.a.run.app/check_login",
+      url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/check_login",
       xhrFields: { withCredentials: true }
     }).done((data: string | null) => {
       if(data) {
-        console.log("woo netid!");
+        console.log(data);
         setAuth(true);
       }else{
-        console.log("boo netid!");
-        setAuth(true);
+        console.log(data);
+        setAuth(false);
       }
     });
   }, []);
 
-  useEffect(() => {
-    $.ajax({
-      url: "https://functions-ggwttz72sa-uc.a.run.app/get_majors",
-      method: "GET",
-      xhrFields: { withCredentials: true }
-    }).done((data: JSON | null) => {
-      if(data) {
-        console.log("yee!");
-        let strPrograms = JSON.stringify(data);
-        localStorage.setItem("programList", strPrograms);
-      }else{
-        const programs = [CGSC, CPSC, ECON, HIST];
-        let strPrograms = JSON.stringify(programs);
-        localStorage.setItem("programList", strPrograms);
-        console.log("noo!");
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   $.ajax({
+  //     url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/get_majors",
+  //     method: "GET",
+  //     xhrFields: { withCredentials: true }
+  //   }).done((data: JSON | null) => {
+  //     if(data) {
+  //       console.log("yee!");
+  //       let strPrograms = JSON.stringify(data);
+  //       localStorage.setItem("programList", strPrograms);
+  //     }else{
+  //       const programs = [CGSC, CPSC, ECON, HIST];
+  //       let strPrograms = JSON.stringify(programs);
+  //       localStorage.setItem("programList", strPrograms);
+  //       console.log("noo!");
+  //     }
+  //   });
+  // }, []);
 
   return (
   <div>
@@ -54,7 +54,7 @@ function App() {
       <Route path="/"             element={auth ? <Navigate to="/graduation"/> : <Navigate to="/login"/>}/> 
       <Route path="/login"        element={auth ? <Navigate to="/graduation"/> : <Login/>}/> 
 
-      <Route path="/graduation"   element={auth ? <Graduation/> : <Navigate to="/login"/>}/> 
+      <Route path="/graduation"   element={auth ? <Graduation/> : <Navigate to="/login"/>}/>
       <Route path="/courses"      element={auth ? <Courses/> : <Navigate to="/login"/>}/> 
       <Route path="/majors"       element={auth ? <Majors/> : <Navigate to="/login"/>}/> 
     </Routes>
