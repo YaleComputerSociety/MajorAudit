@@ -32,10 +32,12 @@
 
 .innerText {
   display: flex;
+  margin: 10px;
 }
 
 .navbarMe {
   /* padding-left: 1rem; */
+  height: 40px;
   display: flex;
 }
 
