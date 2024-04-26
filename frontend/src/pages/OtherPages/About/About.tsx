@@ -1,13 +1,13 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.css";
 import MeDropdown from "../../../navbar/account/MeDropdown";
-import nav_styles from "../../../commons/components/navbar/NavBar.module.css";
+import nav_styles from "./../../../navbar/NavBar.module.css";
 import img_logo from "../../../commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { Card, Row } from "react-bootstrap";
 import { TextComponent } from "../../../navbar/Typography";
+import "./components/About.scss";
 
 import ld from "../../../commons/images/ld_headshot.jpeg";
 import lm from "../../../commons/images/lm_headshot.jpeg";
@@ -193,41 +193,44 @@ function About() {
   return (
     <div>
       <NavBar />
-      <div className={clsx(styles.container, "mx-auto")}>
-        <div style={{ marginTop: "75px" }}>
-          <h1 className={clsx(styles.title, "mt-5 mb-1")}>About Us</h1>
-          <TextComponent type="secondary">
-            <p className={clsx(styles.aboutDescription, "mb-3 mx-auto")}>
-              CourseTable offers a clean and effective way for Yale students to
-              find the courses they want, bringing together course information,
-              student evaluations, and course demand statistics in an intuitive
-              interface. It's run by a small team of volunteers within the{" "}
-              <a
-                href="http://yalecomputersociety.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Yale Computer Society
-              </a>{" "}
-              and is completely{" "}
-              <a
-                href="https://github.com/coursetable"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                open source
-              </a>
-              .
-            </p>
-            <p className={clsx(styles.aboutDescription, "mb-3 mx-auto")}>
-              Also check out our <Link to="/faq">FAQ</Link> and{" "}
-              <Link to="/releases">Release Notes</Link>.
-            </p>
-          </TextComponent>
-          <h1 className="mt-3">Current Team</h1>
+      <div className="local-bootstrap">
+        <div className={clsx(styles.container, "mx-auto")}>
+          <div style={{ marginTop: "75px" }}>
+            <h1 className={clsx(styles.title, "mt-5 mb-1")}>About Us</h1>
+            <TextComponent type="secondary">
+              <p className={clsx(styles.aboutDescription, "mb-3 mx-auto")}>
+                CourseTable offers a clean and effective way for Yale students
+                to find the courses they want, bringing together course
+                information, student evaluations, and course demand statistics
+                in an intuitive interface. It's run by a small team of
+                volunteers within the{" "}
+                <a
+                  href="http://yalecomputersociety.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Yale Computer Society
+                </a>{" "}
+                and is completely{" "}
+                <a
+                  href="https://github.com/coursetable"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  open source
+                </a>
+                .
+              </p>
+              <p className={clsx(styles.aboutDescription, "mb-3 mx-auto")}>
+                Also check out our <Link to="/faq">FAQ</Link> and{" "}
+                <Link to="/releases">Release Notes</Link>.
+              </p>
+            </TextComponent>
+            <h1 className="mt-3">Current Team</h1>
 
-          <div className="my-3">
-            <Row className="mx-auto">{current.map(createCards)}</Row>
+            <div className="my-3">
+              <Row className="mx-auto">{current.map(createCards)}</Row>
+            </div>
           </div>
         </div>
       </div>

@@ -5,11 +5,11 @@ import styles from "./Graduation.module.css";
 import GraduationDistribution from "./components/DistributionTable";
 import GraduationOverview from "./components/Overview";
 
-import { CPSC } from "./../../commons/mock/MockProgram"
-
+import { CPSC } from "./../../commons/mock/MockProgram";
+import MeDropdown from "../../navbar/account/MeDropdown";
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
-import PageLinks from "../../navbar/PageLinks";
+import { NavLink } from "react-router-dom";
 
 function NavBar() {
   return (

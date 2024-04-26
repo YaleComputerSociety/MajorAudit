@@ -6,10 +6,10 @@ import YearBox from "./components/YearBox";
 import AddCourseMenu from "./components/add_course/AddCourse";
 
 import { MockStudent } from "./../../commons/mock/MockStudent";
-
+import MeDropdown from "../../navbar/account/MeDropdown";
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
-import PageLinks from "../../navbar/PageLinks";
+import { NavLink } from "react-router-dom";
 
 function NavBar() {
   return (
