@@ -4,6 +4,7 @@
       "source": "backend",
       "codebase": "default",
       "ignore": [
+        "__pycache__",
         "venv",
         ".git",
         "firebase-debug.log",
@@ -22,6 +23,11 @@
       "**/node_modules/**",
       "README.md"
     ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }],
     "cleanUrls": true
   },
   "storage": {
