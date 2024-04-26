@@ -8,7 +8,10 @@ import { FaSignOutAlt } from "react-icons/fa";
 import clsx from "clsx";
 
 import styles from "./MeDropdown.module.css";
-import { scrollToTop, useComponentVisible } from "../../commons/utilities/display";
+import {
+  scrollToTop,
+  useComponentVisible,
+} from "../../commons/utilities/display";
 import { SurfaceComponent, TextComponent, HoverText } from "../Typography";
 
 function DropdownItem({
@@ -105,11 +108,13 @@ function DropdownContent({
             <DropdownItem icon={FcInfo} to="/about">
               About
             </DropdownItem>
-            <DropdownItem icon={FcQuestions} to="/faq">
-              FAQ
-            </DropdownItem>
+            {/*
             <DropdownItem icon={FcNews} to="/releases">
               Release Notes
+            </DropdownItem>
+        */}
+            <DropdownItem icon={FcQuestions} to="/faq">
+              FAQ
             </DropdownItem>
             <DropdownItem icon={FaSignOutAlt} iconColor="#ed5f5f">
               Sign Out
