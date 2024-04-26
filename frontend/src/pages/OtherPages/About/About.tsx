@@ -8,7 +8,16 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { Card, Row } from "react-bootstrap";
 import { TextComponent } from "../../../navbar/Typography";
+
 import ld from "../../../commons/images/ld_headshot.jpeg";
+import lm from "../../../commons/images/lm_headshot.jpeg";
+import rg from "../../../commons/images/rg_headshot.jpeg";
+import og from "../../../commons/images/og_headshot.jpeg";
+import ah from "../../../commons/images/ah_headshot.jpeg";
+import rr from "../../../commons/images/rr_headshot.jpeg";
+import bw from "../../../commons/images/bw_headshot.jpeg";
+import wy from "../../../commons/images/wy_headshot.jpeg";
+
 import githubDark from "../../../commons/images/github-light.png";
 import github from "../../../commons/images/github.png";
 import linkedin from "../../../commons/images/linkedin.png";
@@ -72,50 +81,75 @@ function NavBar() {
 function About() {
   const current: Person[] = [
     {
-      name: "Alex Schapiro",
-      image: ld,
-      role: "CourseTable Co-Lead",
+      name: "Lorenss Martinsons",
+      image: lm,
+      role: "MajorAudit Lead",
       links: {
-        github: "https://github.com/bearsyankees",
-        linkedin: "https://www.linkedin.com/in/aschap/",
+        github: "https://github.com/lorenss-m",
+        linkedin: "https://www.linkedin.com/in/lorenss/",
       },
     },
     {
-      name: "Sida Chen",
-      image: ld,
-      role: "CourseTable Co-Lead",
+      name: "Ryan Gumlia",
+      image: rg,
+      role: "Frontend Team Lead",
       links: {
-        linkedin: "https://www.linkedin.com/in/sida-joshua-chen/",
-        github: "https://github.com/Josh-Cena/",
-        website: "https://joshcena.com/",
+        linkedin: "https://www.linkedin.com/in/ryanggumlia/",
+        github: "https://github.com/ryanggum",
       },
     },
     {
-      name: "Neil Song",
-      image: ld,
+      name: "Oz Gitelson",
+      image: og,
       role: "Backend Team Lead",
       links: {
-        linkedin: "https://www.linkedin.com/in/neil-song/",
-        github: "https://github.com/neilsong",
+        linkedin: "https://www.linkedin.com/in/oz-gitelson-4b606b249/",
+        github: "https://github.com/OzGitelson",
       },
     },
     {
-      name: "Ben Xu",
+      name: "Darwin Deng",
       image: ld,
       role: "Development",
       links: {
-        linkedin: "https://www.linkedin.com/in/ben-xu-6323ab258/",
-        github: "https://github.com/benzuzu",
+        linkedin: "https://www.linkedin.com/in/lejun-deng-46b437264/",
+        github: "https://github.com/darwin-hub",
       },
     },
     {
-      name: "Kenny Tung",
-      image: ld,
+      name: "Annabelle Huang",
+      image: ah,
       role: "Development",
       links: {
-        linkedin: "https://www.linkedin.com/in/tungk/",
-        github: "https://github.com/kentng01/",
-        website: "https://kenneru.netlify.app/",
+        linkedin: "https://www.linkedin.com/in/annabellehuang/",
+        github: "https://github.com/annabelle-huang",
+      },
+    },
+    {
+      name: "Ramya Reddy",
+      image: rr,
+      role: "Development",
+      links: {
+        linkedin: "https://www.linkedin.com/in/ramya-n-reddy/",
+        github: "https://github.com/ramyareddy04",
+      },
+    },
+    {
+      name: "Ben Wu",
+      image: bw,
+      role: "Development",
+      links: {
+        linkedin: "https://www.linkedin.com/in/benjaminwu13/",
+        github: "https://github.com/winbow13",
+      },
+    },
+    {
+      name: "Will Yang",
+      image: wy,
+      role: "Development",
+      links: {
+        linkedin: "https://www.linkedin.com/in/will-y/",
+        github: "https://github.com/WillJYang",
       },
     },
   ];
@@ -160,45 +194,41 @@ function About() {
     <div>
       <NavBar />
       <div className={clsx(styles.container, "mx-auto")}>
-        <h1 className={clsx(styles.title, "mt-5 mb-1")}>About Us</h1>
-        <TextComponent type="secondary">
-          <p className={clsx(styles.aboutDescription, "mb-3 mx-auto")}>
-            CourseTable offers a clean and effective way for Yale students to
-            find the courses they want, bringing together course information,
-            student evaluations, and course demand statistics in an intuitive
-            interface. It's run by a small team of volunteers within the{" "}
-            <a
-              href="http://yalecomputersociety.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Yale Computer Society
-            </a>{" "}
-            and is completely{" "}
-            <a
-              href="https://github.com/coursetable"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              open source
-            </a>
-            .
-          </p>
-          <p className={clsx(styles.aboutDescription, "mb-3 mx-auto")}>
-            Also check out our <Link to="/faq">FAQ</Link> and{" "}
-            <Link to="/releases">Release Notes</Link>.
-          </p>
-        </TextComponent>
+        <div style={{ marginTop: "75px" }}>
+          <h1 className={clsx(styles.title, "mt-5 mb-1")}>About Us</h1>
+          <TextComponent type="secondary">
+            <p className={clsx(styles.aboutDescription, "mb-3 mx-auto")}>
+              CourseTable offers a clean and effective way for Yale students to
+              find the courses they want, bringing together course information,
+              student evaluations, and course demand statistics in an intuitive
+              interface. It's run by a small team of volunteers within the{" "}
+              <a
+                href="http://yalecomputersociety.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Yale Computer Society
+              </a>{" "}
+              and is completely{" "}
+              <a
+                href="https://github.com/coursetable"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                open source
+              </a>
+              .
+            </p>
+            <p className={clsx(styles.aboutDescription, "mb-3 mx-auto")}>
+              Also check out our <Link to="/faq">FAQ</Link> and{" "}
+              <Link to="/releases">Release Notes</Link>.
+            </p>
+          </TextComponent>
+          <h1 className="mt-3">Current Team</h1>
 
-        <div className="d-flex justify-content-center">
-          <Link className="btn" to="/joinus">
-            Join Us
-          </Link>
-        </div>
-        <h1 className="mt-3">Current Team</h1>
-
-        <div className="my-3">
-          <Row className="mx-auto">{current.map(createCards)}</Row>
+          <div className="my-3">
+            <Row className="mx-auto">{current.map(createCards)}</Row>
+          </div>
         </div>
       </div>
     </div>
