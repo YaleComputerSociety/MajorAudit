@@ -7,7 +7,7 @@ import FAQ from "./pages/OtherPages/FAQ/FAQ";
 import About from "./pages/OtherPages/About/About";
 const router = createBrowserRouter([
   {
-    path: "",
+    path: "/graduation",
     element: <Graduation />,
   },
   {

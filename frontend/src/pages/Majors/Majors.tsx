@@ -4,7 +4,7 @@ import styles from "./Majors.module.css";
 import ProgramRequirementsBox from "./components/ProgramRequirementsBox";
 import ProgramMetadataBox from "./components/ProgramMetadataBox";
 
-import nav_styles from "./../../commons/components/navbar/NavBar.module.css";
+import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
 import MeDropdown from "../../navbar/account/MeDropdown";
@@ -53,40 +53,50 @@ function NavBar() {
   );
 }
 
-export const Majors = () => {
-  // Which Program
+function Majors() {
   const [currdex, setCurrdex] = useState(0);
+  const [currDegree, setCurrDegree] = useState(0);
+
+  const storedPrograms = localStorage.getItem("programList");
+  let programs: Program[] | null = null;
+
+  if (storedPrograms) {
+    programs = JSON.parse(storedPrograms) as Program[];
+  }
+
   const alterCurrdex = (dir: number) => {
-    setCurrdex((currdex + dir + programs.length) % programs.length);
-    setCurrDegree(0);
-  };
-  const seeProgram = (dir: number) => {
-    return programs[(currdex + dir + programs.length) % programs.length];
+    if (programs && programs.length > 0) {
+      setCurrdex((currdex + dir + programs.length) % programs.length);
+      setCurrDegree(0);
+    }
   };
 
-  // Which Degree
-  const [currDegree, setCurrDegree] = useState(0);
-  const alterCurrDegree = (num: number) => {
-    setCurrDegree(num);
+  const seeProgram = (dir: number) => {
+    if (programs && programs.length > 0) {
+      return programs[(currdex + dir + programs.length) % programs.length];
+    }
+    return null; 
   };
+
+
+  if (!programs || programs.length === 0) {
+    return <div></div>;
+  }
 
   return (
     <div>
       <NavBar />
       <div className={styles.MajorsPage}>
         <ProgramMetadataBox
-          program={programs[currdex]}
           scrollProgram={alterCurrdex}
           seeProgram={seeProgram}
           whichDegree={currDegree}
           alterCurrDegree={alterCurrDegree}
         />
-        <ProgramRequirementsBox
-          degree={programs[currdex].degrees[currDegree]}
-        />
+        <ProgramRequirementsBox degree={programs[currdex].degrees[currDegree]} />
       </div>
     </div>
   );
-};
+}
 
 export default Majors;
