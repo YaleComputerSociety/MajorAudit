@@ -6,13 +6,13 @@ export const skillsAreasColors: { [code: string]: string } = {
     Sc: '#67AE5E',
     QR: '#C1320A',
     WR: '#E37F1D',
-    L: '#231861',
+    L: '#747474',
     "Hu - Humanities & Arts": '#9970AB',
     "So - Social Sciences" : '#5493C4',
     "Sc - Sciences": '#67AE5E',
     "QR - Quantitative Reasoning": '#C1320A',
     "WR - Writing": '#E37F1D',
-    "L - Language": '#231861',
+    "L - Language": '#747474',
     ...Object.fromEntries([1, 2, 3, 4, 5].map((i) => [`L${i}`, '#888888'])),
 };
 

@@ -4,6 +4,8 @@ import nav_styles from "../../navbar/NavBar.module.css";
 import img_logo from "../../commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
 
+import { useTheme } from "../../hooks/themeContext";
+
 function NavBar() {
   return (
     <div className={nav_styles.NavBar}>
@@ -48,11 +50,22 @@ function NavBar() {
 
 
 function Themes() {
+  const {currentTheme, setCurrentTheme} = useTheme();
+
+  function setLightTheme() {
+    setCurrentTheme("light")
+  }
+
+  function setDarkTheme() {
+    setCurrentTheme("dark")
+  }
+
   return (
     <div>
         <NavBar/>
         <div style={{display: "flex", justifyContent: "center", alignItems: "center",  height: "100vh"}}>
-            <p>There is nothing here yet!</p>
+            <button type="button" onClick={setLightTheme}>Light</button>
+            <button type="button" onClick={setDarkTheme}>Dark</button>
         </div>
     </div>
   )
