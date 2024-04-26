@@ -9,14 +9,14 @@ import { Card, Row } from "react-bootstrap";
 import { TextComponent } from "../../../navbar/Typography";
 import "./components/About.scss";
 
-import ld from "../../../commons/images/ld_headshot.jpeg";
-import lm from "../../../commons/images/lm_headshot.jpeg";
-import rg from "../../../commons/images/rg_headshot.jpeg";
-import og from "../../../commons/images/og_headshot.jpeg";
-import ah from "../../../commons/images/ah_headshot.jpeg";
-import rr from "../../../commons/images/rr_headshot.jpeg";
-import bw from "../../../commons/images/bw_headshot.jpeg";
-import wy from "../../../commons/images/wy_headshot.jpeg";
+import AnnabelleHuang from "../../../commons/images/headshots/annabelle-huang-headshot.jpeg";
+import BenWu from "../../../commons/images/headshots/ben-wu-headshot.jpeg";
+import LejunDeng from "../../../commons/images/headshots/lejun-deng-headshot.jpeg";
+import LorenssMartinsons from "../../../commons/images/headshots/lorenss-martinsons-headshot.jpeg";
+import OzGitelson from "../../../commons/images/headshots/oz-gitelson-headshot.jpeg";
+import RamyaReddy from "../../../commons/images/headshots/ramya-reddy-headshot.jpeg";
+import RyanGumlia from "../../../commons/images/headshots/ryan-gumlia-headshot.jpeg";
+import WillYang from "../../../commons/images/headshots/will-yang-headshot.jpeg";
 
 import githubDark from "../../../commons/images/github-light.png";
 import github from "../../../commons/images/github.png";
@@ -49,7 +49,7 @@ function NavBar() {
 
       <div className={nav_styles.row} style={{ marginRight: "20px" }}>
         <NavLink
-          to="/"
+          to="/graduation"
           className={({ isActive }) =>
             isActive ? nav_styles.activeLink : nav_styles.dormantLink
           }
@@ -82,7 +82,7 @@ function About() {
   const current: Person[] = [
     {
       name: "Lorenss Martinsons",
-      image: lm,
+      image: LorenssMartinsons,
       role: "MajorAudit Lead",
       links: {
         github: "https://github.com/lorenss-m",
@@ -91,7 +91,7 @@ function About() {
     },
     {
       name: "Ryan Gumlia",
-      image: rg,
+      image: RyanGumlia,
       role: "Frontend Team Lead",
       links: {
         linkedin: "https://www.linkedin.com/in/ryanggumlia/",
@@ -100,7 +100,7 @@ function About() {
     },
     {
       name: "Oz Gitelson",
-      image: og,
+      image: OzGitelson,
       role: "Backend Team Lead",
       links: {
         linkedin: "https://www.linkedin.com/in/oz-gitelson-4b606b249/",
@@ -109,7 +109,7 @@ function About() {
     },
     {
       name: "Darwin Deng",
-      image: ld,
+      image: LejunDeng,
       role: "Development",
       links: {
         linkedin: "https://www.linkedin.com/in/lejun-deng-46b437264/",
@@ -118,7 +118,7 @@ function About() {
     },
     {
       name: "Annabelle Huang",
-      image: ah,
+      image: AnnabelleHuang,
       role: "Development",
       links: {
         linkedin: "https://www.linkedin.com/in/annabellehuang/",
@@ -127,7 +127,7 @@ function About() {
     },
     {
       name: "Ramya Reddy",
-      image: rr,
+      image: RamyaReddy,
       role: "Development",
       links: {
         linkedin: "https://www.linkedin.com/in/ramya-n-reddy/",
@@ -136,7 +136,7 @@ function About() {
     },
     {
       name: "Ben Wu",
-      image: bw,
+      image: BenWu,
       role: "Development",
       links: {
         linkedin: "https://www.linkedin.com/in/benjaminwu13/",
@@ -145,7 +145,7 @@ function About() {
     },
     {
       name: "Will Yang",
-      image: wy,
+      image: WillYang,
       role: "Development",
       links: {
         linkedin: "https://www.linkedin.com/in/will-y/",

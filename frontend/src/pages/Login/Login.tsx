@@ -45,7 +45,7 @@ function Login() {
             <Link to="/graduation" className={styles.btn} style={{marginRight: "8px"}}>
               Login with CAS
             </Link>
-            <Link to="/courses" className={styles.btn} style={{marginRight: "8px"}}>
+            <Link to="/about" className={styles.btn} style={{marginRight: "8px"}}>
               About Us
             </Link>
             <Link to="/majors" className={styles.btn}>
