@@ -26,7 +26,7 @@ function Router() {
         <Route path="/themes"       element={auth ? <Themes/> : <Navigate to="/login"/>}/> 
         <Route path="/about"        element={<About/>}/> 
         <Route path="/faq"          element={<FAQ/>}/> 
-        <Route path="/releases"     element={<Releases/>}/> 
+        <Route path="/releases"     element={<Releases/>}/>
       </Routes>
     </div>
   );

@@ -10,10 +10,9 @@ type Props = {
 export default function DistributionBox({ text }: Props) {
   const textColor = skillsAreasColors[text];
   return (
-    <div className={styles.overviewDistBox} style={{ 
-        backgroundColor: chroma(textColor).alpha(0.16).css(), 
+    <div className={styles.distributionBox} style={{ 
+        backgroundColor: chroma(textColor).alpha(0.32).css(), 
         color: textColor,
-        fontWeight: "bold"
      }}>{text}</div>
   );
 }

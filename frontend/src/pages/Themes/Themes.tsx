@@ -48,10 +48,12 @@ function NavBar() {
 
 
 function Themes() {
-  return(
+  return (
     <div>
-      <NavBar/>
-      
+        <NavBar/>
+        <div style={{display: "flex", justifyContent: "center", alignItems: "center",  height: "100vh"}}>
+            <p>There is nothing here yet!</p>
+        </div>
     </div>
   )
 }

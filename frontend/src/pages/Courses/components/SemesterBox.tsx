@@ -1,6 +1,7 @@
 
 import styles from "./../Courses.module.css"
 import CourseBox from "./CourseBox";
+import DistributionBoxSmall from "../../../commons/components/courses/DistributionBoxSmall"
 import { Semester } from "./../../../commons/types/TypeStudent";
 import { DisplaySetting } from "./../Courses";
 
@@ -29,16 +30,6 @@ function MetadataAll(props: { semester: Semester, displaySetting: DisplaySetting
 
     const areaArray = Array.from(areaSet);
     const skillArray = Array.from(skillSet);
-
-    // TO-DO: change colors: either move these to constants.ts or make these the same as constants.ts
-    const styleMapping = {
-        "Hu": { backgroundColor: "#E6CFF4", color: "#9970AB", marginRight: "4px" },
-        "So": { backgroundColor: "#CFE0F4", color: "#5493C4", marginRight: "4px"  },
-        "Sc": { backgroundColor: "#D0F4CF", color: "#67AE5E", marginRight: "4px"  },
-        "QR": { backgroundColor: "#F4CFCF", color: "#C1320A", marginRight: "4px"  },
-        "WR": { backgroundColor: "#F4DCCF", color: "#E37F1D", marginRight: "4px"  },
-        "L" : { backgroundColor: "#D2CEDB", color: "#231861", marginRight: "4px"  }
-    };
 
     return(
         <div className={styles.row} style={{ marginBottom: "10px" }}>
@@ -69,9 +60,12 @@ function MetadataAll(props: { semester: Semester, displaySetting: DisplaySetting
                     </div>
                     <div className={styles.row}>
                         {areaArray.map((value, index) => (
-                            <div className={styles.evaluateBox} key={index} style={styleMapping[value as keyof typeof styleMapping]}>
-                                {value}
+                            <div style={{paddingRight: "4px"}}>
+                            <DistributionBoxSmall text={value} key={index} />
                             </div>
+                            // <div className={styles.evaluateBox} key={index} style={styleMapping[value as keyof typeof styleMapping]}>
+                            //     {value}
+                            // </div>
                         ))}
                     </div>
                 </div>
@@ -83,8 +77,8 @@ function MetadataAll(props: { semester: Semester, displaySetting: DisplaySetting
                     </div>
                     <div className={styles.row}>
                         {skillArray.map((value, index) => (
-                            <div className={styles.evaluateBox} key={index} style={styleMapping[value as keyof typeof styleMapping]}>
-                                {value}
+                            <div style={{paddingRight: "4px"}}>
+                            <DistributionBoxSmall text={value} key={index} />
                             </div>
                         ))}
                     </div>

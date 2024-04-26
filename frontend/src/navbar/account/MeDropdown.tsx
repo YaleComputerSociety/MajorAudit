@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { Row, Col, Collapse } from "react-bootstrap";
 import type { IconType } from "react-icons";
 import { BsFillPersonFill } from "react-icons/bs";
-import { FcInfo, FcQuestions, FcNews } from "react-icons/fc";
+import { FcInfo, FcQuestions, FcNews, FcMultipleSmartphones } from "react-icons/fc";
 import { FaSignOutAlt } from "react-icons/fa";
 
 import styles from "./MeDropdown.module.css";
@@ -111,6 +111,9 @@ function DropdownContent({
             </DropdownItem>
             <DropdownItem icon={FcNews} to="/releases">
               Release Notes
+            </DropdownItem>
+            <DropdownItem icon={FcMultipleSmartphones} to="/themes">
+              Themes
             </DropdownItem>
             <DropdownItem icon={FaSignOutAlt} iconColor="#ed5f5f">
               Sign Out
