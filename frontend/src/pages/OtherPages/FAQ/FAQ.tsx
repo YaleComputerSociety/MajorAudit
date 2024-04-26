@@ -62,6 +62,49 @@ function FAQ() {
           top: "150px",
         }}
       >
+        <h1>Questions</h1>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <Typography>Accordion 1</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
+              eget.
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2-content"
+            id="panel2-header"
+          >
+            <Typography>Accordion 2</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
+              eget.
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+      <div
+        style={{
+          position: "relative",
+          margin: "auto",
+          maxWidth: "50%",
+          top: "150px",
+        }}
+      >
+        <h1>Questions</h1>
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
