@@ -6,10 +6,10 @@ import ProgramMetadataBox from "./components/ProgramMetadataBox";
 
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
-import { NavLink } from "react-router-dom";
+
+import { Program } from "./../../commons/types/TypeProgram";
 import MeDropdown from "../../navbar/account/MeDropdown";
-import { CGSC, CPSC, ECON, HIST } from "./../../commons/mock/MockProgram";
-const programs = [CGSC, CPSC, ECON, HIST];
+import { NavLink } from "react-router-dom";
 
 function NavBar() {
   return (
@@ -21,7 +21,6 @@ function NavBar() {
           style={{ width: "150px", height: "auto", marginRight: "10px" }}
         />
       </div>
-
       <div className={nav_styles.row} style={{ marginRight: "20px" }}>
         <NavLink
           to="/"
@@ -52,7 +51,6 @@ function NavBar() {
     </div>
   );
 }
-
 function Majors() {
   const [currdex, setCurrdex] = useState(0);
   const [currDegree, setCurrDegree] = useState(0);
@@ -75,9 +73,12 @@ function Majors() {
     if (programs && programs.length > 0) {
       return programs[(currdex + dir + programs.length) % programs.length];
     }
-    return null; 
+    return null;
   };
 
+  const alterCurrDegree = (num: number) => {
+    setCurrDegree(num);
+  };
 
   if (!programs || programs.length === 0) {
     return <div></div>;
@@ -88,12 +89,15 @@ function Majors() {
       <NavBar />
       <div className={styles.MajorsPage}>
         <ProgramMetadataBox
+          program={programs[currdex]}
           scrollProgram={alterCurrdex}
           seeProgram={seeProgram}
           whichDegree={currDegree}
           alterCurrDegree={alterCurrDegree}
         />
-        <ProgramRequirementsBox degree={programs[currdex].degrees[currDegree]} />
+        <ProgramRequirementsBox
+          degree={programs[currdex].degrees[currDegree]}
+        />
       </div>
     </div>
   );
