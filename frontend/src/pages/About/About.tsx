@@ -1,28 +1,28 @@
 import React from "react";
-import MeDropdown from "../../../navbar/account/MeDropdown";
-import nav_styles from "./../../../navbar/NavBar.module.css";
-import img_logo from "../../../commons/images/ma_logo.png";
+import MeDropdown from "../../navbar/account/MeDropdown";
+import nav_styles from "./../../navbar/NavBar.module.css";
+import img_logo from "../../commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { Card, Row } from "react-bootstrap";
-import { TextComponent } from "../../../navbar/Typography";
+import { TextComponent } from "../../navbar/Typography";
 import "./components/About.scss";
 
-import AnnabelleHuang from "../../../commons/images/headshots/annabelle-huang-headshot.jpeg";
-import BenWu from "../../../commons/images/headshots/ben-wu-headshot.jpeg";
-import LejunDeng from "../../../commons/images/headshots/lejun-deng-headshot.jpeg";
-import LorenssMartinsons from "../../../commons/images/headshots/lorenss-martinsons-headshot.jpeg";
-import OzGitelson from "../../../commons/images/headshots/oz-gitelson-headshot.jpeg";
-import RamyaReddy from "../../../commons/images/headshots/ramya-reddy-headshot.jpeg";
-import RyanGumlia from "../../../commons/images/headshots/ryan-gumlia-headshot.jpeg";
-import WillYang from "../../../commons/images/headshots/will-yang-headshot.jpeg";
+import AnnabelleHuang from "../../commons/images/headshots/annabelle-huang-headshot.jpeg";
+import BenWu from "../../commons/images/headshots/ben-wu-headshot.jpeg";
+import LejunDeng from "../../commons/images/headshots/lejun-deng-headshot.jpeg";
+import LorenssMartinsons from "../../commons/images/headshots/lorenss-martinsons-headshot.jpeg";
+import OzGitelson from "../../commons/images/headshots/oz-gitelson-headshot.jpeg";
+import RamyaReddy from "../../commons/images/headshots/ramya-reddy-headshot.jpeg";
+import RyanGumlia from "../../commons/images/headshots/ryan-gumlia-headshot.jpeg";
+import WillYang from "../../commons/images/headshots/will-yang-headshot.jpeg";
 
-import githubDark from "../../../commons/images/github-light.png";
-import github from "../../../commons/images/github.png";
-import linkedin from "../../../commons/images/linkedin.png";
-import webDark from "../../../commons/images/web-light.png";
-import web from "../../../commons/images/web.png";
+import githubDark from "../../commons/images/github-light.png";
+import github from "../../commons/images/github.png";
+import linkedin from "../../commons/images/linkedin.png";
+import webDark from "../../commons/images/web-light.png";
+import web from "../../commons/images/web.png";
 import styles from "./components/About.module.css";
 
 type Person = {

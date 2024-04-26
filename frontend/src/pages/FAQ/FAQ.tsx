@@ -1,6 +1,7 @@
-import MeDropdown from "../../../navbar/account/MeDropdown";
-import nav_styles from "./../../../navbar/NavBar.module.css";
-import img_logo from "../../../commons/images/ma_logo.png";
+import React from "react";
+import MeDropdown from "../../navbar/account/MeDropdown";
+import nav_styles from "../../navbar/NavBar.module.css";
+import img_logo from "../../commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";

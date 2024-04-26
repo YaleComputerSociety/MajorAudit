@@ -7,11 +7,9 @@ import { Link } from 'react-router-dom';
 
 import lgsIcon from "../../../commons/images/little_guys.png";
 import img_plus from "../../../commons/images/plus.png";
-import img_arrowup from "../../../commons/images/arrowup.png";
-import img_arrowdown from "../../../commons/images/arrowdown.png";
+import { SlArrowUp , SlArrowDown } from "react-icons/sl";
 
 import { Program, Degree } from "../../../commons/types/TypeProgram";
-
 
 function MetadataTopshelf(degree: Degree){
   return(
@@ -119,7 +117,9 @@ function MetadataScrollButton(props: {scrollProgram: Function, seeProgram: Funct
   return(
     <Button style={{ backgroundColor: "white", border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(props.dir)}>
       <div style={{ display: "flex" }}>
-        <img src={props.dir > 0 ? img_arrowup : img_arrowdown} alt="" style={{ width: "31px", height: "15px", marginTop: "8px", marginRight: "8px" }}/>
+        <div style={{paddingRight: "6px"}}>
+          {props.dir > 0 ? <SlArrowUp size={26} color="gray"/> : <SlArrowDown size={26} color="gray"/>}
+        </div>
         <div style={{ textAlign: "left", color: "gray" }}>
           <div style={{ fontSize: "18px", fontWeight: "bold" }}>
             {props.seeProgram(props.dir).name}

@@ -47,14 +47,16 @@ function NavBar() {
 }
 
 
-function Themes() {
+function Releases() {
   return(
     <div>
-      <NavBar/>
-      
+        <NavBar/>
+        <div style={{display: "flex", justifyContent: "center", alignItems: "center",  height: "100vh"}}>
+            <p>There is nothing here yet!</p>
+        </div>
     </div>
   )
 }
 
-export default Themes;
+export default Releases;
 

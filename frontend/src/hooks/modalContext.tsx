@@ -6,7 +6,7 @@ import {
   useMemo,
 } from "react";
 import { Course } from "../commons/types/TypeCourse";
-import { EMPTYCOURSE } from "../commons/mock/MockCourses";
+import { EMPTYCOURSE } from "../commons/utilities/constants";
 
 type Store = {
   isOpen: Course;
@@ -25,7 +25,7 @@ export function ModalProvider({
 
   const setModalOpen = useCallback((course: Course) => {
     setIsOpen(course);
-  }, [isOpen]);
+  }, []);
 
   const store: Store = useMemo(
     () => ({

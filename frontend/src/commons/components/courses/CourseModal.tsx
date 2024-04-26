@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./CourseModal.module.css";
 import { useModal } from "../../../hooks/modalContext";
 import { Dialog } from "@headlessui/react";
-import { EMPTYCOURSE } from "../../mock/MockCourses";
+import { EMPTYCOURSE } from "../../utilities/constants";
 
 export default function CourseModal() {
   const { isOpen, setModalOpen } = useModal();

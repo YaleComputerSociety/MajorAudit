@@ -5,7 +5,6 @@ import type { IconType } from "react-icons";
 import { BsFillPersonFill } from "react-icons/bs";
 import { FcInfo, FcQuestions, FcNews } from "react-icons/fc";
 import { FaSignOutAlt } from "react-icons/fa";
-import clsx from "clsx";
 
 import styles from "./MeDropdown.module.css";
 import {
@@ -35,9 +34,8 @@ function DropdownItem({
     <div className={styles.innerText}>
       <HoverText>
         <Icon
-          className="mr-2 my-auto"
           size={20}
-          style={{ paddingLeft: "2px", paddingBottom: "3px" }}
+          style={{ paddingLeft: "2px", paddingBottom: "3px", marginRight: "2px", marginTop: "auto", marginBottom: "auto" }}
           color={iconColor}
         />
       </HoverText>
@@ -45,7 +43,7 @@ function DropdownItem({
     </div>
   );
   return (
-    <Row className="pb-3 m-auto">
+    <Row style={{ margin: "auto" }}>
       <TextComponent type="secondary">
         {to ? (
           <NavLink
@@ -104,18 +102,16 @@ function DropdownContent({
         {/* This wrapper div is important for making the collapse animation
           smooth */}
         <div>
-          <Col className="px-3 pt-3">
+          <Col style={{paddingTop: "3px", paddingLeft: "3px", paddingRight: "3px"}}>
             <DropdownItem icon={FcInfo} to="/about">
               About
             </DropdownItem>
             <DropdownItem icon={FcQuestions} to="/faq">
               FAQ
             </DropdownItem>
-            {/*
             <DropdownItem icon={FcNews} to="/releases">
               Release Notes
             </DropdownItem>
-        */}
             <DropdownItem icon={FaSignOutAlt} iconColor="#ed5f5f">
               Sign Out
             </DropdownItem>
@@ -131,16 +127,17 @@ function MeDropdown() {
   const { elemRef, isComponentVisible, setIsComponentVisible } =
     useComponentVisible<HTMLButtonElement>(false);
   return (
-    <div className={clsx(styles.navbarMe, "align-self-end")}>
+    <div className={styles.navbarMe} style={{alignSelf: "end"}}>
       <button
         type="button"
         ref={elemRef}
-        className={clsx(styles.meIcon, "m-auto")}
+        className={styles.meIcon}
+        style={{margin: "auto"}}
         onClick={() => setIsComponentVisible(!isComponentVisible)}
         aria-label="Profile"
       >
         <BsFillPersonFill
-          className="m-auto"
+          style={{margin: "auto"}}
           size={20}
           color={isComponentVisible ? "#007bff" : undefined}
         />

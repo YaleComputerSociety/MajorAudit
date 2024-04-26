@@ -1,5 +1,6 @@
 
-import {Course, StudentCourse } from "./../types/TypeCourse";
+import { Course, StudentCourse } from "./../types/TypeCourse";
+import { EMPTYCOURSE } from "./../utilities/constants";
 
 const CPSC201: Course = { code: "CPSC 201", title: "Title CPSC201", description: "CPSC 201 is ... ", seasons: ["FALL", "SPRING"], evaluation: { rating: 4.1, workload: 4.2, professor: 5}, distribution: ["QR"] };
 const CPSC202: Course = { code: "CPSC 202", title: "Title CPSC202", description: "CPSC 202 is ... ", seasons: ["FALL", "SPRING"], evaluation: { rating: 4.1, workload: 4.2, professor: 5}, distribution: ["QR"] };
@@ -8,8 +9,6 @@ const CPSC223: Course = { code: "CPSC 223", title: "Title CPSC223", description:
 const CPSC323: Course = { code: "CPSC 323", title: "Title CPSC323", description: "CPSC 323 is ... ", seasons: ["FALL", "SPRING"], evaluation: { rating: 4.1, workload: 4.2, professor: 5}, distribution: ["QR"] };
 const CPSC365: Course = { code: "CPSC 365", title: "Title CPSC365", description: "CPSC 365 is ... ", seasons: ["FALL", "SPRING"], evaluation: { rating: 4.1, workload: 4.2, professor: 5}, distribution: ["QR"] };
 const CGSC110: Course = { code: "CGSC 110", title: "Title CGSC110", description: "CGSC 110 is ... ", seasons: ["FALL", "SPRING"], evaluation: { rating: 4.1, workload: 4.2, professor: 5}, distribution: ["So"] };
-
-export const EMPTYCOURSE: Course = { code: "N/A", title: "Title NULL", description: "No course", seasons: [], evaluation: { rating: 3, workload: 3, professor: 3}, distribution: [] };
 
 const Student201: StudentCourse = { course: CPSC201, enrollmentStatus: "COMPLETED", season: "FALL", year: "2022-2023" };
 const Student223: StudentCourse = { course: CPSC223, enrollmentStatus: "COMPLETED", season: "SPRING", year: "2022-2023" };

@@ -1,3 +1,4 @@
+import { Course } from "../types/TypeCourse";
 
 export const skillsAreasColors: { [code: string]: string } = {
     Hu: '#9970AB',
@@ -14,3 +15,5 @@ export const skillsAreasColors: { [code: string]: string } = {
     "L - Language": '#000000',
     ...Object.fromEntries([1, 2, 3, 4, 5].map((i) => [`L${i}`, '#888888'])),
 };
+
+export const EMPTYCOURSE: Course = { code: "N/A", title: "Title NULL", description: "No course", seasons: [], evaluation: { rating: 3, workload: 3, professor: 3}, distribution: [] };
