@@ -5,6 +5,7 @@ import {
   useCallback,
   useMemo,
 } from "react";
+import { getThemeColor } from "../commons/utilities/themeSchemas";
 
 export type Theme = "light" | "dark";
 
@@ -25,13 +26,8 @@ export function ThemeProvider({
 
   const setCurrentTheme = useCallback((theme: Theme) => {
     localStorage.setItem("theme", theme);
-    if (theme === 'light') {
-        document.body.style.backgroundColor = "#FFFFFF";
-        document.body.style.color = "#000000"
-    } else if (theme === 'dark') {
-        document.body.style.backgroundColor = "#242424";
-        document.body.style.color = "#EEEEEE"
-    }
+    document.body.style.backgroundColor = getThemeColor(theme, 'backgroundColor');
+    document.body.style.color = getThemeColor(theme, 'color');
     setTheme(theme);
   }, []);
 

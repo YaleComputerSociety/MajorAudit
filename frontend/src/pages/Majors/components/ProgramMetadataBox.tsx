@@ -11,6 +11,9 @@ import { SlArrowUp , SlArrowDown } from "react-icons/sl";
 
 import { Program, Degree } from "../../../commons/types/TypeProgram";
 
+import { useTheme } from "../../../hooks/themeContext";
+import { getThemeColor } from "../../../commons/utilities/themeSchemas";
+
 function MetadataTopshelf(degree: Degree){
   return(
     <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
@@ -114,8 +117,9 @@ function MetadataContent(props: {program: Program, whichDegree: number, alterCur
 }
 
 function MetadataScrollButton(props: {scrollProgram: Function, seeProgram: Function, dir: number}){
+  const { currentTheme } = useTheme();
   return(
-    <Button style={{ backgroundColor: "#242424", border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(props.dir)}>
+    <Button style={{ backgroundColor: getThemeColor(currentTheme, 'backgroundColor'), border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(props.dir)}>
       <div style={{ display: "flex" }}>
         <div style={{paddingRight: "6px"}}>
           {props.dir > 0 ? <SlArrowUp size={26} color="gray"/> : <SlArrowDown size={26} color="gray"/>}

@@ -11,16 +11,19 @@ import { DisplaySetting } from "./../Courses";
 import { StudentCourse } from "./../../../commons/types/TypeCourse";
 
 import { useModal } from "../../../hooks/modalContext";
+import { useTheme } from "../../../hooks/themeContext";
+import { getThemeColor } from "../../../commons/utilities/themeSchemas";
 
 function CourseBox(props: {course: StudentCourse, displaySetting: DisplaySetting }) {
     const { setModalOpen } = useModal();
+    const { currentTheme } = useTheme();
 
     function openModal() {
         setModalOpen(props.course.course)
     }
 
     return (
-        <div className={styles.courseBox} onClick={openModal} style={{ backgroundColor: props.course.enrollmentStatus === "COMPLETED" ? "#E1E9F8" : "#F5F5F5" }}>
+        <div className={styles.courseBox} onClick={openModal} style={{ backgroundColor: props.course.enrollmentStatus === "COMPLETED" ? getThemeColor(currentTheme, 'courseBoxColor2') : getThemeColor(currentTheme, 'courseBoxColor')}}>
             <div className={styles.row} style={{ alignItems: "center" }}>
                 <div className={props.course.enrollmentStatus === "COMPLETED" ? styles.checkmark : styles.hidden}>
                     {props.course.enrollmentStatus === "COMPLETED" ? 
