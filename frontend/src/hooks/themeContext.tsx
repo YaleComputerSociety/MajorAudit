@@ -6,7 +6,7 @@ import {
   useMemo,
 } from "react";
 
-type Theme = "light" | "dark";
+export type Theme = "light" | "dark";
 
 type Store = {
   currentTheme: Theme;

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import styles from "./CourseBoxSmall.module.css";
 
 import "react-tooltip/dist/react-tooltip.css";
@@ -13,9 +13,10 @@ import {
 import img_fall from "./../../images/fall.png";
 import img_spring from "./../../images/spring.png";
 import DistributionCircle from "./DistributionsCircle";
-import ReactDOMServer from 'react-dom/server';
 
 import { useModal } from "../../../hooks/modalContext";
+import { useTheme } from "../../../hooks/themeContext";
+import { getThemeColor } from "../../utilities/themeSchemas";
 
 function CourseSeasonText(season: string ) {
   return (
@@ -96,6 +97,7 @@ function CourseBoxSmall(props: {
   course?: Course;
 }) {
   const { setModalOpen } = useModal();
+  const { currentTheme } = useTheme();
 
   function openModal() {
     if (props.course && props.studentCourse == null) {
@@ -107,7 +109,7 @@ function CourseBoxSmall(props: {
 
   if (props.course && props.studentCourse == null) {
     return (
-      <div className={styles.CourseBox} onClick={openModal}>
+      <div className={styles.CourseBox} onClick={openModal} style={{backgroundColor: getThemeColor(currentTheme, 'courseBoxColor')}}>
         <CourseSeasonIcon seasons={props.course.seasons} />
         {props.course.code}
         {props.course.distribution.length > 0 ? (
@@ -119,7 +121,7 @@ function CourseBoxSmall(props: {
     );
   } else if (props.course == null && props.studentCourse) {
     return (
-      <div className={styles.CourseBox} onClick={openModal}>
+      <div className={styles.CourseBox} onClick={openModal} style={{backgroundColor: getThemeColor(currentTheme, 'courseBoxColor')}}>
         <CheckMark studentCourse={props.studentCourse} />
         <CourseSeasonIcon seasons={[props.studentCourse.season]} />
         {props.studentCourse.course.code}

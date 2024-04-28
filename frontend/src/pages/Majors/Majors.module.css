@@ -17,7 +17,6 @@
   padding: 20px;
   width: auto;
   height: 400px;
-  background-color: white;
   margin-right: 10px;
   /* border: 1px solid black; */
 }
@@ -28,7 +27,6 @@
   width: 490px;
   height: 490px;
   min-width: 390px;
-  background-color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 

@@ -6,6 +6,8 @@ html, body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  transition: 0.3s ease;
 }
 
 code {

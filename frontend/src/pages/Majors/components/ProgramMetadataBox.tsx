@@ -115,7 +115,7 @@ function MetadataContent(props: {program: Program, whichDegree: number, alterCur
 
 function MetadataScrollButton(props: {scrollProgram: Function, seeProgram: Function, dir: number}){
   return(
-    <Button style={{ backgroundColor: "white", border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(props.dir)}>
+    <Button style={{ backgroundColor: "#242424", border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(props.dir)}>
       <div style={{ display: "flex" }}>
         <div style={{paddingRight: "6px"}}>
           {props.dir > 0 ? <SlArrowUp size={26} color="gray"/> : <SlArrowDown size={26} color="gray"/>}
