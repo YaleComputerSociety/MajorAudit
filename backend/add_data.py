@@ -25,6 +25,8 @@ cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-9405
 app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
+
+
 #
 # courses=[
 #     ['CPSC 472', 'CPSC 202', 'EAST 310', 'PLSC 130'],
@@ -38,15 +40,14 @@ db = firestore.client()
 #     'majors':['Computer Science']
 # }
 #
-# me=db.collection('Users').document('oag22')
+me=db.collection('Users').document('oag22')
 # me.set(data)
-
+print(me.get().to_dict())
 # db_course_connection=db.collection('Courses').document('courses')
 # courses=db_course_connection.get().to_dict()['json_string']
 # print(f'{courses}')
 
 
-db_course_connection=db.collection('Majors')
 
 # print(type())
 # majors_to_keep=[]
@@ -59,8 +60,11 @@ db_course_connection=db.collection('Majors')
 # with open('good majors.json', 'w') as outfile:
 #     json.dump(majors_to_keep, outfile)
 
-majors=[m.id for m in db_course_connection.get()]
-print(majors)
+
+#
+# db_course_connection=db.collection('Majors')
+# majors=[m.id for m in db_course_connection.get()]
+# print(majors)
 
 
 
