@@ -297,8 +297,11 @@ def logged_in():
 @app.route('/get_majors', methods=['POST', 'GET'])
 def get_majors():
     if logged_in():
-        majors = db.collection('Majors')
-        return jsonify([m.id for m in majors.get()])
+        majors = db.collection('Majors').stream()
+        data = []
+        for m in majors:
+            data.append(m.to_dict())
+        return jsonify(data)
     return jsonify()
 
 

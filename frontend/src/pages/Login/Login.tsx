@@ -6,8 +6,6 @@ import $ from "jquery";
 import navStyles from "./../../navbar/NavBar.module.css";
 import logo from "./../../commons/images/ma_logo.png";
 
-import { CGSC, CPSC, ECON, HIST } from "./../../commons/mock/MockProgram";
-
 function NavBar() {
   return(
     <div className={navStyles.NavBar}>
@@ -41,25 +39,6 @@ function Login(){
     });
   });
 
-  useEffect(() => {
-    $.ajax({
-      url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/get_majors",
-      method: "GET",
-      xhrFields: { withCredentials: true }
-    }).done((data: JSON | null) => {
-      if(data) {
-        console.log("yee!");
-        let strPrograms = JSON.stringify(data);
-        if (JSON.stringify(data).length < 3) strPrograms = JSON.stringify([CGSC, CPSC, ECON, HIST]);
-        localStorage.setItem("programList", strPrograms);
-      }else{
-        const programs = [CGSC, CPSC, HIST];
-        let strPrograms = JSON.stringify(programs);
-        localStorage.setItem("programList", strPrograms);
-        console.log("noo!");
-      }
-    });
-  }, []);
 
   return(
     <div>
