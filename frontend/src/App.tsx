@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Navigate, Route, Routes  } from 'react-router-dom'; 
 import $ from "jquery";

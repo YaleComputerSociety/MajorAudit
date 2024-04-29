@@ -5,15 +5,22 @@ import { Tooltip } from "react-tooltip";
 
 import img_fall from "./../../../commons/images/fall.png";
 import img_spring from "./../../../commons/images/spring.png";
-
 import DistributionsCircle from "./../../../commons/components/courses/DistributionsCircle"
 
 import { DisplaySetting } from "./../Courses";
 import { StudentCourse } from "./../../../commons/types/TypeCourse";
 
+import { useModal } from "../../../hooks/modalContext";
+
 function CourseBox(props: {course: StudentCourse, displaySetting: DisplaySetting }) {
+    const { setModalOpen } = useModal();
+
+    function openModal() {
+        setModalOpen(props.course.course)
+    }
+
     return (
-        <div className={styles.courseBox} style={{ backgroundColor: props.course.enrollmentStatus === "COMPLETED" ? "#E1E9F8" : "#F5F5F5" }}>
+        <div className={styles.courseBox} onClick={openModal} style={{ backgroundColor: props.course.enrollmentStatus === "COMPLETED" ? "#E1E9F8" : "#F5F5F5" }}>
             <div className={styles.row} style={{ alignItems: "center" }}>
                 <div className={props.course.enrollmentStatus === "COMPLETED" ? styles.checkmark : styles.hidden}>
                     {props.course.enrollmentStatus === "COMPLETED" ? 

@@ -10,11 +10,17 @@ import loginPageImage from "../../commons/images/reallycoolguy.jpg";
 import styles from "./Login.module.css";
 
 function NavBar() {
-  return(
+  return (
     <div className={navStyles.NavBar}>
       <div style={{ marginLeft: "20px" }}>
-        <img src={logo} alt="" style={{ width: "150px", height: "auto", marginRight: "10px" }}/>
+        <img
+          src={logo}
+          alt=""
+          style={{ width: "150px", height: "auto", marginRight: "10px" }}
+        />
       </div>
+      {/* <PageLinks />
+      <MeDropdown /> */}
     </div>
   );
 }
@@ -76,8 +82,7 @@ function Login(){
         <img alt="Landing page" src={loginPageImage} width="450"/>
       </div>
     </div>
-  )
+  );
 }
 
 export default Login;
-
