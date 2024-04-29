@@ -41,6 +41,7 @@
 }
 
 .btn {
+    text-decoration: none;
     padding: 8px 24px;
     border-radius: 10px;
     font-weight: 500;
@@ -51,6 +52,7 @@
     filter 0.3s;
     margin-top: 8px;
     font-size: large;
+    cursor: pointer;
 }
 
 .btn:hover {

@@ -25,30 +25,27 @@ function NavBar() {
   );
 }
 
-function NetidLogin() {
+
+function Login(){
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const handleLogin = () => {
     $.ajax({
       url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/check_login",
       xhrFields: { withCredentials: true }
     }).done((data: string | null) => {
-      if(data) {
+      if (data) {
         console.log("woo netid!");
         console.log(data);
         navigate("/graduation");
-      }else{
+      } else {
         console.log("boo netid!");
         console.log(data);
-        window.location.href = "http://127.0.0.1:5001/majoraudit/us-central1/functions/user_login"
-        //navigate("/graduation");
+        window.location.href = "http://127.0.0.1:5001/majoraudit/us-central1/functions/user_login";
       }
     });
-  });
-}
+  };
 
-
-function Login(){
   return(
     <div>
       <NavBar />
@@ -68,9 +65,9 @@ function Login(){
             >
               Login with CAS
             </a> */}
-            <button onClick={NetidLogin} className={styles.btn} style={{marginRight: "8px"}}>
+            <div onClick={handleLogin} className={styles.btn} style={{marginRight: "8px"}}>
               Login with CAS
-            </button>
+            </div>
             <Link to="/about" className={styles.btn} style={{marginRight: "8px"}}>
               About Us
             </Link>

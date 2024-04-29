@@ -4,7 +4,14 @@ import $ from "jquery";
 import Globals from './Globals';
 
 import CourseModal from './commons/components/courses/CourseModal';
-import Router from './Router';
+import { Navigate, Route, Routes } from 'react-router-dom'; 
+
+import Login from "./pages/Login";
+import Graduation from './pages/Graduation';
+import Courses from './pages/Courses';
+import Majors from './pages/Majors';
+import About from './pages/OtherPages/About/About';
+import FAQ from './pages/OtherPages/FAQ/FAQ';
 
 import { CGSC, CPSC, ECON, HIST } from "./commons/mock/MockProgram";
 
@@ -20,12 +27,12 @@ function App() {
     }).done((data: string | null) => {
       if(data) {
         console.log(data);
+        console.log("check login");
         setAuth(true);
       }else{
         console.log(data);
         setAuth(false);
       }
-      setLoading(false);
     });
   }, []);
 
@@ -36,7 +43,7 @@ function App() {
       xhrFields: { withCredentials: true }
     }).done((data: JSON | null) => {
       if(data) {
-        console.log("yee!");
+        console.log("yee majors!");
         console.log(JSON.stringify(data));
         let strPrograms = JSON.stringify(data);
         if (JSON.stringify(data).length < 3) strPrograms = JSON.stringify([CGSC, CPSC, ECON, HIST]);
@@ -45,20 +52,32 @@ function App() {
         const programs = [CGSC, CPSC, HIST];
         let strPrograms = JSON.stringify(programs);
         localStorage.setItem("programList", strPrograms);
-        console.log("noo!");
+        console.log("noo majors!");
       }
+      setLoading(false);
     });
   }, []);
+  
 
   if (loading) {
     // Display a loading state while checking login
-    return <div>Loading...</div>;
+    return <div style={{position: "absolute", left: "50%"}}>Loading...</div>;
   }
 
   return (
   <div>
     <Globals>
-      <Router />
+      <Routes>
+        <Route path="/"             element={auth ? <Navigate to="/graduation"/> : <Navigate to="/login"/>}/> 
+        <Route path="/login"        element={auth ? <Navigate to="/graduation"/> : <Login/>}/> 
+
+        <Route path="/graduation"   element={auth ? <Graduation/> : <Navigate to="/login"/>}/> 
+        <Route path="/courses"      element={auth ? <Courses/> : <Navigate to="/login"/>}/> 
+        <Route path="/majors"       element={auth ? <Majors/> : <Navigate to="/login"/>}/> 
+
+        <Route path="/about"        element={<About/>}/> 
+        <Route path="/FAQ"          element={<FAQ/>}/> 
+      </Routes>
       <CourseModal />
     </Globals>
   </div>
