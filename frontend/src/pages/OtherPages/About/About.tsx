@@ -195,13 +195,13 @@ function About() {
       <NavBar />
       <div className="local-bootstrap">
         <div className={clsx(styles.container, "mx-auto")}>
-          <div style={{ marginTop: "75px" }}>
+          <div style={{ marginTop: "100px" }}>
             <h1 className={clsx(styles.title, "mt-5 mb-1")}>About Us</h1>
             <TextComponent type="secondary">
               <p className={clsx(styles.aboutDescription, "mb-3 mx-auto")}>
-                CourseTable offers a clean and effective way for Yale students
-                to find the courses they want, bringing together course
-                information, student evaluations, and course demand statistics
+                MajorAudit offers a clean and effective way for Yale students
+                to find the majors they want to take, bringing together major
+                information, degree requirements, and a four year planning tool
                 in an intuitive interface. It's run by a small team of
                 volunteers within the{" "}
                 <a

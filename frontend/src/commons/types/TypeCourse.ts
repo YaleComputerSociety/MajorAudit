@@ -11,7 +11,6 @@ interface CourseEvaluation {
 export interface Course {
   code: string;
   title: string;
-  description: string;
   seasons: Array<Season>;
   evaluation: CourseEvaluation;
   distribution: Array<Distribution>;
