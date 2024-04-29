@@ -28,10 +28,6 @@
     margin:0px;
 }
 
-.close:hover {
-    filter: brightness(90%);
-}
-
 .container {
     flex-direction: column;
     row-gap: 20px;
