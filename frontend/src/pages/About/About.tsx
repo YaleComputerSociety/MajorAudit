@@ -4,7 +4,6 @@ import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "../../commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
-import clsx from "clsx";
 import { Card, Row } from "react-bootstrap";
 import { TextComponent } from "../../navbar/Typography";
 import "./components/About.scss";
@@ -25,6 +24,9 @@ import webDark from "../../commons/images/web-light.png";
 import web from "../../commons/images/web.png";
 import styles from "./components/About.module.css";
 
+import { useTheme } from "../../hooks/themeContext";
+import { getThemeColor } from "../../commons/utilities/themeSchemas";
+
 type Person = {
   name: string;
   image: string;
@@ -37,8 +39,9 @@ type Person = {
 };
 
 function NavBar() {
+  const { currentTheme } = useTheme();
   return (
-    <div className={nav_styles.NavBar}>
+    <div className={nav_styles.NavBar} style={{backgroundColor: getThemeColor(currentTheme, 'backgroundColor')}}>
       <div style={{ marginLeft: "20px" }}>
         <img
           src={img_logo}
@@ -194,11 +197,11 @@ function About() {
     <div>
       <NavBar />
       <div className="local-bootstrap">
-        <div className={clsx(styles.container, "mx-auto")}>
+        <div className={styles.container}>
           <div style={{ marginTop: "75px" }}>
-            <h1 className={clsx(styles.title, "mt-5 mb-1")}>About Us</h1>
+            <h1 className={styles.title}>About Us</h1>
             <TextComponent type="secondary">
-              <p className={clsx(styles.aboutDescription, "mb-3 mx-auto")}>
+              <p className={styles.aboutDescription}>
                 CourseTable offers a clean and effective way for Yale students
                 to find the courses they want, bringing together course
                 information, student evaluations, and course demand statistics
@@ -221,7 +224,7 @@ function About() {
                 </a>
                 .
               </p>
-              <p className={clsx(styles.aboutDescription, "mb-3 mx-auto")}>
+              <p className={styles.aboutDescription}>
                 Also check out our <Link to="/faq">FAQ</Link> and{" "}
                 <Link to="/releases">Release Notes</Link>.
               </p>
