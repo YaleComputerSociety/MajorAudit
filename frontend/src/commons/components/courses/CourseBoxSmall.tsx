@@ -101,7 +101,7 @@ function CourseBoxSmall(props: {
 
   function openModal() {
     if (props.course && props.studentCourse == null) {
-      setModalOpen(props.course);
+      if (props.course.code !== "N/A") setModalOpen(props.course);
     } else if (props.course == null && props.studentCourse) {
       setModalOpen(props.studentCourse.course);
     }

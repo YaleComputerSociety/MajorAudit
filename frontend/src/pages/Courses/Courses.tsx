@@ -85,14 +85,14 @@ function Settings(props: {
 
   return (
     <div className={styles.row} style={{ alignItems: "center" }}>
-      <button
+      {/* <button
         className={`${styles.optionsButton} ${
           isOpen ? styles.activeButton : ""
         }`}
         onClick={toggleDropdown}
       >
         Options
-      </button>
+      </button> */}
       {isOpen && (
         <div style={{ display: "flex" }}>
           <button

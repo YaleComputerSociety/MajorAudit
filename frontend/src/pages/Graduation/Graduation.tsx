@@ -9,8 +9,11 @@ import MeDropdown from "../../navbar/account/MeDropdown";
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
+import { getThemeColor } from "../../commons/utilities/themeSchemas";
+import { useTheme } from "../../hooks/themeContext";
 
 function NavBar() {
+  const { currentTheme } = useTheme();
   return (
     <div className={nav_styles.NavBar}>
       <div style={{ marginLeft: "20px" }}>
@@ -20,7 +23,7 @@ function NavBar() {
           style={{ width: "150px", height: "auto", marginRight: "10px" }}
         />
       </div>
-      <div className={nav_styles.row} style={{ marginRight: "20px" }}>
+      <div className={nav_styles.row} style={{ marginRight: "20px"}} >
         <NavLink
           to="/graduation"
           className={({ isActive }) =>

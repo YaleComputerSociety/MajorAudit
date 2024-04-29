@@ -7,7 +7,6 @@
   border-radius: 10px;
   transform: translate(0, -10px);
   opacity: 1;
-  background-color: white;
 }
 
 .collapseContainer:before {
@@ -19,12 +18,10 @@
   height: 100%;
   opacity: 1;
   border-radius: 10px;
-  background-color: white;
   z-index: -1;
 }
 
 .collapseText {
-  color: black;
   font-weight: 500;
   margin-bottom: 10px;
   text-decoration: none;
@@ -35,9 +32,25 @@
   margin: 10px;
 }
 
+.innerText:hover {
+  color: #598ff4;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
 .navbarMe {
   /* padding-left: 1rem; */
   display: flex;
+}
+
+.icon {
+  vertical-align: middle;
+  padding-left: 2px;
+  padding-right: 2px; 
+  padding-bottom: 3px; 
+  margin-right: 2px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .meIcon {
@@ -47,6 +60,9 @@
   display: flex;
   background-color: rgb(1 1 1 / 10%);
   color: var(--color-primary);
-  transition: border-color var(--trans-dur), background-color var(--trans-dur),
-    color var(--trans-dur);
+}
+
+.meIcon:hover {
+  color: #598ff4;
+  cursor: pointer;
 }

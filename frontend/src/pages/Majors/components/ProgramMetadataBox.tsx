@@ -5,8 +5,8 @@ import styles from "./../Majors.module.css";
 import { Button } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 
-import lgsIcon from "../../../commons/images/little_guys.png";
-import img_plus from "../../../commons/images/plus.png";
+import { MdPeople } from "react-icons/md";
+import { FaPlus } from "react-icons/fa";
 import { SlArrowUp , SlArrowDown } from "react-icons/sl";
 
 import { Program, Degree } from "../../../commons/types/TypeProgram";
@@ -15,17 +15,18 @@ import { useTheme } from "../../../hooks/themeContext";
 import { getThemeColor } from "../../../commons/utilities/themeSchemas";
 
 function MetadataTopshelf(degree: Degree){
+  const { currentTheme } = useTheme();
   return(
     <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
       <Button style={{ width: '28px', height: '28px', padding: 0, border: 'none', marginRight: "8px" }}>
-        <img src={img_plus} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+        <FaPlus style={{ color: '#6A8FF4', backgroundColor: getThemeColor(currentTheme, 'backgroundColor'), width: '100%', height: '100%', objectFit: 'cover' }}/>
       </Button>
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>{degree.metadata.name}</div>
-          <img src={lgsIcon} alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }}/>
+          <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "8px" }}>{degree.metadata.name}</div>
+          <MdPeople style={{ width: "25px", height: "auto", marginTop: "4px", marginRight: "6px"}}/>
           <div className={styles.countBox} style={{ marginRight: "10px", marginTop: "4px" }}>{degree.metadata.students}</div>
-          <div className={styles.pinkMajorBox} style={{ fontSize: "16px", marginTop: "2px" }}>MAJOR</div>
+          <div className={styles.pinkMajorBox}>MAJOR</div>
         </div>
         <div>{degree.metadata.abbreviation}</div>
       </div>
@@ -36,6 +37,7 @@ function MetadataTopshelf(degree: Degree){
 function MetadataDegree(props: {program: Program, whichDegree: number, alterCurrDegree: Function}){
 
   const [activeDegree, setActiveDegree] = useState(props.whichDegree);
+  const { currentTheme } = useTheme();
 
   useEffect(() => {
     setActiveDegree(props.whichDegree);
@@ -52,12 +54,13 @@ function MetadataDegree(props: {program: Program, whichDegree: number, alterCurr
         <button key={index} onClick={() => handleDegreeClick(index)} 
         style={{
           marginRight: "0px",
-          backgroundColor: activeDegree === index ? '#3184FF' : 'white',
-          color: activeDegree === index ? 'white' : 'black',
+          backgroundColor: activeDegree === index ? '#3184FF' : getThemeColor(currentTheme, 'courseBoxColor'),
+          color: activeDegree === index ? 'white' : getThemeColor(currentTheme, 'color'),
           borderRadius: "5px",
           padding: "5px 10px",
-          border: "1px solid #ccc",
-          cursor: "pointer"
+          border: "1px solid " + getThemeColor(currentTheme, 'color'),
+          cursor: "pointer",
+          transition: "0.3s ease",
         }}>
           {degree.metadata.degreeType === "BACH_ART" ? "B.A." : 
            degree.metadata.degreeType === "BACH_SCI" ? "B.S." : 

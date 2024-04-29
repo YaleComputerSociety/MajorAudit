@@ -13,6 +13,9 @@ import {
 } from "../../commons/utilities/display";
 import { SurfaceComponent, TextComponent, HoverText } from "../Typography";
 
+import { useTheme } from "../../hooks/themeContext";
+import { getThemeColor } from "../../commons/utilities/themeSchemas";
+
 function DropdownItem({
   icon: Icon,
   iconColor,
@@ -35,13 +38,14 @@ function DropdownItem({
       <HoverText>
         <Icon
           size={20}
-          style={{ paddingLeft: "2px", paddingBottom: "3px", marginRight: "2px", marginTop: "auto", marginBottom: "auto" }}
+          className={styles.icon}
           color={iconColor}
         />
       </HoverText>
       <div>{children}</div>
     </div>
   );
+  const { currentTheme } = useTheme();
   return (
     <Row style={{ margin: "auto" }}>
       <TextComponent type="secondary">
@@ -50,6 +54,7 @@ function DropdownItem({
             to={to}
             className={styles.collapseText}
             onClick={onClick ?? scrollToTop}
+            style={{color: getThemeColor(currentTheme, 'color')}}
           >
             {innerText}
           </NavLink>
@@ -88,6 +93,7 @@ function DropdownContent({
   readonly isExpanded: boolean;
   readonly setIsExpanded: (visible: boolean) => void;
 }) {
+  const { currentTheme } = useTheme();
   return (
     <SurfaceComponent
       className={styles.collapseContainer}
@@ -96,13 +102,14 @@ function DropdownContent({
       }}
       style={{
         display: isExpanded ? "flex" : "none",
+        backgroundColor: getThemeColor(currentTheme, 'backgroundColor'),
       }}
     >
       <Collapse in={isExpanded}>
         {/* This wrapper div is important for making the collapse animation
           smooth */}
         <div>
-          <Col style={{paddingTop: "3px", paddingLeft: "3px", paddingRight: "3px"}}>
+          <Col style={{paddingTop: "3px", paddingLeft: "3px", paddingRight: "3px",}}>
             <DropdownItem icon={FcInfo} to="/about">
               About
             </DropdownItem>

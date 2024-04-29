@@ -7,6 +7,9 @@ import DistributionBox from "../../../commons/components/courses/DistributionBox
 import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
 import InfoButton from "../../../commons/components/InfoButton";
 
+import { useTheme } from "../../../hooks/themeContext";
+import { getThemeColor } from "../../../commons/utilities/themeSchemas";
+
 import { StudentCourse, ClassLists } from "../../../commons/types/TypeCourse";
 import { MockStudentCourses } from "../../../commons/mock/MockCourses";
 
@@ -109,6 +112,7 @@ function GraduationDistribution(props: {
   currYear: number;
   alterCurrYear: Function;
 }) {
+  const { currentTheme } = useTheme();
   return (
     <div className={styles.containerDistributions}>
       <div
@@ -126,7 +130,6 @@ function GraduationDistribution(props: {
         <div
           style={{
             display: "flex",
-            border: "1px solid #ccc",
             borderRadius: "5px",
           }}
         >
@@ -135,13 +138,14 @@ function GraduationDistribution(props: {
               key={year}
               onClick={() => props.alterCurrYear(year)}
               style={{
-                backgroundColor: props.currYear === year ? "#1976d2" : "white", // Set active button to blue
-                color: props.currYear === year ? "white" : "black", // Set text color based on button state
+                backgroundColor: props.currYear === year ? "#3184FF" : getThemeColor(currentTheme, 'courseBoxColor'), // Set active button to blue
+                color: props.currYear === year ? "white" : getThemeColor(currentTheme, 'color'), // Set text color based on button state
                 borderRadius: "5px",
                 padding: "5px 10px",
                 cursor: "pointer",
                 marginRight: "0", // Remove margin between buttons
-                border: "1px solid white", // Add white border
+                border: "1px solid " + getThemeColor(currentTheme, 'color'),
+                transition: "0.3s ease",
               }}
             >
               {["First-Year", "Sophomore", "Junior", "Senior"][year - 1]}

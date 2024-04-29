@@ -18,7 +18,6 @@
   align-items: center;
   box-sizing: border-box;
 
-  background-color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -28,7 +27,7 @@
   text-decoration: none;
   margin-right: 10px;
   margin-left: 10px;
-  transition: color 0.3s;
+  transition: ease 0.3s;
 }
 
 .NavBar .dormantLink {
@@ -37,5 +36,9 @@
   text-decoration: none;
   margin-right: 10px;
   margin-left: 10px;
-  transition: color 0.3s;
+  transition: ease 0.3s;
+}
+
+.NavBar .dormantLink:hover {
+  color: #598ff4;
 }

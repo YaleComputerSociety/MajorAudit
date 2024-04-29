@@ -47,12 +47,15 @@
 /* Major Metadata ************************************************************/
 
 .pinkMajorBox {
-  font-size: 12px;
   font-weight: bold;
   border: 1px solid #d69cd8;
   color: #d69cd8;
   border-radius: 4px;
   text-align: center;
+  font-size: 16px;
+  margin-top: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 .countBox {
@@ -61,7 +64,6 @@
   padding: 0 6px;
   font-size: 12px;
   border: 1px solid grey;
-  color: black; /* Black text */
   border-radius: 4px; /* Rounded corners */
   text-align: center;
 }

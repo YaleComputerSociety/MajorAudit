@@ -8,6 +8,8 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useTheme } from "../../hooks/themeContext";
+import { getThemeColor } from "../../commons/utilities/themeSchemas";
 
 function NavBar() {
   return (
@@ -52,6 +54,7 @@ function NavBar() {
 }
 
 function FAQ() {
+  const { currentTheme } = useTheme();
   return (
     <div>
       <NavBar />
@@ -64,9 +67,9 @@ function FAQ() {
         }}
       >
         <h1>Questions</h1>
-        <Accordion>
+        <Accordion style={{backgroundColor: getThemeColor(currentTheme, "courseBoxColor"), color: getThemeColor(currentTheme, "color")}}>
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ExpandMoreIcon style={{color: getThemeColor(currentTheme, "color")}}/>}
             aria-controls="panel1-content"
             id="panel1-header"
           >
@@ -80,9 +83,9 @@ function FAQ() {
             </Typography>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion style={{backgroundColor: getThemeColor(currentTheme, "courseBoxColor"), color: getThemeColor(currentTheme, "color")}}>
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ExpandMoreIcon style={{color: getThemeColor(currentTheme, "color")}}/>}
             aria-controls="panel2-content"
             id="panel2-header"
           >
@@ -106,9 +109,9 @@ function FAQ() {
         }}
       >
         <h1>Questions</h1>
-        <Accordion>
+        <Accordion style={{backgroundColor: getThemeColor(currentTheme, "courseBoxColor"), color: getThemeColor(currentTheme, "color")}}>
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ExpandMoreIcon style={{color: getThemeColor(currentTheme, "color")}}/>}
             aria-controls="panel1-content"
             id="panel1-header"
           >
@@ -122,9 +125,9 @@ function FAQ() {
             </Typography>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion style={{backgroundColor: getThemeColor(currentTheme, "courseBoxColor"), color: getThemeColor(currentTheme, "color")}}>
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ExpandMoreIcon style={{color: getThemeColor(currentTheme, "color")}}/>}
             aria-controls="panel2-content"
             id="panel2-header"
           >
