@@ -24,7 +24,7 @@ with open('courses.json', 'r') as infile:
 
     courses=new_courses
 
-with open
+# with open
 
 while True:
     request=input('enter course:\n')

@@ -34,11 +34,13 @@ from flask_cors import cross_origin
 
 #cred = credentials.Certificate(r'secrets\majoraudit-firebase-adminsdk-bc6kc-f15a5f23e2.json')
 
-cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-7f4d0e1e3b.json')
+cred = credentials.Certificate(r'sercrets\majoraudit-firebase-adminsdk-bc6kc-9405745a46.json')
 app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
+
+allowed_CORS_origins=['http://127.0.0.1:5000', 'majoraudit.web.app', 'http://127.0.0.1:3000']
 
 class User:
     def __init__(self, netID, courses):
@@ -46,7 +48,7 @@ class User:
         self.courses = courses
 
 app = Flask(__name__, template_folder='templates')
-CORS(app, supports_credentials=True, origins='http://127.0.0.1:5000')
+CORS(app, supports_credentials=True, origins=allowed_CORS_origins)
 
 app.secret_key = secrets.token_urlsafe(16)
 #app.secret_key = 'Dk8q3sdxz7-3WD8QzKXHgQ'
@@ -57,22 +59,34 @@ def sanity():
 
 @app.route('/hello_world')
 def hello_world():
-    return make_response(session["NETID"])
+    return make_response('hello world')
 
 @app.get('/user_login')
 def login():
     # print(request.cookies, flush=True)
     # netid = session['NETID']
     # print("netid", netid)
+    service=get_redirect_url()
+    cookies={}
+
+
     if 'NETID' in session:
         print('sanity', file=sys.stderr)
-        return redirect('/majoraudit/us-central1/functions/dashboard')
+        if '127.0.0.1' in service:
+            # redirect_url='http://127.0.0.1:5000/dashboard'
+            redirect_url = 'http://127.0.0.1:3000'
+        else:
+            redirect_url = 'https://majoraudit.web.app'
 
-    service=get_redirect_url()
+        current_app.logger.info(f'redirecting to {redirect_url}')
+        resp = make_response(redirect(redirect_url))
+        for c in cookies:
+            resp.set_cookie(c, cookies[c])
+        return resp
+
     login_url=f'''https://secure.its.yale.edu/cas/login?service={service}'''
 
     redirect_url=login_url
-    cookies={}
 
     if 'ticket' in request.args:
         session['CAS_TOKEN'] = request.args['ticket']
@@ -83,6 +97,9 @@ def login():
         validation=validate(session['CAS_TOKEN'], service)
         if validation[0]:
             print("username", validation[1])
+            cookies['hello']='world'
+            if 'NETID' in session:
+                cookies['wtf']=session['NETID']
             print(session)
             
             user = User(validation[1], "")
@@ -93,9 +110,9 @@ def login():
 
             if '127.0.0.1' in service:
                 #redirect_url='http://127.0.0.1:5000/dashboard'
-                redirect_url = 'http://127.0.0.1:5000'
+                redirect_url = 'http://127.0.0.1:3000'
             else:
-                redirect_url='https://majoraudit.web.app/dashboard'
+                redirect_url='https://majoraudit.web.app'
 
             # response = make_response(redirect('/majoraudit/us-central1/functions/dashboard'))
             # expires = datetime.datetime.now() + datetime.timedelta(days=30)
@@ -196,58 +213,9 @@ def get_redirect_url():
     if '127.0.0.1' in url:
         url = url[:function_loc] + '/majoraudit/us-central1/functions' + url[function_loc:]
     else:
-        url=url[:function_loc]+'/functions'+url[function_loc:]
+        url=url[:function_loc]+url[function_loc:]
 
     return url
-
-# @https_fn.on_request()
-# @app.get('/session_login')
-# def session_login(req: https_fn.Request) -> https_fn.Response:
-#     # Get the ID token sent by the client
-#     # req.headers.set('Content-Type', 'application/json')
-#
-#     id_token = req.json['idToken']
-#     # Set session expiration to 5 days.
-#     expires_in = datetime.timedelta(days=5)
-#     try:
-#         # Create the session cookie. This will also verify the ID token in the process.
-#         # The session cookie will have the same claims as the ID token.
-#         session_cookie = auth.create_session_cookie(id_token, expires_in=expires_in)
-#         response = make_response('success')
-#         # Set cookie policy for session cookie.
-#         expires = datetime.datetime.now() + expires_in
-#         response.set_cookie(
-#             'session', session_cookie, expires=expires, httponly=True, secure=True)
-#         return response
-#     except exceptions.FirebaseError:
-#         return abort(401, 'Failed to create a session cookie')
-
-#@https_fn.on_request()
-#def get_netid(req: https_fn.Request) -> https_fn.Response:
-#    print(session)
-#    x = requests.get('http://127.0.0.1:5001/majoraudit/us-central1/functions/get_netid1')
-#    print("Return value of the flask function: ")
-#    print(x.text)
-#    return ''
-
-#@https_fn.on_request()
-#def check_login(req: https_fn.Request) -> https_fn.Response:
-#    print("firebase check login")
-#    print(session)
-#    if 'NETID' in session:
-#        return jsonify(session['NETID'])
-#    return jsonify()
-
-@https_fn.on_request()
-def functions(req: https_fn.Request) -> https_fn.Response:
-    with app.request_context(req.environ):
-        pass
-        return app.full_dispatch_request()
-
-@https_fn.on_request()
-def hello_world(req: https_fn.Request) -> https_fn.Response:
-    response = https_fn.Response('hello world')
-    return response
 
 @app.route('/get_data', methods = ['GET'])
 @cross_origin()
@@ -320,3 +288,30 @@ def sync_data():
     make_response((data, 200, headers))
     #return make_response(('Data received', 200, headers))
 
+
+
+def logged_in():
+    return "NETID" in session
+
+
+@app.route('/get_majors', methods=['POST', 'GET'])
+def get_majors():
+    if logged_in():
+        majors = db.collection('Majors').stream()
+        data = []
+        for m in majors:
+            data.append(m.to_dict())
+        return jsonify(data)
+    return jsonify()
+
+
+@https_fn.on_request()
+def functions(req: https_fn.Request) -> https_fn.Response:
+    with app.request_context(req.environ):
+        pass
+        return app.full_dispatch_request()
+
+@https_fn.on_request()
+def hello_world(req: https_fn.Request) -> https_fn.Response:
+    response = https_fn.Response('hello world')
+    return response

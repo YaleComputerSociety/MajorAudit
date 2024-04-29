@@ -15,6 +15,7 @@ export interface Course {
   seasons: Array<Season>;
   evaluation: CourseEvaluation;
   distribution: Array<Distribution>;
+  description?: string;
 }
 
 export interface StudentCourse {

@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import styles from "./Login.module.css";
 
-import navStyles from "../../navbar/NavBar.module.css";
-import logo from "../../commons/images/ma_logo.png";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import $ from "jquery";
+
+import navStyles from "./../../navbar/NavBar.module.css";
+import logo from "./../../commons/images/ma_logo.png";
 import loginPageImage from "../../commons/images/reallycoolguy.jpg";
+
+import styles from "./Login.module.css";
 
 function NavBar() {
   return (
@@ -22,8 +25,31 @@ function NavBar() {
   );
 }
 
-function Login() {
-  return (
+function NetidLogin() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    $.ajax({
+      url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/check_login",
+      xhrFields: { withCredentials: true }
+    }).done((data: string | null) => {
+      if(data) {
+        console.log("woo netid!");
+        console.log(data);
+        navigate("/graduation");
+      }else{
+        console.log("boo netid!");
+        console.log(data);
+        window.location.href = "http://127.0.0.1:5001/majoraudit/us-central1/functions/user_login"
+        //navigate("/graduation");
+      }
+    });
+  });
+}
+
+
+function Login(){
+  return(
     <div>
       <NavBar />
       <div className={styles.centerDiv}>
@@ -42,9 +68,9 @@ function Login() {
             >
               Login with CAS
             </a> */}
-            <Link to="/graduation" className={styles.btn} style={{marginRight: "8px"}}>
+            <button onClick={NetidLogin} className={styles.btn} style={{marginRight: "8px"}}>
               Login with CAS
-            </Link>
+            </button>
             <Link to="/about" className={styles.btn} style={{marginRight: "8px"}}>
               About Us
             </Link>
