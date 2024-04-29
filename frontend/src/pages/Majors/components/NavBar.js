@@ -2,7 +2,6 @@ import { React, useState } from "react";
 import styles from "./../NavBar.module.css"
 import MeDropdown from "../../../navbar/account/MeDropdown";
 import img_logo from "./../../../commons/images/ma_logo.png"
-// import img_logo from "./../../commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
 
 const programs = [{
@@ -28,10 +27,16 @@ function NavBar() {
 
   const storedPrograms = localStorage.getItem("theProgramList");
 
+  if (myPrograms.length > 0)
+  {
+    localStorage.setItem('theProgramList', JSON.stringify(myPrograms));
+  }
+
   if (storedPrograms) {
     myPrograms = JSON.parse(storedPrograms);
   }
 
+  
   function List(props) {
     const filteredData = programs.filter((el) => {
       if (props.input === "") {
@@ -41,19 +46,25 @@ function NavBar() {
         return el.text.toLowerCase().includes(props.input)
       }
     })
+
+    // fix so it only retracts drop drown list when not scrolling/clicking
+    // window.onmousedown = function (e) {
+    //     if (!e.target.matches('.NavBar')) {
+    //         var myDropdown = document.getElementById("list");
+    //         if (myDropdown.style.display === "block") {
+    //             myDropdown.style.display = "none";
+    //         }
+    //     }
+    // }
+
     let programHandler = (e, name) => {
-      // if (!e.target.matches('.item')) {
       var myDropdown = document.getElementById("list");
       if (myDropdown.style.display === "block") {
         myDropdown.style.display = "none";
         if (myPrograms.length !== 2) {
-          setPrograms([...myPrograms, name.toUpperCase()]); 
-        }
-        if (myPrograms.length > 0) {
-          localStorage.setItem('theProgramList', JSON.stringify(myPrograms));
+          setPrograms([...myPrograms, name.toUpperCase()]);
         }
       }
-      // }
     };
     return (
       <div className={styles.list} id="list">
@@ -75,14 +86,6 @@ function NavBar() {
     let visibilityHandler = (e) => {
       document.getElementById("list").style.display = "block";
     }
-    // window.onmousedown = function (e) {
-    //     if (!e.target.matches('.list')) {
-    //         var myDropdown = document.getElementById("list");
-    //         if (myDropdown.style.display === "block") {
-    //             myDropdown.style.display = "none";
-    //         }
-    //     }
-    // }
     return (
       <div className={styles.container}>
         <input type="text"
