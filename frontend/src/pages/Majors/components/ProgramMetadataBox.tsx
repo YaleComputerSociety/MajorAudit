@@ -54,7 +54,7 @@ function MetadataDegree(props: {program: Program, whichDegree: number, alterCurr
         <button key={index} onClick={() => handleDegreeClick(index)} 
         style={{
           marginRight: "0px",
-          backgroundColor: activeDegree === index ? '#3184FF' : getThemeColor(currentTheme, 'courseBoxColor'),
+          backgroundColor: activeDegree === index ? getThemeColor(currentTheme, 'buttonColor') : getThemeColor(currentTheme, 'backgroundColor'),
           color: activeDegree === index ? 'white' : getThemeColor(currentTheme, 'color'),
           borderRadius: "5px",
           padding: "5px 10px",

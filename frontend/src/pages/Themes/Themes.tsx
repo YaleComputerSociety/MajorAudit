@@ -50,7 +50,7 @@ function NavBar() {
 
 
 function Themes() {
-  const {currentTheme, setCurrentTheme} = useTheme();
+  const { setCurrentTheme } = useTheme();
 
   function setLightTheme() {
     setCurrentTheme("light")
@@ -64,6 +64,18 @@ function Themes() {
     setCurrentTheme("pink")
   }
 
+  function setGreenTheme() {
+    setCurrentTheme("green")
+  }
+
+  function setBlueTheme() {
+    setCurrentTheme("blue")
+  }
+
+  function setPurpleTheme() {
+    setCurrentTheme("purple")
+  }
+
   return (
     <div>
         <NavBar/>
@@ -71,6 +83,9 @@ function Themes() {
             <button type="button" onClick={setLightTheme}>Light</button>
             <button type="button" onClick={setDarkTheme}>Dark</button>
             <button type="button" onClick={setPinkTheme}>Pink!</button>
+            <button type="button" onClick={setGreenTheme}>Green</button>
+            <button type="button" onClick={setBlueTheme}>Blue</button>
+            <button type="button" onClick={setPurpleTheme}>Purple</button>
         </div>
     </div>
   )

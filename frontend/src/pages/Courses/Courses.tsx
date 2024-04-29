@@ -9,10 +9,13 @@ import MeDropdown from "../../navbar/account/MeDropdown";
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
 import { NavLink } from "react-router-dom";
+import { useTheme } from "../../hooks/themeContext";
+import { getThemeColor } from "../../commons/utilities/themeSchemas";
 
 function NavBar() {
+  const { currentTheme } = useTheme();
   return (
-    <div className={nav_styles.NavBar}>
+    <div className={nav_styles.NavBar} style={{backgroundColor: getThemeColor(currentTheme, 'backgroundColor')}}>
       <div style={{ marginLeft: "20px" }}>
         <img
           src={img_logo}
@@ -118,6 +121,7 @@ function Settings(props: {
 }
 
 function Courses() {
+  const { currentTheme } = useTheme();
   const [displaySetting, setDisplaySetting] = useState(defaultDisplaySetting);
   const updateDisplaySetting = (newSetting: DisplaySetting) => {
     setDisplaySetting(newSetting);
@@ -148,7 +152,9 @@ function Courses() {
         updateDisplaySetting={updateDisplaySetting}
       />
       <div className={styles.CoursesPage}>
-        <button className={styles.AddCourseButton} onClick={toggleAddCourse}>
+        <button className={styles.AddCourseButton} onClick={toggleAddCourse}
+        style={{backgroundColor: getThemeColor(currentTheme, 'buttonColor'), 
+                color: getThemeColor(currentTheme, 'color')}}>
           +
         </button>
         <div

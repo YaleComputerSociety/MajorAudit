@@ -138,7 +138,7 @@ function GraduationDistribution(props: {
               key={year}
               onClick={() => props.alterCurrYear(year)}
               style={{
-                backgroundColor: props.currYear === year ? "#3184FF" : getThemeColor(currentTheme, 'courseBoxColor'), // Set active button to blue
+                backgroundColor: props.currYear === year ? getThemeColor(currentTheme, 'buttonColor') : getThemeColor(currentTheme, 'backgroundColor'), // Set active button to blue
                 color: props.currYear === year ? "white" : getThemeColor(currentTheme, 'color'), // Set text color based on button state
                 borderRadius: "5px",
                 padding: "5px 10px",
