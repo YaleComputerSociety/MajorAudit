@@ -119,7 +119,7 @@ function CourseBoxSmall(props: {
     );
   } else if (props.course == null && props.studentCourse) {
     return (
-      <div className={styles.CourseBox} onClick={openModal}>
+      <div className={`${styles.CourseBox} ${styles.CourseBoxStudent}`} onClick={openModal}>
         <CheckMark studentCourse={props.studentCourse} />
         <CourseSeasonIcon seasons={[props.studentCourse.season]} />
         {props.studentCourse.course.code}

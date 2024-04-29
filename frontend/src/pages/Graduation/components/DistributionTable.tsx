@@ -8,16 +8,39 @@ import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
 import InfoButton from "../../../navbar/InfoButton";
 
 import { StudentCourse, ClassLists } from "../../../commons/types/TypeCourse";
-import { MockStudentCourses } from "../../../commons/mock/MockCourses";
+
+import { MockStudent } from "../../../commons/mock/MockStudent";
+
 
 const EXABC: ClassLists = {
-  clHu: [MockStudentCourses[0]],
-  clSo: [MockStudentCourses[3], MockStudentCourses[0]],
+  clHu: [],
+  clSo: [],
   clSc: [],
-  clQR: [MockStudentCourses[1], MockStudentCourses[2]],
-  clWR: [MockStudentCourses[0]],
-  clL: [MockStudentCourses[0], MockStudentCourses[0]],
+  clQR: [],
+  clWR: [],
+  clL: [],
 };
+
+// parse MockStudent to ClassLists
+MockStudent.metadata.forEach((courseSet) => {
+  let allCourses = [...courseSet.fall.courses, ...courseSet.spring.courses]
+  for (let c of allCourses) {
+    if (c.course.distribution.includes("WR") && EXABC.clWR.length < 2) {
+      EXABC.clWR.push(c);
+    } else if (c.course.distribution.includes("So") && EXABC.clSo.length < 2) {
+      EXABC.clSo.push(c);
+    } else if (c.course.distribution.includes("Sc") && EXABC.clSc.length < 2) {
+      EXABC.clSc.push(c);
+    } else if (c.course.distribution.includes("QR") && EXABC.clQR.length < 2) {
+      EXABC.clQR.push(c);
+    } else if (c.course.distribution.includes("Hu") && EXABC.clHu.length < 2) {
+      EXABC.clHu.push(c);
+    } else if (c.course.distribution.includes("L") && EXABC.clL.length < 2) {
+      EXABC.clL.push(c);
+    }
+  }
+});
+
 
 function getRequirements({ type, year }: { type: string; year: number }) {
   if (type === "Areas") {
@@ -59,7 +82,7 @@ function RenderRow(
       <td style={{ color: classList.length >= reqNum ? "green" : "red" }}>
         {classList.length}/{reqNum}
       </td>
-      <td style={{ display: "flex", flexDirection: "row" }}>
+      <td style={{ display: "flex", flexDirection: "row", gap: "3px" }}>
         {classList.map((course, index) => (
           <CourseBoxSmall key={index} studentCourse={course} />
         ))}
@@ -75,7 +98,7 @@ function DistributionTable({ year, cls }: { year: number; cls: ClassLists }) {
         <thead>
           <tr>
             <th>
-              <div style={{ display: "flex", flexDirection: "row" }}>
+              <div style={{ display: "flex", flexDirection: "row"}}>
                 AREAS <InfoButton text="test areas" />
               </div>
             </th>

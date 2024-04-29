@@ -35,6 +35,7 @@
   scrollbar-width: thin;
   overflow-y: scroll;
   padding-right: 7px;
+  overflow-x: hidden;
 }
 
 .subsectionHeader {

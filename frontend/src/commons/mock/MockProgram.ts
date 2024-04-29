@@ -51,7 +51,13 @@ export const CPSC: Program = {
             { 
               name: "POPULAR",
               description: "Courses that are popular for this requirement.",
-              courses: [] 
+              courses: [
+                getCourse("CPSC 437"), // Database Systems
+                getCourse("CPSC 478"), // Computer Graphics
+                getCourse("CPSC 439"), // Software Engineering
+                getCourse("CPSC 370"), // Artificial Intelligence
+                getCourse("CPSC 481"), // Introduction to Machine Learning
+                ]
             }
           ],
         },
@@ -106,7 +112,13 @@ export const CPSC: Program = {
             },
             { 
               name: "POPULAR",
-              courses: [] 
+              courses: [
+                getCourse("CPSC 437"), // Database Systems
+                getCourse("CPSC 478"), // Computer Graphics
+                getCourse("CPSC 439"), // Software Engineering
+                getCourse("CPSC 370"), // Artificial Intelligence
+                getCourse("CPSC 481"), // Introduction to Machine Learning
+                ]
             }
           ],
         },

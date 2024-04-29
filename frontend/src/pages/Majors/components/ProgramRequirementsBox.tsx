@@ -6,6 +6,8 @@ import InfoButton from "../../../navbar/InfoButton";
 import { Degree } from "../../../commons/types/TypeProgram";
 import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
 
+import { Course, StudentCourse } from "../../../commons/types/TypeCourse";
+
 function RequirementsTopshelf(major: Degree) {
   return (
     <div
@@ -74,11 +76,23 @@ function RequirementsContent(degree: Degree) {
                   )}
                 </div>
               )}
-              <div style={{ display: "flex" }}>
+              <div style={{ display: "flex", flexWrap: "wrap" }}>
                 {sub.courses.map((course, courseIndex) => (
-                  <div key={courseIndex} style={{ display: "flex" }}>
-                    <CourseBoxSmall course={course} />
-                    {courseIndex < sub.courses.length - 1 && <div>/</div>}
+                  <div
+                    key={courseIndex}
+                    style={{
+                      display: "flex",
+                      marginBottom: "4px",
+                      marginRight: courseIndex % 3 === 2 ? "10px" : "0",
+                    }}
+                  >
+                  <CourseBoxSmall 
+                      course={(course as StudentCourse).course ? undefined : course as Course}
+                      studentCourse={(course as StudentCourse).course ? course as StudentCourse : undefined}
+                    />
+                    {courseIndex < sub.courses.length - 1 && (
+                      courseIndex % 3 === 2 ? <br /> : <div>/</div>
+                    )}
                   </div>
                 ))}
               </div>

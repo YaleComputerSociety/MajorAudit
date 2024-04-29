@@ -15,6 +15,10 @@
     transition: filter 0.4s ease;
 }
 
+.CourseBoxStudent {
+    background-color: rgb(225, 233, 248);
+}
+
 .CourseBox:hover {
     cursor: pointer;
     filter: brightness(95%);
