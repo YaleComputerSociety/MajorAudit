@@ -9,7 +9,7 @@ const CPSC323: Course = { code: "CPSC 323", title: "Title CPSC323", seasons: ["F
 const CPSC365: Course = { code: "CPSC 365", title: "Title CPSC365", seasons: ["FALL", "SPRING"], evaluation: { rating: 4.1, workload: 4.2, professor: 5}, distribution: ["QR"] };
 const CGSC110: Course = { code: "CGSC 110", title: "Title CGSC110", seasons: ["FALL", "SPRING"], evaluation: { rating: 4.1, workload: 4.2, professor: 5}, distribution: ["So"] };
 
-const EMPTYCOURSE: Course = { code: "N/A", title: "Title NULL", seasons: [], evaluation: { rating: 3, workload: 3, professor: 3}, distribution: [] };
+export const EMPTYCOURSE: Course = { code: "N/A", title: "Title NULL", seasons: [], evaluation: { rating: 3, workload: 3, professor: 3}, distribution: [] };
 
 const Student201: StudentCourse = { course: CPSC201, enrollmentStatus: "COMPLETED", season: "FALL", year: "2022-2023" };
 const Student223: StudentCourse = { course: CPSC223, enrollmentStatus: "COMPLETED", season: "SPRING", year: "2022-2023" };

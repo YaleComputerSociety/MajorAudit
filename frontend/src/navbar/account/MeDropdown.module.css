@@ -37,8 +37,8 @@
 
 .navbarMe {
   /* padding-left: 1rem; */
-  height: 40px;
   display: flex;
+  background-color: white;
 }
 
 .meIcon {
@@ -46,7 +46,8 @@
   height: 30px;
   border-radius: 15px;
   display: flex;
-  background-color: rgb(1 1 1 / 10%);
+  background-color: white;
+  cursor: pointer;
   color: var(--color-primary);
   transition: border-color var(--trans-dur), background-color var(--trans-dur),
     color var(--trans-dur);

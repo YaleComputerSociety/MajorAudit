@@ -304,14 +304,6 @@ def get_majors():
         return jsonify(data)
     return jsonify()
 
-@app.route('/get_student_data', methods=['POST', 'GET'])
-def get_majors():
-    if logged_in():
-        user=db.collection('Users').document(session['NETID'])
-        return jsonify(user.get().to_dict())
-    return jsonify()
-
-
 
 @https_fn.on_request()
 def functions(req: https_fn.Request) -> https_fn.Response:
