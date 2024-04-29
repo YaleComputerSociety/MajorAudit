@@ -14,6 +14,13 @@ export const darkTheme = {
     courseBoxColor2: "#404040",
 }
 
+export const pinkTheme = {
+    backgroundColor: "#FFC0CB",
+    color: "#000000",
+    courseBoxColor: "#FF9CAD",
+    courseBoxColor2: "#FF7D94",
+}
+
 export function getThemeColor(currentTheme: Theme, themeProp: string) {
     if (currentTheme === 'light') {
         if (themeProp === 'backgroundColor') return lightTheme.backgroundColor;
@@ -26,6 +33,12 @@ export function getThemeColor(currentTheme: Theme, themeProp: string) {
         if (themeProp === 'color') return darkTheme.color;
         if (themeProp === 'courseBoxColor') return darkTheme.courseBoxColor;
         if (themeProp === 'courseBoxColor2') return darkTheme.courseBoxColor2;
+    }
+    if (currentTheme === 'pink') {
+        if (themeProp === 'backgroundColor') return pinkTheme.backgroundColor;
+        if (themeProp === 'color') return pinkTheme.color;
+        if (themeProp === 'courseBoxColor') return pinkTheme.courseBoxColor;
+        if (themeProp === 'courseBoxColor2') return pinkTheme.courseBoxColor2;
     }
     return "#000000"
 }

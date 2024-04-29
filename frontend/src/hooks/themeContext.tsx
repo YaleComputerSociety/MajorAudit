@@ -7,7 +7,7 @@ import {
 } from "react";
 import { getThemeColor } from "../commons/utilities/themeSchemas";
 
-export type Theme = "light" | "dark";
+export type Theme = "light" | "dark" | "pink";
 
 type Store = {
   currentTheme: Theme;

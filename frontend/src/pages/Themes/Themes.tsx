@@ -60,12 +60,17 @@ function Themes() {
     setCurrentTheme("dark")
   }
 
+  function setPinkTheme() {
+    setCurrentTheme("pink")
+  }
+
   return (
     <div>
         <NavBar/>
         <div style={{display: "flex", justifyContent: "center", alignItems: "center",  height: "100vh"}}>
             <button type="button" onClick={setLightTheme}>Light</button>
             <button type="button" onClick={setDarkTheme}>Dark</button>
+            <button type="button" onClick={setPinkTheme}>Pink!</button>
         </div>
     </div>
   )
