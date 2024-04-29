@@ -3,6 +3,7 @@ import styles from "./../NavBar.module.css"
 import MeDropdown from "../../../navbar/account/MeDropdown";
 import img_logo from "./../../../commons/images/ma_logo.png"
 import { NavLink } from "react-router-dom";
+import { local } from "d3";
 
 const programs = [{
   ID: 1,
@@ -23,20 +24,27 @@ const programs = [{
 
 function NavBar() {
   let [myPrograms, setPrograms] = useState([]);
-  // localStorage.removeItem("theProgramList");
+  let programCount = 0;
 
-  const storedPrograms = localStorage.getItem("theProgramList");
-
-  if (myPrograms.length > 0)
+  if (localStorage.getItem("programCount"))
   {
+    programCount = JSON.parse(localStorage.getItem("programCount"));
+  }
+
+  if (myPrograms.length > 0 || programCount == 0) {
     localStorage.setItem('theProgramList', JSON.stringify(myPrograms));
   }
 
+  const storedPrograms = localStorage.getItem("theProgramList");
   if (storedPrograms) {
-    myPrograms = JSON.parse(storedPrograms);
+    if (JSON.parse(storedPrograms).length > 0) {
+      myPrograms = JSON.parse(storedPrograms);
+    }
+  } else {
+    localStorage.setItem('theProgramList', JSON.stringify(myPrograms));
   }
 
-  
+
   function List(props) {
     const filteredData = programs.filter((el) => {
       if (props.input === "") {
@@ -63,9 +71,12 @@ function NavBar() {
         myDropdown.style.display = "none";
         if (myPrograms.length !== 2) {
           setPrograms([...myPrograms, name.toUpperCase()]);
+          programCount = myPrograms.length + 1;
+          localStorage.setItem('programCount', JSON.stringify(programCount));      
         }
       }
     };
+
     return (
       <div className={styles.list} id="list">
         {filteredData.map((item) => (
@@ -86,16 +97,35 @@ function NavBar() {
     let visibilityHandler = (e) => {
       document.getElementById("list").style.display = "block";
     }
+
+    let programRemover = (e, name) => {
+      setPrograms(l => { return l.filter(item => item !== name)});
+      programCount = myPrograms.length - 1;
+      localStorage.setItem('programCount', JSON.stringify(programCount));
+    };
+
+
     return (
-      <div className={styles.container}>
-        <input type="text"
-          placeholder="Search for a major or certificate!"
-          onChange={inputHandler}
-          onFocus={visibilityHandler}
-          className={styles.search}
-          id="search"
-        />
-        <List input={inputText} />
+      <div className={styles.column}>
+        <div className={styles.container}>
+          <input type="text"
+            placeholder="Search for a major or certificate!"
+            onChange={inputHandler}
+            onFocus={visibilityHandler}
+            className={styles.search}
+            id="search"
+          />
+          <List input={inputText} />
+        </div>
+        <div className={styles.row}>
+          <div className={styles.subheading}>PINNED</div>
+          {myPrograms.map(program => (
+            <div className={styles.program} key={myPrograms.indexOf(program)}>
+              <button className={styles.close} onClick={(e) => programRemover(e, program)}>✕</button>
+              {program}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -109,15 +139,7 @@ function NavBar() {
           style={{ width: "150px", height: "auto", marginRight: "10px" }}
         />
       </div>
-      <div className={styles.column}>
-        <SearchBar />
-        <div className={styles.row}>
-          <div className={styles.subheading}>PINNED</div>
-          {myPrograms.map(program => (
-            <div className={styles.program} key={myPrograms.indexOf(program)}>{program}</div>
-          ))}
-        </div>
-      </div>
+      <SearchBar />
       <div className={styles.row} style={{ marginRight: "20px" }}>
         <NavLink
           to="/graduation"

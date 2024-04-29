@@ -11,6 +11,27 @@
     border-radius: 15px;
 }
 
+.program:hover {
+    filter: brightness(95%);
+}
+
+.program:hover .close {
+    display: inline-block;
+}
+
+.close {
+    display:none;
+    border:0px;
+    background-color: #E1E9F8;
+    padding:0px;
+    padding-right:6px;
+    margin:0px;
+}
+
+.close:hover {
+    filter: brightness(90%);
+}
+
 .container {
     flex-direction: column;
     row-gap: 20px;
