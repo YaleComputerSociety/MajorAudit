@@ -32,13 +32,11 @@ from flask_cors import cross_origin
 # with open(r'C:\YCS\MajorAudit/cwd.txt', 'w') as outfile:
 #     outfile.write(os.getcwd())
 
-#cred = credentials.Certificate(r'secrets\majoraudit-firebase-adminsdk-bc6kc-f15a5f23e2.json')
+cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-6e9544580c.json')
 
-cred = credentials.Certificate(r'sercrets\majoraudit-firebase-adminsdk-bc6kc-9405745a46.json')
 app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-
 
 allowed_CORS_origins=['http://127.0.0.1:5000', 'majoraudit.web.app', 'http://127.0.0.1:3000']
 

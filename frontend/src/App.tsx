@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import $ from "jquery";
 
@@ -10,8 +11,8 @@ import Login from "./pages/Login";
 import Graduation from './pages/Graduation';
 import Courses from './pages/Courses';
 import Majors from './pages/Majors';
-import About from './pages/OtherPages/About/About';
-import FAQ from './pages/OtherPages/FAQ/FAQ';
+// import About from './pages/OtherPages/About/About';
+// import FAQ from './pages/OtherPages/FAQ/FAQ';
 
 import { CGSC, CPSC, ECON, HIST } from "./commons/mock/MockProgram";
 
@@ -19,7 +20,7 @@ function App() {
 
   const [auth, setAuth] = useState(true); 
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     $.ajax({
       url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/check_login",
@@ -57,7 +58,7 @@ function App() {
       setLoading(false);
     });
   }, []);
-  
+
 
   if (loading) {
     // Display a loading state while checking login
@@ -75,8 +76,8 @@ function App() {
         <Route path="/courses"      element={auth ? <Courses/> : <Navigate to="/login"/>}/> 
         <Route path="/majors"       element={auth ? <Majors/> : <Navigate to="/login"/>}/> 
 
-        <Route path="/about"        element={<About/>}/> 
-        <Route path="/FAQ"          element={<FAQ/>}/> 
+        {/* <Route path="/about"        element={<About/>}/>  */}
+        {/* <Route path="/FAQ"          element={<FAQ/>}/>  */}
       </Routes>
       <CourseModal />
     </Globals>
