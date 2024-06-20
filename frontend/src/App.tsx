@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import $ from "jquery";
+import { checkLogin, getMajors } from "./api/api";
 
 import Globals from './Globals';
 
@@ -18,59 +18,46 @@ import { CGSC, CPSC, ECON, HIST } from "./commons/mock/MockProgram";
 
 function App() {
 
-  const [auth, setAuth] = useState(true); 
-  const [loading, setLoading] = useState(true);
+  const [auth, setAuth] = useState(false); 
+
+  const checkAuthStatus = async () => {
+    const isLoggedIn = await checkLogin();
+    setAuth(isLoggedIn);
+  };
+
+  const getMajorData = async () => {
+    const majorData = await getMajors();
+    if(majorData){
+      let strPrograms = JSON.stringify(majorData);
+      
+      if(JSON.stringify(majorData).length < 3){
+        strPrograms = JSON.stringify([CGSC, CPSC, ECON, HIST]);
+      } 
+      localStorage.setItem("programList", strPrograms);
+      console.log("Yes Majors");
+    }else{
+      const programs = [CGSC, CPSC, HIST];
+      let strPrograms = JSON.stringify(programs);
+      localStorage.setItem("programList", strPrograms);
+      console.log("No Majors");
+    }
+  };
   
   useEffect(() => {
-    $.ajax({
-      url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/check_login",
-      xhrFields: { withCredentials: true }
-    }).done((data: string | null) => {
-      if(data) {
-        console.log(data);
-        console.log("check login");
-        setAuth(true);
-      }else{
-        console.log(data);
-        setAuth(false);
-      }
-    });
+    checkAuthStatus();
   }, []);
 
   useEffect(() => {
-    $.ajax({
-      url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/get_majors",
-      method: "GET",
-      xhrFields: { withCredentials: true }
-    }).done((data: JSON | null) => {
-      if(data) {
-        console.log("yee majors!");
-        console.log(JSON.stringify(data));
-        let strPrograms = JSON.stringify(data);
-        if (JSON.stringify(data).length < 3) strPrograms = JSON.stringify([CGSC, CPSC, ECON, HIST]);
-        localStorage.setItem("programList", strPrograms);
-      }else{
-        const programs = [CGSC, CPSC, HIST];
-        let strPrograms = JSON.stringify(programs);
-        localStorage.setItem("programList", strPrograms);
-        console.log("noo majors!");
-      }
-      setLoading(false);
-    });
-  }, []);
-
-
-  if (loading) {
-    // Display a loading state while checking login
-    return <div style={{position: "absolute", left: "50%"}}>Loading...</div>;
-  }
+    checkAuthStatus();
+    getMajorData()
+  }, [auth]);
 
   return (
   <div>
     <Globals>
       <Routes>
         <Route path="/"             element={auth ? <Navigate to="/graduation"/> : <Navigate to="/login"/>}/> 
-        <Route path="/login"        element={auth ? <Navigate to="/graduation"/> : <Login/>}/> 
+        <Route path="/login"        element={auth ? <Navigate to="/graduation"/> : <Login setAuth={setAuth}/>}/> 
 
         <Route path="/graduation"   element={auth ? <Graduation/> : <Navigate to="/login"/>}/> 
         <Route path="/courses"      element={auth ? <Courses/> : <Navigate to="/login"/>}/> 
