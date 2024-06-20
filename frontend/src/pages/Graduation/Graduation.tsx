@@ -1,5 +1,7 @@
+
 import React, { useState } from "react";
 import styles from "./Graduation.module.css";
+import $ from "jquery"
 
 import GraduationDistribution from "./components/DistributionTable";
 import GraduationOverview from "./components/Overview";
@@ -20,6 +22,7 @@ function NavBar() {
           style={{ width: "150px", height: "auto", marginRight: "10px" }}
         />
       </div>
+
       <div className={nav_styles.row} style={{ marginRight: "20px" }}>
         <NavLink
           to="/graduation"
@@ -54,7 +57,7 @@ function NavBar() {
 function Recommendations() {
   return(
     <div>
-      <div style={{ fontSize: "30px", fontWeight: "500" }}>Hello, Ryan!</div>
+      <div style={{ fontSize: "30px", fontWeight: "500" }}>Hello, Ryn!</div>
     </div>
   );
 }
@@ -68,6 +71,44 @@ function Graduation() {
     setCurrYear(num);
   };
 
+  const locSyncData = () => {
+    console.log("exec: locSyncData")
+    var event = new CustomEvent("scrapeData", {
+      detail: { action: "openWebsite" }
+    });
+    document.dispatchEvent(event);
+  };
+  const locGetData = () => {
+    $.ajax({
+      url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/get_data",
+      xhrFields: { withCredentials: true }
+    }).done((data: string | null) => {
+      if (data) {
+        console.log("get: if");
+        console.log(data);
+      } else {
+        console.log("get: else");
+        console.log(data);
+      }
+    });
+  };
+  const locGetNetID = () => {
+    $.ajax({
+      url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/get_netid1",
+      xhrFields: { withCredentials: true }
+    }).done((data: string | null) => {
+      if (data) {
+        console.log("netID: if");
+        console.log(data);
+      } else {
+        console.log("netID: else");
+        console.log(data);
+      }
+    });
+  };
+
+    
+
   return (
     <div>
       <NavBar />
@@ -76,6 +117,15 @@ function Graduation() {
         <div className={styles.row}>
           <div className={styles.column} style={{ marginRight: "60px" }}>
             <Recommendations />
+            <div onClick={locSyncData} className={styles.btn} style={{marginRight: "8px"}}>
+              Sync Data
+            </div>
+            <div onClick={locGetData} className={styles.btn} style={{marginRight: "8px"}}>
+              Get Data
+            </div>
+            <div onClick={locGetNetID} className={styles.btn} style={{marginRight: "8px"}}>
+              Get NetID
+            </div>
             <GraduationDistribution
               currYear={currYear}
               alterCurrYear={alterCurrYear}

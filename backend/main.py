@@ -1,3 +1,4 @@
+
 from urllib.request import urlopen
 import sys
 import datetime
@@ -14,7 +15,7 @@ from firebase_functions import https_fn, options
 
 from firebase_functions import https_fn
 from firebase_admin import initialize_app,  auth, exceptions
-from flask import redirect, session, current_app, make_response, Flask, request, jsonify, abort, render_template
+from flask import Flask, redirect, session, current_app, make_response, request, jsonify, abort, render_template
 from xmltodict import parse
 import secrets
 import datetime
@@ -33,12 +34,11 @@ from flask_cors import cross_origin
 #     outfile.write(os.getcwd())
 
 cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-6e9544580c.json')
-
 app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-allowed_CORS_origins=['http://127.0.0.1:5000', 'majoraudit.web.app', 'http://127.0.0.1:3000']
+allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:5000', 'majoraudit.web.app']
 
 class User:
     def __init__(self, netID, courses):
@@ -49,7 +49,6 @@ app = Flask(__name__, template_folder='templates')
 CORS(app, supports_credentials=True, origins=allowed_CORS_origins)
 
 app.secret_key = secrets.token_urlsafe(16)
-#app.secret_key = 'Dk8q3sdxz7-3WD8QzKXHgQ'
 
 @app.get('/sanity')
 def sanity():
@@ -67,23 +66,19 @@ def login():
     service=get_redirect_url()
     cookies={}
 
-
     if 'NETID' in session:
-        print('sanity', file=sys.stderr)
         if '127.0.0.1' in service:
-            # redirect_url='http://127.0.0.1:5000/dashboard'
             redirect_url = 'http://127.0.0.1:3000'
         else:
             redirect_url = 'https://majoraudit.web.app'
 
-        current_app.logger.info(f'redirecting to {redirect_url}')
+        current_app.logger.info(f'Redirecting: {redirect_url}')
         resp = make_response(redirect(redirect_url))
         for c in cookies:
             resp.set_cookie(c, cookies[c])
         return resp
 
     login_url=f'''https://secure.its.yale.edu/cas/login?service={service}'''
-
     redirect_url=login_url
 
     if 'ticket' in request.args:
@@ -107,7 +102,6 @@ def login():
                 db.collection("Users").document(validation[1]).set(user.__dict__)
 
             if '127.0.0.1' in service:
-                #redirect_url='http://127.0.0.1:5000/dashboard'
                 redirect_url = 'http://127.0.0.1:3000'
             else:
                 redirect_url='https://majoraudit.web.app'
@@ -125,11 +119,16 @@ def login():
                 del session["NETID"]
             return make_response(f'failure to validate: {token} at url {validation[1]}')
 
-    current_app.logger.info(f'redirecting to {redirect_url}')
+    current_app.logger.info(f'Redirecting: {redirect_url}')
     resp=make_response(redirect(redirect_url))
     for c in cookies:
         resp.set_cookie(c, cookies[c])
     return resp
+
+
+
+
+
 
 @app.get('/dashboard')
 def dashboard():
@@ -185,7 +184,7 @@ def validate(ticket, service):
 
     val_dic = val_dic["cas:serviceResponse"]["cas:authenticationSuccess"]
     username = val_dic["cas:user"]
-    session["NETID"] = username
+    session["NETID"] = username # hey hey hey
     session['CAS_ATTRIBUTES'] = val_dic["cas:attributes"]
 
     return True, username
@@ -216,7 +215,6 @@ def get_redirect_url():
     return url
 
 @app.route('/get_data', methods = ['GET'])
-@cross_origin()
 def get_data():
 #    if req.method == 'OPTIONS':
 #        headers = {
@@ -231,26 +229,19 @@ def get_data():
 #    }
 #    response_body = "DEFAULT"
 
-    headers = {
-        'Access-Control-Allow-Credentials': 'true',
-    }
+    loc_netid = session["NETID"]
+    print(loc_netid)
 
-    print(session["NETID"])
-
-    data = db.collection("Users").document(session["NETID"]).get()
-
+    data = db.collection("Users").document(loc_netid).get()
     if not data.exists:
-        response_body = jsonify("No data")
+        response_body = jsonify("No Data")
     else:
         response_body = jsonify(data.to_dict())
 
-    return make_response((response_body, 200, headers))
-    #return make_response((response_body, 200))
-    #return make_response((response_body, 200, headers))
+    return make_response((response_body, 200))
 
 
 @app.route('/sync_data', methods = ['POST'])
-@cross_origin(origins='http://127.0.0.1:5000', supports_credentials=True)
 def sync_data():
 
 #    if req.method == 'OPTIONS':
@@ -270,22 +261,19 @@ def sync_data():
     #if not netid:
     #    return redirect('/user_login')
 
-    headers = {
-        'Access-Control-Allow-Credentials': 'true',
-        'Access-Control-Allow-Origin': 'true'
-    }
-
-    print("here sync data")
-    print(session["NETID"])
-
+    print("main.py: sync_data")
+    loc_netid = session.get("NETID")
+    if not loc_netid:
+        print(session)
+        return make_response("Not authenticated", 401)
+    print(loc_netid)
+    
     data = request.json
-    user = User("jy692", data)
-    db.collection("Users").document("jy692").set(user.__dict__)
+    user = User(loc_netid, data)
+    db.collection("Users").document(loc_netid).set(user.__dict__)
+
     print(data, flush=True)
-
-    make_response((data, 200, headers))
-    #return make_response(('Data received', 200, headers))
-
+    return make_response((data, 200))
 
 
 def logged_in():

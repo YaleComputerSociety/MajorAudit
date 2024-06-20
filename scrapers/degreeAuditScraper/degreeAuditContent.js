@@ -1,7 +1,9 @@
-/**
- * Extract the tables from html code
- */
-function processTable(table) {
+
+console.log("exec: degreeAuditContent.js")
+
+/* Extract tables from HTML. */
+function processTable(table) 
+{
 	const data = [];
 	const rows = table.querySelectorAll('tr');
 
@@ -14,34 +16,35 @@ function processTable(table) {
 	return data;
 }
 
-/**
- * Check whether content is fully loaded
- */
-function isContentLoaded() {
+/* Check whether content is fully loaded. */
+function isContentLoaded() 
+{
 	if (document.location.href.includes("https://degreeaudit.yale.edu/responsive/worksheets/WEB31"))
+	{
 		return document.querySelector('table') !== null;
+	}
 	return false;
 }
 
-/**
- * Get the html code of the Degree Audit page,
- * extract taken courses data from the code
- */
-function onContentLoaded() {
+/* Get DegreeAudit HTML; extract course data. */
+function onContentLoaded() 
+{
 	let data = document.body.innerHTML;
 	const tables = document.querySelectorAll('table');
 	const allTableData = Array.from(tables).map(table => processTable(table))
-	chrome.runtime.sendMessage({ action: "dataExtracted", data: allTableData });
+	chrome.runtime.sendMessage({ action: "dataExtracted", data: allTableData }); // IMPORTANT
 }
 
-function observerCallback(mutationsList, observer) {
+function observerCallback(mutationsList, observer) 
+{
 	if(isContentLoaded()) {
 		onContentLoaded();
 		observer.disconnect();
 	}
 }
 
-function extractData() {
+function extractData() 
+{
 	const observer = new MutationObserver(observerCallback);
 	const config = {childList: true, subtree: true};
 	observer.observe(document.body, config);
