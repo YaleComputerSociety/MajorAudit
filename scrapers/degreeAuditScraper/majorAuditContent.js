@@ -16,6 +16,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: "include",
             body: request.detail
         });
         console.log(request);
