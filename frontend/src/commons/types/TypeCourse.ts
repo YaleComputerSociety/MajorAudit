@@ -1,5 +1,5 @@
 
-export type Season = "FALL" | "SPRING" | "SUMMER";
+export type Season = "Fall" | "Spring";
 export type Distribution = "Hu" | "So" | "Sc" | "QR" | "WR" | "L";
 
 interface CourseEvaluation {
@@ -22,7 +22,7 @@ export interface StudentCourse {
   
   enrollmentStatus: "PROSPECTIVE" | "ENROLLED" | "WITHDRAWN" | "COMPLETED";
   season: Season;
-  year: string;
+  year: number;
 }
 
 /*SoonToDeprecate*/

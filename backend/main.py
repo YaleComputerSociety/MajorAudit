@@ -28,6 +28,10 @@ from firebase_admin import firestore
 from flask_cors import CORS
 from flask_cors import cross_origin
 
+# Ryan
+from year import * 
+from course import *
+
 cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-6e9544580c.json')
 app = firebase_admin.initialize_app(cred)
 
@@ -197,6 +201,7 @@ def get_data():
 # SYNC DATA
 @app.route('/sync_data', methods = ['POST'])
 def sync_data():
+    """"""
     # Validate
     loc_netid = session.get("NETID")
     if not loc_netid:
@@ -205,17 +210,21 @@ def sync_data():
     # Process
     data = request.json
 
-    unique_courses = {}
+    uq_courses = {}
     for entry in data['coursestable']:
         for course in entry['courses']:
-            unique_courses[course['id']] = course
-    unique_courses_list = list(unique_courses.values())
+            uq_courses[course['id']] = course
+    uq_courses = list(uq_courses.values())
+    uq_student_courses = [convert(course_data) for course_data in uq_courses]
 
-    user = User(loc_netid, unique_courses_list, data)
+    years = make_years(uq_student_courses)
+    user = User(loc_netid, years, data)
     db.collection("Users").document(loc_netid).set(user.__dict__)
 
     print(data, flush=True)
     return make_response((data, 200))
+
+
 
 
 def logged_in():

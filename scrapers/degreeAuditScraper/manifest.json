@@ -5,7 +5,7 @@
 	"permissions": ["tabs", "activeTab", "scripting"],
 	"content_scripts": [
 		{
-			"matches": ["http://127.0.0.1:3000/graduation"],
+			"matches": ["http://127.0.0.1:3000/*"],
 			"js": ["majorAuditContent.js"]
 		},
 		{

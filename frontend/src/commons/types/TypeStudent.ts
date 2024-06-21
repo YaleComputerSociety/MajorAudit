@@ -1,14 +1,11 @@
 
 import { StudentCourse } from "./TypeCourse";
 
-export interface Semester {
-    courses: Array<StudentCourse>;
-}
 export interface Year {
-    grade: "First-Year" | "Sophomore" | "Junior" | "Senior";
-    calendarYear: string;
-    fall : Semester;
-    spring: Semester;
+    grade: 1 | 2 | 3 | 4;
+    terms: Array<string>; // e.g. ["Fall 2022", "Spring 2023"]
+    fall: Array<StudentCourse>;
+    spring: Array<StudentCourse>;
 }
 
 export interface Student {
