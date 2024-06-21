@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { checkLogin, getMajors } from "./api/api";
+import { checkLogin, getData, getMajors } from "./api/api";
 
 import Globals from './Globals';
 
@@ -25,31 +25,30 @@ function App() {
     setAuth(isLoggedIn);
   };
 
-  const getMajorData = async () => {
-    const majorData = await getMajors();
-    if(majorData){
-      let strPrograms = JSON.stringify(majorData);
-      
-      if(JSON.stringify(majorData).length < 3){
-        strPrograms = JSON.stringify([CGSC, CPSC, ECON, HIST]);
-      } 
-      localStorage.setItem("programList", strPrograms);
-      console.log("Yes Majors");
+  const initLocalStorage = async () => {
+    let courseList = await getData();
+    localStorage.setItem("courseList", JSON.stringify(courseList));
+
+    let programList = await getMajors();
+    if(programList){
+      localStorage.setItem("programList", JSON.stringify(programList));
     }else{
-      const programs = [CGSC, CPSC, HIST];
-      let strPrograms = JSON.stringify(programs);
-      localStorage.setItem("programList", strPrograms);
-      console.log("No Majors");
+      localStorage.setItem("programList", JSON.stringify([CGSC, CPSC, ECON, HIST]));
     }
-  };
-  
+  }
+
   useEffect(() => {
     checkAuthStatus();
+    if(auth){
+      initLocalStorage();
+    }
   }, []);
 
   useEffect(() => {
     checkAuthStatus();
-    getMajorData()
+    if(auth){
+      initLocalStorage();
+    }
   }, [auth]);
 
   return (

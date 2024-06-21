@@ -41,7 +41,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
  * @returns whether the string is a valid course ID */
 function isCourseId(str) 
 {
-    const pattern = /^[A-Za-z]{4} \d{3}$/;
+    // const pattern = /^[A-Za-z]{4} \d{3}$/;
+	const pattern = /^[A-Za-z&]{3,4} \d{3}J?$/;
     return pattern.test(str);
 }
 

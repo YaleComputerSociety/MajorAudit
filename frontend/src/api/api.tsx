@@ -47,6 +47,7 @@ export const getData = () => {
     return new Promise((resolve, reject) => { 
         $.ajax({
             url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/get_data",
+            method: "GET",
             xhrFields: { withCredentials: true }
         }).done((data: string | null) => {
             resolve(data)

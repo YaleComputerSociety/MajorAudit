@@ -32,7 +32,7 @@ function onContentLoaded()
 	let data = document.body.innerHTML;
 	const tables = document.querySelectorAll('table');
 	const allTableData = Array.from(tables).map(table => processTable(table))
-	chrome.runtime.sendMessage({ action: "dataExtracted", data: allTableData }); // IMPORTANT
+	chrome.runtime.sendMessage({ action: "dataExtracted", data: allTableData }); 
 }
 
 function observerCallback(mutationsList, observer) 

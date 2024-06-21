@@ -28,11 +28,6 @@ from firebase_admin import firestore
 from flask_cors import CORS
 from flask_cors import cross_origin
 
-
-# Use a service account.
-# with open(r'C:\YCS\MajorAudit/cwd.txt', 'w') as outfile:
-#     outfile.write(os.getcwd())
-
 cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-6e9544580c.json')
 app = firebase_admin.initialize_app(cred)
 
@@ -41,36 +36,27 @@ db = firestore.client()
 allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:5000', 'majoraudit.web.app']
 
 class User:
-    def __init__(self, netID, courses):
+    def __init__(self, netID, courseList, daTables):
         self.netID = netID
-        self.courses = courses
+        self.courseList = courseList
+        self.daTables = daTables
 
 app = Flask(__name__, template_folder='templates')
 CORS(app, supports_credentials=True, origins=allowed_CORS_origins)
 
 app.secret_key = secrets.token_urlsafe(16)
 
-@app.get('/sanity')
-def sanity():
-    return make_response('sanity')
-
-@app.route('/hello_world')
-def hello_world():
-    return make_response('hello world')
-
+# LOGIN
 @app.get('/user_login')
 def login():
-    # print(request.cookies, flush=True)
-    # netid = session['NETID']
-    # print("netid", netid)
     service=get_redirect_url()
     cookies={}
 
     if 'NETID' in session:
         if '127.0.0.1' in service:
             redirect_url = 'http://127.0.0.1:3000'
-        else:
-            redirect_url = 'https://majoraudit.web.app'
+        # else:
+        #     redirect_url = 'https://majoraudit.web.app'
 
         current_app.logger.info(f'Redirecting: {redirect_url}')
         resp = make_response(redirect(redirect_url))
@@ -89,54 +75,34 @@ def login():
         redirect_url = '/'
         validation=validate(session['CAS_TOKEN'], service)
         if validation[0]:
-            print("username", validation[1])
-            cookies['hello']='world'
+
             if 'NETID' in session:
                 cookies['wtf']=session['NETID']
-            print(session)
-            
-            user = User(validation[1], "")
-            if db.collection("Users").document(validation[1]).get().exists:
+
+            userID = validation[1]
+            user = User(userID, "", "")
+            if db.collection("Users").document(userID).get().exists:
                 pass
             else:
-                db.collection("Users").document(validation[1]).set(user.__dict__)
+                db.collection("Users").document(userID).set(user.__dict__)
 
             if '127.0.0.1' in service:
                 redirect_url = 'http://127.0.0.1:3000'
-            else:
-                redirect_url='https://majoraudit.web.app'
-
-            # response = make_response(redirect('/majoraudit/us-central1/functions/dashboard'))
-            # expires = datetime.datetime.now() + datetime.timedelta(days=30)
-            # response.set_cookie('netid', user.netID, expires=expires, path='/')
-
-            # return response
+            # else:
+            #     redirect_url='https://majoraudit.web.app'
 
         else:
             token=session['CAS_TOKEN']
             del session['CAS_TOKEN']
             if "NETID" in session:
                 del session["NETID"]
-            return make_response(f'failure to validate: {token} at url {validation[1]}')
+            return make_response(f'Failed Validation: {token} @ URL {validation[1]}')
 
     current_app.logger.info(f'Redirecting: {redirect_url}')
     resp=make_response(redirect(redirect_url))
     for c in cookies:
         resp.set_cookie(c, cookies[c])
     return resp
-
-
-
-
-
-
-@app.get('/dashboard')
-def dashboard():
-    netid = session['NETID'] 
-    if not netid:
-        return redirect('/user_login')
-    return render_template('dashboard.html', netid=netid)
-
 
 @app.route('/logout')
 def logout():
@@ -145,10 +111,6 @@ def logout():
     response.set_cookie('netid', '', expires=0, path='/') 
     return response
 
-
-@app.get('/url_test')
-def url_test():
-    return make_response(f'{request.url}\n {get_base_url()}')
 
 @app.get('/get_netid1')
 def get_netid():
@@ -184,11 +146,10 @@ def validate(ticket, service):
 
     val_dic = val_dic["cas:serviceResponse"]["cas:authenticationSuccess"]
     username = val_dic["cas:user"]
-    session["NETID"] = username # hey hey hey
+    session["NETID"] = username
     session['CAS_ATTRIBUTES'] = val_dic["cas:attributes"]
 
     return True, username
-
 
 def get_base_url():
      url=request.url
@@ -214,62 +175,43 @@ def get_redirect_url():
 
     return url
 
+# GET DATA
 @app.route('/get_data', methods = ['GET'])
 def get_data():
-#    if req.method == 'OPTIONS':
-#        headers = {
-#            'Access-Control-Allow-Origin': '*',
-#            'Access-Control-Allow-Methods': 'GET',
-#            'Access-Control-Allow-Headers': 'Content-Type',
-#            'Access-Control-Max-Age': '3600',
-#        }
-#        return make_response('', 204, headers)
-#    headers = {
-#        'Access-Control-Allow-Origin': '*',
-#    }
-#    response_body = "DEFAULT"
+    # Validate
+    loc_netid = session.get("NETID")
+    if not loc_netid:
+        return make_response("Not Authenticated", 401)
 
-    loc_netid = session["NETID"]
-    print(loc_netid)
 
     data = db.collection("Users").document(loc_netid).get()
+
+    # Return
     if not data.exists:
         response_body = jsonify("No Data")
     else:
         response_body = jsonify(data.to_dict())
-
+        
     return make_response((response_body, 200))
 
-
+# SYNC DATA
 @app.route('/sync_data', methods = ['POST'])
 def sync_data():
-
-#    if req.method == 'OPTIONS':
-#        headers = {
-#            'Access-Control-Allow-Origin': '*',
-#            'Access-Control-Allow-Methods': 'GET',
-#            'Access-Control-Allow-Headers': 'Content-Type',
-#            'Access-Control-Max-Age': '3600',
-#        }
-#        return make_response('', 204, headers)
-    
-#    headers = {
-#        'Access-Control-Allow-Origin': '*',
-#    }
-
-    #netid = session['NETID']
-    #if not netid:
-    #    return redirect('/user_login')
-
-    print("main.py: sync_data")
+    # Validate
     loc_netid = session.get("NETID")
     if not loc_netid:
-        print(session)
-        return make_response("Not authenticated", 401)
-    print(loc_netid)
+        return make_response("Not Authenticated", 401)
     
+    # Process
     data = request.json
-    user = User(loc_netid, data)
+
+    unique_courses = {}
+    for entry in data['coursestable']:
+        for course in entry['courses']:
+            unique_courses[course['id']] = course
+    unique_courses_list = list(unique_courses.values())
+
+    user = User(loc_netid, unique_courses_list, data)
     db.collection("Users").document(loc_netid).set(user.__dict__)
 
     print(data, flush=True)
