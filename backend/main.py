@@ -40,10 +40,13 @@ db = firestore.client()
 allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:5000', 'majoraudit.web.app']
 
 class User:
-    def __init__(self, netID, courseList, daTables):
+    def __init__(self, netID, name, degree, major, yearTree, tables):
         self.netID = netID
-        self.courseList = courseList
-        self.daTables = daTables
+        self.name = name
+        self.degree = degree
+        self.major = major
+        self.yearTree = yearTree
+        self.daTables = tables
 
 app = Flask(__name__, template_folder='templates')
 CORS(app, supports_credentials=True, origins=allowed_CORS_origins)
@@ -84,7 +87,7 @@ def login():
                 cookies['wtf']=session['NETID']
 
             userID = validation[1]
-            user = User(userID, "", "")
+            user = User(userID, "", "", "", "", "")
             if db.collection("Users").document(userID).get().exists:
                 pass
             else:
@@ -108,6 +111,7 @@ def login():
         resp.set_cookie(c, cookies[c])
     return resp
 
+
 @app.route('/logout')
 def logout():
     service="127.0.0.1:5000/login"
@@ -118,24 +122,23 @@ def logout():
 
 @app.get('/get_netid1')
 def get_netid():
-    print("flask get netid")
-    print(session)
-    if 'NETID' in session:
-        print(session["NETID"])
+    if "NETID" in session:
         return session["NETID"]
     else:
-        return ''
+        return ""
 
 
 @app.get('/sync')
 def sync():
     True
 
+
 @app.get('/check_login')
 def check_login():
     if 'NETID' in session:
         return jsonify(session['NETID'])
     return jsonify()
+
 
 def validate(ticket, service):
     validation_url = f'https://secure.its.yale.edu/cas/serviceValidate?service={service}&ticket={ticket}'
@@ -155,6 +158,7 @@ def validate(ticket, service):
 
     return True, username
 
+
 def get_base_url():
      url=request.url
 
@@ -164,6 +168,7 @@ def get_base_url():
          return base_url.group()
 
      return 'no url found'
+
 
 def get_redirect_url():
     url = request.url
@@ -179,52 +184,57 @@ def get_redirect_url():
 
     return url
 
-# GET DATA
-@app.route('/get_data', methods = ['GET'])
-def get_data():
-    # Validate
-    loc_netid = session.get("NETID")
-    if not loc_netid:
-        return make_response("Not Authenticated", 401)
-
-
-    data = db.collection("Users").document(loc_netid).get()
-
-    # Return
-    if not data.exists:
-        response_body = jsonify("No Data")
-    else:
-        response_body = jsonify(data.to_dict())
-        
-    return make_response((response_body, 200))
 
 # SYNC DATA
-@app.route('/sync_data', methods = ['POST'])
+@app.route("/sync_data", methods = ["POST"])
 def sync_data():
     """"""
     # Validate
     loc_netid = session.get("NETID")
     if not loc_netid:
-        return make_response("Not Authenticated", 401)
+        return make_response(jsonify({"Error": "Not Authenticated"}), 401)
     
-    # Process
+    # Check
     data = request.json
+    required_fields = ["name", "degree", "major", "coursestable"]
+    if not data or not all(field in data for field in required_fields):
+        return make_response(jsonify({"Error": "Invalid Data"}), 400)
 
+    # Process
     uq_courses = {}
-    for entry in data['coursestable']:
-        for course in entry['courses']:
-            uq_courses[course['id']] = course
+    for entry in data["coursestable"]:
+        for course in entry["courses"]:
+            uq_courses[course["id"]] = course
     uq_courses = list(uq_courses.values())
     uq_student_courses = [convert(course_data) for course_data in uq_courses]
+    yearTree = make_years(uq_student_courses)
 
-    years = make_years(uq_student_courses)
-    user = User(loc_netid, years, data)
+    # Store
+    user = User(loc_netid, data["name"], data["degree"], data["major"], yearTree, data["coursestable"])
     db.collection("Users").document(loc_netid).set(user.__dict__)
 
-    print(data, flush=True)
-    return make_response((data, 200))
+    # Transfer
+    # print(data, flush=True)
+    return make_response(jsonify(data), 200)
 
 
+# GET DATA
+@app.route("/get_data", methods = ["GET"])
+def get_data():
+    # Validate
+    loc_netid = session.get("NETID")
+    if not loc_netid:
+        return make_response(jsonify({"Error": "Not Authenticated"}), 401)
+
+    # Retrieve
+    user_doc = db.collection("Users").document(loc_netid).get()
+
+    # Return
+    if not user_doc.exists:
+        return make_response(jsonify({"Error": "Data Not Found"}), 404)
+    
+    response_body = jsonify(user_doc.to_dict())
+    return make_response(response_body, 200)
 
 
 def logged_in():
@@ -248,7 +258,9 @@ def functions(req: https_fn.Request) -> https_fn.Response:
         pass
         return app.full_dispatch_request()
 
+
 @https_fn.on_request()
 def hello_world(req: https_fn.Request) -> https_fn.Response:
     response = https_fn.Response('hello world')
     return response
+

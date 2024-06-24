@@ -13,7 +13,7 @@ import {
 import img_fall from "./../../images/fall.png";
 import img_spring from "./../../images/spring.png";
 import DistributionCircle from "./DistributionsCircle";
-import ReactDOMServer from 'react-dom/server';
+// import ReactDOMServer from 'react-dom/server';
 
 import { useModal } from "../../../hooks/modalContext";
 
@@ -25,9 +25,8 @@ function CourseSeasonText(season: string ) {
 
 function CourseSeasonIcon(props: { seasons: Array<Season> }) {
   const seasonImageMap = {
-    FALL: img_fall,
-    SPRING: img_spring,
-    SUMMER: "summer.png",
+    "Fall": img_fall,
+    "Spring": img_spring,
   };
 
   return (
@@ -59,7 +58,7 @@ function CourseSeasonIcon(props: { seasons: Array<Season> }) {
   );
 }
 
-function DistCircDiv(props: { dist: Array<Distribution> }) {
+function DistCircDiv(props: { dist: Array<string> }) {
   return (
     <div style={{ marginLeft: "2px", marginTop: "2px" }}>
       <DistributionCircle distributions={props.dist} />
@@ -70,7 +69,7 @@ function DistCircDiv(props: { dist: Array<Distribution> }) {
 function CheckMark(props: { studentCourse: StudentCourse }) {
   return (
     <div>
-      {props.studentCourse.enrollmentStatus === "COMPLETED" ? (
+      {props.studentCourse.status === "COMPLETE" ? (
         <div style={{ paddingLeft: "1px", paddingRight: "3px" }}>
           <div
             data-tooltip-id="check-tooltip"
@@ -108,7 +107,7 @@ function CourseBoxSmall(props: {
   if (props.course && props.studentCourse == null) {
     return (
       <div className={styles.CourseBox} onClick={openModal}>
-        <CourseSeasonIcon seasons={props.course.seasons} />
+        {/* <CourseSeasonIcon seasons={props.course.seasons} /> */}
         {props.course.code}
         {props.course.distribution.length > 0 ? (
           <DistCircDiv dist={props.course.distribution} />
@@ -121,7 +120,7 @@ function CourseBoxSmall(props: {
     return (
       <div className={`${styles.CourseBox} ${styles.CourseBoxStudent}`} onClick={openModal}>
         <CheckMark studentCourse={props.studentCourse} />
-        <CourseSeasonIcon seasons={[props.studentCourse.season]} />
+        {/* <CourseSeasonIcon seasons={[props.studentCourse.season]} /> */}
         {props.studentCourse.course.code}
         {props.studentCourse.course.distribution.length > 0 ? (
           <DistCircDiv dist={props.studentCourse.course.distribution} />

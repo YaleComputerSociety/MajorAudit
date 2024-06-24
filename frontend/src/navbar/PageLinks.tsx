@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 
 function PageLinks() {
   return (
-    <div style={{ display: "flex", flexDirection: "row", marginRight: "20px" }}>
+    <div className={styles.row} style={{ marginRight: "20px" }}>
       <NavLink
         to="/graduation"
         className={({ isActive }) =>

@@ -1,7 +1,8 @@
 
 import React, { useState } from "react";
 import styles from "./Graduation.module.css";
-import $ from "jquery"
+
+import { getData } from "../../api/api";
 
 import GraduationDistribution from "./components/DistributionTable";
 import GraduationOverview from "./components/Overview";
@@ -10,7 +11,7 @@ import { CPSC } from "./../../commons/mock/MockProgram";
 import MeDropdown from "../../navbar/account/MeDropdown";
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
-import { NavLink } from "react-router-dom";
+import PageLinks from "./../../navbar/PageLinks";
 
 function NavBar() {
   return (
@@ -22,34 +23,8 @@ function NavBar() {
           style={{ width: "150px", height: "auto", marginRight: "10px" }}
         />
       </div>
-
-      <div className={nav_styles.row} style={{ marginRight: "20px" }}>
-        <NavLink
-          to="/graduation"
-          className={({ isActive }) =>
-            isActive ? nav_styles.activeLink : nav_styles.dormantLink
-          }
-        >
-          Graduation
-        </NavLink>
-        <NavLink
-          to="/courses"
-          className={({ isActive }) =>
-            isActive ? nav_styles.activeLink : nav_styles.dormantLink
-          }
-        >
-          Courses
-        </NavLink>
-        <NavLink
-          to="/majors"
-          className={({ isActive }) =>
-            isActive ? nav_styles.activeLink : nav_styles.dormantLink
-          }
-        >
-          Majors
-        </NavLink>
-        <MeDropdown />
-      </div>
+      <PageLinks/>
+      {/* <MeDropdown/> */}
     </div>
   );
 }
@@ -78,36 +53,49 @@ function Graduation() {
     });
     document.dispatchEvent(event);
   };
-  const locGetData = () => {
-    $.ajax({
-      url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/get_data",
-      xhrFields: { withCredentials: true }
-    }).done((data: string | null) => {
-      if (data) {
-        console.log("get: if");
-        console.log(data);
-      } else {
-        console.log("get: else");
-        console.log(data);
-      }
-    });
-  };
-  const locGetNetID = () => {
-    $.ajax({
-      url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/get_netid1",
-      xhrFields: { withCredentials: true }
-    }).done((data: string | null) => {
-      if (data) {
-        console.log("netID: if");
-        console.log(data);
-      } else {
-        console.log("netID: else");
-        console.log(data);
-      }
-    });
-  };
 
-    
+  const initLocalStorage = async () => {
+    try {
+      const allData = await getData();
+  
+      if (!allData) {
+        console.error("No data returned from getData");
+        return;
+      }
+  
+      const jsonData = typeof allData === "object" ? JSON.stringify(allData) : allData;
+  
+      let parsedData;
+      try {
+        parsedData = JSON.parse(jsonData);
+        console.log("Parsed JSON Data: ", parsedData);
+      } catch (error) {
+        console.error("Failed To Parse JSON Data From getData: ", error);
+        return;
+      }
+
+      // studentName
+      const studentName = parsedData?.name;
+      if (!studentName) {
+        console.error("No studentName In Parsed Data");
+        return;
+      }
+      localStorage.setItem("studentName", JSON.stringify(studentName));
+      console.log("studentName Saved To localStorage");
+  
+      // yearTree
+      const yearTree = parsedData?.yearTree;
+      if (!yearTree) {
+        console.error("No courseList In Parsed Data");
+        return;
+      }
+      localStorage.setItem("yearTree", JSON.stringify(yearTree));
+      console.log("yearTree Saved To localStorage");
+
+    } catch (error) {
+      console.error("Error In initLocalStorage: ", error);
+    }
+  };
 
   return (
     <div>
@@ -116,20 +104,14 @@ function Graduation() {
       <div className={styles.GraduationPage}>
         <div className={styles.row}>
           <div className={styles.column} style={{ marginRight: "60px" }}>
-            <Recommendations />
+            <Recommendations/>
             <div onClick={locSyncData} className={styles.btn} style={{marginRight: "8px"}}>
               Sync Data
             </div>
-            <div onClick={locGetData} className={styles.btn} style={{marginRight: "8px"}}>
-              Get Data
+            <div onClick={initLocalStorage} className={styles.btn} style={{marginRight: "8px"}}>
+              Init Courses
             </div>
-            <div onClick={locGetNetID} className={styles.btn} style={{marginRight: "8px"}}>
-              Get NetID
-            </div>
-            <GraduationDistribution
-              currYear={currYear}
-              alterCurrYear={alterCurrYear}
-            />
+            <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
           </div>
           <GraduationOverview degree={CPSC.degrees[0]} />
         </div>

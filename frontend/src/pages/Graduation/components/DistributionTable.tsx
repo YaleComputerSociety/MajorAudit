@@ -23,7 +23,7 @@ const EXABC: ClassLists = {
 
 // parse MockStudent to ClassLists
 MockStudent.metadata.forEach((courseSet) => {
-  let allCourses = [...courseSet.fall.courses, ...courseSet.spring.courses]
+  let allCourses = [...courseSet.fall, ...courseSet.spring]
   for (let c of allCourses) {
     if (c.course.distribution.includes("WR") && EXABC.clWR.length < 2) {
       EXABC.clWR.push(c);

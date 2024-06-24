@@ -1,6 +1,5 @@
 
 import { Program } from "./../types/TypeProgram";
-import { getCourse } from "./../mock/MockCourses";
 
 export const CPSC: Program = {
   name: "Computer Science",
@@ -29,13 +28,7 @@ export const CPSC: Program = {
           name: "CORE",
           coursesCompleted: 1,
           coursesTotal: 5,
-          subsections: [
-            { courses: [getCourse("CPSC 201")] },
-            { courses: [getCourse("CPSC 202"), getCourse("MATH 244")] },
-            { courses: [getCourse("CPSC 223")] },
-            { courses: [getCourse("CPSC 323")] },
-            { courses: [getCourse("CPSC 365"), getCourse("CPSC 366"), getCourse("CPSC 368")] },
-          ],
+          subsections: [],
         },
         {
           name: "ELECTIVES",
@@ -51,13 +44,7 @@ export const CPSC: Program = {
             { 
               name: "POPULAR",
               description: "Courses that are popular for this requirement.",
-              courses: [
-                getCourse("CPSC 437"), // Database Systems
-                getCourse("CPSC 478"), // Computer Graphics
-                getCourse("CPSC 439"), // Software Engineering
-                getCourse("CPSC 370"), // Artificial Intelligence
-                getCourse("CPSC 481"), // Introduction to Machine Learning
-                ]
+              courses: []
             }
           ],
         },
@@ -65,7 +52,7 @@ export const CPSC: Program = {
           name: "SENIOR REQUIREMENT",
           coursesCompleted: 0,
           coursesTotal: 1,
-          subsections: [{ courses: [getCourse("CPSC 490")] }],
+          subsections: [],
         },
       ],
     },
@@ -92,13 +79,7 @@ export const CPSC: Program = {
           name: "CORE",
           coursesCompleted: 1,
           coursesTotal: 5,
-          subsections: [
-            { courses: [getCourse("CPSC 201")] },
-            { courses: [getCourse("CPSC 202"), getCourse("MATH 244")] },
-            { courses: [getCourse("CPSC 223")] },
-            { courses: [getCourse("CPSC 323")] },
-            { courses: [getCourse("CPSC 365"), getCourse("CPSC 366"), getCourse("CPSC 368")] },
-          ],
+          subsections: [],
         },
         {
           name: "ELECTIVES",
@@ -112,13 +93,7 @@ export const CPSC: Program = {
             },
             { 
               name: "POPULAR",
-              courses: [
-                getCourse("CPSC 437"), // Database Systems
-                getCourse("CPSC 478"), // Computer Graphics
-                getCourse("CPSC 439"), // Software Engineering
-                getCourse("CPSC 370"), // Artificial Intelligence
-                getCourse("CPSC 481"), // Introduction to Machine Learning
-                ]
+              courses: []
             }
           ],
         },
@@ -126,7 +101,7 @@ export const CPSC: Program = {
           name: "SENIOR REQUIREMENT",
           coursesCompleted: 0,
           coursesTotal: 1,
-          subsections: [{ courses: [getCourse("CPSC 490")] }],
+          subsections: [],
         },
       ],
     },
@@ -162,7 +137,7 @@ export const CGSC: Program = {
           coursesCompleted: 0,
           subsections: [
             {
-              courses: [getCourse("CGSC 110")]
+              courses: []
             }
           ]
         },
@@ -174,27 +149,27 @@ export const CGSC: Program = {
           subsections: [
             {
               name: "COMPUTER SCIENCE",
-              courses: [getCourse("CPSC 201")]
+              courses: []
             },
             {
               name: "ECONOMICS AND DECISION MAKING",
-              courses: [getCourse("ECON 159")]  
+              courses: []  
             },
             {
               name: "LINGUISTICS",
-              courses: [getCourse("LING 110"), getCourse("LING 116"), getCourse("LING 130"), getCourse("LING 217"), getCourse("LING 232"), getCourse("LING 253")]
+              courses: []
             },
             {
               name: "NEUROSCIENCE",
-              courses: [getCourse("CGSC 201"), getCourse("MCDB 320"), getCourse("NSCI 340"), getCourse("PSYC 160"), getCourse("PSYC 270")]
+              courses: []
             },
             {
               name: "PHILOSOPHY",
-              courses: [getCourse("PHIL 126"), getCourse("PHIL 182"), getCourse("PHIL 269"), getCourse("PHIL 270"), getCourse("PHIL 271")]  
+              courses: []  
             },
             {
               name: "PSYCHOLOGY",
-              courses: [getCourse("PSYC 110"), getCourse("PSYC S139E"), getCourse("PSYC 140")]
+              courses: []
             }
           ]
         },
@@ -217,7 +192,7 @@ export const CGSC: Program = {
           coursesCompleted: 0,
           subsections: [
             {
-              courses: [getCourse("CGSC 395")]
+              courses: []
             }
           ]
         },
@@ -225,7 +200,7 @@ export const CGSC: Program = {
           name: "SENIOR REQUIREMENT",
           coursesTotal: 1,
           coursesCompleted: 0,
-          subsections: [{ courses: [getCourse("CGSC 491")]}]  
+          subsections: []  
         }
       ],
     },
@@ -254,7 +229,7 @@ export const CGSC: Program = {
           coursesCompleted: 0,
           subsections: [
             {
-              courses: [getCourse("CGSC 110")]
+              courses: []
             }
           ]
         },
@@ -263,32 +238,7 @@ export const CGSC: Program = {
           description: "Each major is required to take a course from four of the following six areas:",
           coursesTotal: 4,
           coursesCompleted: 0,
-          subsections: [
-            {
-              name: "COMPUTER SCIENCE",
-              courses: [getCourse("CPSC 201")]
-            },
-            {
-              name: "ECONOMICS AND DECISION MAKING",
-              courses: [getCourse("ECON 159")]  
-            },
-            {
-              name: "LINGUISTICS",
-              courses: [getCourse("LING 110"), getCourse("LING 116"), getCourse("LING 130"), getCourse("LING 217"), getCourse("LING 232"), getCourse("LING 253")]
-            },
-            {
-              name: "NEUROSCIENCE",
-              courses: [getCourse("CGSC 201"), getCourse("MCDB 320"), getCourse("NSCI 340"), getCourse("PSYC 160"), getCourse("PSYC 270")]
-            },
-            {
-              name: "PHILOSOPHY",
-              courses: [getCourse("PHIL 126"), getCourse("PHIL 182"), getCourse("PHIL 269"), getCourse("PHIL 270"), getCourse("PHIL 271")]  
-            },
-            {
-              name: "PSYCHOLOGY",
-              courses: [getCourse("PSYC 110"), getCourse("PSYC S139E"), getCourse("PSYC 140")]
-            }
-          ]
+          subsections: []
         },
         {
           name: "DEPTH REQUIREMENT",
@@ -309,7 +259,7 @@ export const CGSC: Program = {
           coursesCompleted: 0,
           subsections: [
             {
-              courses: [getCourse("PSYC 200")]
+              courses: []
             }
           ]
         },
@@ -320,7 +270,7 @@ export const CGSC: Program = {
           coursesCompleted: 0,
           subsections: [
             {
-              courses: [getCourse("CGSC 395")]
+              courses: []
             }
           ]
         },
@@ -329,7 +279,7 @@ export const CGSC: Program = {
           description: "The B.S. degree program requires empirical research and a senior essay.",
           coursesTotal: 1,
           coursesCompleted: 0,
-          subsections: [{ courses: [getCourse("CGSC 491")]}]  
+          subsections: []  
         }
       ],
     },

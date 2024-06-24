@@ -11,17 +11,16 @@ interface CourseEvaluation {
 export interface Course {
   code: string;
   title: string;
-  seasons: Array<Season>;
-  evaluation: CourseEvaluation;
-  distribution: Array<Distribution>;
+  distribution: Array<string>;
+  seasons: Array<string>;
   description?: string;
 }
 
 export interface StudentCourse {
   course: Course;
   
-  enrollmentStatus: "PROSPECTIVE" | "ENROLLED" | "WITHDRAWN" | "COMPLETED";
-  season: Season;
+  status: string;
+  season: string;
   year: number;
 }
 

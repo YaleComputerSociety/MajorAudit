@@ -1,5 +1,5 @@
 
-console.log("exec: degreeAuditContent.js")
+console.log("inject: degreeAuditContent.js")
 
 /* Extract tables from HTML. */
 function processTable(table) 
@@ -30,9 +30,28 @@ function isContentLoaded()
 function onContentLoaded() 
 {
 	let data = document.body.innerHTML;
+	
+	const nameMatch = data.match(/id="studentName"[^>]*value="([^"]+)"/);
+	const name = nameMatch ? nameMatch[1] : 'Name Not Found';
+
+	const degreeMatch = data.match(/id="degree"[^>]*value="([^"]+)"/);
+	const degree = degreeMatch ? degreeMatch[1] : 'Degree Not Found';
+
+	const majorMatch = data.match(/Major<\/span>\s*([^<]+)<\/span>/);
+	const major = majorMatch ? majorMatch[1] : 'Major Not Found';
+
 	const tables = document.querySelectorAll('table');
-	const allTableData = Array.from(tables).map(table => processTable(table))
-	chrome.runtime.sendMessage({ action: "dataExtracted", data: allTableData }); 
+	const allTableData = Array.from(tables).map(table => processTable(table));
+	
+	chrome.runtime.sendMessage({
+		action: "dataExtracted",
+		data: {
+			name: name,
+			degree: degree,
+			major: major,
+			tables: allTableData
+		}
+	});
 }
 
 function observerCallback(mutationsList, observer) 

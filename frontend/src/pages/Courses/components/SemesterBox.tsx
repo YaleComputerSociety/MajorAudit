@@ -1,19 +1,19 @@
 
 import styles from "./../Courses.module.css"
 import CourseBox from "./CourseBox";
-import { Semester } from "./../../../commons/types/TypeStudent";
+import { StudentCourse } from "../../../commons/types/TypeCourse";
 import { DisplaySetting } from "./../Courses";
 
-function MetadataAll(props: { semester: Semester, displaySetting: DisplaySetting }){
+function MetadataAll(props: { courses: Array<StudentCourse>, displaySetting: DisplaySetting }){
     let totalRating = 0;
     let totalWorkload = 0;
 
     const areaSet = new Set<string>();
     const skillSet = new Set<string>();
 
-    props.semester.courses.forEach(course => {
-        totalRating += course.course.evaluation.rating;
-        totalWorkload += course.course.evaluation.workload;
+    props.courses.forEach(course => {
+        // totalRating += course.course.evaluation.rating;
+        // totalWorkload += course.course.evaluation.workload;
 
         course.course.distribution.forEach(value => {
             if(value === "Hu" || value === "So" || value === "Sc"){
@@ -24,7 +24,7 @@ function MetadataAll(props: { semester: Semester, displaySetting: DisplaySetting
         });
     });
 
-    const averageRating = totalRating / props.semester.courses.length;
+    const averageRating = totalRating / props.courses.length;
     const averageWorkload = totalWorkload; // maybe not divide
 
     const areaArray = Array.from(areaSet);
@@ -47,21 +47,21 @@ function MetadataAll(props: { semester: Semester, displaySetting: DisplaySetting
                     Credits
                 </div>
                 <div className={styles.countBox}>
-                    {props.semester.courses.length}
+                    {props.courses.length}
                 </div>
             </div>
-            {props.displaySetting.rating && (
+            {/* {props.displaySetting.rating && (
                 <div className={styles.MetadataColumn} style={{ marginRight: "18px" }}>
                     <div className={styles.MetadataHeading}>Rating</div>
                     <div className={styles.evaluateBox}>{averageRating.toFixed(1)}</div>
                 </div>
-            )}
-            {props.displaySetting.workload && (
+            )} */}
+            {/* {props.displaySetting.workload && (
                 <div className={styles.MetadataColumn} style={{ marginRight: "18px" }}>
                     <div className={styles.MetadataHeading}>Workload</div>
                     <div className={styles.evaluateBox}>{averageWorkload.toFixed(1)}</div>
                 </div>
-            )}
+            )} */}
             {areaArray.length > 0 && (
                 <div className={styles.MetadataColumn} style={{ marginRight: "18px" }}>
                     <div className={styles.MetadataHeading}>
@@ -94,16 +94,21 @@ function MetadataAll(props: { semester: Semester, displaySetting: DisplaySetting
     );
 }
 
-function SemesterBox(props: { semester: Semester, displaySetting: DisplaySetting }) {
+function SemesterBox(props: { courses: Array<StudentCourse>, displaySetting: DisplaySetting }) {
+    // Ensure courses is a valid array
+    const courses = props.courses || [];
+    const classComponents = courses.map((course, index) => (
+        <CourseBox key={index} course={course} displaySetting={props.displaySetting} />
+    ));
 
-    const classComponents = [];
-    for (let i=0; i <props.semester["courses"].length; i++) {
-        classComponents.push(<CourseBox course={props.semester["courses"][i]} displaySetting={props.displaySetting} />); 
+    // Render empty div if no courses
+    if (classComponents.length === 0) {
+        return <div />;
     }
 
     return (
         <div className={styles.column}>
-            <MetadataAll {...props}/>
+            <MetadataAll {...props} />
             {classComponents}
         </div>
     );

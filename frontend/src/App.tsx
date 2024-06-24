@@ -25,31 +25,9 @@ function App() {
     setAuth(isLoggedIn);
   };
 
-  const initLocalStorage = async () => {
-    let courseList = await getData();
-    localStorage.setItem("courseList", JSON.stringify(courseList));
-
-    let programList = await getMajors();
-    if(programList){
-      localStorage.setItem("programList", JSON.stringify(programList));
-    }else{
-      localStorage.setItem("programList", JSON.stringify([CGSC, CPSC, ECON, HIST]));
-    }
-  }
-
   useEffect(() => {
     checkAuthStatus();
-    if(auth){
-      initLocalStorage();
-    }
   }, []);
-
-  useEffect(() => {
-    checkAuthStatus();
-    if(auth){
-      initLocalStorage();
-    }
-  }, [auth]);
 
   return (
   <div>

@@ -2,16 +2,18 @@
 from typing import List, Optional
 
 class Course:
-    def __init__(self, code: str, title: str, credit: int, distribution: List[str], description: Optional[str] = None):
+    def __init__(self, code: str, title: str, credit: int, seasons, distribution: List[str], description: Optional[str] = None):
         self.code = code
         self.title = title
         self.credit = credit
+        self.seasons = seasons
         self.distribution = distribution
 
     def to_dict(self):
         return {
             "code": self.code,
             "title": self.title,
+            "seasons": self.seasons,
             "credit": self.credit,
             "distribution": self.distribution
         }
@@ -45,6 +47,7 @@ def convert(da_course):
         code = da_course["id"],
         title = da_course["name"],
         credit = credit,
+        seasons = [],
         distribution = distribution
     )
 

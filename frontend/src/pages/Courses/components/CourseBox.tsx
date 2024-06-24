@@ -20,10 +20,10 @@ function CourseBox(props: {course: StudentCourse, displaySetting: DisplaySetting
     }
 
     return (
-        <div className={styles.courseBox} onClick={openModal} style={{ backgroundColor: props.course.enrollmentStatus === "COMPLETED" ? "#E1E9F8" : "#F5F5F5" }}>
+        <div className={styles.courseBox} onClick={openModal} style={{ backgroundColor: props.course.status === "COMPLETE" ? "#E1E9F8" : "#F5F5F5" }}>
             <div className={styles.row} style={{ alignItems: "center" }}>
-                <div className={props.course.enrollmentStatus === "COMPLETED" ? styles.checkmark : styles.hidden}>
-                    {props.course.enrollmentStatus === "COMPLETED" ? 
+                <div className={props.course.status === "COMPLETE" ? styles.checkmark : styles.hidden}>
+                    {props.course.status === "COMPLETE" ? 
                     <div>
                         <div data-tooltip-id="check-tooltip" data-tooltip-content="Credit Confirmed by Yale"
                         data-tooltip-place="top">✓</div>
@@ -38,7 +38,7 @@ function CourseBox(props: {course: StudentCourse, displaySetting: DisplaySetting
             </div>
             <div>
                 <div className={styles.row} style={{ alignItems: "center"}}>     
-                    {props.displaySetting.rating && (
+                    {/* {props.displaySetting.rating && (
                         <div className={styles.evaluateBox} style={{ marginRight: "6px" }}>
                             {props.course.course.evaluation.rating}
                         </div>
@@ -47,7 +47,7 @@ function CourseBox(props: {course: StudentCourse, displaySetting: DisplaySetting
                         <div className={styles.evaluateBox} style={{ marginRight: "6px" }}>
                             {props.course.course.evaluation.workload}
                         </div>
-                    )}
+                    )} */}
                     <div>
                         <DistributionsCircle distributions={props.course.course.distribution}/>
                     </div>

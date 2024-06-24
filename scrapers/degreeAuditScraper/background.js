@@ -116,7 +116,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
 {
 	if (request.action === "dataExtracted") {
 
-		tables = request.data
+		const { name, degree, major, tables } = request.data;
 
 		var coursestable = []
 		var first_year_tables = [
@@ -136,12 +136,17 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
 			}
 			coursestable.push(requirement);
 		}
-		const coursesJson = JSON.stringify({coursestable}, null, 2);
-		sendMessageToTab(majorauditId, {action: "receiveData", detail: coursesJson});
 
-		console.log("ATTEMPT CLOSE")
+		const dataJSON = JSON.stringify({
+			name: name,
+			degree: degree,
+			major: major,
+			coursestable: coursestable
+		}, null, 2);
+
+		sendMessageToTab(majorauditId, {action: "receiveData", detail: dataJSON});
+
 		chrome.tabs.remove(sender.tab.id);
-
 	}
 });
 
