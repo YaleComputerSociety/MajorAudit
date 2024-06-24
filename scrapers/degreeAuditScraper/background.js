@@ -114,28 +114,18 @@ function TabletoJson(table)
 /* Format raw data sent from Degree Audit Scraper into a JSON file. */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) 
 {
-	if (request.action === "dataExtracted") {
+	if(request.action === "dataExtracted"){
 
-		const { name, degree, major, tables } = request.data;
+		const { name, degree, major, headers, tables } = request.data;
 
 		var coursestable = []
-		var first_year_tables = [
-			"",
-			"Distributional Requirements for the First Year", 
-			"Distributional Requirements for Sophomore Year", 
-			"Distributional Requirements for Junior Year",
-			"Distributional Requirements for Bachelor's Degree", 
-			"Undeclared Major", 
-			"In Progress"]
-		
-		for(var i = 0; i < tables.length; i++) 
-		{
-			const requirement = {
-				req: first_year_tables[i],
-				courses: TabletoJson(tables[i])
-			}
-			coursestable.push(requirement);
-		}
+		for(var i = 0; i < tables.length; i++) {
+            const requirement = {
+                req: headers[i],
+                courses: TabletoJson(tables[i])
+            }
+            coursestable.push(requirement);
+        }
 
 		const dataJSON = JSON.stringify({
 			name: name,
@@ -145,7 +135,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
 		}, null, 2);
 
 		sendMessageToTab(majorauditId, {action: "receiveData", detail: dataJSON});
-
 		chrome.tabs.remove(sender.tab.id);
 	}
 });

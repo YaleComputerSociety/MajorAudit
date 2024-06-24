@@ -40,8 +40,14 @@ function onContentLoaded()
 	const majorMatch = data.match(/Major<\/span>\s*([^<]+)<\/span>/);
 	const major = majorMatch ? majorMatch[1] : 'Major Not Found';
 
+	const headers = document.querySelectorAll('h2');
+	const headerTexts = Array.from(headers).map(header => {
+        const firstSpan = header.querySelector('span');
+        return firstSpan ? firstSpan.textContent : header.textContent;
+    });
+
 	const tables = document.querySelectorAll('table');
-	const allTableData = Array.from(tables).map(table => processTable(table));
+	const tableTexts = Array.from(tables).map(table => processTable(table));
 	
 	chrome.runtime.sendMessage({
 		action: "dataExtracted",
@@ -49,7 +55,8 @@ function onContentLoaded()
 			name: name,
 			degree: degree,
 			major: major,
-			tables: allTableData
+			headers: headerTexts,
+			tables: tableTexts
 		}
 	});
 }
