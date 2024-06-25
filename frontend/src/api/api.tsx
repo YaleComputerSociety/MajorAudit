@@ -35,8 +35,8 @@ export const checkLogin = () => {
     });
 };
 
+// syncData()
 export const syncData = () => {
-    console.log("api: syncData")
     var event = new CustomEvent("scrapeData", {
       detail: { action: "openWebsite" }
     });

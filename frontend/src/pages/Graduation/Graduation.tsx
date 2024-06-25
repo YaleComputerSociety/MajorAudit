@@ -1,27 +1,25 @@
 
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./Graduation.module.css";
 
-import { getData } from "../../api/api";
+import { syncData, getData } from "../../api/api";
 
 import GraduationDistribution from "./components/DistributionTable";
 import GraduationOverview from "./components/Overview";
 
-import { CPSC } from "./../../commons/mock/MockProgram";
-import MeDropdown from "../../navbar/account/MeDropdown";
+import { CPSC, ECON, CGSC } from "./../../commons/mock/MockProgram";
+// import MeDropdown from "../../navbar/account/MeDropdown";
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
 import PageLinks from "./../../navbar/PageLinks";
+
+import { ryan } from "../../commons/mock/MockStudent"
 
 function NavBar() {
   return (
     <div className={nav_styles.NavBar}>
       <div style={{ marginLeft: "20px" }}>
-        <img
-          src={img_logo}
-          alt=""
-          style={{ width: "150px", height: "auto", marginRight: "10px" }}
-        />
+        <img src={img_logo} alt="" style={{ width: "150px", height: "auto", marginRight: "10px" }}/>
       </div>
       <PageLinks/>
       {/* <MeDropdown/> */}
@@ -37,7 +35,8 @@ function Recommendations() {
   );
 }
 
-function Graduation() {
+function Graduation(){
+
   const UserYear = () => {
     return 2;
   };
@@ -47,19 +46,16 @@ function Graduation() {
   };
 
   const locSyncData = () => {
-    console.log("exec: locSyncData")
-    var event = new CustomEvent("scrapeData", {
-      detail: { action: "openWebsite" }
-    });
-    document.dispatchEvent(event);
+    syncData();
   };
 
   const initLocalStorage = async () => {
     try {
-      const allData = await getData();
+      // const allData = await getData();
+      const allData = ryan;
   
       if (!allData) {
-        console.error("No data returned from getData");
+        console.error("No Data Returned By getData()");
         return;
       }
   
@@ -74,46 +70,61 @@ function Graduation() {
         return;
       }
 
-      // studentName
-      const studentName = parsedData?.name;
-      if (!studentName) {
-        console.error("No studentName In Parsed Data");
+      // name
+      const name = parsedData?.name;
+      if (!name) {
+        console.error("No name In Parsed Data");
         return;
       }
-      localStorage.setItem("studentName", JSON.stringify(studentName));
-      console.log("studentName Saved To localStorage");
+      localStorage.setItem("name", JSON.stringify(name));
+      console.log("name Stored");
+
+      // studentCourses
+      const studentCourses = parsedData?.studentCourses;
+      if (!studentCourses) {
+        console.error("No studentCourses In Parsed Data");
+        return;
+      }
+      localStorage.setItem("studentCourses", JSON.stringify(studentCourses));
+      console.log("studentCourses Stored");
   
       // yearTree
       const yearTree = parsedData?.yearTree;
       if (!yearTree) {
-        console.error("No courseList In Parsed Data");
+        console.error("No yearTree In Parsed Data");
         return;
       }
       localStorage.setItem("yearTree", JSON.stringify(yearTree));
-      console.log("yearTree Saved To localStorage");
+      console.log("yearTree Stored");
 
-    } catch (error) {
-      console.error("Error In initLocalStorage: ", error);
+      localStorage.setItem("programs", JSON.stringify([CPSC, ECON, CGSC]));
+      console.log("programs Stored");
+
+    }catch(error){
+      console.error("initLocalStorage Error: ", error);
     }
+  };
+
+  const initPrograms = () => {
+    
   };
 
   return (
     <div>
-      <NavBar />
-
+      <NavBar/>
       <div className={styles.GraduationPage}>
         <div className={styles.row}>
           <div className={styles.column} style={{ marginRight: "60px" }}>
             <Recommendations/>
-            <div onClick={locSyncData} className={styles.btn} style={{marginRight: "8px"}}>
+            <div onClick={locSyncData} className={styles.btn}>
               Sync Data
             </div>
-            <div onClick={initLocalStorage} className={styles.btn} style={{marginRight: "8px"}}>
-              Init Courses
+            <div onClick={initLocalStorage} className={styles.btn}>
+              Init Local
             </div>
             <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
           </div>
-          <GraduationOverview degree={CPSC.degrees[0]} />
+          <GraduationOverview degree={CPSC.degrees[0]}/>
         </div>
       </div>
     </div>

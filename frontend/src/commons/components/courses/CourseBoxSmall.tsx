@@ -90,10 +90,8 @@ function CheckMark(props: { studentCourse: StudentCourse }) {
   );
 }
 
-function CourseBoxSmall(props: {
-  studentCourse?: StudentCourse;
-  course?: Course;
-}) {
+function CourseBoxSmall(props: {studentCourse?: StudentCourse; course?: Course;}){
+  
   const { setModalOpen } = useModal();
 
   function openModal() {

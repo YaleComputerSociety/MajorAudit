@@ -18,7 +18,5 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
             credentials: "include",
             body: request.detail
         });
-        
-        // console.log(request.detail);
     }
 });

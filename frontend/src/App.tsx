@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { checkLogin, getData, getMajors } from "./api/api";
+import { checkLogin } from "./api/api";
 
 import Globals from './Globals';
 
@@ -14,20 +14,18 @@ import Majors from './pages/Majors';
 // import About from './pages/OtherPages/About/About';
 // import FAQ from './pages/OtherPages/FAQ/FAQ';
 
-import { CGSC, CPSC, ECON, HIST } from "./commons/mock/MockProgram";
-
 function App() {
 
-  const [auth, setAuth] = useState(false); 
+  const [auth, setAuth] = useState(true); 
 
-  const checkAuthStatus = async () => {
-    const isLoggedIn = await checkLogin();
-    setAuth(isLoggedIn);
-  };
+  // const checkAuthStatus = async () => {
+  //   const isLoggedIn = await checkLogin();
+  //   setAuth(isLoggedIn);
+  // };
 
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
+  // useEffect(() => {
+  //   checkAuthStatus();
+  // }, []);
 
   return (
   <div>

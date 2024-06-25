@@ -40,11 +40,12 @@ db = firestore.client()
 allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:5000', 'majoraudit.web.app']
 
 class User:
-    def __init__(self, netID, name, degree, major, yearTree, tables):
+    def __init__(self, netID, name, degree, major, studentCourses, yearTree, tables):
         self.netID = netID
         self.name = name
         self.degree = degree
         self.major = major
+        self.studentCourses = studentCourses
         self.yearTree = yearTree
         self.daTables = tables
 
@@ -87,7 +88,7 @@ def login():
                 cookies['wtf']=session['NETID']
 
             userID = validation[1]
-            user = User(userID, "", "", "", "", "")
+            user = User(userID, "", "", "", "", "", "")
             if db.collection("Users").document(userID).get().exists:
                 pass
             else:
@@ -210,7 +211,7 @@ def sync_data():
     yearTree = make_years(uq_student_courses)
 
     # Store
-    user = User(loc_netid, data["name"], data["degree"], data["major"], yearTree, data["coursestable"])
+    user = User(loc_netid, data["name"].split(" ")[1], data["degree"], data["major"], uq_student_courses, yearTree, data["coursestable"])
     db.collection("Users").document(loc_netid).set(user.__dict__)
 
     # Transfer
