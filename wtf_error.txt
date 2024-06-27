@@ -1,1 +1,0 @@
-[Errno 2] No such file or directory: 'secrets/majoraudit-firebase-adminsdk-bc6kc-7f4d0e1e3b.json'

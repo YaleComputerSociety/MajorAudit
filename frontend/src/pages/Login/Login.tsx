@@ -1,7 +1,6 @@
 
-import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import $ from "jquery";
+import React from "react";
+import { checkLogin } from "../../api/api";
 
 import navStyles from "./../../navbar/NavBar.module.css";
 import logo from "./../../commons/images/ma_logo.png";
@@ -10,40 +9,24 @@ import loginPageImage from "../../commons/images/reallycoolguy.jpg";
 import styles from "./Login.module.css";
 
 function NavBar() {
-  return (
+  return(
     <div className={navStyles.NavBar}>
       <div style={{ marginLeft: "20px" }}>
-        <img
-          src={logo}
-          alt=""
-          style={{ width: "150px", height: "auto", marginRight: "10px" }}
-        />
+        <img src={logo} alt="" style={{ width: "150px", height: "auto" }}/>
       </div>
-      {/* <PageLinks />
-      <MeDropdown /> */}
     </div>
   );
 }
 
-
-function Login(){
-  const navigate = useNavigate();
-
-  const handleLogin = () => {
-    $.ajax({
-      url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/check_login",
-      xhrFields: { withCredentials: true }
-    }).done((data: string | null) => {
-      if (data) {
-        console.log("woo netid!");
-        console.log(data);
-        navigate("/graduation");
-      } else {
-        console.log("boo netid!");
-        console.log(data);
-        window.location.href = "http://127.0.0.1:5001/majoraudit/us-central1/functions/user_login";
-      }
-    });
+function Login(props: { setAuth: Function }){
+  
+  const handleLogin = async () => {
+    const authStatus = await checkLogin();
+    if(authStatus){
+      props.setAuth(authStatus)
+    }else{
+      window.location.href = "http://127.0.0.1:5001/majoraudit/us-central1/functions/user_login";
+    }
   };
 
   return(
@@ -51,32 +34,20 @@ function Login(){
       <NavBar />
       <div className={styles.centerDiv}>
         <div style={{width: "450px"}}>
-          <h1>The best place to explore and plan your major at Yale</h1>
+          <h1>Plan Your Major @ Yale</h1>
           <ul className={styles.featureListStyle}>
-            <li className={styles.featureItemStyle}>Explore all 80+ majors at Yale</li>
-            <li className={styles.featureItemStyle}>Check all your distributional requirements are satisfied</li>
-            <li className={styles.featureItemStyle}>Plan out all your courses in the traditional four-year plan</li>
-            <li className={styles.featureItemStyle}>Look at this really cool guy to the right</li>
+            <li className={styles.featureItemStyle}>Explore 80+ Majors</li>
+            <li className={styles.featureItemStyle}>Check Distributional Requirements</li>
+            <li className={styles.featureItemStyle}>Plan Four-Year Plan</li>
+            <li className={styles.featureItemStyle}>Cool Guy</li>
           </ul>
           <div className={styles.loginButtons}>
-            {/* <a
-              href={`${API_ENDPOINT}/api/auth/cas?redirect=${window.location.origin}/catalog`}
-              className={clsx(styles.btn, styles.login, 'me-2')}
-            >
-              Login with CAS
-            </a> */}
-            <div onClick={handleLogin} className={styles.btn} style={{marginRight: "8px"}}>
-              Login with CAS
+            <div onClick={handleLogin} className={styles.btn}>
+              Login w/ CAS
             </div>
-            <Link to="/about" className={styles.btn} style={{marginRight: "8px"}}>
-              About Us
-            </Link>
-            <Link to="/majors" className={styles.btn}>
-              Guest
-            </Link>
           </div>
         </div>
-        <img alt="Landing page" src={loginPageImage} width="450"/>
+        <img alt="Landing Page" src={loginPageImage} width="450"/>
       </div>
     </div>
   );

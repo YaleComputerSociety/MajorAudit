@@ -2,9 +2,7 @@
 import React from "react";
 import styles from "./AddCourse.module.css";
 
-import CourseBoxSmall from "./../../../../commons/components/courses/CourseBoxSmall";
-
-import { MockCourses } from "../../../../commons/mock/MockCourses";
+// import CourseBoxSmall from "./../../../../commons/components/courses/CourseBoxSmall";
 
 function AddCourseMenu(){
     return(

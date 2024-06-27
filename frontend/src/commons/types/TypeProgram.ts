@@ -31,7 +31,7 @@ interface DegreeMetadata {
 interface DegreeRequirementsSubsection {
     name?: string;
     description?: string;
-    courses: Array<Course | StudentCourse>;
+    courses: Array<Course>;
 }
   
 interface DegreeRequirements {

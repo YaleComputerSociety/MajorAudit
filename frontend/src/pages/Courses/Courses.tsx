@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import styles from "./Courses.module.css";
 
 import YearBox from "./components/YearBox";
-import AddCourseMenu from "./components/add_course/AddCourse";
+// import AddCourseMenu from "./components/add_course/AddCourse";
 
-import { MockStudent } from "./../../commons/mock/MockStudent";
-import MeDropdown from "../../navbar/account/MeDropdown";
+// import MeDropdown from "../../navbar/account/MeDropdown";
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
-import { NavLink } from "react-router-dom";
+import PageLinks from "./../../navbar/PageLinks";
 
 function NavBar() {
   return (
@@ -20,33 +19,8 @@ function NavBar() {
           style={{ width: "150px", height: "auto", marginRight: "10px" }}
         />
       </div>
-      <div className={nav_styles.row} style={{ marginRight: "20px" }}>
-        <NavLink
-          to="/graduation"
-          className={({ isActive }) =>
-            isActive ? nav_styles.activeLink : nav_styles.dormantLink
-          }
-        >
-          Graduation
-        </NavLink>
-        <NavLink
-          to="/courses"
-          className={({ isActive }) =>
-            isActive ? nav_styles.activeLink : nav_styles.dormantLink
-          }
-        >
-          Courses
-        </NavLink>
-        <NavLink
-          to="/majors"
-          className={({ isActive }) =>
-            isActive ? nav_styles.activeLink : nav_styles.dormantLink
-          }
-        >
-          Majors
-        </NavLink>
-        <MeDropdown />
-      </div>
+      <PageLinks/>
+      {/* <MeDropdown/> */}
     </div>
   );
 }
@@ -118,47 +92,41 @@ function Settings(props: {
 }
 
 function Courses() {
+
   const [displaySetting, setDisplaySetting] = useState(defaultDisplaySetting);
   const updateDisplaySetting = (newSetting: DisplaySetting) => {
     setDisplaySetting(newSetting);
   };
   useEffect(() => {}, [displaySetting]);
 
-  const [addCourse, setAddCourse] = useState(false);
-  const toggleAddCourse = () => {
-    setAddCourse(!addCourse);
+  // yearTree
+  const [yearTree, setYearTree] = useState([]);
+  const syncCourses = () => {
+    const localStorageYearTree = localStorage.getItem("yearTree");
+    console.log(localStorageYearTree)
+    if(localStorageYearTree){
+      setYearTree(JSON.parse(localStorageYearTree));
+    } else {
+      setYearTree([]);
+    }
   };
-  useEffect(() => {}, [addCourse]);
 
-  const yearboxComponents = [];
-  for (let i = 0; i < MockStudent["metadata"].length; i++) {
-    yearboxComponents.push(
-      <YearBox
-        year={MockStudent["metadata"][i]}
-        displaySetting={displaySetting}
-      />
-    );
-  }
+  useEffect(() => {
+    syncCourses();
+  }, []);
+
+
+  const renderedYears = yearTree.map((year, index) => (
+    <YearBox key={index} year={year} displaySetting={displaySetting}/>
+  ));
 
   return (
     <div>
-      <NavBar />
-      <Settings
-        displaySetting={displaySetting}
-        updateDisplaySetting={updateDisplaySetting}
-      />
+      <NavBar/>
+      <Settings displaySetting={displaySetting} updateDisplaySetting={updateDisplaySetting}/>
       <div className={styles.CoursesPage}>
-        <button className={styles.AddCourseButton} onClick={toggleAddCourse}>
-          +
-        </button>
-        <div
-          className={`${styles.AddCourseMenuDormant} ${
-            addCourse ? styles.AddCourseMenuActive : ""
-          }`}
-        >
-          {addCourse && <AddCourseMenu />}
-        </div>
-        <div className={styles.column}>{yearboxComponents}</div>
+        <button className={styles.AddCourseButton} onClick={syncCourses}>+</button>
+        <div className={styles.column}>{renderedYears}</div>
       </div>
     </div>
   );
