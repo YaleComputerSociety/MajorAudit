@@ -27,7 +27,7 @@ def term_courses(term_str, courses):
     return [course for course in courses if course["season"] == season and course["year"] == year]
 
 
-def make_years(courses):
+def yearTreeify(courses):
     """"""
     terms = list(set(f"{course["season"]} {course["year"]}" for course in courses))
 
@@ -57,6 +57,6 @@ def make_years(courses):
 
     years = sorted(years, key=fall_year)
     for idx, year in enumerate(years):
-        year['grade'] = idx + 1
+        year["grade"] = idx + 1
 
     return years

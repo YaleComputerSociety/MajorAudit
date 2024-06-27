@@ -1,6 +1,6 @@
 
 import { Program } from "./../types/TypeProgram";
-import { RACKET } from "./../mock/MockCourses"
+import { CPSC201, CPSC202, CPSC223, CPSC323, CPSC365 } from "./../mock/MockCourses"
 
 export const CPSC: Program = {
   name: "Computer Science",
@@ -29,7 +29,23 @@ export const CPSC: Program = {
           name: "CORE",
           coursesCompleted: 1,
           coursesTotal: 5,
-          subsections: [],
+          subsections: [
+            { 
+              courses: [CPSC201] 
+            },
+            { 
+              courses: [CPSC202] 
+            },
+            { 
+              courses: [CPSC223] 
+            },
+            { 
+              courses: [CPSC323] 
+            },
+            { 
+              courses: [CPSC365] 
+            }
+        ],
         },
         {
           name: "ELECTIVES",
@@ -78,23 +94,20 @@ export const CPSC: Program = {
       requirements: [
         {
           name: "CORE",
-          coursesCompleted: 1,
+          coursesCompleted: 0,
           coursesTotal: 5,
           subsections: [
             { 
-              courses: [RACKET] 
+              courses: [CPSC201] 
             },
             { 
-              courses: [RACKET] 
+              courses: [CPSC223] 
             },
             { 
-              courses: [RACKET] 
+              courses: [CPSC323] 
             },
             { 
-              courses: [RACKET] 
-            },
-            { 
-              courses: [RACKET] 
+              courses: [CPSC365] 
             }
         ],
         },

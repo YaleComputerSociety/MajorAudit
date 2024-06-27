@@ -202,13 +202,8 @@ def sync_data():
         return make_response(jsonify({"Error": "Invalid Data"}), 400)
 
     # Process
-    uq_courses = {}
-    for entry in data["coursestable"]:
-        for course in entry["courses"]:
-            uq_courses[course["id"]] = course
-    uq_courses = list(uq_courses.values())
-    uq_student_courses = [convert(course_data) for course_data in uq_courses]
-    yearTree = make_years(uq_student_courses)
+    courses = extract_dacourses(data)
+    yearTree = yearTreeify(courses)
 
     # Store
     user = User(loc_netid, data["name"].split(" ")[1], data["degree"], data["major"], uq_student_courses, yearTree, data["coursestable"])
