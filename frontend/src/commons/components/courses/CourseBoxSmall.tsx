@@ -1,14 +1,10 @@
-import React, { useContext } from "react";
+
+import React from "react";
 import styles from "./CourseBoxSmall.module.css";
 
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
-import {
-  Season,
-  StudentCourse,
-  Course,
-  Distribution,
-} from "../../types/TypeCourse";
+import { Course, StudentCourse } from "../../types/TypeCourse";
 
 import img_fall from "./../../images/fall.png";
 import img_spring from "./../../images/spring.png";
@@ -17,14 +13,14 @@ import DistributionCircle from "./DistributionsCircle";
 
 import { useModal } from "../../../hooks/modalContext";
 
-function CourseSeasonText(season: string ) {
-  return (
-    "Course Offered In " + season.charAt(0) + season.slice(1).toLowerCase()
-  );
-}
+// function CourseSeasonText(season: string ) {
+//   return (
+//     "Course Offered In " + season.charAt(0) + season.slice(1).toLowerCase()
+//   );
+// }
 
-function CourseSeasonIcon(props: { seasons: Array<Season> }) {
-  const seasonImageMap = {
+function CourseSeasonIcon(props: { seasons: Array<string> }) {
+  const seasonImageMap: { [key: string]: string } = {
     "Fall": img_fall,
     "Spring": img_spring,
   };
@@ -34,23 +30,11 @@ function CourseSeasonIcon(props: { seasons: Array<Season> }) {
       {props.seasons.map((szn, index) => (
         <div key={index} style={{ marginLeft: index > 0 ? "-7.5px" : 0 }}>
           {seasonImageMap[szn] && (
-            <div>
-              <div
-                data-tooltip-id="season-tooltip"
-                data-tooltip-content={CourseSeasonText(szn)}
-                data-tooltip-place="top"
-              >
-                <img
-                  style={{ width: "15px", height: "15px" }}
-                  src={seasonImageMap[szn]}
-                  alt={szn}
-                />
-              </div>
-              <Tooltip
-                id="season-tooltip"
-                style={{ backgroundColor: "#444444", borderRadius: "3px" }}
-              />
-            </div>
+            <img
+              style={{ width: "15px", height: "15px" }}
+              src={seasonImageMap[szn]}
+              alt={szn}
+            />
           )}
         </div>
       ))}
@@ -102,29 +86,24 @@ function CourseBoxSmall(props: {studentCourse?: StudentCourse; course?: Course;}
     }
   }
 
-  if (props.course && props.studentCourse == null) {
+  if(props.course && props.studentCourse == null){
+    let allDist = [...props.course.areas, ...props.course.skills];
     return (
       <div className={styles.CourseBox} onClick={openModal}>
-        {/* <CourseSeasonIcon seasons={props.course.seasons} /> */}
-        {props.course.code}
-        {props.course.distribution.length > 0 ? (
-          <DistCircDiv dist={props.course.distribution} />
-        ) : (
-          ""
-        )}
+        <CourseSeasonIcon seasons={props.course.seasons} />
+        {props.course.codes}
+        {allDist.length > 0 ? (<DistCircDiv dist={allDist}/>) : ("")}
       </div>
     );
-  } else if (props.course == null && props.studentCourse) {
+  }else if(props.course == null && props.studentCourse){
+    let allDist = [...props.studentCourse.course.areas, ...props.studentCourse.course.skills];
     return (
       <div className={`${styles.CourseBox} ${styles.CourseBoxStudent}`} onClick={openModal}>
         <CheckMark studentCourse={props.studentCourse} />
         {/* <CourseSeasonIcon seasons={[props.studentCourse.season]} /> */}
-        {props.studentCourse.course.code}
-        {props.studentCourse.course.distribution.length > 0 ? (
-          <DistCircDiv dist={props.studentCourse.course.distribution} />
-        ) : (
-          ""
-        )}
+        {props.studentCourse.course.codes}
+        {allDist.length > 0 ? (
+          <DistCircDiv dist={allDist}/>) : ("")}
       </div>
     );
   }

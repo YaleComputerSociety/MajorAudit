@@ -5,12 +5,13 @@ import requests
 import json
 
 class Course:
-    def __init__(self, codes: List[str], title: str, credit: int, areas: List[str], skills: List[str]):
+    def __init__(self, codes: List[str], title: str, credit: int, areas: List[str], skills: List[str], seasons: List[str]):
         self.codes = codes
         self.title = title
         self.credit = credit
         self.areas = areas
         self.skills = skills
+        self.seasons = seasons
 
     def to_dict(self):
         return {
@@ -18,7 +19,8 @@ class Course:
             "title": self.title,
             "credit": self.credit,
             "areas": self.areas,
-            "skills": self.skills
+            "skills": self.skills,
+            "seasons": self.seasons
         }
 
 class StudentCourse:
@@ -38,12 +40,12 @@ class StudentCourse:
     
 # Functions
 
-def process_dacourses(data):
+def distill_dacourses(data):
     dacourses = {}
     for table in data["coursestable"]:
         for raw in table["courses"]:
             season, year = raw["term"].split()
-            season_map = { "Fall": "01", "Spring": "02" }
+            season_map = { "Spring": "01", "Fall": "03"  }
             raw["timekey"] = f"{year}{season_map.get(season)}"
             dacourses[raw["id"]] = raw
     dacourses = list(dacourses.values())
@@ -65,7 +67,7 @@ def process_dacourses(data):
     
 
 def coursify(dacourses):
-    """DegreeAuditCourse[] (w/ Same Term) -> StudentCourse[]"""
+    """DegreeAuditCourse[] -> StudentCourse[]"""
 
     cookies = { 'session': 'enter_session_here', 'session.sig': 'enter_session_sig_here' }
     timekey = dacourses[0]["timekey"]
@@ -84,16 +86,14 @@ def coursify(dacourses):
         if not offering:
             print("NA Offering")
             continue
-
-        print("FOUND!")
         
         codes = [l["course_code"] for l in offering["course"]["listings"]]
         title = offering["course"]["title"]
         credit = int(dacourse["credit"].strip("()"))
         areas = offering["course"]["areas"]
         skills = offering["course"]["skills"]
-
-        course = Course(codes, title, credit, areas, skills)
+        seasons = ["Fall", "Spring"]
+        course = Course(codes, title, credit, areas, skills, seasons)
 
         # StudentCourse Portion
         status = dacourse["status"]
@@ -108,21 +108,3 @@ def coursify(dacourses):
 
     return student_courses
 
-
-# mock = {'coursestable': [{'req': '', 'courses': [{'id': 'CPSC 327', 'name': 'Object-Oriented Programming', 'status': 'A', 'credit': '1', 'term': 'Fall 2023', 'designation': 'Qr'}, {'id': 'ART 136', 'name': 'B&W', 'status': 'A', 'credit': '1', 'term': 'Fall 2023', 'designation': 'Qr'}]}, 
-#                          {'req': '', 'courses': [{'id': 'ENGL 376', 'name': 'Theories of the Western Novel', 'status': 'A-', 'credit': '1', 'term': 'Fall 2023', 'designation': 'Hu'}, {'id': 'HIST 277J', 'name': 'Memory', 'status': 'A', 'credit': '1', 'term': 'Fall 2023', 'designation': 'Qr'}]}]}
-
-# def save(data: dict, filename: str):
-#     """"""
-#     with open(filename, 'w') as file:
-#         json.dump(data, file, indent=4)
-
-# if __name__ == "__main__":
-#     cookies = { 'session': 'enter_session_here', 'session.sig': 'enter_session_sig_here' }
-#     timekey = "202302"
-#     url = f"https://api.coursetable.com/api/static/catalogs/public/{timekey}"
-
-#     response = requests.get(url, cookies)
-#     if response:
-#         print(timekey)
-#         save(response.json(), 'public_catalog_data.json')

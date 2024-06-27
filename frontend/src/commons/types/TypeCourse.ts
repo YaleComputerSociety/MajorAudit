@@ -9,11 +9,12 @@ interface CourseEvaluation {
 }
 
 export interface Course {
-  code: string;
+  codes: Array<string>;
   title: string;
-  distribution: Array<string>;
+  credit: number
+  areas: Array<string>;
+  skills: Array<string>
   seasons: Array<string>;
-  description?: string;
 }
 
 export interface StudentCourse {
@@ -34,21 +35,3 @@ export interface ClassLists {
   clWR: Array<StudentCourse>;
   clL: Array<StudentCourse>;
 }
-
-// /*Other*/
-
-// type CRN = number;
-
-// interface DistributionalRequirementDIFF {
-//   title: string;
-// }
-
-// interface CourseDIFF {
-//   crn: CRN;
-//   all_course_codes: string[];
-//   skills: DistributionalRequirementDIFF[]; // Distributional requirements
-//   // professor_names: string[];
-//   // professor_ids: string[];
-//   // season_code: string;
-// }
-

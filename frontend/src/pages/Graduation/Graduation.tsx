@@ -13,7 +13,7 @@ import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
 import PageLinks from "./../../navbar/PageLinks";
 
-import { ryan } from "../../commons/mock/MockStudent"
+// import { ryan } from "../../commons/mock/MockStudent"
 
 function NavBar() {
   return (
@@ -51,9 +51,8 @@ function Graduation(){
 
   const initLocalStorage = async () => {
     try {
-      // const allData = await getData();
-      const allData = ryan;
-  
+      // const allData = ryan;
+      const allData = await getData();
       if (!allData) {
         console.error("No Data Returned By getData()");
         return;
@@ -70,44 +69,16 @@ function Graduation(){
         return;
       }
 
-      // name
-      const name = parsedData?.name;
-      if (!name) {
-        console.error("No name In Parsed Data");
-        return;
-      }
-      localStorage.setItem("name", JSON.stringify(name));
-      console.log("name Stored");
-
-      // studentCourses
-      const studentCourses = parsedData?.studentCourses;
-      if (!studentCourses) {
-        console.error("No studentCourses In Parsed Data");
-        return;
-      }
-      localStorage.setItem("studentCourses", JSON.stringify(studentCourses));
-      console.log("studentCourses Stored");
-  
-      // yearTree
-      const yearTree = parsedData?.yearTree;
-      if (!yearTree) {
-        console.error("No yearTree In Parsed Data");
-        return;
-      }
-      localStorage.setItem("yearTree", JSON.stringify(yearTree));
-      console.log("yearTree Stored");
-
+      localStorage.setItem("name", JSON.stringify(parsedData?.name));
+      localStorage.setItem("studentCourses", JSON.stringify(parsedData?.studentCourses));
+      localStorage.setItem("yearTree", JSON.stringify(parsedData?.yearTree));
       localStorage.setItem("programs", JSON.stringify([CPSC, ECON, CGSC]));
-      console.log("programs Stored");
 
     }catch(error){
       console.error("initLocalStorage Error: ", error);
     }
   };
 
-  const initPrograms = () => {
-    
-  };
 
   return (
     <div>

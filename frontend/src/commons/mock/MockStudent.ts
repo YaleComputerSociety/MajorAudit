@@ -1,7 +1,7 @@
 import { Course, StudentCourse } from "./../types/TypeCourse";
 import { Student } from "./../types/TypeStudent";
 
-const CGSC110: Course = { code: "CGSC 110", title: "Introduction to Cognitive Science", seasons: ["Fall"], distribution: ["So"] };
+const CGSC110: Course = { codes: ["CGSC 110"], title: "Introduction to Cognitive Science", credit: 1, areas: [], skills: [], seasons: ["Fall"] };
 const StudentCGSC110: StudentCourse = { course: CGSC110, status: "COMPLETE", season: "Fall", year: 2022 };
 
 export const MockStudent: Student = {

@@ -25,17 +25,17 @@ const EXABC: ClassLists = {
 MockStudent.metadata.forEach((courseSet) => {
   let allCourses = [...courseSet.fall, ...courseSet.spring]
   for (let c of allCourses) {
-    if (c.course.distribution.includes("WR") && EXABC.clWR.length < 2) {
+    if (c.course.skills.includes("WR") && EXABC.clWR.length < 2) {
       EXABC.clWR.push(c);
-    } else if (c.course.distribution.includes("So") && EXABC.clSo.length < 2) {
+    } else if (c.course.areas.includes("So") && EXABC.clSo.length < 2) {
       EXABC.clSo.push(c);
-    } else if (c.course.distribution.includes("Sc") && EXABC.clSc.length < 2) {
+    } else if (c.course.areas.includes("Sc") && EXABC.clSc.length < 2) {
       EXABC.clSc.push(c);
-    } else if (c.course.distribution.includes("QR") && EXABC.clQR.length < 2) {
+    } else if (c.course.skills.includes("QR") && EXABC.clQR.length < 2) {
       EXABC.clQR.push(c);
-    } else if (c.course.distribution.includes("Hu") && EXABC.clHu.length < 2) {
+    } else if (c.course.areas.includes("Hu") && EXABC.clHu.length < 2) {
       EXABC.clHu.push(c);
-    } else if (c.course.distribution.includes("L") && EXABC.clL.length < 2) {
+    } else if (c.course.skills.includes("L") && EXABC.clL.length < 2) {
       EXABC.clL.push(c);
     }
   }

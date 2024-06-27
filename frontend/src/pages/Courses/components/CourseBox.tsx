@@ -32,7 +32,7 @@ function CourseBox(props: {course: StudentCourse, displaySetting: DisplaySetting
                 </div>
                 <img style={{ width: "15px", height: "15px", marginRight: "6px" }} src={props.course.season === "FALL" ? img_fall : img_spring} alt={props.course.season}></img>
                 <div>
-                    <div style={{ fontSize: "12px", fontWeight: "500" }}>{props.course.course.code}</div>
+                    <div style={{ fontSize: "12px", fontWeight: "500" }}>{props.course.course.codes[0]}</div>
                     <div style={{ fontSize: "8px", fontWeight: "500" }}>{props.course.course.title}</div>
                 </div>
             </div>
@@ -49,7 +49,7 @@ function CourseBox(props: {course: StudentCourse, displaySetting: DisplaySetting
                         </div>
                     )} */}
                     <div>
-                        <DistributionsCircle distributions={props.course.course.distribution}/>
+                        <DistributionsCircle distributions={props.course.course.areas}/>
                     </div>
                 </div>
             </div>

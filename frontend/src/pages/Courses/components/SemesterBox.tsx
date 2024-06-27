@@ -4,33 +4,30 @@ import CourseBox from "./CourseBox";
 import { StudentCourse } from "../../../commons/types/TypeCourse";
 import { DisplaySetting } from "./../Courses";
 
-function MetadataAll(props: { courses: Array<StudentCourse>, displaySetting: DisplaySetting }){
-    let totalRating = 0;
-    let totalWorkload = 0;
+function MetadataAll(props: { studentCourses: Array<StudentCourse>, displaySetting: DisplaySetting }){
+    // let totalRating = 0;
+    // let totalWorkload = 0;
+
+    if (props.studentCourses.length === 0) {
+        return <div></div>;
+    }
 
     const areaSet = new Set<string>();
     const skillSet = new Set<string>();
 
-    props.courses.forEach(course => {
+    props.studentCourses.forEach(studentCourse => {
         // totalRating += course.course.evaluation.rating;
         // totalWorkload += course.course.evaluation.workload;
 
-        course.course.distribution.forEach(value => {
-            if(value === "Hu" || value === "So" || value === "Sc"){
-                areaSet.add(value);
-            }else{
-                skillSet.add(value);
-            }
-        });
+        studentCourse.course.areas.forEach(value => { areaSet.add(value); });
+        studentCourse.course.skills.forEach(value => { skillSet.add(value); });
     });
 
-    const averageRating = totalRating / props.courses.length;
-    const averageWorkload = totalWorkload; // maybe not divide
+    // const averageRating = totalRating / props.courses.length;
+    // const averageWorkload = totalWorkload;
 
     const areaArray = Array.from(areaSet);
     const skillArray = Array.from(skillSet);
-
-    // TO-DO: change colors: either move these to constants.ts or make these the same as constants.ts
     const styleMapping = {
         "Hu": { backgroundColor: "#E6CFF4", color: "#9970AB", marginRight: "4px" },
         "So": { backgroundColor: "#CFE0F4", color: "#5493C4", marginRight: "4px"  },
@@ -47,7 +44,7 @@ function MetadataAll(props: { courses: Array<StudentCourse>, displaySetting: Dis
                     Credits
                 </div>
                 <div className={styles.countBox}>
-                    {props.courses.length}
+                    {props.studentCourses.length}
                 </div>
             </div>
             {/* {props.displaySetting.rating && (
@@ -94,11 +91,11 @@ function MetadataAll(props: { courses: Array<StudentCourse>, displaySetting: Dis
     );
 }
 
-function SemesterBox(props: { courses: Array<StudentCourse>, displaySetting: DisplaySetting }) {
+function SemesterBox(props: { studentCourses: Array<StudentCourse>, displaySetting: DisplaySetting }) {
     // Ensure courses is a valid array
-    const courses = props.courses || [];
-    const classComponents = courses.map((course, index) => (
-        <CourseBox key={index} course={course} displaySetting={props.displaySetting} />
+    const studentCourses = props.studentCourses || [];
+    const classComponents = studentCourses.map((studentCourses, index) => (
+        <CourseBox key={index} course={studentCourses} displaySetting={props.displaySetting} />
     ));
 
     // Render empty div if no courses

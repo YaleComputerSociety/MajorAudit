@@ -47,9 +47,9 @@ function Majors(){
   const storedStudentCourses = localStorage.getItem("studentCourses");
   let studentCourses: StudentCourse[] = [];
   let studentCodes: Set<string> = new Set();
-  if(storedStudentCourses) {
+  if (storedStudentCourses) {
     studentCourses = JSON.parse(storedStudentCourses) as StudentCourse[];
-    studentCodes = new Set(studentCourses.map(studentCourse => studentCourse.course.code));
+    studentCodes = new Set(studentCourses.flatMap(studentCourse => studentCourse.course.codes));
   }
 
   if(!programs || programs.length === 0){

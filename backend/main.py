@@ -202,15 +202,14 @@ def sync_data():
         return make_response(jsonify({"Error": "Invalid Data"}), 400)
 
     # Process
-    courses = extract_dacourses(data)
-    yearTree = yearTreeify(courses)
+    courses = distill_dacourses(data)
+    year_tree = year_treeify(courses)
 
     # Store
-    user = User(loc_netid, data["name"].split(" ")[1], data["degree"], data["major"], uq_student_courses, yearTree, data["coursestable"])
+    user = User(loc_netid, data["name"].split(" ")[1], data["degree"], data["major"], courses, year_tree, data["coursestable"])
     db.collection("Users").document(loc_netid).set(user.__dict__)
 
     # Transfer
-    # print(data, flush=True)
     return make_response(jsonify(data), 200)
 
 

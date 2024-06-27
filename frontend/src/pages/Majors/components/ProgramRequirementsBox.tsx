@@ -11,12 +11,22 @@ import { Course, StudentCourse } from "../../../commons/types/TypeCourse";
 
 function PairCourse(props: { studentCourses: StudentCourse[], studentCodes: Set<string>, course: Course }){
 
-  const isInPropsCodes = props.studentCodes.has(props.course.code);
+  let pairCode: string | undefined;
+  const isInPropsCodes = props.course.codes.some((code: string) => {
+    if (props.studentCodes.has(code)) {
+      pairCode = code;
+      return true;
+    }
+    return false;
+  });
+
 
   let pairStudentCourse = undefined;
   if (isInPropsCodes && props.studentCourses) {
     pairStudentCourse = props.studentCourses.find(
-      (studentCourse) => studentCourse.course.code === props.course.code
+      (studentCourse) => studentCourse.course.codes.some(
+        (code: string) => code === pairCode
+      )
     );
   }
 

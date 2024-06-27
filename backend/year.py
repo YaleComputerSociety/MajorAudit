@@ -27,7 +27,7 @@ def term_courses(term_str, courses):
     return [course for course in courses if course["season"] == season and course["year"] == year]
 
 
-def yearTreeify(courses):
+def year_treeify(courses):
     """"""
     terms = list(set(f"{course["season"]} {course["year"]}" for course in courses))
 

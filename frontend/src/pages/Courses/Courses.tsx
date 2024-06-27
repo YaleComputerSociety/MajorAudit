@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import styles from "./Courses.module.css";
 
 import YearBox from "./components/YearBox";
-import AddCourseMenu from "./components/add_course/AddCourse";
+// import AddCourseMenu from "./components/add_course/AddCourse";
 
-import MeDropdown from "../../navbar/account/MeDropdown";
+// import MeDropdown from "../../navbar/account/MeDropdown";
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
-import { NavLink } from "react-router-dom";
 import PageLinks from "./../../navbar/PageLinks";
 
 function NavBar() {

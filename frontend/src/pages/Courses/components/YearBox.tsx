@@ -28,9 +28,9 @@ export default function YearBox(props: {year: Year, displaySetting: DisplaySetti
         </div>
         <div className={styles.row}>
             <div style={{ marginRight: "20px" }}>
-              <SemesterBox courses={props.year["fall"]} displaySetting={props.displaySetting}/>
+              <SemesterBox studentCourses={props.year["fall"]} displaySetting={props.displaySetting}/>
             </div>
-              <SemesterBox courses={props.year["spring"]} displaySetting={props.displaySetting}/>
+              <SemesterBox studentCourses={props.year["spring"]} displaySetting={props.displaySetting}/>
         </div>
     </div>
   );

@@ -16,16 +16,16 @@ import Majors from './pages/Majors';
 
 function App() {
 
-  const [auth, setAuth] = useState(true); 
+  const [auth, setAuth] = useState(false); 
 
-  // const checkAuthStatus = async () => {
-  //   const isLoggedIn = await checkLogin();
-  //   setAuth(isLoggedIn);
-  // };
+  const checkAuthStatus = async () => {
+    const isLoggedIn = await checkLogin();
+    setAuth(isLoggedIn);
+  };
 
-  // useEffect(() => {
-  //   checkAuthStatus();
-  // }, []);
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
 
   return (
   <div>
