@@ -4,16 +4,17 @@ import styles from "./Graduation.module.css";
 
 import { syncData, getData } from "../../api/api";
 
-import GraduationDistribution from "./components/DistributionTable";
+import GraduationDistribution from "./components/Distribution";
 import GraduationOverview from "./components/Overview";
 
-import { CPSC, ECON, CGSC } from "./../../commons/mock/MockProgram";
+import { CPSC, CGSC } from "./../../commons/mock/MockProgram";
+import { ECON } from "./../../commons/mock/programs/Econ";
 // import MeDropdown from "../../navbar/account/MeDropdown";
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
 import PageLinks from "./../../navbar/PageLinks";
 
-// import { ryan } from "../../commons/mock/MockStudent"
+import { ryan } from "../../commons/mock/MockStudent"
 
 function NavBar() {
   return (
@@ -51,12 +52,12 @@ function Graduation(){
 
   const initLocalStorage = async () => {
     try {
-      // const allData = ryan;
-      const allData = await getData();
-      if (!allData) {
-        console.error("No Data Returned By getData()");
-        return;
-      }
+      const allData = ryan;
+      // const allData = await getData();
+      // if (!allData) {
+      //   console.error("No Data Returned By getData()");
+      //   return;
+      // }
   
       const jsonData = typeof allData === "object" ? JSON.stringify(allData) : allData;
   

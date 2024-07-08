@@ -1,10 +1,11 @@
 
+import { useRef, useState, useEffect } from "react"
 import styles from "./../Courses.module.css"
 import CourseBox from "./CourseBox";
 import { StudentCourse } from "../../../commons/types/TypeCourse";
-import { DisplaySetting } from "./../Courses";
+import { getCTCourses } from "../../../api/api";
 
-function MetadataAll(props: { studentCourses: Array<StudentCourse>, displaySetting: DisplaySetting }){
+function MetadataAll(props: { studentCourses: Array<StudentCourse> }){
     // let totalRating = 0;
     // let totalWorkload = 0;
 
@@ -91,24 +92,122 @@ function MetadataAll(props: { studentCourses: Array<StudentCourse>, displaySetti
     );
 }
 
-function SemesterBox(props: { studentCourses: Array<StudentCourse>, displaySetting: DisplaySetting }) {
-    // Ensure courses is a valid array
-    const studentCourses = props.studentCourses || [];
-    const classComponents = studentCourses.map((studentCourses, index) => (
-        <CourseBox key={index} course={studentCourses} displaySetting={props.displaySetting} />
-    ));
+function CodeSearch(props: {}){
 
-    // Render empty div if no courses
-    if (classComponents.length === 0) {
-        return <div />;
+}
+
+
+
+function AddButton(props: { timeKey: string }){
+
+	const inputRef = useRef<HTMLInputElement>(null);
+	const [active, setActive] = useState(false);
+	useEffect(() => { 
+		if(active) {
+			inputRef.current?.focus();
+		}
+	}, [active]);
+
+	let searchData: any[] = []
+
+	const activate = () => {
+		setActive(true)
+		const trueData = localStorage.getItem(props.timeKey);
+		if(!trueData){
+      getCTCourses(props.timeKey)
+        .then((data) => {
+					searchData = data;
+          localStorage.setItem(props.timeKey, JSON.stringify(data));
+          setActive(true);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+	}
+
+	const deactivate = () => {
+		setActive(false)
+	}
+
+	const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === "Enter" && inputRef.current){
+      const val = inputRef.current.value;
+			const match = searchData.find(course => course.course_code === val);
+			if(match){
+				const newStudentCourse = {
+					course: {
+
+					},
+					status: ,
+					season: ,
+					year: ,
+				}
+			}
+
+    }
+  };
+
+	if(!active){
+		return(
+			<div className={styles.addCourseButton} onClick={activate}>
+				+
+			</div>
+		)
+	}else{
+		return(
+			<div className={styles.courseBox}>
+				<div className={styles.row}>
+					<div onClick={deactivate}>
+						-
+					</div>
+					<input 
+						ref={inputRef} 
+						type="text" 
+						placeholder="e.g. FREN 401" 
+						maxLength={9} 
+						onKeyPress={handleKeyPress}
+						className={styles.CodeSearch}
+					/>
+				</div>
+			</div>
+		);
+	}
+}
+
+function SemesterBox(props: { edit: boolean, term: string, studentCourses: Array<StudentCourse> }) {
+    
+	const studentCourses = props.studentCourses || [];
+	const studentCourseComponents = studentCourses.map((studentCourses, index) => (
+		<CourseBox key={index} course={studentCourses}/>
+	));
+
+	const calcTimeKey = (terms: string): string => {
+    const [season, year] = terms.split(" ");
+    let seasonCode = "";
+
+    if (season === "Spring") {
+      seasonCode = "01";
+    } else if (season === "Fall") {
+      seasonCode = "03";
     }
 
-    return (
-        <div className={styles.column}>
-            <MetadataAll {...props} />
-            {classComponents}
-        </div>
-    );
+    return `${year}${seasonCode}`;
+  };
+
+	return (
+		<div className={styles.column}>
+			{/* <MetadataAll studentCourses={props.studentCourses} /> */}
+			<div style={{ marginBottom: "6px" }}>
+
+			</div>
+			{studentCourseComponents}
+			{props.edit && 
+				(!props.studentCourses.length || props.studentCourses[0].status !== "COMPLETE") && 
+				(<AddButton timeKey={calcTimeKey(props.term)}/>)
+			}
+		</div>
+	);
 }
 
 export default SemesterBox;

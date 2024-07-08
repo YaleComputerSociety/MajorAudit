@@ -1,5 +1,5 @@
 
-import React from "react";
+import { useState } from "react";
 import styles from "./../Majors.module.css";
 
 import InfoButton from "../../../navbar/InfoButton";
@@ -19,7 +19,6 @@ function PairCourse(props: { studentCourses: StudentCourse[], studentCodes: Set<
     }
     return false;
   });
-
 
   let pairStudentCourse = undefined;
   if (isInPropsCodes && props.studentCourses) {
@@ -48,16 +47,18 @@ function RequirementsTopshelf(major: Degree) {
 }
 
 function RequirementsContent(props: { degree: Degree, studentCourses: StudentCourse[], studentCodes: Set<string> }){
+
   return (
     <div className={styles.reqsList}>
-      {props.degree.requirements.map((req, reqIndex) => (
+      {
+      props.degree.requirements.map((req, reqIndex) => (
         <div key={`req-${reqIndex}`}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div className={styles.subsectionHeader} style={{ marginBottom: "4px" }}>
               {req.name}
             </div>
             <div style={{ color: "grey" }}>
-              {req.coursesCompleted}/{req.coursesTotal}
+              {":("}/{Object.values(req.subsections).reduce((sum, subsection) => sum + subsection.courses.length, 0)}
             </div>
           </div>
           {req.description && (
@@ -80,7 +81,11 @@ function RequirementsContent(props: { degree: Degree, studentCourses: StudentCou
               <div style={{ display: "flex", flexWrap: "wrap" }}>
                 {sub.courses.map((course, courseIndex) => (
                   <div key={courseIndex} style={{ display: "flex", marginBottom: "4px", marginRight: courseIndex % 3 === 2 ? "10px" : "0" }}>
-                    <PairCourse studentCourses={props.studentCourses} studentCodes={props.studentCodes} course={course}/>
+                    <PairCourse
+                      studentCourses={props.studentCourses}
+                      studentCodes={props.studentCodes}
+                      course={course}
+                    />
                     {courseIndex < sub.courses.length - 1 && (courseIndex % 3 === 2 ? <br/> : <div>/</div>)}
                   </div>
                 ))}
@@ -89,6 +94,7 @@ function RequirementsContent(props: { degree: Degree, studentCourses: StudentCou
           ))}
         </div>
       ))}
+
     </div>
   );
 }

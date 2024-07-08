@@ -70,3 +70,31 @@ export const getMajors = () => {
         });
     });
 };
+
+//
+
+export const getCTCourses = (timekey: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const url = `https://api.coursetable.com/api/catalog/public/${timekey}`;
+    // const cookies = {
+    //   'session': 'enter_session_here',
+    //   'session.sig': 'enter_session_sig_here'
+    // };
+
+    $.ajax({
+      url: url,
+      method: "GET",
+      // headers: {
+      //   'Cookie': `session=${cookies.session}; session.sig=${cookies['session.sig']}`
+      // }
+    }).done((data) => {
+      resolve(data);
+    }).fail((jqXHR, textStatus) => {
+      if (jqXHR.status !== 200) {
+        reject(new Error(`${timekey} ${jqXHR.status}`));
+      } else {
+        reject(new Error(`Error: ${textStatus}`));
+      }
+    });
+  });
+};

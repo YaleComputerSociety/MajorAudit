@@ -36,8 +36,6 @@ interface DegreeRequirementsSubsection {
   
 interface DegreeRequirements {
     name: string;
-    coursesCompleted: number;
-    coursesTotal: number;
     description?: string;
     subsections: Array<DegreeRequirementsSubsection>;
 }
