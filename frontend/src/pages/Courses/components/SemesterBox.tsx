@@ -98,7 +98,7 @@ function CodeSearch(props: {}){
 
 
 
-function AddButton(props: { timeKey: string }){
+function AddButton(props: { term: number }){
 
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [active, setActive] = useState(false);
@@ -111,19 +111,19 @@ function AddButton(props: { timeKey: string }){
 	let searchData: any[] = []
 
 	const activate = () => {
-		setActive(true)
-		const trueData = localStorage.getItem(props.timeKey);
-		if(!trueData){
-      getCTCourses(props.timeKey)
-        .then((data) => {
-					searchData = data;
-          localStorage.setItem(props.timeKey, JSON.stringify(data));
-          setActive(true);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
+		// setActive(true)
+		// const trueData = localStorage.getItem(props.term);
+		// if(!trueData){
+    //   getCTCourses(props.term)
+    //     .then((data) => {
+		// 			searchData = data;
+    //       localStorage.setItem(props.term, JSON.stringify(data));
+    //       setActive(true);
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+    // }
 	}
 
 	const deactivate = () => {
@@ -134,16 +134,16 @@ function AddButton(props: { timeKey: string }){
     if(event.key === "Enter" && inputRef.current){
       const val = inputRef.current.value;
 			const match = searchData.find(course => course.course_code === val);
-			if(match){
-				const newStudentCourse = {
-					course: {
+			// if(match){
+			// 	const newStudentCourse = {
+			// 		course: {
 
-					},
-					status: ,
-					season: ,
-					year: ,
-				}
-			}
+			// 		},
+			// 		status: ,
+			// 		season: ,
+			// 		year: ,
+			// 	}
+			// }
 
     }
   };
@@ -175,25 +175,12 @@ function AddButton(props: { timeKey: string }){
 	}
 }
 
-function SemesterBox(props: { edit: boolean, term: string, studentCourses: Array<StudentCourse> }) {
+function SemesterBox(props: { edit: boolean, term: number, studentCourses: Array<StudentCourse> }) {
     
 	const studentCourses = props.studentCourses || [];
 	const studentCourseComponents = studentCourses.map((studentCourses, index) => (
 		<CourseBox key={index} course={studentCourses}/>
 	));
-
-	const calcTimeKey = (terms: string): string => {
-    const [season, year] = terms.split(" ");
-    let seasonCode = "";
-
-    if (season === "Spring") {
-      seasonCode = "01";
-    } else if (season === "Fall") {
-      seasonCode = "03";
-    }
-
-    return `${year}${seasonCode}`;
-  };
 
 	return (
 		<div className={styles.column}>
@@ -204,7 +191,7 @@ function SemesterBox(props: { edit: boolean, term: string, studentCourses: Array
 			{studentCourseComponents}
 			{props.edit && 
 				(!props.studentCourses.length || props.studentCourses[0].status !== "COMPLETE") && 
-				(<AddButton timeKey={calcTimeKey(props.term)}/>)
+				(<AddButton term={props.term}/>)
 			}
 		</div>
 	);

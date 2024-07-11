@@ -29,7 +29,7 @@ export default function YearBox(props: {year: Year, edit: boolean }){
               {convertGrade(props.year["grade"])}
             </div>
             <div style={{ fontSize: "14px", fontWeight: "600", color: "#727272", alignSelf: "flex-end", marginBottom: "2.5px" }}>
-              {props.year["terms"][0].split(" ")[1]}-{props.year["terms"][1].split(" ")[1]}
+							{props.year["terms"][0].toString().slice(0, 4)}-{props.year["terms"][1].toString().slice(0, 4)}
             </div>
         </div>
 

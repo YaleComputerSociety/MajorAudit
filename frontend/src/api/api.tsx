@@ -18,17 +18,13 @@ export const handleLogin = () => {
     });
 };
 
-export const checkLogin = () => {
-    return new Promise<boolean> ((resolve, reject) => { 
+export const checkUser = (): Promise<{ loggedIn: boolean; onboard: boolean }> => {
+    return new Promise<{ loggedIn: boolean; onboard: boolean }>((resolve, reject) => {
         $.ajax({
             url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/check_login",
             xhrFields: { withCredentials: true }
-        }).done((data: string | null) => {
-            if(data){
-                resolve(true)
-            }else{
-                resolve(false)
-            }
+        }).done((data: { loggedIn: boolean; onboard: boolean }) => {
+            resolve(data);
         }).fail((error) => {
             reject(error);
         });

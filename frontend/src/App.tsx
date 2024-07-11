@@ -1,49 +1,58 @@
 
 import { useState, useEffect } from "react";
-import { checkLogin } from "./api/api";
+import { Navigate, Route, Routes } from 'react-router-dom'; 
+import { checkUser } from "./api/api";
 
 import Globals from './Globals';
-
 import CourseModal from './commons/components/courses/CourseModal';
-import { Navigate, Route, Routes } from 'react-router-dom'; 
 
 import Login from "./pages/Login";
+import Onboard from "./pages/Onboard/Onboard";
 import Graduation from './pages/Graduation';
 import Courses from './pages/Courses';
 import Majors from './pages/Majors';
-// import About from './pages/OtherPages/About/About';
-// import FAQ from './pages/OtherPages/FAQ/FAQ';
 
-function App() {
+function App(){
 
-  const [auth, setAuth] = useState(true); 
+  const [auth, setAuth] = useState({ loggedIn: false, onboard: false }); 
+  const checkAuth = async () => {
+		const response = await checkUser();
+		setAuth({
+			loggedIn: response.loggedIn,
+			onboard: response.onboard,
+		});
+	};
 
-  // const checkAuthStatus = async () => {
-  //   const isLoggedIn = await checkLogin();
-  //   setAuth(isLoggedIn);
-  // };
+  useEffect(() => {
+    // checkAuth();
+  }, []);
 
-  // useEffect(() => {
-  //   checkAuthStatus();
-  // }, []);
+	const ProtectedRoute = (element: JSX.Element) => {
+		if(!auth.loggedIn){
+			return <Navigate to="/login"/>;
+		}else 
+		if(!auth.onboard){
+			return <Navigate to="/onboard"/>;
+		}else
+		return element;
+	};
 
-  return (
-  <div>
-    <Globals>
-      <Routes>
-        <Route path="/"             element={auth ? <Navigate to="/graduation"/> : <Navigate to="/login"/>}/> 
-        <Route path="/login"        element={auth ? <Navigate to="/graduation"/> : <Login setAuth={setAuth}/>}/> 
+  return(
+		<div>
+			<Globals>
+				<Routes>
+					<Route path="/onboard"      element={<Onboard setAuth={setAuth}/>}/>
 
-        <Route path="/graduation"   element={auth ? <Graduation/> : <Navigate to="/login"/>}/> 
-        <Route path="/courses"      element={auth ? <Courses/> : <Navigate to="/login"/>}/> 
-        <Route path="/majors"       element={auth ? <Majors/> : <Navigate to="/login"/>}/> 
-
-        {/* <Route path="/about"        element={<About/>}/>  */}
-        {/* <Route path="/FAQ"          element={<FAQ/>}/>  */}
-      </Routes>
-      <CourseModal />
-    </Globals>
-  </div>
+					<Route path="/"             element={<Navigate to="/graduation"/>}/>
+					<Route path="/login"        element={!auth.loggedIn ? <Login setAuth={setAuth}/> 		: <Navigate to="/onboard"/>}/>
+					{/* <Route path="/onboard"      element={!auth.onboard 	? <Onboard setAuth={setAuth}/> 	: <Navigate to="/graduation"/>}/> */}
+					<Route path="/graduation" 	element={ProtectedRoute(<Graduation/>)}/> 
+					<Route path="/courses" 			element={ProtectedRoute(<Courses/>)}/> 
+					<Route path="/majors" 			element={ProtectedRoute(<Majors/>)}/> 
+				</Routes>
+				<CourseModal/>
+			</Globals>
+		</div>
   );
 }
 

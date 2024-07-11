@@ -1,6 +1,6 @@
 
 import React from "react";
-import { checkLogin } from "../../api/api";
+import { checkUser } from "../../api/api";
 
 import navStyles from "./../../navbar/NavBar.module.css";
 import logo from "./../../commons/images/ma_logo.png";
@@ -20,10 +20,10 @@ function NavBar() {
 
 function Login(props: { setAuth: Function }){
   
-  const handleLogin = async () => {
-    const authStatus = await checkLogin();
-    if(authStatus){
-      props.setAuth(authStatus)
+  const execLogin = async () => {
+    const userStatus = await checkUser();
+    if(userStatus.loggedIn){
+      props.setAuth(userStatus)
     }else{
       window.location.href = "http://127.0.0.1:5001/majoraudit/us-central1/functions/user_login";
     }
@@ -31,7 +31,7 @@ function Login(props: { setAuth: Function }){
 
   return(
     <div>
-      <NavBar />
+      <NavBar/>
       <div className={styles.centerDiv}>
         <div style={{width: "450px"}}>
           <h1>Plan Your Major @ Yale</h1>
@@ -42,7 +42,7 @@ function Login(props: { setAuth: Function }){
             <li className={styles.featureItemStyle}>Cool Guy</li>
           </ul>
           <div className={styles.loginButtons}>
-            <div onClick={handleLogin} className={styles.btn}>
+            <div onClick={execLogin} className={styles.btn}>
               Login w/ CAS
             </div>
           </div>
