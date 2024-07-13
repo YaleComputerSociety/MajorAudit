@@ -29,8 +29,7 @@ def term_courses(term_str, courses):
 
 def year_treeify(courses):
     """"""
-    terms = list(set(f"{course["season"]} {course["year"]}" for course in courses))
-
+    terms = set(f"{"Spring" if course["term"][5] == "1" else "Fall"} {course["term"][:4]}" for course in courses) # bruh
 
     years = []
     for term in terms:
@@ -56,6 +55,12 @@ def year_treeify(courses):
             years.append(year.to_dict())
 
     years = sorted(years, key=fall_year)
+    last = int(years[-1]["terms"][1].split()[1])
+    for i in range(4 - len(years)):
+        curr = last + i
+        terms = [f"Fall {curr}", f"Spring {curr + 1}"]
+        years.append(Year("", terms, [], []))
+
     for idx, year in enumerate(years):
         year["grade"] = idx + 1
 

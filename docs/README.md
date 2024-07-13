@@ -18,8 +18,8 @@ We're working fullstack.
 6. Run: pip install -r requirements.txt
 7. Run: deactivate
 * Secrets
-8. Make a secrets directory in backend
-9. Go to the Firebase Console
+8. Make a "secrets" directory in backend
+9. Go to Firebase Console
 10. Select majoraudit
 11. Click on the gear icon next to Project Overview and select Project Settings
 12. Select Service Accounts
@@ -31,14 +31,18 @@ We're working fullstack.
 16. In root or frontend directory, run: firebase emulators:start
 17. Troubleshoot any errors
 * Notes
-- Anytime you change the frontend, you need to cut the emulators and rebuild. 
-    They only host the most recent build.
+- Anytime you change the frontend, you need to cut the emulators and rebuild. They only host the most recent build.
 - Anyime you change the webscraper, you need to remove and reconfigure the extension in chrome. 
-- You can change backend code as you go. Whenever you save, the emulators 
-    will automatically restart. 
+- You can change backend code as you go. Whenever you save, the emulators will automatically restart. 
+* Strategies
+- If focused purely frontend development: 
+    1. Change the useState(auth) value in App.tsx to true
+    2. Change the initLocalStorage() method in Graduation.tsx to yield data from MockStudent rather than the getData() API
+    3. In frontend directory, run: npm start
+    4. The frontend will now update as you go. 
 
 # Contributing
-1. Create a branch for your feature. This can usually be done with `git checkout -b <username>/<feature_name>`
+1. Create a branch for your feature. Likely, `git checkout -b <username>/<feature_name>`
 2. _make changes_
 3. Create some commits and push your changes to the origin.
 4. Create a pull request and add a few reviewers. In the pull request, be sure to reference any relevant issue numbers.
@@ -46,5 +50,4 @@ We're working fullstack.
 
 # Roadmap
 We use GitHub issues to track bugs and feature requests: [https://github.com/YaleComputerSociety/MajorAudit/issues](https://github.com/YaleComputerSociety/MajorAudit/issues).
-
 We use GitHub projects to manage everything and do planning: [https://github.com/orgs/YaleComputerSociety/projects/2/](https://github.com/orgs/YaleComputerSociety/projects/2/).

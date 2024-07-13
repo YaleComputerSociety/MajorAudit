@@ -26,7 +26,7 @@
     width: 100%;
 
     padding-top: 50px;
-    padding-bottom: 75px;
+    padding-bottom: 500px;
 }
 
 .AddCourseButton {
@@ -87,8 +87,31 @@
 
 /* COURSES */
 
+.addCourseButton {
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+
+    width: 36px;
+    height: 36px;
+
+    border-radius: 50%; /* Use 50% for a perfect circle */
+    margin-bottom: 5px;
+
+    background-color: #F5F5F5;
+
+    cursor: pointer; /* Change cursor on hover */
+}
+
+.addCourseButton:hover,
+.addCourseButton:active {
+    background-color: #E0E0E0; /* Lighter color when hovered or clicked */
+}
+
+
 .courseBox {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
 
@@ -126,13 +149,33 @@
     margin-right: 10px;
 }
 
-.Year {
-    font-size: 14px;
-    font-weight: 600;
-    color: #727272;
-    align-self: flex-end;
-    margin-bottom: 2.5px;
-}
+
+
+
+.yearComponent {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    transition: transform 0.5s ease, height 0.5s ease, width 0.5s ease;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* sem meta */
 
@@ -237,3 +280,34 @@
 .activeButton {
     background-color: #f0f0f0
 }
+
+
+
+
+
+
+
+
+.CodeSearch {
+    background-color: white; /* Very light grey background */
+    border: grey;
+    height: 22px;
+    width: 100px;
+    padding-left: 10px; /* Optional: adds padding inside the input */
+    margin-left: 10px; /* Adds space between the minus button and input */
+    outline: none; /* Ensure no outline when focused */
+    font-size: 12px; /* Set font size to 12px */
+    font-weight: 500; /* Set font weight to 500 */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.CodeSearch:focus {
+    border: grey; /* Ensure no border when focused */
+    outline: none; /* Ensure no outline when focused */
+}
+
+.CodeSearch::placeholder {
+    color: grey;
+    font-style: italic; /* Make placeholder text italic */
+}
+

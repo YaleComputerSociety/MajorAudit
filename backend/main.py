@@ -40,14 +40,13 @@ db = firestore.client()
 allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:5000', 'majoraudit.web.app']
 
 class User:
-    def __init__(self, netID, name, degree, major, studentCourses, yearTree, tables):
-        self.netID = netID
-        self.name = name
-        self.degree = degree
-        self.major = major
-        self.studentCourses = studentCourses
-        self.yearTree = yearTree
-        self.daTables = tables
+	def __init__(self, netID, onboard, name, degrees, studentCourses, yearTree):
+		self.netID = netID
+		self.onboard = onboard
+		self.name = name
+		self.degrees = degrees
+		self.studentCourses = studentCourses
+		self.yearTree = yearTree
 
 app = Flask(__name__, template_folder='templates')
 CORS(app, supports_credentials=True, origins=allowed_CORS_origins)
@@ -61,10 +60,7 @@ def login():
     cookies={}
 
     if 'NETID' in session:
-        if '127.0.0.1' in service:
-            redirect_url = 'http://127.0.0.1:3000'
-        # else:
-        #     redirect_url = 'https://majoraudit.web.app'
+        redirect_url = 'http://127.0.0.1:3000'
 
         current_app.logger.info(f'Redirecting: {redirect_url}')
         resp = make_response(redirect(redirect_url))
@@ -77,7 +73,6 @@ def login():
 
     if 'ticket' in request.args:
         session['CAS_TOKEN'] = request.args['ticket']
-        print(session['CAS_TOKEN'], file=sys.stderr)
 
     if 'CAS_TOKEN' in session:
         redirect_url = '/'
@@ -87,17 +82,21 @@ def login():
             if 'NETID' in session:
                 cookies['wtf']=session['NETID']
 
-            userID = validation[1]
-            user = User(userID, "", "", "", "", "", "")
-            if db.collection("Users").document(userID).get().exists:
+            netID = validation[1]
+            if db.collection("Users").document(netID).get().exists:
                 pass
             else:
-                db.collection("Users").document(userID).set(user.__dict__)
+                new_user = User(
+									netID=netID, 
+									onboard=False, 
+									name="", 
+									degrees=[], 
+									studentCourses=[], 
+									yearTree=[]
+                )
+                db.collection("Users").document(netID).set(new_user.__dict__)
 
-            if '127.0.0.1' in service:
-                redirect_url = 'http://127.0.0.1:3000'
-            # else:
-            #     redirect_url='https://majoraudit.web.app'
+            redirect_url = 'http://127.0.0.1:3000'
 
         else:
             token=session['CAS_TOKEN']
@@ -121,14 +120,6 @@ def logout():
     return response
 
 
-@app.get('/get_netid1')
-def get_netid():
-    if "NETID" in session:
-        return session["NETID"]
-    else:
-        return ""
-
-
 @app.get('/sync')
 def sync():
     True
@@ -136,9 +127,13 @@ def sync():
 
 @app.get('/check_login')
 def check_login():
-    if 'NETID' in session:
-        return jsonify(session['NETID'])
-    return jsonify()
+	if "NETID" in session:
+		document = db.collection("Users").document(session['NETID']).get()
+		onboard = document.to_dict().get("onboard")
+		return jsonify({"loggedIn": True, "onboard": onboard})
+	else:
+		return jsonify({"loggedIn": False, "onboard": False})
+
 
 
 def validate(ticket, service):

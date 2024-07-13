@@ -91,7 +91,7 @@ function CourseBoxSmall(props: {studentCourse?: StudentCourse; course?: Course;}
     return (
       <div className={styles.CourseBox} onClick={openModal}>
         <CourseSeasonIcon seasons={props.course.seasons} />
-        {props.course.codes}
+        {props.course.codes[0]}
         {allDist.length > 0 ? (<DistCircDiv dist={allDist}/>) : ("")}
       </div>
     );
@@ -101,7 +101,7 @@ function CourseBoxSmall(props: {studentCourse?: StudentCourse; course?: Course;}
       <div className={`${styles.CourseBox} ${styles.CourseBoxStudent}`} onClick={openModal}>
         <CheckMark studentCourse={props.studentCourse} />
         {/* <CourseSeasonIcon seasons={[props.studentCourse.season]} /> */}
-        {props.studentCourse.course.codes}
+        {props.studentCourse.course.codes[0]}
         {allDist.length > 0 ? (
           <DistCircDiv dist={allDist}/>) : ("")}
       </div>

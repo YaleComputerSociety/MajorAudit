@@ -27,8 +27,6 @@ export const CPSC: Program = {
       requirements: [
         {
           name: "CORE",
-          coursesCompleted: 1,
-          coursesTotal: 5,
           subsections: [
             { 
               courses: [CPSC201] 
@@ -50,8 +48,6 @@ export const CPSC: Program = {
         {
           name: "ELECTIVES",
           description: "Usually, courses with course numbers above 300 work for this requirement.",
-          coursesCompleted: 0,
-          coursesTotal: 4,
           subsections: [
             { 
               name: "YOUR COURSES",
@@ -67,8 +63,6 @@ export const CPSC: Program = {
         },
         {
           name: "SENIOR REQUIREMENT",
-          coursesCompleted: 0,
-          coursesTotal: 1,
           subsections: [],
         },
       ],
@@ -94,8 +88,6 @@ export const CPSC: Program = {
       requirements: [
         {
           name: "CORE",
-          coursesCompleted: 0,
-          coursesTotal: 5,
           subsections: [
             { 
               courses: [CPSC201] 
@@ -114,8 +106,6 @@ export const CPSC: Program = {
         {
           name: "ELECTIVES",
           description: "Usually, courses with course numbers above 300 work for this requirement.",
-          coursesCompleted: 0,
-          coursesTotal: 6,
           subsections: [
             { 
               name: "YOUR COURSES",
@@ -129,8 +119,6 @@ export const CPSC: Program = {
         },
         {
           name: "SENIOR REQUIREMENT",
-          coursesCompleted: 0,
-          coursesTotal: 1,
           subsections: [],
         },
       ],
@@ -163,8 +151,6 @@ export const CGSC: Program = {
       requirements: [
         {
           name: "PREREQUISITE", 
-          coursesTotal: 1,
-          coursesCompleted: 0,
           subsections: [
             {
               courses: []
@@ -174,8 +160,6 @@ export const CGSC: Program = {
         {  
           name: "BREADTH REQUIREMENT",
           description: "Each major is required to take a course from four of the following six areas:",
-          coursesTotal: 4,
-          coursesCompleted: 0,
           subsections: [
             {
               name: "COMPUTER SCIENCE",
@@ -206,8 +190,6 @@ export const CGSC: Program = {
         {
           name: "DEPTH REQUIREMENT",
           description: "The depth courses must be chosen from at least two disciplines, and are typically drawn from the six cognitive science subfields. All six courses must be at the intermediate or advanced level (usually 300+).",
-          coursesTotal: 6,
-          coursesCompleted: 0,
           subsections: [
             {
               name: "YOUR COURSES",
@@ -218,8 +200,6 @@ export const CGSC: Program = {
         {
           name: "JUNIOR COLLOQUIUM", 
           description: "In the junior year, students are required to take CGSC 395, a half-credit colloquium in which majors discuss current issues and research in cognitive science and select a senior essay topic.",
-          coursesTotal: 1, 
-          coursesCompleted: 0,
           subsections: [
             {
               courses: []
@@ -228,8 +208,6 @@ export const CGSC: Program = {
         },
         {
           name: "SENIOR REQUIREMENT",
-          coursesTotal: 1,
-          coursesCompleted: 0,
           subsections: []  
         }
       ],
@@ -255,8 +233,6 @@ export const CGSC: Program = {
       requirements: [
         {
           name: "PREREQUISITE", 
-          coursesTotal: 1,
-          coursesCompleted: 0,
           subsections: [
             {
               courses: []
@@ -266,15 +242,11 @@ export const CGSC: Program = {
         {  
           name: "BREADTH REQUIREMENT",
           description: "Each major is required to take a course from four of the following six areas:",
-          coursesTotal: 4,
-          coursesCompleted: 0,
           subsections: []
         },
         {
           name: "DEPTH REQUIREMENT",
           description: "Students fulfill a depth requirement by completing six courses that focus on a specific topic or area in cognitive science. The depth courses must be chosen from at least two disciplines, and are typically drawn from the six cognitive science subfields. All six courses must be at the intermediate or advanced level (usually 300+).",
-          coursesTotal: 6,
-          coursesCompleted: 0,
           subsections: [
             {
               name: "YOUR COURSES",
@@ -285,8 +257,6 @@ export const CGSC: Program = {
         {
           name: "SKILLS REQUIREMENT",  
           description: "The skills requirement for the B.S. is fulfilled by PSYC 200 or another course with permission of the DUS.",
-          coursesTotal: 1,
-          coursesCompleted: 0,
           subsections: [
             {
               courses: []
@@ -296,8 +266,6 @@ export const CGSC: Program = {
         {
           name: "JUNIOR COLLOQUIUM", 
           description: "In the junior year, students are required to take CGSC 395, a half-credit colloquium in which majors discuss current issues and research in cognitive science and select a senior essay topic.",
-          coursesTotal: 1, 
-          coursesCompleted: 0,
           subsections: [
             {
               courses: []
@@ -307,29 +275,9 @@ export const CGSC: Program = {
         {
           name: "SENIOR REQUIREMENT",
           description: "The B.S. degree program requires empirical research and a senior essay.",
-          coursesTotal: 1,
-          coursesCompleted: 0,
           subsections: []  
         }
       ],
     },
   ],
-};
-
-export const ECON: Program = {
-  name: "Economics", 
-  abbreviation: "ECON",
-  degrees: [{
-    metadata: {
-      name: "Economics", abbreviation: "ECON",
-      degreeType: "BACH_ART",
-      stats: { courses: 16, rating: 4.5, workload: 3.6, type: "QR", },
-      students: 76,
-      about: "Economics is much broader than the study of recessions and inflation or stocks and bonds. Economists study decision making and incentives such as how taxes create incentives for labor market and savings behavior. Many current public policy debates concern questions of economics, including causes and consequences of inequality and gender and racial wage gaps; how to address poverty; the impact of immigration and trade on the well-being of a country’s citizens; the cause of the Great Recession; and how to predict future downturns.",
-      dus: { name: "Giovanni Maggi", address: "115 Prospect St., Rosenkranz Hall, Room 334", email: "cpsc.yale.edu", },
-      catologLink: "https://catalog.yale.edu/ycps/subjects-of-instruction/computer-science/",
-      wesbiteLink: "http://cpsc.yale.edu",
-    },
-    requirements: [],
-  }]
 };
