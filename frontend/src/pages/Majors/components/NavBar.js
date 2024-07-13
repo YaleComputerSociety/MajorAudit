@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { useState } from "react";
 import styles from "./../NavBar.module.css"
 import MeDropdown from "../../../navbar/account/MeDropdown";
 import img_logo from "./../../../commons/images/ma_logo.png"

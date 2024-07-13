@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React from "react";
 import styles from "./CourseModal.module.css";
 import { useModal } from "../../../hooks/modalContext";
 import { Dialog } from "@headlessui/react";
@@ -22,9 +23,6 @@ export default function CourseModal() {
                 {isOpen !== undefined ? isOpen.title : 'No title'}
               </Dialog.Title>
               <div style={{ marginTop: "2px" }}>
-                <p className={styles.descriptionStyle}>
-                  {isOpen !== undefined ? isOpen.description : 'No description'}
-                </p>
               </div>
             </Dialog.Panel>
           </div>

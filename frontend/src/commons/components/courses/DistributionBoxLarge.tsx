@@ -14,7 +14,7 @@ export default function DistributionBox({ text }: Props) {
       style={{
         borderRadius: "5px",
         color: textColor,
-        backgroundColor: chroma(textColor).alpha(0.16).css(),
+        // backgroundColor: chroma(textColor).alpha(0.16).css(),
         width: "max-content",
         padding: "2px 4px",
         fontWeight: "bold"

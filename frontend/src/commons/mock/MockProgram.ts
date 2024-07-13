@@ -1,6 +1,6 @@
 
 import { Program } from "./../types/TypeProgram";
-import { getCourse } from "./../mock/MockCourses";
+import { CPSC201, CPSC202, CPSC223, CPSC323, CPSC365 } from "./../mock/MockCourses"
 
 export const CPSC: Program = {
   name: "Computer Science",
@@ -30,12 +30,22 @@ export const CPSC: Program = {
           coursesCompleted: 1,
           coursesTotal: 5,
           subsections: [
-            { courses: [getCourse("CPSC 201")] },
-            { courses: [getCourse("CPSC 202"), getCourse("MATH 244")] },
-            { courses: [getCourse("CPSC 223")] },
-            { courses: [getCourse("CPSC 323")] },
-            { courses: [getCourse("CPSC 365"), getCourse("CPSC 366"), getCourse("CPSC 368")] },
-          ],
+            { 
+              courses: [CPSC201] 
+            },
+            { 
+              courses: [CPSC202] 
+            },
+            { 
+              courses: [CPSC223] 
+            },
+            { 
+              courses: [CPSC323] 
+            },
+            { 
+              courses: [CPSC365] 
+            }
+        ],
         },
         {
           name: "ELECTIVES",
@@ -51,13 +61,7 @@ export const CPSC: Program = {
             { 
               name: "POPULAR",
               description: "Courses that are popular for this requirement.",
-              courses: [
-                getCourse("CPSC 437"), // Database Systems
-                getCourse("CPSC 478"), // Computer Graphics
-                getCourse("CPSC 439"), // Software Engineering
-                getCourse("CPSC 370"), // Artificial Intelligence
-                getCourse("CPSC 481"), // Introduction to Machine Learning
-                ]
+              courses: []
             }
           ],
         },
@@ -65,7 +69,7 @@ export const CPSC: Program = {
           name: "SENIOR REQUIREMENT",
           coursesCompleted: 0,
           coursesTotal: 1,
-          subsections: [{ courses: [getCourse("CPSC 490")] }],
+          subsections: [],
         },
       ],
     },
@@ -90,15 +94,22 @@ export const CPSC: Program = {
       requirements: [
         {
           name: "CORE",
-          coursesCompleted: 1,
+          coursesCompleted: 0,
           coursesTotal: 5,
           subsections: [
-            { courses: [getCourse("CPSC 201")] },
-            { courses: [getCourse("CPSC 202"), getCourse("MATH 244")] },
-            { courses: [getCourse("CPSC 223")] },
-            { courses: [getCourse("CPSC 323")] },
-            { courses: [getCourse("CPSC 365"), getCourse("CPSC 366"), getCourse("CPSC 368")] },
-          ],
+            { 
+              courses: [CPSC201] 
+            },
+            { 
+              courses: [CPSC223] 
+            },
+            { 
+              courses: [CPSC323] 
+            },
+            { 
+              courses: [CPSC365] 
+            }
+        ],
         },
         {
           name: "ELECTIVES",
@@ -112,13 +123,7 @@ export const CPSC: Program = {
             },
             { 
               name: "POPULAR",
-              courses: [
-                getCourse("CPSC 437"), // Database Systems
-                getCourse("CPSC 478"), // Computer Graphics
-                getCourse("CPSC 439"), // Software Engineering
-                getCourse("CPSC 370"), // Artificial Intelligence
-                getCourse("CPSC 481"), // Introduction to Machine Learning
-                ]
+              courses: []
             }
           ],
         },
@@ -126,7 +131,7 @@ export const CPSC: Program = {
           name: "SENIOR REQUIREMENT",
           coursesCompleted: 0,
           coursesTotal: 1,
-          subsections: [{ courses: [getCourse("CPSC 490")] }],
+          subsections: [],
         },
       ],
     },
@@ -162,7 +167,7 @@ export const CGSC: Program = {
           coursesCompleted: 0,
           subsections: [
             {
-              courses: [getCourse("CGSC 110")]
+              courses: []
             }
           ]
         },
@@ -174,27 +179,27 @@ export const CGSC: Program = {
           subsections: [
             {
               name: "COMPUTER SCIENCE",
-              courses: [getCourse("CPSC 201")]
+              courses: []
             },
             {
               name: "ECONOMICS AND DECISION MAKING",
-              courses: [getCourse("ECON 159")]  
+              courses: []  
             },
             {
               name: "LINGUISTICS",
-              courses: [getCourse("LING 110"), getCourse("LING 116"), getCourse("LING 130"), getCourse("LING 217"), getCourse("LING 232"), getCourse("LING 253")]
+              courses: []
             },
             {
               name: "NEUROSCIENCE",
-              courses: [getCourse("CGSC 201"), getCourse("MCDB 320"), getCourse("NSCI 340"), getCourse("PSYC 160"), getCourse("PSYC 270")]
+              courses: []
             },
             {
               name: "PHILOSOPHY",
-              courses: [getCourse("PHIL 126"), getCourse("PHIL 182"), getCourse("PHIL 269"), getCourse("PHIL 270"), getCourse("PHIL 271")]  
+              courses: []  
             },
             {
               name: "PSYCHOLOGY",
-              courses: [getCourse("PSYC 110"), getCourse("PSYC S139E"), getCourse("PSYC 140")]
+              courses: []
             }
           ]
         },
@@ -217,7 +222,7 @@ export const CGSC: Program = {
           coursesCompleted: 0,
           subsections: [
             {
-              courses: [getCourse("CGSC 395")]
+              courses: []
             }
           ]
         },
@@ -225,7 +230,7 @@ export const CGSC: Program = {
           name: "SENIOR REQUIREMENT",
           coursesTotal: 1,
           coursesCompleted: 0,
-          subsections: [{ courses: [getCourse("CGSC 491")]}]  
+          subsections: []  
         }
       ],
     },
@@ -254,7 +259,7 @@ export const CGSC: Program = {
           coursesCompleted: 0,
           subsections: [
             {
-              courses: [getCourse("CGSC 110")]
+              courses: []
             }
           ]
         },
@@ -263,32 +268,7 @@ export const CGSC: Program = {
           description: "Each major is required to take a course from four of the following six areas:",
           coursesTotal: 4,
           coursesCompleted: 0,
-          subsections: [
-            {
-              name: "COMPUTER SCIENCE",
-              courses: [getCourse("CPSC 201")]
-            },
-            {
-              name: "ECONOMICS AND DECISION MAKING",
-              courses: [getCourse("ECON 159")]  
-            },
-            {
-              name: "LINGUISTICS",
-              courses: [getCourse("LING 110"), getCourse("LING 116"), getCourse("LING 130"), getCourse("LING 217"), getCourse("LING 232"), getCourse("LING 253")]
-            },
-            {
-              name: "NEUROSCIENCE",
-              courses: [getCourse("CGSC 201"), getCourse("MCDB 320"), getCourse("NSCI 340"), getCourse("PSYC 160"), getCourse("PSYC 270")]
-            },
-            {
-              name: "PHILOSOPHY",
-              courses: [getCourse("PHIL 126"), getCourse("PHIL 182"), getCourse("PHIL 269"), getCourse("PHIL 270"), getCourse("PHIL 271")]  
-            },
-            {
-              name: "PSYCHOLOGY",
-              courses: [getCourse("PSYC 110"), getCourse("PSYC S139E"), getCourse("PSYC 140")]
-            }
-          ]
+          subsections: []
         },
         {
           name: "DEPTH REQUIREMENT",
@@ -309,7 +289,7 @@ export const CGSC: Program = {
           coursesCompleted: 0,
           subsections: [
             {
-              courses: [getCourse("PSYC 200")]
+              courses: []
             }
           ]
         },
@@ -320,7 +300,7 @@ export const CGSC: Program = {
           coursesCompleted: 0,
           subsections: [
             {
-              courses: [getCourse("CGSC 395")]
+              courses: []
             }
           ]
         },
@@ -329,7 +309,7 @@ export const CGSC: Program = {
           description: "The B.S. degree program requires empirical research and a senior essay.",
           coursesTotal: 1,
           coursesCompleted: 0,
-          subsections: [{ courses: [getCourse("CGSC 491")]}]  
+          subsections: []  
         }
       ],
     },
@@ -346,24 +326,6 @@ export const ECON: Program = {
       stats: { courses: 16, rating: 4.5, workload: 3.6, type: "QR", },
       students: 76,
       about: "Economics is much broader than the study of recessions and inflation or stocks and bonds. Economists study decision making and incentives such as how taxes create incentives for labor market and savings behavior. Many current public policy debates concern questions of economics, including causes and consequences of inequality and gender and racial wage gaps; how to address poverty; the impact of immigration and trade on the well-being of a country’s citizens; the cause of the Great Recession; and how to predict future downturns.",
-      dus: { name: "Giovanni Maggi", address: "115 Prospect St., Rosenkranz Hall, Room 334", email: "cpsc.yale.edu", },
-      catologLink: "https://catalog.yale.edu/ycps/subjects-of-instruction/computer-science/",
-      wesbiteLink: "http://cpsc.yale.edu",
-    },
-    requirements: [],
-  }]
-};
-
-export const HIST: Program = {
-  name: "History", 
-  abbreviation: "HIST",
-  degrees: [{
-    metadata: {
-      name: "History", abbreviation: "HIST",
-      degreeType: "BACH_ART",
-      stats: { courses: 16, rating: 4.5, workload: 3.6, type: "Hu", },
-      students: 76,
-      about: "The History major is for students who understand that shaping the future requires knowing the past. History courses explore many centuries of human experimentation and ingenuity, from the global to the individual scale. History majors learn to be effective storytellers and analysts, and to craft arguments that speak to broad audiences. They make extensive use of Yale’s vast library resources to create pioneering original research projects. Students of history learn to think about politics and government, sexuality, the economy, cultural and intellectual life, war and society, and other themes in broadly humanistic—rather than narrowly technocratic—ways.",
       dus: { name: "Giovanni Maggi", address: "115 Prospect St., Rosenkranz Hall, Room 334", email: "cpsc.yale.edu", },
       catologLink: "https://catalog.yale.edu/ycps/subjects-of-instruction/computer-science/",
       wesbiteLink: "http://cpsc.yale.edu",

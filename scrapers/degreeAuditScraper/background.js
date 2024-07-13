@@ -1,23 +1,24 @@
-var majorauditId = "" //used to store the ID of the web page of the caller
 
-/**
- * When receiving the request of scraping the data,
- * pop up a window of Degree Audit
- * then inject the scraper into the web page
- */
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if (request.action === "openWebsite") {
+// Store the ID of the web page of the caller.
+var majorauditId = ""
+
+/* Upon receiving scraping request, open Degree Audit and inject the scraper into the web page. */
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) 
+{
+	if (request.action === "openWebsite") 
+	{
 	  	majorauditId = sender.tab.id;
 
-		chrome.windows.create({
+		chrome.tabs.create({
 			url: "https://secure.its.yale.edu/cas/login?service=https%3A%2F%2Fdegreeaudit.yale.edu%2Fresponsive%2Flogin%2Fcas",
-			type: "popup",
-			width: 800, 
 		},
 
-		function(tab) {
-			chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-				if (tabId === tab.id && changeInfo.url && changeInfo.url.includes('https://degreeaudit.yale.edu/responsive/')) {
+		function(tab) 
+		{
+			chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) 
+			{
+				if (tabId === tab.id && changeInfo.url && changeInfo.url.includes('https://degreeaudit.yale.edu/responsive/')) 
+				{
 					chrome.tabs.update(tabId, { url: "https://degreeaudit.yale.edu/responsive/worksheets/WEB31" });
 					chrome.scripting.executeScript({
 						target: { tabId: tab.id },
@@ -35,14 +36,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}
 });
 
-/**
- * Check whether a string is a valid course ID (defined as four alphabets + a space + three digits)
- * 
+/* Check whether a string is a valid course ID (defined as four alphabets + a space + three digits)
  * @param {*} str the string that needs to be checked
- * @returns whether the string is a valid course ID
- */
-function isCourseId(str) {
-    const pattern = /^[A-Za-z]{4} \d{3}$/;
+ * @returns whether the string is a valid course ID */
+function isCourseId(str) 
+{
+    // const pattern = /^[A-Za-z]{4} \d{3}$/;
+	const pattern = /^[A-Za-z&]{3,4} \d{3}J?$/;
     return pattern.test(str);
 }
 
@@ -64,24 +64,25 @@ function isDesignation(str) {
 	return "";
 }
 
-/**
- * According to the format of Degree Audit, 
- * the distributional requirment entry, if existed,
- * must be located in either the same line or the above line
- */
-function getDesignation(table, row, col) {
-	if(isDesignation(table[row][0])!="") return isDesignation(table[row][0]);
+/* According to the format of Degree Audit, the distributional requirment entry, if existed, must be located in either the same line or the above line. */
+function getDesignation(table, row, col) 
+{
+	if(isDesignation(table[row][0])!=""){
+		return isDesignation(table[row][0]);
+	} 
 	if(row >= 1)
 	{
-		if(isDesignation(table[row-1][0])!="") return isDesignation(table[row-1][0]);
+		if(isDesignation(table[row-1][0])!="") 
+		{
+			return isDesignation(table[row-1][0]);
+		}
 	}
 	return "";
 }
 
-/**
- * Transform the table into a json file
- */
-function TabletoJson(table) {
+/* Transform the table into a JSON file. */
+function TabletoJson(table) 
+{
 	var courses = [];
 	for(var i = 0; i < table.length; i++) {
 		if(isCourseId(table[i][1])) {
@@ -110,35 +111,36 @@ function TabletoJson(table) {
 	return courses;
 }
 
-/**
- * When receiving the raw data from Degree Audit Scraper,
- * format it into a json file
- */
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if (request.action === "dataExtracted") {
+/* Format raw data sent from Degree Audit Scraper into a JSON file. */
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) 
+{
+	if(request.action === "dataExtracted"){
 
-		tables = request.data
+		const { name, degree, major, headers, tables } = request.data;
 
 		var coursestable = []
-		var first_year_tables = ["","Distributional Requirements for the First Year", "Distributional Requirements for Sophomore Year", "Distributional Requirements for Junior Year",
-								"Distributional Requirements for Bachelor's Degree", "Undeclared Major", "In Progress"]
-		
 		for(var i = 0; i < tables.length; i++) {
-			const requirement = {
-				req: first_year_tables[i],
-				courses: TabletoJson(tables[i])
-			}
-			coursestable.push(requirement);
-		}
-		
-		const coursesJson = JSON.stringify({coursestable}, null, 2);
-		sendMessageToTab(majorauditId, {action: "receiveData", detail: coursesJson});
+            const requirement = {
+                req: headers[i],
+                courses: TabletoJson(tables[i])
+            }
+            coursestable.push(requirement);
+        }
+
+		const dataJSON = JSON.stringify({
+			name: name,
+			degree: degree,
+			major: major,
+			coursestable: coursestable
+		}, null, 2);
+
+		sendMessageToTab(majorauditId, {action: "receiveData", detail: dataJSON});
+		chrome.tabs.remove(sender.tab.id);
 	}
 });
 
-/**
- * Send the formatted json file back to the caller
- */
-function sendMessageToTab(tabID, message) {
+/* Send formatted JSON file back to caller. */
+function sendMessageToTab(tabID, message) 
+{
     chrome.tabs.sendMessage(tabID, message);
 }
