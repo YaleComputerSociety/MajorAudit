@@ -29,7 +29,6 @@ from flask_cors import CORS
 from flask_cors import cross_origin
 
 # Ryan
-from year import * 
 from course import *
 
 cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-6e9544580c.json')
@@ -37,16 +36,15 @@ app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:5000', 'majoraudit.web.app']
+allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:3000/courses', 'http://127.0.0.1:5000']
 
 class User:
-	def __init__(self, netID, onboard, name, degrees, studentCourses, yearTree):
+	def __init__(self, netID, onboard, name, degrees, studentCourses):
 		self.netID = netID
 		self.onboard = onboard
 		self.name = name
 		self.degrees = degrees
 		self.studentCourses = studentCourses
-		self.yearTree = yearTree
 
 app = Flask(__name__, template_folder='templates')
 CORS(app, supports_credentials=True, origins=allowed_CORS_origins)
@@ -91,8 +89,7 @@ def login():
 									onboard=False, 
 									name="", 
 									degrees=[], 
-									studentCourses=[], 
-									yearTree=[]
+									studentCourses=[]
                 )
                 db.collection("Users").document(netID).set(new_user.__dict__)
 
@@ -123,6 +120,27 @@ def logout():
 @app.get('/sync')
 def sync():
     True
+    
+
+
+@app.get("/CT_Courses")
+def get_ct_courses():
+    key = request.args.get('key')
+    if not key:
+        return jsonify({"error": "Missing Param"}), 400
+
+    cookies = { 
+        'session': 'enter_session_here', 
+        'session.sig': 'enter_session_sig_here' 
+    }
+    url = f"https://api.coursetable.com/api/catalog/public/{key}"
+
+    try:
+        response = requests.get(url, cookies=cookies)
+        response.raise_for_status()
+        return jsonify(response.json())
+    except requests.exceptions.RequestException as e:
+        return jsonify({"Error": str(e)}), 500
 
 
 @app.get('/check_login')
@@ -198,10 +216,9 @@ def sync_data():
 
     # Process
     courses = distill_dacourses(data)
-    year_tree = year_treeify(courses)
 
     # Store
-    user = User(loc_netid, data["name"].split(" ")[1], data["degree"], data["major"], courses, year_tree, data["coursestable"])
+    user = User(loc_netid, data["name"].split(" ")[1], data["degree"], data["major"], courses, data["coursestable"])
     db.collection("Users").document(loc_netid).set(user.__dict__)
 
     # Transfer
@@ -253,4 +270,7 @@ def functions(req: https_fn.Request) -> https_fn.Response:
 def hello_world(req: https_fn.Request) -> https_fn.Response:
     response = https_fn.Response('hello world')
     return response
+
+
+
 

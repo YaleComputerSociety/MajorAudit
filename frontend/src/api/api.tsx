@@ -70,27 +70,15 @@ export const getMajors = () => {
 //
 
 export const getCTCourses = (timekey: string): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    const url = `https://api.coursetable.com/api/catalog/public/${timekey}`;
-    // const cookies = {
-    //   'session': 'enter_session_here',
-    //   'session.sig': 'enter_session_sig_here'
-    // };
-
-    $.ajax({
-      url: url,
-      method: "GET",
-      // headers: {
-      //   'Cookie': `session=${cookies.session}; session.sig=${cookies['session.sig']}`
-      // }
-    }).done((data) => {
-      resolve(data);
-    }).fail((jqXHR, textStatus) => {
-      if (jqXHR.status !== 200) {
-        reject(new Error(`${timekey} ${jqXHR.status}`));
-      } else {
-        reject(new Error(`Error: ${textStatus}`));
-      }
-    });
-  });
+	return new Promise((resolve, reject) => {
+			$.ajax({
+					url: `http://127.0.0.1:5001/majoraudit/us-central1/functions/CT_Courses?key=${timekey}`,
+					method: "GET",
+					xhrFields: { withCredentials: true }
+			}).done((data: any) => {
+					resolve(data);
+			}).fail((error) => {
+					reject(error);
+			});
+	});
 };

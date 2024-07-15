@@ -26,7 +26,7 @@
     width: 100%;
 
     padding-top: 50px;
-    padding-bottom: 500px;
+    padding-bottom: 400px;
 }
 
 .AddCourseButton {
@@ -311,3 +311,71 @@
     font-style: italic; /* Make placeholder text italic */
 }
 
+.AddCourseBox {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	width: 425px;
+	height: 36px;
+
+	border-radius: 16px;
+	margin-bottom: 5px;
+
+	padding-left: 10px;
+	padding-right: 10px;
+
+	background-color: #F5F5F5;
+	transition: filter 0.4s ease;
+}
+
+
+
+
+
+.TermSelect {
+  border: 1px solid white;
+  padding: 0 5px; /* Adjust padding to fit within the desired height */
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 12px; /* Make the font smaller */
+  height: 22px; /* Set height */
+  display: flex; /* Align items within */
+  align-items: center; /* Center items vertically */
+  box-sizing: border-box; /* Include border and padding in the height */
+  color: black; /* Make text black */
+  position: relative; /* Make it the reference point for absolute positioning */
+}
+
+.TermDrop {
+  position: absolute;
+  background-color: white;
+  border: 1px solid white; /* Make the border white */
+  border-radius: 4px;
+  top: 100%; /* Position it directly below the TermSelect element */
+  margin-top: 5px; /* Additional spacing if needed */
+  z-index: 10;
+  width: 100px; /* Make the dropdown wider */
+  font-size: 12px; /* Make the font smaller */
+  box-sizing: border-box;
+}
+
+.TermDrop div {
+  padding: 5px;
+  cursor: pointer;
+  color: black; /* Make text black */
+}
+
+.TermDrop div:nth-child(odd) {
+  background-color: white; /* Lighter grey background */
+}
+
+.TermDrop div:nth-child(even) {
+  background-color: #f0f0f0; /* Lighter grey background */
+}
+
+.TermDrop div:hover {
+  background-color: #e0e0e0; /* Light grey on hover */
+}
