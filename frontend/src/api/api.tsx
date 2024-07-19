@@ -32,7 +32,7 @@ export const checkUser = (): Promise<{ loggedIn: boolean; onboard: boolean }> =>
 };
 
 // syncData()
-export const syncData = () => {
+export const initExtension = () => {
     var event = new CustomEvent("scrapeData", {
       detail: { action: "openWebsite" }
     });
@@ -52,6 +52,24 @@ export const getData = () => {
         });
     });
 };
+
+export const syncData = (data: string) => {
+	return new Promise((resolve, reject) => {
+			$.ajax({
+					url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/sync_data",
+					method: "POST",
+					contentType: "application/json",
+					data: JSON.stringify(data),
+					xhrFields: { withCredentials: true }
+			}).done((response) => {
+					resolve(response);
+			}).fail((error) => {
+					reject(error);
+			});
+	});
+};
+
+
 
 export const getMajors = () => {
     return new Promise((resolve, reject) => { 

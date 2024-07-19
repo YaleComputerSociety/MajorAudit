@@ -36,15 +36,17 @@ app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:3000/courses', 'http://127.0.0.1:5000']
+allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:3000/courses', 'http://127.0.0.1:3000/onboard', 'http://127.0.0.1:5000']
 
 class User:
-	def __init__(self, netID, onboard, name, degrees, studentCourses):
+	def __init__(self, netID, onboard, name, degrees, studentCourses, language):
 		self.netID = netID
 		self.onboard = onboard
 		self.name = name
 		self.degrees = degrees
 		self.studentCourses = studentCourses
+		self.language = language
+  	
 
 app = Flask(__name__, template_folder='templates')
 CORS(app, supports_credentials=True, origins=allowed_CORS_origins)
@@ -89,7 +91,8 @@ def login():
 									onboard=False, 
 									name="", 
 									degrees=[], 
-									studentCourses=[]
+									studentCourses=[],
+                  language=""
                 )
                 db.collection("Users").document(netID).set(new_user.__dict__)
 
@@ -120,6 +123,9 @@ def logout():
 @app.get('/sync')
 def sync():
     True
+    
+	
+
     
 
 
@@ -210,18 +216,26 @@ def sync_data():
     
     # Check
     data = request.json
-    required_fields = ["name", "degree", "major", "coursestable"]
+    required_fields = ["name", "degrees", "courses", "language"]
     if not data or not all(field in data for field in required_fields):
         return make_response(jsonify({"Error": "Invalid Data"}), 400)
 
     # Process
-    courses = distill_dacourses(data)
+    studentCourses = distill_dacourses(data)
 
     # Store
-    user = User(loc_netid, data["name"].split(" ")[1], data["degree"], data["major"], courses, data["coursestable"])
+    user = User(
+        netID=loc_netid, 
+        onboard=True,
+        name=data["name"], 
+        degrees=data["degrees"], 
+        studentCourses=studentCourses, 
+        language=data["language"],
+    )
     db.collection("Users").document(loc_netid).set(user.__dict__)
 
     # Transfer
+    # return jsonify({"loggedIn": True, "onboard": True}
     return make_response(jsonify(data), 200)
 
 

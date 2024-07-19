@@ -48,7 +48,7 @@ function App(){
 				<Routes>
 					<Route path="/"             element={<Navigate to="/graduation"/>}/>
 					<Route path="/login"        element={!auth.loggedIn ? <Login setAuth={setAuth}/> 		: <Navigate to="/onboard"/>}/>
-					<Route path="/onboard"      element={!auth.onboard 	? <Onboard setAuth={setAuth}/> 	: <Navigate to="/graduation"/>}/>
+					<Route path="/onboard"      element={!auth.onboard 	? <Onboard setAuth={setAuth} checkAuth={checkAuth}/> : <Navigate to="/graduation"/>}/>
 					<Route path="/graduation" 	element={ProtectedRoute(<Graduation/>)}/> 
 					<Route path="/courses" 			element={ProtectedRoute(<Courses GlobalSC={GlobalSC} setGlobalSC={setGlobalSC}/>)}/> 
 					<Route path="/majors" 			element={ProtectedRoute(<Majors/>)}/> 

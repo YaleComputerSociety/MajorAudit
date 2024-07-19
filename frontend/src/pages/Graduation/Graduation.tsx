@@ -46,10 +46,6 @@ function Graduation(){
     setCurrYear(num);
   };
 
-  const locSyncData = () => {
-    syncData();
-  };
-
   const initLocalStorage = async () => {
     try {
       const allData = ryan;
@@ -88,9 +84,6 @@ function Graduation(){
         <div className={styles.row}>
           <div className={styles.column} style={{ marginRight: "60px" }}>
             <Recommendations/>
-            <div onClick={locSyncData} className={styles.btn}>
-              Sync Data
-            </div>
             <div onClick={initLocalStorage} className={styles.btn}>
               Init Local
             </div>
