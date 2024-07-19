@@ -1,8 +1,8 @@
 
-import { useRef, useCallback } from "react";
 import styles from "./../Courses.module.css";
 import SemesterBox from "./SemesterBox";
 import { Year } from "./../../../commons/types/TypeStudent";
+import { StudentCourse } from "../../../commons/types/TypeCourse";
 
 const convertGrade = (grade: number) => {
   switch (grade) {
@@ -19,7 +19,7 @@ const convertGrade = (grade: number) => {
   }
 };
 
-export default function YearBox(props: {year: Year, edit: boolean }){
+export default function YearBox(props: {year: Year, edit: boolean, GlobalSC: StudentCourse[], setGlobalSC: Function }){
 
   return(
     <div className={styles.yearComponent}>
@@ -34,12 +34,10 @@ export default function YearBox(props: {year: Year, edit: boolean }){
         </div>
 
         <div className={styles.row}>
-
             <div style={{ marginRight: "20px" }}>
-              <SemesterBox  edit={props.edit} term={props.year["terms"][0]} studentCourses={props.year["fall"]}/>
+              <SemesterBox  edit={props.edit} GlobalSC={props.GlobalSC} setGlobalSC={props.setGlobalSC} term={props.year["terms"][0]} TermSC={props.year["fall"]}/>
             </div>
-            <SemesterBox    edit={props.edit} term={props.year["terms"][1]} studentCourses={props.year["spring"]}/>
-
+            <SemesterBox    edit={props.edit} GlobalSC={props.GlobalSC} setGlobalSC={props.setGlobalSC} term={props.year["terms"][1]} TermSC={props.year["spring"]}/>
         </div>
     </div>
   );

@@ -12,6 +12,9 @@ import Graduation from './pages/Graduation';
 import Courses from './pages/Courses';
 import Majors from './pages/Majors';
 
+import { ImportSC } from "./commons/mock/MockStudent";
+import { StudentCourse } from "./commons/types/TypeCourse";
+
 function App(){
 
   const [auth, setAuth] = useState({ loggedIn: false, onboard: false }); 
@@ -24,7 +27,7 @@ function App(){
 	};
 
   useEffect(() => {
-    // checkAuth();
+    checkAuth();
   }, []);
 
 	const ProtectedRoute = (element: JSX.Element) => {
@@ -37,17 +40,17 @@ function App(){
 		return element;
 	};
 
+	const [GlobalSC, setGlobalSC] = useState<StudentCourse[]>(ImportSC);
+
   return(
 		<div>
 			<Globals>
 				<Routes>
-					<Route path="/onboard"      element={<Onboard setAuth={setAuth}/>}/>
-
 					<Route path="/"             element={<Navigate to="/graduation"/>}/>
 					<Route path="/login"        element={!auth.loggedIn ? <Login setAuth={setAuth}/> 		: <Navigate to="/onboard"/>}/>
-					{/* <Route path="/onboard"      element={!auth.onboard 	? <Onboard setAuth={setAuth}/> 	: <Navigate to="/graduation"/>}/> */}
+					<Route path="/onboard"      element={!auth.onboard 	? <Onboard setAuth={setAuth} checkAuth={checkAuth}/> : <Navigate to="/graduation"/>}/>
 					<Route path="/graduation" 	element={ProtectedRoute(<Graduation/>)}/> 
-					<Route path="/courses" 			element={ProtectedRoute(<Courses/>)}/> 
+					<Route path="/courses" 			element={ProtectedRoute(<Courses GlobalSC={GlobalSC} setGlobalSC={setGlobalSC}/>)}/> 
 					<Route path="/majors" 			element={ProtectedRoute(<Majors/>)}/> 
 				</Routes>
 				<CourseModal/>

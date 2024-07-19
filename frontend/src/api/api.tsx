@@ -32,7 +32,7 @@ export const checkUser = (): Promise<{ loggedIn: boolean; onboard: boolean }> =>
 };
 
 // syncData()
-export const syncData = () => {
+export const initExtension = () => {
     var event = new CustomEvent("scrapeData", {
       detail: { action: "openWebsite" }
     });
@@ -53,6 +53,24 @@ export const getData = () => {
     });
 };
 
+export const syncData = (data: string) => {
+	return new Promise((resolve, reject) => {
+			$.ajax({
+					url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/sync_data",
+					method: "POST",
+					contentType: "application/json",
+					data: JSON.stringify(data),
+					xhrFields: { withCredentials: true }
+			}).done((response) => {
+					resolve(response);
+			}).fail((error) => {
+					reject(error);
+			});
+	});
+};
+
+
+
 export const getMajors = () => {
     return new Promise((resolve, reject) => { 
         $.ajax({
@@ -70,27 +88,15 @@ export const getMajors = () => {
 //
 
 export const getCTCourses = (timekey: string): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    const url = `https://api.coursetable.com/api/catalog/public/${timekey}`;
-    // const cookies = {
-    //   'session': 'enter_session_here',
-    //   'session.sig': 'enter_session_sig_here'
-    // };
-
-    $.ajax({
-      url: url,
-      method: "GET",
-      // headers: {
-      //   'Cookie': `session=${cookies.session}; session.sig=${cookies['session.sig']}`
-      // }
-    }).done((data) => {
-      resolve(data);
-    }).fail((jqXHR, textStatus) => {
-      if (jqXHR.status !== 200) {
-        reject(new Error(`${timekey} ${jqXHR.status}`));
-      } else {
-        reject(new Error(`Error: ${textStatus}`));
-      }
-    });
-  });
+	return new Promise((resolve, reject) => {
+			$.ajax({
+					url: `http://127.0.0.1:5001/majoraudit/us-central1/functions/CT_Courses?key=${timekey}`,
+					method: "GET",
+					xhrFields: { withCredentials: true }
+			}).done((data: any) => {
+					resolve(data);
+			}).fail((error) => {
+					reject(error);
+			});
+	});
 };

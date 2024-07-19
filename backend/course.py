@@ -40,12 +40,13 @@ class StudentCourse:
 
 def distill_dacourses(data):
     dacourses = {}
-    for table in data["coursestable"]:
-        for raw in table["courses"]:
-            season, year = raw["term"].split()
-            season_map = { "Spring": "01", "Fall": "03"  }
-            raw["term"] = f"{year}{season_map.get(season)}"
-            dacourses[raw["id"]] = raw
+    season_map = {"Spring": "01", "Fall": "03"}
+    
+    for c in data["courses"]:
+        season, year = c["term"].split()
+        c["term"] = f"{year}{season_map.get(season)}"
+        dacourses[c["code"]] = c  # Assuming course code is unique
+
     dacourses = list(dacourses.values())
 
     grouped_dacourses = defaultdict(list)
@@ -55,12 +56,12 @@ def distill_dacourses(data):
 
     consolidate = []
     for group in grouped_dacourses:
-        result = coursify(group)
+        result = coursify(group)  # Assuming coursify is a function you defined
         if result: 
             consolidate.extend(result)
 
-    all = [studentCourse.to_dict() for studentCourse in consolidate]
-    return all
+    all_courses = [studentCourse.to_dict() for studentCourse in consolidate]
+    return all_courses
     
 
 def coursify(dacourses):
@@ -78,13 +79,13 @@ def coursify(dacourses):
     student_courses = []
     for dacourse in dacourses:
         # Course Portion
-        offering = next((c for c in response.json() if c["course_code"] == dacourse["id"]), None)
+        offering = next((c for c in response.json() if c["course_code"] == dacourse["code"]), None)
         if not offering:
           continue
         
         codes = [l["course_code"] for l in offering["course"]["listings"]]
         title = offering["course"]["title"]
-        credit = int(dacourse["credit"].strip("()"))
+        credit = int(dacourse["credits"])
         areas = offering["course"]["areas"]
         skills = offering["course"]["skills"]
         seasons = ["Fall", "Spring"]
@@ -92,9 +93,6 @@ def coursify(dacourses):
 
         # StudentCourse Portion
         status = dacourse["status"]
-        if status not in {"IP", "PROSPECTIVE", "W"}:
-            status = "COMPLETE"
-
         student_courses.append(StudentCourse(course, status, key))
 
     return student_courses

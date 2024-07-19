@@ -8,6 +8,9 @@ export interface Year {
 	spring: Array<StudentCourse>;
 }
 
-export interface Student {
-  metadata: Array<Year>;
+export interface User {
+	netID: string;
+	name: string;
+	degrees: Array<string>;
+	studentCourses: Array<StudentCourse>;
 }
