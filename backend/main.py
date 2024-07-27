@@ -30,27 +30,16 @@ from flask_cors import cross_origin
 
 # Ryan
 from course import *
+from user import *
 
 cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-6e9544580c.json')
 app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-
 allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:3000/courses', 'http://127.0.0.1:3000/onboard', 'http://127.0.0.1:5000']
-
-class User:
-	def __init__(self, netID, onboard, name, degrees, studentCourses, language):
-		self.netID = netID
-		self.onboard = onboard
-		self.name = name
-		self.degrees = degrees
-		self.studentCourses = studentCourses
-		self.language = language
-  	
-
 app = Flask(__name__, template_folder='templates')
-CORS(app, supports_credentials=True, origins=allowed_CORS_origins)
 
+CORS(app, supports_credentials=True, origins=allowed_CORS_origins)
 app.secret_key = secrets.token_urlsafe(16)
 
 # LOGIN
@@ -149,7 +138,7 @@ def get_ct_courses():
         return jsonify({"Error": str(e)}), 500
 
 
-@app.get('/check_login')
+@app.get('/check_login') 
 def check_login():
 	if "NETID" in session:
 		document = db.collection("Users").document(session['NETID']).get()

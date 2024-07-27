@@ -1,11 +1,16 @@
 
-import { List } from "lodash";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
+
 import * as d3 from "d3";
-import { skillsAreasColors } from "../../utilities/constants";
-import DistributionBoxSmall from "./DistributionBoxSmall";
+
+import { List } from "lodash";
 import { Tooltip } from "react-tooltip";
 import ReactDOMServer from 'react-dom/server';
+
+
+import { skillsAreasColors } from "../../utilities/constants";
+import DistributionBoxSmall from "./DistributionBoxSmall";
+
 
 type Props = {
   readonly distributions: List<string>;
@@ -19,15 +24,15 @@ function getData({ distributions }: Props) {
   return pieData;
 }
 
-function CourseDistributionsText(props: { distributions: List<string>}) {
-  const rows = [];
-  for (let i = 0; i < props.distributions.length; i++) {
-      rows.push(<DistributionBoxSmall text={props.distributions[i]}/>);
-  }
-  return (
-    <div>Satisfies {rows} Requirement{props.distributions.length > 1 ? "s" : ""}</div>
-  );
-}
+// function CourseDistributionsText(props: { distributions: List<string>}) {
+//   const rows = [];
+//   for(let i = 0; i < props.distributions.length; i++) {
+//     rows.push(<DistributionBoxSmall text={props.distributions[i]}/>);
+//   }
+//   return (
+//     <div>Satisfies {rows} Requirement{props.distributions.length > 1 ? "s" : ""}</div>
+//   );
+// }
 
 type DataItem = {
   name: string;
@@ -61,9 +66,9 @@ export default function DistributionCircle({ distributions }: Props) {
 
   return(
     <div
-      data-tooltip-id="distribution-tooltip"
-      data-tooltip-html={ReactDOMServer.renderToStaticMarkup(<CourseDistributionsText distributions={distributions}/>)}
-      data-tooltip-place="top"
+      // data-tooltip-id="distribution-tooltip"
+      // data-tooltip-html={ReactDOMServer.renderToStaticMarkup(<CourseDistributionsText distributions={distributions}/>)}
+      // data-tooltip-place="top"
     >
     <div style={{position: "relative", float: "right"}}>
       <svg width={width} height={height} style={{ display: "inline-block" }}>
@@ -74,9 +79,7 @@ export default function DistributionCircle({ distributions }: Props) {
         </g>
       </svg>
     </div>
-    <Tooltip id="distribution-tooltip" style={{ 
-            backgroundColor: "#444444",
-            borderRadius: "3px"}}/>
+    {/* <Tooltip id="distribution-tooltip" style={{ backgroundColor: "#444444", borderRadius: "3px"}}/> */}
     </div>
   );
 }

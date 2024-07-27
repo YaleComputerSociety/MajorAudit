@@ -84,7 +84,6 @@ function OptionOne(props: { checkAuth: Function }){
     return courses;
 };
 
-
 // u can use this for better data rendering, although I rly dont fuck w the dynamic DACourse typing, deprecate that shit
 	// const groupCourses = (courses: DACourse[]): { [term: string]: DACourse[] } => {
 	// 	// Group courses by term
@@ -115,14 +114,11 @@ function OptionOne(props: { checkAuth: Function }){
 	// 	return sortedGroupedCourses;
 	// };
 
-
-
-const syncAndGo = () => {
-	// 
-	console.log(parsedData);
-	syncData(parsedData);
-	props.checkAuth()
-};
+	const syncAndGo = async () => {
+		console.log(parsedData);
+		await syncData(parsedData);
+		props.checkAuth();
+	};
 
 return (
 	<div style={{ border: "1px solid black", borderRadius: "8px", padding: "10px" }}>
@@ -164,7 +160,7 @@ function OptionTwo(){
 	)
 }
 
-function Onboard(props: { setAuth: Function, checkAuth: Function }){
+function Onboard(props: { checkAuth: Function }){
 	
   return(
     <div>

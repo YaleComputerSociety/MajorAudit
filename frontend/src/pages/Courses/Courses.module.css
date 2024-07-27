@@ -379,3 +379,27 @@
 .TermDrop div:hover {
   background-color: #e0e0e0; /* Light grey on hover */
 }
+
+
+
+
+
+
+.RemoveButton {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 16px; /* adjust size as needed */
+	height: 16px;
+	border-radius: 50%;
+	background-color: #ededed;
+	cursor: pointer;
+	margin-right: 5px;
+	/* optional border for better visibility */
+	/* border: 1px solid #C0C0C0; */
+}
+
+.RemoveButton:hover {
+	background-color: #D3D3D3; /* slightly darker grey on hover */
+}
+

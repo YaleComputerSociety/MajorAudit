@@ -1,6 +1,8 @@
 
 import $ from "jquery"
 
+import { User, nullUser, AuthState } from "../commons/types/TypeStudent";
+
 export const handleLogin = () => {
     return new Promise<boolean> ((resolve, reject) => { 
         $.ajax({
@@ -18,39 +20,35 @@ export const handleLogin = () => {
     });
 };
 
-export const checkUser = (): Promise<{ loggedIn: boolean; onboard: boolean }> => {
-    return new Promise<{ loggedIn: boolean; onboard: boolean }>((resolve, reject) => {
-        $.ajax({
-            url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/check_login",
-            xhrFields: { withCredentials: true }
-        }).done((data: { loggedIn: boolean; onboard: boolean }) => {
-            resolve(data);
-        }).fail((error) => {
-            reject(error);
-        });
-    });
+// checkUser()
+export const checkUser = () => {
+	console.log("API: checkUser();")
+	return new Promise<AuthState>((resolve, reject) => {
+		$.ajax({
+			url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/check_login",
+			xhrFields: { withCredentials: true }
+		}).done((data: AuthState) => {
+			resolve(data);
+		}).fail((error) => {
+			reject(error);
+		});
+	});
 };
 
-// syncData()
-export const initExtension = () => {
-    var event = new CustomEvent("scrapeData", {
-      detail: { action: "openWebsite" }
-    });
-    document.dispatchEvent(event);
-};
 
-export const getData = () => {
-    return new Promise<string | null>((resolve, reject) => { 
-        $.ajax({
-            url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/get_data",
-            method: "GET",
-            xhrFields: { withCredentials: true }
-        }).done((data: string | null) => {
-            resolve(data)
-        }).fail((error) => {
-            reject(error);
-        });
-    });
+// checkUserData();
+export const getUserData = () => {
+  return new Promise<User>((resolve, reject) => {
+    $.ajax({
+      url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/get_data",
+      method: "GET",
+      xhrFields: { withCredentials: true }
+    }).done((data: User) => {
+			resolve(data);
+		}).fail((error) => {
+			reject(error);
+		});
+  });
 };
 
 export const syncData = (data: string) => {
@@ -99,4 +97,13 @@ export const getCTCourses = (timekey: string): Promise<any> => {
 					reject(error);
 			});
 	});
+};
+
+
+// syncData()
+export const initExtension = () => {
+	var event = new CustomEvent("scrapeData", {
+		detail: { action: "openWebsite" }
+	});
+	document.dispatchEvent(event);
 };

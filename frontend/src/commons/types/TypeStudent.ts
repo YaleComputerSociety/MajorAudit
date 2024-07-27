@@ -10,7 +10,28 @@ export interface Year {
 
 export interface User {
 	netID: string;
+	onboard: boolean;
 	name: string;
 	degrees: Array<string>;
 	studentCourses: Array<StudentCourse>;
+	language: string;
+}
+
+export const nullUser: User = {
+	netID: "",
+	onboard: false,
+	name: "",
+	degrees: [],
+	studentCourses: [],
+	language: ""
+}
+
+export interface AuthState {
+	loggedIn: boolean;
+	onboard: boolean;
+}
+
+export const nullAuthState: AuthState = {
+	loggedIn: false,
+	onboard: false,
 }

@@ -2,8 +2,6 @@
 import { useState } from "react";
 import styles from "./Graduation.module.css";
 
-import { syncData, getData } from "../../api/api";
-
 import GraduationDistribution from "./components/Distribution";
 import GraduationOverview from "./components/Overview";
 

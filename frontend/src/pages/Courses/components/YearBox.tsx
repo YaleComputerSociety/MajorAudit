@@ -1,7 +1,7 @@
 
 import styles from "./../Courses.module.css";
 import SemesterBox from "./SemesterBox";
-import { Year } from "./../../../commons/types/TypeStudent";
+import { User, Year } from "./../../../commons/types/TypeStudent";
 import { StudentCourse } from "../../../commons/types/TypeCourse";
 
 const convertGrade = (grade: number) => {
@@ -19,7 +19,7 @@ const convertGrade = (grade: number) => {
   }
 };
 
-export default function YearBox(props: {year: Year, edit: boolean, GlobalSC: StudentCourse[], setGlobalSC: Function }){
+export default function YearBox(props: {year: Year, edit: boolean, user: User, setUser: Function }){
 
   return(
     <div className={styles.yearComponent}>
@@ -35,9 +35,9 @@ export default function YearBox(props: {year: Year, edit: boolean, GlobalSC: Stu
 
         <div className={styles.row}>
             <div style={{ marginRight: "20px" }}>
-              <SemesterBox  edit={props.edit} GlobalSC={props.GlobalSC} setGlobalSC={props.setGlobalSC} term={props.year["terms"][0]} TermSC={props.year["fall"]}/>
+              <SemesterBox  edit={props.edit} user={props.user} setUser={props.setUser} term={props.year["terms"][0]} TermSC={props.year["fall"]}/>
             </div>
-            <SemesterBox    edit={props.edit} GlobalSC={props.GlobalSC} setGlobalSC={props.setGlobalSC} term={props.year["terms"][1]} TermSC={props.year["spring"]}/>
+            <SemesterBox    edit={props.edit} user={props.user} setUser={props.setUser} term={props.year["terms"][1]} TermSC={props.year["spring"]}/>
         </div>
     </div>
   );

@@ -18,15 +18,10 @@ function NavBar() {
   );
 }
 
-function Login(props: { setAuth: Function }){
+function Login(){
   
-  const execLogin = async () => {
-    const userStatus = await checkUser();
-    if(userStatus.loggedIn){
-      props.setAuth(userStatus)
-    }else{
-      window.location.href = "http://127.0.0.1:5001/majoraudit/us-central1/functions/user_login";
-    }
+  const login = async () => {
+    window.location.href = "http://127.0.0.1:5001/majoraudit/us-central1/functions/user_login";
   };
 
   return(
@@ -42,7 +37,7 @@ function Login(props: { setAuth: Function }){
             <li className={styles.featureItemStyle}>Cool Guy</li>
           </ul>
           <div className={styles.loginButtons}>
-            <div onClick={execLogin} className={styles.btn}>
+            <div onClick={login} className={styles.btn}>
               Login w/ CAS
             </div>
           </div>
