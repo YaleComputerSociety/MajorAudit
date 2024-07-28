@@ -12,16 +12,16 @@ import Graduation from './pages/Graduation';
 import Courses from './pages/Courses';
 import Majors from './pages/Majors';
 
-import { checkUser, getUserData } from "./api/api";
+import { getAuth, getUser } from "./api/api";
 import { AuthState, nullAuthState, User, nullUser } from "./commons/types/TypeStudent";
 
 function App(){
 
   const [auth, setAuth] = useState<AuthState>(nullAuthState); 
   const checkAuth = async () => {
-		console.log("checkAuth();")
-		const response = await checkUser();
-		console.log(response)
+		console.log()
+		const response = await getAuth();
+		console.log("checkAuth() -> API: getAuth() -> " + response);
 		setAuth({
 			loggedIn: response.loggedIn,
 			onboard: response.onboard,
@@ -30,9 +30,8 @@ function App(){
 
 	const [user, setUser] = useState<User>(nullUser); 
 	const initUser = async () => {
-		console.log("initUser();")
-    const response = await getUserData();
-		console.log(response)
+    const response = await getUser();
+		console.log("initUser() -> API: getUser() -> " + response)
 		setUser({
 			netID: response.netID,
 			onboard: response.onboard,

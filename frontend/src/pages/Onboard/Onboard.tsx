@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { syncData } from "../../api/api";
+import { onboardUser } from "../../api/api";
 
 import NavStyle from "./../../navbar/NavBar.module.css";
 import LogoMA from "./../../commons/images/ma_logo.png";
@@ -116,7 +116,7 @@ function OptionOne(props: { checkAuth: Function }){
 
 	const syncAndGo = async () => {
 		console.log(parsedData);
-		await syncData(parsedData);
+		await onboardUser(parsedData);
 		props.checkAuth();
 	};
 

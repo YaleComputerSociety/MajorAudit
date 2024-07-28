@@ -1,4 +1,6 @@
 
+# * * * IMPORTS * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
 from urllib.request import urlopen
 import sys
 import datetime
@@ -32,6 +34,8 @@ from flask_cors import cross_origin
 from course import *
 from user import *
 
+# * * * APP * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
 cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-6e9544580c.json')
 app = firebase_admin.initialize_app(cred)
 
@@ -42,6 +46,9 @@ app = Flask(__name__, template_folder='templates')
 CORS(app, supports_credentials=True, origins=allowed_CORS_origins)
 app.secret_key = secrets.token_urlsafe(16)
 
+
+# * * * LOGIN * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    
 # LOGIN
 @app.get('/user_login')
 def login():
@@ -101,52 +108,19 @@ def login():
     return resp
 
 
-@app.route('/logout')
-def logout():
-    service="127.0.0.1:5000/login"
-    response = make_response(redirect(f'https://secure.its.yale.edu/cas/logout'))
-    response.set_cookie('netid', '', expires=0, path='/') 
-    return response
+def get_redirect_url():
+    url = request.url
+    if '?' in url:
+        url=url[:url.find('?')]
 
+    function_loc=url.rfind('/')
 
-@app.get('/sync')
-def sync():
-    True
-    
-	
+    if '127.0.0.1' in url:
+        url = url[:function_loc] + '/majoraudit/us-central1/functions' + url[function_loc:]
+    else:
+        url=url[:function_loc]+url[function_loc:]
 
-    
-
-
-@app.get("/CT_Courses")
-def get_ct_courses():
-    key = request.args.get('key')
-    if not key:
-        return jsonify({"error": "Missing Param"}), 400
-
-    cookies = { 
-        'session': 'enter_session_here', 
-        'session.sig': 'enter_session_sig_here' 
-    }
-    url = f"https://api.coursetable.com/api/catalog/public/{key}"
-
-    try:
-        response = requests.get(url, cookies=cookies)
-        response.raise_for_status()
-        return jsonify(response.json())
-    except requests.exceptions.RequestException as e:
-        return jsonify({"Error": str(e)}), 500
-
-
-@app.get('/check_login') 
-def check_login():
-	if "NETID" in session:
-		document = db.collection("Users").document(session['NETID']).get()
-		onboard = document.to_dict().get("onboard")
-		return jsonify({"loggedIn": True, "onboard": onboard})
-	else:
-		return jsonify({"loggedIn": False, "onboard": False})
-
+    return url
 
 
 def validate(ticket, service):
@@ -168,35 +142,79 @@ def validate(ticket, service):
     return True, username
 
 
-def get_base_url():
-     url=request.url
-
-     base_url=re.search('https?://[^/]+', url)
-
-     if base_url:
-         return base_url.group()
-
-     return 'no url found'
+@app.route('/logout')
+def logout():
+    service="127.0.0.1:5000/login"
+    response = make_response(redirect(f'https://secure.its.yale.edu/cas/logout'))
+    response.set_cookie('netid', '', expires=0, path='/') 
+    return response
 
 
-def get_redirect_url():
-    url = request.url
-    if '?' in url:
-        url=url[:url.find('?')]
+# * * * GET * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-    function_loc=url.rfind('/')
-
-    if '127.0.0.1' in url:
-        url = url[:function_loc] + '/majoraudit/us-central1/functions' + url[function_loc:]
-    else:
-        url=url[:function_loc]+url[function_loc:]
-
-    return url
+@app.get('/getAuth') 
+def getAuth():
+	if "NETID" in session:
+		document = db.collection("Users").document(session['NETID']).get()
+		onboard = document.to_dict().get("onboard")
+		return jsonify({"loggedIn": True, "onboard": onboard})
+	else:
+		return jsonify({"loggedIn": False, "onboard": False})
 
 
-# SYNC DATA
-@app.route("/sync_data", methods = ["POST"])
-def sync_data():
+@app.route("/getUser", methods = ["GET"])
+def getUser():
+    # Validate
+    loc_netid = session.get("NETID")
+    if not loc_netid:
+        return make_response(jsonify({"Error": "Not Authenticated"}), 401)
+
+    # Retrieve
+    user_doc = db.collection("Users").document(loc_netid).get()
+
+    # Return
+    if not user_doc.exists:
+        return make_response(jsonify({"Error": "Data Not Found"}), 404)
+    
+    response_body = jsonify(user_doc.to_dict())
+    return make_response(response_body, 200)
+
+
+@app.get("/CT_Courses")
+def get_ct_courses():
+    key = request.args.get('key')
+    if not key:
+        return jsonify({"error": "Missing Param"}), 400
+
+    cookies = { 
+        'session': 'enter_session_here', 
+        'session.sig': 'enter_session_sig_here' 
+    }
+    url = f"https://api.coursetable.com/api/catalog/public/{key}"
+
+    try:
+        response = requests.get(url, cookies=cookies)
+        response.raise_for_status()
+        return jsonify(response.json())
+    except requests.exceptions.RequestException as e:
+        return jsonify({"Error": str(e)}), 500
+  
+
+@app.route('/get_majors', methods=['POST', 'GET'])
+def get_majors():
+    if "NETID" in session:
+        majors = db.collection('Majors').stream()
+        data = []
+        for m in majors:
+            data.append(m.to_dict())
+        return jsonify(data)
+    return jsonify()
+
+
+# * * * POST * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+@app.route("/onboardUser", methods = ["POST"])
+def onboardUser():
     """"""
     # Validate
     loc_netid = session.get("NETID")
@@ -224,43 +242,49 @@ def sync_data():
     db.collection("Users").document(loc_netid).set(user.__dict__)
 
     # Transfer
-    # return jsonify({"loggedIn": True, "onboard": True}
     return make_response(jsonify(data), 200)
 
 
-# GET DATA
-@app.route("/get_data", methods = ["GET"])
-def get_data():
+@app.route("/syncUser", methods = ["POST"])
+def syncUser():
+    """"""
     # Validate
     loc_netid = session.get("NETID")
     if not loc_netid:
         return make_response(jsonify({"Error": "Not Authenticated"}), 401)
-
-    # Retrieve
-    user_doc = db.collection("Users").document(loc_netid).get()
-
-    # Return
-    if not user_doc.exists:
-        return make_response(jsonify({"Error": "Data Not Found"}), 404)
     
-    response_body = jsonify(user_doc.to_dict())
-    return make_response(response_body, 200)
+    # Parse
+    try:
+      data = json.loads(request.data)
+    except json.JSONDecodeError:
+      return make_response(jsonify({"Error": "Invalid JSON"}), 400)
+    
+		# Validate
+    required_fields = ["netID", "onboard", "name", "degrees", "studentCourses", "language"]
+    if not all(field in data for field in required_fields):
+      return make_response(jsonify({"Error": "Invalid Data"}), 400)
 
 
-def logged_in():
-    return "NETID" in session
+    data = request.json
+    required_fields = ["netID", "onboard", "name", "degrees", "studentCourses", "language"]
+    if not data or not all(field in data for field in required_fields):
+      return make_response(jsonify({"Error": "Invalid Data"}), 400)
+
+    user = User(
+        netID=loc_netid, 
+        onboard=data["onboard"],
+        name=data["name"], 
+        degrees=data["degrees"], 
+        studentCourses=data["studentCourses"], 
+        language=data["language"],
+    )
+    db.collection("Users").document(loc_netid).set(user.__dict__)
+
+    # Transfer
+    return make_response(200)
 
 
-@app.route('/get_majors', methods=['POST', 'GET'])
-def get_majors():
-    if logged_in():
-        majors = db.collection('Majors').stream()
-        data = []
-        for m in majors:
-            data.append(m.to_dict())
-        return jsonify(data)
-    return jsonify()
-
+# * * * OTHER * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 @https_fn.on_request()
 def functions(req: https_fn.Request) -> https_fn.Response:
@@ -273,7 +297,4 @@ def functions(req: https_fn.Request) -> https_fn.Response:
 def hello_world(req: https_fn.Request) -> https_fn.Response:
     response = https_fn.Response('hello world')
     return response
-
-
-
 

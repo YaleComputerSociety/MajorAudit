@@ -1,6 +1,5 @@
 
 import React from "react";
-import { checkUser } from "../../api/api";
 
 import navStyles from "./../../navbar/NavBar.module.css";
 import logo from "./../../commons/images/ma_logo.png";
