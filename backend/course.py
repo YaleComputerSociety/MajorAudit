@@ -92,7 +92,7 @@ def coursify(dacourses):
         course = Course(codes, title, credit, areas, skills, seasons)
 
         # StudentCourse Portion
-        status = dacourse["status"]
+        status = "DA_COMPLETE" if dacourse["status"] == "COMPLETE" else ("DA_PROSPECT" if dacourse["status"] == "IP" else dacourse["status"])
         student_courses.append(StudentCourse(course, status, key))
 
     return student_courses

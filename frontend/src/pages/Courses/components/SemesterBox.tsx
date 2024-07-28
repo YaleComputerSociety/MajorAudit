@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import styles from "./../Courses.module.css";
 import CourseBox from "./CourseBox";
 import { StudentCourse } from "../../../commons/types/TypeCourse";
+import { User } from "../../../commons/types/TypeStudent";
 import { getCTCourses } from "./../../../api/api";
 
 const termMappings: { [key: string]: number } = {
@@ -64,7 +65,7 @@ function TermSelector(props: { selectedTerm: number, onSelectTerm: Function }){
   );
 }
 
-function AddButton(props: { term: number, GlobalSC: StudentCourse[], setGlobalSC: Function }) {
+function AddButton(props: { term: number, user: User, setUser: Function }) {
 		
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [active, setActive] = useState(false);
@@ -114,9 +115,21 @@ function AddButton(props: { term: number, GlobalSC: StudentCourse[], setGlobalSC
 				const term = props.term;
 				const newCourse: StudentCourse = { course, term, status };
 
-				props.setGlobalSC((prevGlobalSC: StudentCourse[]) => [...prevGlobalSC, newCourse]);
+				const isDuplicate = props.user.studentCourses.some(existingCourse =>
+          existingCourse.course.title === newCourse.course.title &&
+          existingCourse.term === newCourse.term
+        );
+
+        if(isDuplicate){
+					console.log("Duplicate.");
+        }else{
+          props.setUser((prevUser: User) => ({
+						...prevUser,
+						studentCourses: [...prevUser.studentCourses, newCourse]
+					}));
+					deactivate();
+        }
 			}
-			deactivate();
 		}
 	};
 	
@@ -151,10 +164,10 @@ function AddButton(props: { term: number, GlobalSC: StudentCourse[], setGlobalSC
 	}
 
 
-function SemesterBox(props: { edit: boolean, GlobalSC: StudentCourse[], setGlobalSC: Function; term: number, TermSC: StudentCourse[] }) {
+function SemesterBox(props: { edit: boolean, user: User, setUser: Function; term: number, TermSC: StudentCourse[] }) {
     
 	let SCBoxes = props.TermSC.map((SC, index) => (
-		<CourseBox key={index} SC={SC}/>
+		<CourseBox key={index} edit={props.edit} SC={SC} user={props.user} setUser={props.setUser}/>
 	));
 
 	return (
@@ -165,7 +178,7 @@ function SemesterBox(props: { edit: boolean, GlobalSC: StudentCourse[], setGloba
 			{SCBoxes}
 			{props.edit && 
 				(!props.TermSC.length || props.TermSC[0].status !== "DA_COMPLETE") && 
-				(<AddButton term={props.term} GlobalSC={props.GlobalSC} setGlobalSC={props.setGlobalSC}/>)
+				(<AddButton term={props.term} user={props.user} setUser={props.setUser}/>)
 			}
 		</div>
 	);

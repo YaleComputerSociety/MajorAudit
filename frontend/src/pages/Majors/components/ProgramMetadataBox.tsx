@@ -16,9 +16,9 @@ import { Program, Degree } from "../../../commons/types/TypeProgram";
 function MetadataTopshelf(degree: Degree){
   return(
     <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
-      <Button style={{ width: '28px', height: '28px', padding: 0, border: 'none', marginRight: "8px" }}>
+      {/* <Button style={{ width: '28px', height: '28px', padding: 0, border: 'none', marginRight: "8px" }}>
         <img src={img_plus} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
-      </Button>
+      </Button> */}
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>{degree.metadata.name}</div>
@@ -73,8 +73,12 @@ function MetadataStats(degree: Degree){
       <div className={styles.subsectionHeader} style={{ marginBottom: "4px" }}>STATS</div>
       <div style={{ display: "flex" }}>
         <div style={{ marginRight: "15px" }}>
-          <div style={{ fontSize: "12px" }}>COURSES</div>
-          <div className={styles.countBox}>{degree.metadata.stats.courses}</div>
+          <div style={{ fontSize: "12px" }}>
+						COURSES
+					</div>
+          <div className={styles.countBox}>
+						{degree.metadata.stats.courses}
+					</div>
         </div>
         <div style={{ marginRight: "15px" }}>
           <div style={{ fontSize: "12px" }}>RATING</div>
@@ -119,7 +123,7 @@ function MetadataScrollButton(props: {scrollProgram: Function, seeProgram: Funct
   return(
     <Button style={{ backgroundColor: "white", border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(props.dir)}>
       <div style={{ display: "flex" }}>
-        <img src={props.dir > 0 ? img_arrowup : img_arrowdown} alt="" style={{ width: "31px", height: "15px", marginTop: "8px", marginRight: "8px" }}/>
+        {/* <img src={props.dir > 0 ? img_arrowup : img_arrowdown} alt="" style={{ width: "31px", height: "15px", marginTop: "8px", marginRight: "8px" }}/> */}
         <div style={{ textAlign: "left", color: "gray" }}>
           <div style={{ fontSize: "18px", fontWeight: "bold" }}>
             {props.seeProgram(props.dir).name}

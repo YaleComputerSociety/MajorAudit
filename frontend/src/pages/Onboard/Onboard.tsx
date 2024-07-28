@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { syncData } from "../../api/api";
+import { onboardUser } from "../../api/api";
 
 import NavStyle from "./../../navbar/NavBar.module.css";
 import LogoMA from "./../../commons/images/ma_logo.png";
@@ -80,20 +80,43 @@ function OptionOne(props: { handleParsedData: Function }) {
       }
     }
     return courses;
-  };
+};
 
-  const groupCoursesByYear = (courses: DACourse[]) => {
-    const groupedCourses: { [year: string]: DACourse[] } = {};
-    courses.forEach((course) => {
-      const year = course.term.split(' ')[1];
-      const term = course.term.split(' ')[0];
-      if (!groupedCourses[year]) {
-        groupedCourses[year] = [];
-      }
-      groupedCourses[year].push({ ...course, term });
-    });
-    return groupedCourses;
-  };
+// u can use this for better data rendering, although I rly dont fuck w the dynamic DACourse typing, deprecate that shit
+	// const groupCourses = (courses: DACourse[]): { [term: string]: DACourse[] } => {
+	// 	// Group courses by term
+	// 	const groupedCourses = courses.reduce((acc, course) => {
+	// 			(acc[course.term] = acc[course.term] || []).push(course);
+	// 			return acc;
+	// 	}, {} as { [term: string]: DACourse[] });
+
+	// 	// Sort terms in chronological order
+	// 	const sortedTerms = Object.keys(groupedCourses).sort((a, b) => {
+	// 			const [termA, yearA] = a.split(' ');
+	// 			const [termB, yearB] = b.split(' ');
+
+	// 			if (yearA !== yearB) {
+	// 					return parseInt(yearA) - parseInt(yearB);
+	// 			}
+
+	// 			const termOrder = ['Spring', 'Fall'];
+	// 			return termOrder.indexOf(termA) - termOrder.indexOf(termB);
+	// 	});
+
+	// 	// Reorder groupedCourses according to sortedTerms
+	// 	const sortedGroupedCourses = sortedTerms.reduce((acc, term) => {
+	// 			acc[term] = groupedCourses[term];
+	// 			return acc;
+	// 	}, {} as { [term: string]: DACourse[] });
+
+	// 	return sortedGroupedCourses;
+	// };
+
+	const syncAndGo = async () => {
+		console.log(parsedData);
+		await onboardUser(parsedData);
+		props.checkAuth();
+	};
 
   return (
     <div style={{ border: "1px solid black", borderRadius: "8px", padding: "10px" }}>
@@ -168,14 +191,9 @@ function ResultsWindow(props: { parsedData: any }) {
   );
 }
 
-function Onboard(props: { setAuth: Function; checkAuth: Function }) {
-  const [parsedData, setParsedData] = useState<any>({});
-
-  const handleParsedData = (data: any) => {
-    setParsedData(data);
-  };
-
-  return (
+function Onboard(props: { checkAuth: Function }){
+	
+  return(
     <div>
       <NavBar />
       <div className={Style.OnboardContainer}>

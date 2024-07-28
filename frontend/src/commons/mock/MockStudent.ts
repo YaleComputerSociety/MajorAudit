@@ -140,7 +140,7 @@ export const ImportSC = [
       "skills": ["QR"]
     },
     "term": 202401,
-    "status": "DA_COMPLETE"
+    "status": "DA_PROSPECT"
   },
   {
     "course": {
@@ -176,7 +176,7 @@ export const ImportSC = [
       "title": "Reading Ulysses: Modernist Classic and Postcolonial Epic"
     },
     "term": 202403,
-    "status": "DA_PROSPECT"
+    "status": "MA_VALID"
   },
   {
     "course": {
