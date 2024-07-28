@@ -1,17 +1,34 @@
 
 import { useState } from "react";
+
 import styles from "./Majors.module.css";
+
+import NavStyle from "./../../navbar/NavBar.module.css";
+import logo from "./../../commons/images/ma_logo.png";
+import PageLinks from "./../../navbar/PageLinks";
+
 
 import ProgramRequirementsBox from "./components/ProgramRequirementsBox";
 import ProgramMetadataBox from "./components/ProgramMetadataBox";
 
+import { User } from "../../commons/types/TypeStudent";
 import { Program } from "./../../commons/types/TypeProgram";
 import { StudentCourse } from "./../../commons/types/TypeCourse";
 
-import NavBar from "./components/NavBar"
+// import NavBar from "./components/NavBar"
 
+function NavBar() {
+  return (
+    <div className={NavStyle.NavBar}>
+      <div style={{ marginLeft: "20px" }}>
+        <img src={logo} alt="" style={{ width: "150px", height: "auto", marginRight: "10px" }}/>
+      </div>
+      <PageLinks/>
+    </div>
+  );
+}
 
-function Majors(){
+function Majors(props: { user: User, setUser: Function }){
 
   /************************************************************************/
 

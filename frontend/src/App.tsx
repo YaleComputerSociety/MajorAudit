@@ -10,7 +10,7 @@ import Onboard from "./pages/Onboard/Onboard";
 
 import Graduation from './pages/Graduation';
 import Courses from './pages/Courses';
-import Majors from './pages/Majors';
+import Majors from './pages/Majors/Majors';
 
 import { getAuth, getUser } from "./api/api";
 import { AuthState, nullAuthState, User, nullUser } from "./commons/types/TypeStudent";
@@ -67,13 +67,12 @@ function App(){
 			<Globals>
 				<Routes>
 					<Route path="/"             element={<Navigate to="/graduation"/>}/>
-					
 					<Route path="/login"        element={!auth.loggedIn ? <Login/> 													: <Navigate to="/onboard"/>}/>
 					<Route path="/onboard"      element={!auth.onboard 	? <Onboard 	checkAuth={checkAuth}/> : <Navigate to="/graduation"/>}/>
 
 					<Route path="/graduation" 	element={ProtectedRoute(<Graduation/>)}/> 
 					<Route path="/courses" 			element={ProtectedRoute(<Courses user={user} setUser={setUser}/>)}/> 
-					<Route path="/majors" 			element={ProtectedRoute(<Majors/>)}/> 
+					<Route path="/majors" 			element={ProtectedRoute(<Majors  user={user} setUser={setUser}/>)}/> 
 				</Routes>
 				<CourseModal/>
 			</Globals>
