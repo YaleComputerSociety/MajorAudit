@@ -1,26 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
-
-.Row {
-	display: flex;
-	flex-direction: row;
+/* UTIL */
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  margin-top: 20px;
 }
 
-.Column {
-	display: flex;
-	flex-direction: column;
+.column {
+  display: flex;
+  flex-direction: column;
 }
 
+/* CONTAIN */
 .OnboardContainer {
-	position: absolute;
-	top: 75px;
-	
-	display: flex;
-	flex-direction: column;
+  position: absolute;
+  top: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 500px;
+  background-color: #f0f0f0;
+  font-family: 'Open Sans', sans-serif;
+}
 
-	align-items: center;
+.CourseDisplayBox {
+  border: 1px solid green;
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+  height: 400px;
+  overflow-y: scroll;
+}
 
-	width: 100%;
+.courseBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 425px;
+  height: 36px;
+  border-radius: 16px;
+  margin-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #F5F5F5;
+  transition: filter 0.4s ease;
+}
 
-	padding-top: 50px;
-	padding-bottom: 500px;
+.courseBox:hover {
+  cursor: pointer;
+  filter: brightness(95%);
+}
+
+.courseCode,
+.courseCredits,
+.courseStatus {
+  flex: 1;
+}
+
+.YearHeader {
+  font-weight: 600;
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.TabButtons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.TabButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.TabContent {
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: white;
+  width: 450px;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.ResultsContainer {
+  border: 1px solid green;
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }

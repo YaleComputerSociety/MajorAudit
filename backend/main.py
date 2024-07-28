@@ -31,12 +31,12 @@ from flask_cors import cross_origin
 # Ryan
 from course import *
 
-cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-6e9544580c.json')
+cred = credentials.Certificate(r'secrets/majoraudit-firebase-adminsdk-bc6kc-2898e677ae.json')
 app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:3000/courses', 'http://127.0.0.1:3000/onboard', 'http://127.0.0.1:5000']
+allowed_CORS_origins=['http://127.0.0.1:5000', 'http://127.0.0.1:5000/graduation', 'http://127.0.0.1:5000/login', 'http://127.0.0.1:5000/courses', 'http://127.0.0.1:5000/onboard', 'http://127.0.0.1:5000']
 
 class User:
 	def __init__(self, netID, onboard, name, degrees, studentCourses, language):
@@ -60,7 +60,7 @@ def login():
     cookies={}
 
     if 'NETID' in session:
-        redirect_url = 'http://127.0.0.1:3000'
+        redirect_url = 'http://127.0.0.1:5000'
 
         current_app.logger.info(f'Redirecting: {redirect_url}')
         resp = make_response(redirect(redirect_url))
@@ -96,7 +96,7 @@ def login():
                 )
                 db.collection("Users").document(netID).set(new_user.__dict__)
 
-            redirect_url = 'http://127.0.0.1:3000'
+            redirect_url = 'http://127.0.0.1:5000'
 
         else:
             token=session['CAS_TOKEN']
