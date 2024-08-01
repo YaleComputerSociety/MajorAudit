@@ -5,7 +5,7 @@ import Table from "react-bootstrap/Table";
 import styles from "./../Graduation.module.css";
 
 import DistributionBox from "../../../commons/components/courses/DistributionBoxLarge";
-import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
+import CourseIcon from "../../../commons/components/icons/CourseIcon";
 import InfoButton from "../../../navbar/InfoButton";
 
 import { StudentCourse } from "../../../commons/types/TypeCourse";
@@ -79,7 +79,7 @@ function RenderRowLanguage(year: number, LList: Array<StudentCourse>){
       </td>
       <td style={{ display: "flex", flexDirection: "row", gap: "3px" }}>
         {LList.slice(0, required).map((course, index) => (
-          <CourseBoxSmall key={index} studentCourse={course} />
+          <CourseIcon key={index} studentCourse={course} />
         ))}
       </td>
     </tr>
@@ -123,7 +123,7 @@ function RenderRow(text: string, required: number, classList: Array<StudentCours
       </td>
       <td style={{ display: "flex", flexDirection: "row", gap: "3px" }}>
         {classList.slice(0, required).map((course, index) => (
-          <CourseBoxSmall key={index} studentCourse={course} />
+          <CourseIcon key={index} studentCourse={course} />
         ))}
       </td>
     </tr>

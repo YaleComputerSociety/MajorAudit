@@ -2,12 +2,6 @@
 export type Season = "Fall" | "Spring";
 export type Distribution = "Hu" | "So" | "Sc" | "QR" | "WR" | "L";
 
-// interface CourseEvaluation {
-//   rating: number;
-//   workload: number;
-//   professor: number;
-// }
-
 export interface Course {
   codes: Array<string>; 		// ["FREN 403", "HUMS 409"]
   title: string; 						// "Proust Interpretations: Reading <i>Remembrance of Things Past</i>"
@@ -19,7 +13,8 @@ export interface Course {
 
 export interface StudentCourse {
   course: Course; 	// ^
-  
 	term: number; 		// 202401
   status: string; 	// "DA_COMPLETE" | "DA_PROSPECT" | "MA_VALID" | "MA_HYPOTHETICAL"
 }
+
+export type AmbiCourse = Course | StudentCourse;

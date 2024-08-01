@@ -1,0 +1,31 @@
+
+.CourseIcon {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	border-radius: 15px;
+
+	width: max-content;
+	padding: 2px 4px;
+
+	font-size: 14px;
+	font-weight: bold;
+
+	background-color: #F5F5F5;
+	transition: filter 0.4s ease;
+}
+
+.CourseIconStudent {
+	background-color: rgb(225, 233, 248);
+}
+
+.CourseIcon:hover {
+	cursor: pointer;
+	filter: brightness(95%);
+}
+
+.Mark { 
+	padding-left: 1px;
+	padding-right: 3px;
+}

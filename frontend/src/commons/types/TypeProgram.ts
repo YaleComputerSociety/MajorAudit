@@ -1,5 +1,5 @@
 
-import { Course, StudentCourse } from "./TypeCourse";
+import { AmbiCourse } from "./TypeCourse";
 
 interface DUS {
     name: string;
@@ -31,7 +31,7 @@ interface DegreeMetadata {
 interface DegreeRequirementsSubsection {
     name?: string;
     description?: string;
-    courses: Array<Course>;
+    courses: Array<AmbiCourse>;
 }
   
 interface DegreeRequirements {

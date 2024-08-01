@@ -2,13 +2,10 @@
 import React from "react";
 import styles from "./../Graduation.module.css";
 
-import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
 import { Degree } from "../../../commons/types/TypeProgram"
+import { StudentCourse } from "../../../commons/types/TypeCourse";
 
 import ProgramRequirementsBox from "../../Majors/components/ProgramRequirementsBox";
-
-import { Course, StudentCourse } from "../../../commons/types/TypeCourse";
-
 
 function DegreeTopshelf(props: { degree: Degree }) {
     return(

@@ -34,10 +34,10 @@ export const getUser = () => {
 
 
 
-export const getCTCourses = (timekey: string): Promise<any> => {
+export const getCTCourses = (key: string): Promise<any> => {
 	return new Promise((resolve, reject) => {
 			$.ajax({
-					url: `http://127.0.0.1:5001/majoraudit/us-central1/functions/CT_Courses?key=${timekey}`,
+					url: `http://127.0.0.1:5001/majoraudit/us-central1/functions/getCTCourses?key=${key}`,
 					method: "GET",
 					xhrFields: { withCredentials: true }
 			}).done((data: any) => {
@@ -67,7 +67,8 @@ export const onboardUser = (data: string) => {
 	});
 };
 
-export const syncUser = (data: string) => {
+
+export const syncUser = (data: User) => {
 	return new Promise((resolve, reject) => {
 		$.ajax({
 			url: "http://127.0.0.1:5001/majoraudit/us-central1/functions/syncUser",

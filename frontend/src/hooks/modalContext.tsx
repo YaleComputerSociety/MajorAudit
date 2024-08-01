@@ -6,7 +6,7 @@ import {
     useMemo,
   } from "react";
   import { Course } from "../commons/types/TypeCourse";
-  import { EMPTYCOURSE } from "../commons/mock/MockCourses";
+  import { EMPTYCOURSE } from "../commons/mock/MockStudent";
   
   type Store = {
     isOpen: Course;

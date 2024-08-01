@@ -1,11 +1,11 @@
 
-import { useState } from "react";
+// import { useState } from "react";
 import styles from "./../Majors.module.css";
 
 import InfoButton from "../../../navbar/InfoButton";
 
 import { Degree } from "../../../commons/types/TypeProgram";
-import CourseBoxSmall from "../../../commons/components/courses/CourseBoxSmall";
+import CourseIcon from "../../../commons/components/icons/CourseIcon";
 
 import { Course, StudentCourse } from "../../../commons/types/TypeCourse";
 
@@ -30,18 +30,23 @@ function PairCourse(props: { studentCourses: StudentCourse[], studentCodes: Set<
   }
 
   return(
-    <CourseBoxSmall 
+    <CourseIcon 
       course={!isInPropsCodes ? props.course as Course : undefined}
       studentCourse={isInPropsCodes ? pairStudentCourse : undefined}
     />
   )
 }
 
+
+
+
+
+
 function RequirementsTopshelf(major: Degree) {
   return (
     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
       <div style={{ fontSize: "30px" }}>Requirements</div>
-      <div style={{ fontSize: "18px" }}>List Graph</div>
+      <div style={{ fontSize: "18px" }}>List</div>
     </div>
   );
 }

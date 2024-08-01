@@ -1,3 +1,4 @@
+
 import { ModalProvider } from "./hooks/modalContext";
 
 function Globals({ children }: { readonly children: React.ReactNode }) {

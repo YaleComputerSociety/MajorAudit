@@ -1,6 +1,6 @@
 
-import { Program } from "./../../types/TypeProgram";
-import { Course } from "./../../types/TypeCourse";
+import { Program } from "../../types/TypeProgram";
+import { Course } from "../../types/TypeCourse";
 
 export const MATH118: Course = { codes: ["MATH 118"], title: "", credit: 1, areas: [], skills: [], seasons: ["Fall", "Spring"] };
 export const MATH120: Course = { codes: ["MATH 120"], title: "", credit: 1, areas: [], skills: [], seasons: ["Fall", "Spring"] };
@@ -109,4 +109,3 @@ export const ECON: Program = {
         }
     ]   
 };
-  

@@ -8,12 +8,12 @@ import LogoMA from "./../../commons/images/ma_logo.png";
 import Style from "./Onboard.module.css";
 
 
-type DACourse = {
-	code: string;
-	credits: string;
-	term: string;
-	status: string;
-};
+// type DACourse = {
+// 	code: string;
+// 	credits: string;
+// 	term: string;
+// 	status: string;
+// };
 
 function NavBar(){
   return(

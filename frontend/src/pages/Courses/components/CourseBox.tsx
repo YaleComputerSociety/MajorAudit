@@ -4,12 +4,11 @@ import "react-tooltip/dist/react-tooltip.css";
 
 import img_fall from "./../../../commons/images/fall.png";
 import img_spring from "./../../../commons/images/spring.png";
-import DistributionsCircle from "./../../../commons/components/courses/DistributionsCircle"
+import DistributionsCircle from "../../../commons/components/icons/DistributionsCircle"
 
 import { StudentCourse } from "./../../../commons/types/TypeCourse";
 import { User } from "../../../commons/types/TypeStudent";
-import { useModal } from "../../../hooks/modalContext";
-
+// import { useModal } from "../../../hooks/modalContext";
 
 function RemoveCourse(props: { SC: StudentCourse, user: User, setUser: Function }){
 
@@ -30,7 +29,6 @@ function RemoveCourse(props: { SC: StudentCourse, user: User, setUser: Function 
 	)
 }
 
-
 function CourseBox(props: {edit: boolean, SC: StudentCourse, user: User, setUser: Function  }) {
     
     // const { setModalOpen } = useModal();
@@ -41,20 +39,22 @@ function CourseBox(props: {edit: boolean, SC: StudentCourse, user: User, setUser
 		const { status, term, course } = props.SC;
 
 		const renderMark = () => {
-			if(status === "DA_COMPLETE" || status === "DA_PROSPECT") {
-				return( 
+			if(status === "DA_COMPLETE" || status === "DA_PROSPECT"){
+				return (
 					<div className={styles.checkmark}>
 						✓
 					</div>
-				)
-			}else if(status === "MA_HYPOTHETICAL"){
-				return( 
-					<div className={styles.checkmark}>
-						⚠
+				);
+			}else if(status === "MA_HYPOTHETICAL" || "MA_VALID"){
+				const mark = (status === "MA_HYPOTHETICAL") ? "⚠" : "☑";
+				return (
+					<div className={styles.row}>
+						{props.edit && <RemoveCourse SC={props.SC} user={props.user} setUser={props.setUser} />}
+						<div className={styles.checkmark}>
+							{mark}
+						</div>
 					</div>
-				)
-			}else if(props.edit && status === "MA_VALID"){
-				return(<RemoveCourse SC={props.SC} user={props.user} setUser={props.setUser}/>)
+				);
 			}
 			return <div className={styles.hidden}></div>;
 		};
@@ -65,7 +65,6 @@ function CourseBox(props: {edit: boolean, SC: StudentCourse, user: User, setUser
 		return (
 			<div className={styles.courseBox}  style={{ backgroundColor: getBackgroundColor() }}> 
 			{/* onClick={openModal} */}
-
 
 				<div className={styles.row} style={{ alignItems: "center" }}>
 					{renderMark()}
@@ -81,16 +80,6 @@ function CourseBox(props: {edit: boolean, SC: StudentCourse, user: User, setUser
 				</div>
 				<div>
 					<div className={styles.row} style={{ alignItems: "center" }}>
-						{/* {props.displaySetting.rating && (
-                        <div className={styles.evaluateBox} style={{ marginRight: "6px" }}>
-                            {props.course.course.evaluation.rating}
-                        </div>
-                    )}
-                    {props.displaySetting.workload && (
-                        <div className={styles.evaluateBox} style={{ marginRight: "6px" }}>
-                            {props.course.course.evaluation.workload}
-                        </div>
-                    )} */}
 						<DistributionsCircle distributions={[...course.areas, ...course.skills]} />
 					</div>
 				</div>

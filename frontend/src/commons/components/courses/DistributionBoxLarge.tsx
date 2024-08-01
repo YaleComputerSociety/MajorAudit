@@ -1,6 +1,6 @@
 
 import React from "react";
-import chroma from "chroma-js"
+// import chroma from "chroma-js"
 import { skillsAreasColors } from '../../utilities/constants';
 
 type Props = {

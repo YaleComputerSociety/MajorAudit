@@ -6,9 +6,9 @@ import { Button } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 
 import lgsIcon from "../../../commons/images/little_guys.png";
-import img_plus from "../../../commons/images/plus.png";
-import img_arrowup from "../../../commons/images/arrowup.png";
-import img_arrowdown from "../../../commons/images/arrowdown.png";
+// import img_plus from "../../../commons/images/plus.png";
+// import img_arrowup from "../../../commons/images/arrowup.png";
+// import img_arrowdown from "../../../commons/images/arrowdown.png";
 
 import { Program, Degree } from "../../../commons/types/TypeProgram";
 
