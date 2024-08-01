@@ -1,8 +1,12 @@
+
 import { useRef, useState, useEffect } from "react";
 import styles from "./../Courses.module.css";
+
 import { getCTCourses } from "./../../../api/api";
 import { StudentCourse } from "../../../commons/types/TypeCourse";
-import { User } from "../../../commons/types/TypeStudent";
+import { User } from "../../../commons/types/TypeUser";
+import { xCheckMajorsAndSet } from "../utils/CoursesUtils";
+
 
 const termMappings: { [key: string]: number } = {
   "Fall 2022": 202203,
@@ -109,12 +113,12 @@ function AddButton(props: { term: number, user: User, setUser: Function }) {
       const offering = searchData.find(course => course["course_code"] === code);
 
       if (offering) {
-        const codes = offering["course"]["listings"].map((l: any) => l["course_code"]);
-        const title = offering["course"]["title"];
-        const credit = 1;
-        const areas = offering["course"]["areas"];
-        const skills = offering["course"]["skills"];
-        const seasons = ["Fall", "Spring"];
+				const codes = offering["listings"];
+				const title = offering["title"];
+				const credit = offering["credits"];
+				const areas = offering["areas"];
+				const skills = offering["skills"];
+				const seasons = ["Fall", "Spring"];
         const course = { codes, title, credit, areas, skills, seasons };
         const status = (selectedTerm === props.term) ? "MA_VALID" : "MA_HYPOTHETICAL";
         const term = props.term;
@@ -125,15 +129,12 @@ function AddButton(props: { term: number, user: User, setUser: Function }) {
           existingCourse.term === newCourse.term
         );
 
-        if (isDuplicate) {
-          console.log("Duplicate.");
-        } else {
-          props.setUser((prevUser: User) => ({
-            ...prevUser,
-            studentCourses: [...prevUser.studentCourses, newCourse]
-          }));
-          deactivate();
-        }
+        if(isDuplicate){
+          console.log("Duplicate");
+        }else{
+					xCheckMajorsAndSet(props.user, newCourse, props.setUser);
+        	deactivate();
+				}
       }
     }
   };
@@ -153,7 +154,7 @@ function AddButton(props: { term: number, user: User, setUser: Function }) {
             <input
               ref={inputRef}
               type="text"
-              placeholder="e.g. FREN 401"
+              placeholder="e.g. FREN 403"
               maxLength={9}
               onKeyPress={handleKeyPress}
               className={styles.CodeSearch}

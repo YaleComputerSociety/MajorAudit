@@ -186,20 +186,31 @@ def getUser():
 def getCTCourses():
 	key = request.args.get('key')
 	if not key:
-		return jsonify({"error": "Missing Param"}), 400
+		result = {"Error": "Missing Param"}
+		status_code = 400
 
 	cookies = { 
-		'session': 'enter_session_here', 
-		'session.sig': 'enter_session_sig_here' 
-	}
+			'session': 'enter_session_here', 
+			'session.sig': 'enter_session_sig_here' 
+		}
 	url = f"https://api.coursetable.com/api/catalog/public/{key}"
-
+						
 	try:
 		response = requests.get(url, cookies=cookies)
-		response.raise_for_status()
-		return jsonify(response.json())
+		course_data = response.json()
+		transformed_data = simplify_CT_courses(course_data)
+		result = transformed_data
+		status_code = 200
 	except requests.exceptions.RequestException as e:
-		return jsonify({"Error": str(e)}), 500
+		result = {"Error": str(e)}
+		status_code = 500
+  
+	# output_file = "output.json"
+	# with open(output_file, "w") as f:
+	# 	json.dump(result, f, indent=2)
+	# print(f"Result -> {output_file}")
+     
+	return jsonify(result), status_code
   
 
 # * * * POST * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -221,7 +232,7 @@ def onboardUser():
 	# Process
 	studentCourses = distill_dacourses(data)
 	studentPrograms = clone_programs(studentCourses)
-
+	
 	# Store
 	user = User(
 		netID=loc_netid, 
@@ -244,6 +255,8 @@ def syncUser():
 	loc_netid = session.get("NETID")
 	if not loc_netid:
 		return make_response(jsonify({"Error": "Not Authenticated"}), 401)
+     
+	print("NETID IN SESSION: ", loc_netid)
 
 	# Parse
 	try:
@@ -256,15 +269,13 @@ def syncUser():
 	if not all(field in data for field in required_fields):
 		return make_response(jsonify({"Error": "Invalid Data"}), 400)
 
-	studentPrograms = data["studentCourses"]
-
 	user = User(
 	netID=loc_netid, 
 	onboard=data["onboard"],
 	name=data["name"], 
 	degrees=data["degrees"], 
 	studentCourses=data["studentCourses"], 
-	programs=studentPrograms,
+	programs=data["programs"],
 	language=data["language"]
 	)
 

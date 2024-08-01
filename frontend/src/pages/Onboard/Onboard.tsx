@@ -115,7 +115,7 @@ function OptionOne(props: { checkAuth: Function }){
 	// };
 
 	const syncAndGo = async () => {
-		console.log(parsedData);
+		console.log("syncAndGo() -> API: onboardUser() <-", parsedData);
 		await onboardUser(parsedData);
 		props.checkAuth();
 	};

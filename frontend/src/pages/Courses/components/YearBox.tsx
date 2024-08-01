@@ -1,7 +1,7 @@
 
 import styles from "./../Courses.module.css";
 import SemesterBox from "./SemesterBox";
-import { User, Year } from "./../../../commons/types/TypeStudent";
+import { User, Year } from "../../../commons/types/TypeUser";
 // import { StudentCourse } from "../../../commons/types/TypeCourse";
 
 const convertGrade = (grade: number) => {

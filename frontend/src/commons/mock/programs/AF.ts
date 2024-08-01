@@ -13,6 +13,7 @@ export const AFAM: Program = {
 	abbreviation: "AFAM",
 	degrees: [
 		{
+			codes: [],
 			metadata: {
 				name: "African American History", 
 				abbreviation: "AFAM",

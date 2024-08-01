@@ -42,6 +42,7 @@ interface DegreeRequirements {
   
 export interface Degree {
     metadata: DegreeMetadata;
+		codes: string[];
     requirements: Array<DegreeRequirements>;
 }
   

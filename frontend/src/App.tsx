@@ -13,7 +13,7 @@ import Courses from "./pages/Courses/Courses";
 import Majors from "./pages/Majors/Majors";
 
 import { getAuth, getUser, syncUser } from "./api/api";
-import { AuthState, nullAuthState, User, nullUser } from "./commons/types/TypeStudent";
+import { AuthState, nullAuthState, User, nullUser } from "./commons/types/TypeUser";
 
 // import { Ryan } from "./commons/mock/MockStudent";
 
@@ -21,9 +21,8 @@ function App(){
 
   const [auth, setAuth] = useState<AuthState>(nullAuthState); 
   const checkAuth = async () => {
-		console.log()
 		const response = await getAuth();
-		console.log("checkAuth() -> API: getAuth() -> " + response);
+		console.log("checkAuth() -> API: getAuth() -> ", response);
 		setAuth({
 			loggedIn: response.loggedIn,
 			onboard: response.onboard,
@@ -33,13 +32,14 @@ function App(){
 	const [user, setUser] = useState<User>(nullUser); 
 	const initUser = async () => {
     const response = await getUser();
-		console.log("initUser() -> API: getUser() -> " + response)
+		console.log("initUser() -> API: getUser() -> ", response)
 		setUser({
 			netID: response.netID,
 			onboard: response.onboard,
 			name: response.name,
 			degrees: response.degrees,
 			studentCourses: response.studentCourses,
+			programs: response.programs,
 			language: response.language
 		});
   };

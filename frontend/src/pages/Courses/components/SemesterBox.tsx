@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./../Courses.module.css";
 
 import { StudentCourse } from "../../../commons/types/TypeCourse";
-import { User } from "../../../commons/types/TypeStudent";
+import { User } from "../../../commons/types/TypeUser";
 
 import CourseBox from "./CourseBox";
 import AddButton from "./AddButton";

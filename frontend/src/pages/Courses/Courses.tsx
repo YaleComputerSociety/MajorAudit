@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Year } from "./../../commons/types/TypeStudent";
+import { Year } from "../../commons/types/TypeUser";
 
 import styles from "./Courses.module.css";
 
@@ -9,7 +9,7 @@ import nav_styles from "./../../navbar/NavBar.module.css";
 import logo from "./../../commons/images/ma_logo.png";
 import PageLinks from "./../../navbar/PageLinks";
 
-import { User } from "./../../commons/types/TypeStudent";
+import { User } from "../../commons/types/TypeUser";
 // import { StudentCourse } from "../../commons/types/TypeCourse";
 
 import { yearTreeify } from "./utils/CoursesUtils";

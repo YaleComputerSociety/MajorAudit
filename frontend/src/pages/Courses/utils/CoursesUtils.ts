@@ -1,5 +1,5 @@
 
-import { Year } from "../../../commons/types/TypeStudent";
+import { User, Year } from "../../../commons/types/TypeUser";
 import { StudentCourse } from "../../../commons/types/TypeCourse";
 
 export const yearTreeify = (courses: StudentCourse[]): Year[] => {
@@ -46,4 +46,50 @@ export const yearTreeify = (courses: StudentCourse[]): Year[] => {
   }
 
   return sortedYears;
+};
+
+
+
+export const xCheckMajorsAndSet = ( user: User, newCourse: StudentCourse, setUser: Function ): void => {
+
+  // Update student courses
+  let updatedStudentCourses = user.studentCourses.map(existingCourse => {
+    if (existingCourse.course.codes.some(code => newCourse.course.codes.includes(code))) {
+      return newCourse;
+    }
+    return existingCourse;
+  });
+
+  // Check if newCourse was added to studentCourses
+  const courseExists = updatedStudentCourses.some(course =>
+    course.course.codes.some(code => newCourse.course.codes.includes(code))
+  );
+  if (!courseExists) {
+    updatedStudentCourses.push(newCourse);
+  }
+
+  // Update programs
+  const updatedPrograms = user.programs.map(program => {
+    const updatedDegrees = program.degrees.map(degree => {
+      if (degree.codes.some(code => newCourse.course.codes.includes(code))) {
+        const updatedRequirements = degree.requirements.map(requirement => {
+          const updatedSubsections = requirement.subsections.map(subsection => ({
+            ...subsection,
+            courses: subsection.courses.map(course => {
+              if ('codes' in course && course.codes.some(code => newCourse.course.codes.includes(code))) {
+                return newCourse.course; // Substitute with the new course
+              }
+              return course;
+            })
+          }));
+          return { ...requirement, subsections: updatedSubsections };
+        });
+        return { ...degree, requirements: updatedRequirements };
+      }
+      return degree;
+    });
+    return { ...program, degrees: updatedDegrees };
+  });
+
+  setUser({ ...user, studentCourses: updatedStudentCourses, programs: updatedPrograms });
 };

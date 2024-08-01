@@ -7,7 +7,7 @@ import img_spring from "./../../../commons/images/spring.png";
 import DistributionsCircle from "../../../commons/components/icons/DistributionsCircle"
 
 import { StudentCourse } from "./../../../commons/types/TypeCourse";
-import { User } from "../../../commons/types/TypeStudent";
+import { User } from "../../../commons/types/TypeUser";
 // import { useModal } from "../../../hooks/modalContext";
 
 function RemoveCourse(props: { SC: StudentCourse, user: User, setUser: Function }){

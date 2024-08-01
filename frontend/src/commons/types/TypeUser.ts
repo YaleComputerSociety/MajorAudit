@@ -1,5 +1,6 @@
 
 import { StudentCourse } from "./TypeCourse";
+import { Program } from "./TypeProgram";
 
 export interface Year {
 	grade: number;
@@ -12,8 +13,9 @@ export interface User {
 	netID: string;
 	onboard: boolean;
 	name: string;
-	degrees: Array<string>;
-	studentCourses: Array<StudentCourse>;
+	degrees: string[];
+	studentCourses: StudentCourse[];
+	programs: Program[];
 	language: string;
 }
 
@@ -23,7 +25,8 @@ export const nullUser: User = {
 	name: "",
 	degrees: [],
 	studentCourses: [],
-	language: ""
+	programs: [],
+	language: "",
 }
 
 export interface AuthState {

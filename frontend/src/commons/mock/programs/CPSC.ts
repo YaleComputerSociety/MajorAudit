@@ -14,6 +14,7 @@ export const CPSC: Program = {
   abbreviation: "CPSC",
   degrees: [
     {
+			codes: [],
       metadata: {
         name: "Computer Science",
         abbreviation: "CPSC",
@@ -75,6 +76,7 @@ export const CPSC: Program = {
       ],
     },
     {
+			codes: [],
       metadata: {
         name: "Computer Science",
         abbreviation: "CPSC",

@@ -22,6 +22,7 @@ export const ECON: Program = {
     abbreviation: "ECON",
     degrees: [
         {
+						codes: [],
             metadata: {
                 name: "Economics", abbreviation: "ECON",
                 degreeType: "BACH_ART",

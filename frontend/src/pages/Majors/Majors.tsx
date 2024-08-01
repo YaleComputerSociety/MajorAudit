@@ -10,12 +10,8 @@ import PageLinks from "./../../navbar/PageLinks";
 import ProgramRequirementsBox from "./components/ProgramRequirementsBox";
 import ProgramMetadataBox from "./components/ProgramMetadataBox";
 
-import { User } from "../../commons/types/TypeStudent";
+import { User } from "../../commons/types/TypeUser";
 import { Program } from "./../../commons/types/TypeProgram";
-
-import { ECON } from "../../commons/mock/programs/ECON";
-import { AFAM } from "../../commons/mock/programs/AF";
-import { CPSC } from "../../commons/mock/programs/CPSC";
 
 function NavBar() {
   return (
@@ -51,8 +47,7 @@ function Majors(props: { user: User, setUser: Function }){
     setCurrDegree(num);
   };
 
-  let programs: Program[] = [ECON, AFAM, CPSC];
-	let studentCodes: Set<string> = new Set(props.user.studentCourses.flatMap(studentCourse => studentCourse.course.codes));
+  let programs: Program[] = props.user.programs;
 
   return (
     <div>
@@ -67,8 +62,6 @@ function Majors(props: { user: User, setUser: Function }){
         />
         <ProgramRequirementsBox
           degree={programs[currdex].degrees[currDegree]}
-          studentCourses={props.user.studentCourses}
-          studentCodes={studentCodes}
         />
       </div>
     </div>
