@@ -1,0 +1,16 @@
+
+.RemoveButton {
+	display: flex;
+	margin-right: 5px;
+
+	width: 10px; 
+	height: 10px;
+	border-radius: 50%;
+
+	background-color: #7d7d7d;
+	cursor: pointer;
+}
+
+.RemoveButton:hover {
+	background-color: #D3D3D3; /* slightly darker grey on hover */
+}

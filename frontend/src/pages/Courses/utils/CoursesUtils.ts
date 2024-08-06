@@ -76,8 +76,9 @@ export const xCheckMajorsAndSet = ( user: User, newCourse: StudentCourse, setUse
           const updatedSubsections = requirement.subsections.map(subsection => ({
             ...subsection,
             courses: subsection.courses.map(course => {
-              if ('codes' in course && course.codes.some(code => newCourse.course.codes.includes(code))) {
-                return newCourse.course; // Substitute with the new course
+              if (course.course.codes.some(code => newCourse.course.codes.includes(code))) {
+                // Update only the term and status attributes
+                return { ...course, term: newCourse.term, status: newCourse.status };
               }
               return course;
             })

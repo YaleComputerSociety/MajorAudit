@@ -44,9 +44,9 @@ function DistCircDiv(props: { dist: Array<string> }) {
   );
 }
 
-export function AmbiCourseIcon(props: { ambiCourse: AmbiCourse }) {
-  const { ambiCourse } = props;
 
+export function StudentCourseIcon(props: { studentCourse: StudentCourse, utilityButton?: React.ReactNode }) {
+  
   const mark = (status: string) => {
     let mark = "";
     switch (status) {
@@ -66,29 +66,20 @@ export function AmbiCourseIcon(props: { ambiCourse: AmbiCourse }) {
     return <div className={styles.Mark}>{mark}</div>;
   };
 
-  const isStudentCourse = (course: AmbiCourse): course is StudentCourse => {
-    return (course as StudentCourse).status !== undefined;
-  };
+  const dist = [...(props.studentCourse.course.areas || []), ...(props.studentCourse.course.skills || [])];
 
-  if (isStudentCourse(ambiCourse)) {
-    const studentCourse = ambiCourse as StudentCourse;
-    const dist = [...(studentCourse.course.areas || []), ...(studentCourse.course.skills || [])];
-    return (
-      <div className={`${styles.CourseIcon} ${styles.CourseIconStudent}`}>
-        {mark(studentCourse.status)}
-        {studentCourse.course.codes[0]}
-        <DistCircDiv dist={dist} />
-      </div>
-    );
-  } else {
-    const course = ambiCourse as Course;
-    const dist = [...(course.areas || []), ...(course.skills || [])];
-    return (
-      <div className={styles.CourseIcon}>
-        <CourseSeasonIcon seasons={course.seasons || []} />
-        {course.codes[0]}
-        <DistCircDiv dist={dist} />
-      </div>
-    );
-  }
+  return (
+    <div 
+      className={styles.CourseIcon} 
+      style={{ backgroundColor: props.studentCourse.status === "NA" ? "#F5F5F5" : "#E1E9F8" }}
+    >
+      {props.utilityButton && props.utilityButton}
+      {props.studentCourse.status === "NA" 
+        ? <CourseSeasonIcon seasons={props.studentCourse.course.seasons || []} />
+        : mark(props.studentCourse.status)
+      }
+      {props.studentCourse.course.codes[0]}
+      <DistCircDiv dist={dist} />
+    </div>
+  );
 }

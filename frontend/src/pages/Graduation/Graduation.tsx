@@ -9,8 +9,6 @@ import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
 import PageLinks from "./../../navbar/PageLinks";
 
-import { CPSC } from "../../commons/mock/programs/CPSC";
-
 function NavBar() {
   return (
     <div className={nav_styles.NavBar}>
@@ -50,7 +48,6 @@ function Graduation(){
             <Recommendations/>
             <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
           </div>
-          <GraduationOverview degree={CPSC.degrees[0]}/>
         </div>
       </div>
     </div>

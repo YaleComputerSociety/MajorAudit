@@ -1,10 +1,11 @@
 
 import React, { useRef, useState } from "react";
-import styles from "./../Majors.module.css";
-import { User } from "../../../commons/types/TypeUser";
+import Style from "./AddableCourse.module.css";
+import { User } from "../../../../commons/types/TypeUser";
 
-function SatisfyCourseButton(props: { user: User, addCourseToSubsection: Function }) {
-  const inputRef = useRef<HTMLInputElement>(null);
+function AddableCourse(props: { user: User, addCourseToSubsection: Function }) {
+  
+	const inputRef = useRef<HTMLInputElement>(null);
   const [active, setActive] = useState(false);
 
   const activate = () => {
@@ -31,13 +32,13 @@ function SatisfyCourseButton(props: { user: User, addCourseToSubsection: Functio
   return (
     <div>
       {!active ? (
-        <div className={styles.satisfyCourseButton} onClick={activate}>
+        <div className={Style.satisfyCourseButton} onClick={activate}>
           +
         </div>
       ) : (
-        <div className={styles.SatisfyCourseBox}>
-          <div className={styles.row} style={{ alignItems: "center" }}>
-            <div className={styles.DeactivateButton} onClick={deactivate}>
+        <div className={Style.SatisfyCourseBox}>
+          <div className={Style.row} style={{ alignItems: "center" }}>
+            <div className={Style.DeactivateButton} onClick={deactivate}>
 
             </div>
             <input
@@ -46,7 +47,7 @@ function SatisfyCourseButton(props: { user: User, addCourseToSubsection: Functio
               placeholder="Code..."
               maxLength={9}
               onKeyPress={handleKeyPress}
-              className={styles.CodeSearch}
+              className={Style.CodeSearch}
               // onBlur={deactivate} // Deactivate input when it loses focus
             />
           </div>
@@ -56,4 +57,4 @@ function SatisfyCourseButton(props: { user: User, addCourseToSubsection: Functio
   );
 }
 
-export default SatisfyCourseButton;
+export default AddableCourse;

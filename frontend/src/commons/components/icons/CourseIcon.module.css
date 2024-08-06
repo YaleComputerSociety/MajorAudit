@@ -2,6 +2,7 @@
 .CourseIcon {
 	display: flex;
 	flex-direction: row;
+	
 	align-items: center;
 
 	border-radius: 15px;
@@ -18,10 +19,6 @@
 	margin-right: 2px;
 }
 
-.CourseIconStudent {
-	background-color: rgb(225, 233, 248);
-}
-
 .CourseIcon:hover {
 	cursor: pointer;
 	filter: brightness(95%);
@@ -29,5 +26,5 @@
 
 .Mark { 
 	padding-left: 1px;
-	padding-right: 3px;
+	padding-right: 1px;
 }

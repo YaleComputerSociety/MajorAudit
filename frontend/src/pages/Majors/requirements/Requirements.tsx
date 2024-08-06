@@ -1,15 +1,16 @@
 
-import { useState, useRef } from "react";
-import styles from "./../Majors.module.css";
+import { useState } from "react";
+import Style from "./Requirements.module.css";
 
-import InfoButton from "../../../navbar/InfoButton";
+// import InfoButton from "../../../navbar/InfoButton";
 
 import { User } from "../../../commons/types/TypeUser";
 import { Degree } from "../../../commons/types/TypeProgram";
-import { StudentCourse } from "../../../commons/types/TypeCourse";
-import { AmbiCourseIcon } from "../../../commons/components/icons/CourseIcon";
+import { StudentCourse, AmbiCourse } from "../../../commons/types/TypeCourse";
+import { StudentCourseIcon } from "../../../commons/components/icons/CourseIcon";
 
-import SatisfyCourseButton from "./SatisfyCourseButton";
+import AddableCourse from "./icons/AddableCourse";
+import RemovableCourse from "./icons/RemovableCourse";
 
 function RequirementsContent(props: { edit: boolean, degree: Degree, user: User, setUser: Function }) {
 
@@ -19,16 +20,31 @@ function RequirementsContent(props: { edit: boolean, degree: Degree, user: User,
     props.setUser({ ...props.user, requirements: newRequirements });
   };
 
-  return (
-    <div className={styles.reqsList}>
+	const removeCourseFromSubsection = (studentCourse: StudentCourse, reqIndex: number, subIndex: number) => {
+    const newRequirements = [...props.degree.requirements];
+
+    // Ensure subsections exist at the provided indices
+    if (newRequirements[reqIndex]?.subsections?.[subIndex]) {
+      const updatedCourses = newRequirements[reqIndex].subsections[subIndex].courses.filter(
+        (c: StudentCourse) => c.course?.title !== studentCourse.course?.title
+      );
+      newRequirements[reqIndex].subsections[subIndex].courses = updatedCourses;
+      props.setUser({ ...props.user, degree: { ...props.degree, requirements: newRequirements } });
+    } else {
+      console.error('Invalid reqIndex or subIndex:', reqIndex, subIndex);
+    }
+  };
+
+  return(
+    <div className={Style.reqsList}>
       {props.degree.requirements.map((req, reqIndex) => (
         <div key={`req-${reqIndex}`}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div className={styles.subsectionHeader} style={{ marginBottom: "4px" }}>
+            <div className={Style.subsectionHeader} style={{ marginBottom: "4px" }}>
               {req.name}
             </div>
             <div style={{ color: "grey" }}>
-              {/* {":("}/{Object.values(req.subsections).reduce((sum, subsection) => sum + subsection.courses.length, 0)} */}
+              N/N
             </div>
           </div>
           {req.description && (
@@ -44,20 +60,26 @@ function RequirementsContent(props: { edit: boolean, degree: Degree, user: User,
                   <div style={{ fontSize: "13px", fontStyle: "semibold", marginBottom: "4px" }}>
                     {sub.name}
                   </div>
-                  {sub.description && (<InfoButton text={sub.description} size={13} />)}
+                  {/* {sub.description && (<InfoButton text={sub.description} size={13} />)} */}
                 </div>
               )}
               <div style={{ display: "flex", flexWrap: "wrap" }}>
-                {sub.courses.map((course, courseIndex) => (
-                  <div key={courseIndex} style={{ display: "flex", marginBottom: "4px", marginRight: courseIndex % 3 === 2 ? "10px" : "0" }}>
-                    <AmbiCourseIcon ambiCourse={course} />
-                    {/* {courseIndex < sub.courses.length - 1 && (courseIndex % 3 === 2 ? <br /> : <div>/</div>)} */}
+                {sub.courses.map((studentCourse, studentCourseIndex) => (
+                  <div key={studentCourseIndex} style={{ display: "flex", marginBottom: "4px" }}>
+                    {props.edit && sub.flexible ? (
+                      <RemovableCourse 
+                        studentCourse={studentCourse} 
+                        removeStudentCourse={(studentCourse: StudentCourse) => removeCourseFromSubsection(studentCourse, reqIndex, subIndex)}
+                      />
+                    ) : (
+                      <StudentCourseIcon studentCourse={studentCourse}/>
+                    )}
                   </div>
                 ))}
-                {props.edit && (
-                  <SatisfyCourseButton
+                {props.edit && sub.flexible && (
+                  <AddableCourse
                     user={props.user}
-                    addCourseToSubsection={(course: StudentCourse) => addCourseToSubsection(course, reqIndex, subIndex)}
+                    addCourseToSubsection={(studentCourse: StudentCourse) => addCourseToSubsection(studentCourse, reqIndex, subIndex)}
                   />
                 )}
               </div>
@@ -69,11 +91,10 @@ function RequirementsContent(props: { edit: boolean, degree: Degree, user: User,
   );
 }
 
-function ProgramRequirementsBox(props: { user: User, setUser: Function, degree: Degree }) {
+function Requirements(props: { user: User, setUser: Function, degree: Degree }) {
   
 	const [edit, setEdit] = useState(false);
 	const updateEdit = () => {
-		console.log("updateEdit")
     setEdit(!edit);
   };
 	
@@ -82,12 +103,12 @@ function ProgramRequirementsBox(props: { user: User, setUser: Function, degree: 
   };
 
   return (
-    <div className={styles.reqsContainer}>
+    <div className={Style.reqsContainer}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
         <div style={{ fontSize: "30px" }}>
           Requirements
         </div>
-        <div className={styles.row}>
+        <div className={Style.row}>
           {/* {edit && 
 						(<div onClick={resetDegree} style={{ cursor: "pointer", fontSize: "30px" }}>
 					 		⟳
@@ -103,4 +124,4 @@ function ProgramRequirementsBox(props: { user: User, setUser: Function, degree: 
   );
 }
 
-export default ProgramRequirementsBox;
+export default Requirements;

@@ -7,8 +7,8 @@ import NavStyle from "./../../navbar/NavBar.module.css";
 import Logo from "./../../commons/images/ma_logo.png";
 import PageLinks from "./../../navbar/PageLinks";
 
-import ProgramRequirementsBox from "./components/ProgramRequirementsBox";
-import ProgramMetadataBox from "./components/ProgramMetadataBox";
+import Requirements from "./requirements/Requirements";
+import Metadata from "./metadata/Metadata";
 
 import { User } from "../../commons/types/TypeUser";
 import { Program } from "./../../commons/types/TypeProgram";
@@ -53,14 +53,14 @@ function Majors(props: { user: User, setUser: Function }){
     <div>
       <NavBar/>
       <div className={Style.MajorsPage}>
-        <ProgramMetadataBox
+        <Metadata
           program={programs[currdex]}
           scrollProgram={alterCurrdex}
           seeProgram={seeProgram}
           whichDegree={currDegree}
           alterCurrDegree={alterCurrDegree}
         />
-        <ProgramRequirementsBox
+        <Requirements
 					user={props.user}
 					setUser={props.setUser}
           degree={programs[currdex].degrees[currDegree]}

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import styles from "./../Majors.module.css";
+import Style from "./Metadata.module.css";
 
 import { Button } from "react-bootstrap";
 import { Link } from 'react-router-dom';
@@ -13,7 +13,7 @@ import lgsIcon from "../../../commons/images/little_guys.png";
 import { Program, Degree } from "../../../commons/types/TypeProgram";
 
 
-function MetadataTopshelf(degree: Degree){
+function MetadataTopshelf(props: { program: Program, degree: Degree }){
   return(
     <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
       {/* <Button style={{ width: '28px', height: '28px', padding: 0, border: 'none', marginRight: "8px" }}>
@@ -21,12 +21,12 @@ function MetadataTopshelf(degree: Degree){
       </Button> */}
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>{degree.metadata.name}</div>
+          <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>{props.degree.metadata.name}</div>
           <img src={lgsIcon} alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }}/>
-          <div className={styles.countBox} style={{ marginRight: "10px", marginTop: "4px" }}>{degree.metadata.students}</div>
-          <div className={styles.pinkMajorBox} style={{ fontSize: "16px", marginTop: "2px" }}>MAJOR</div>
+          <div className={Style.countBox} style={{ marginRight: "10px", marginTop: "4px" }}>{props.degree.metadata.students}</div>
+          <div className={Style.pinkMajorBox} style={{ fontSize: "16px", marginTop: "2px" }}>MAJOR</div>
         </div>
-        <div>{degree.metadata.abbreviation}</div>
+        <div>{props.program.abbreviation}</div>
       </div>
     </div>
   );
@@ -70,27 +70,27 @@ function MetadataDegree(props: {program: Program, whichDegree: number, alterCurr
 function MetadataStats(degree: Degree){
   return(
     <div style={{ color: "grey", marginBottom: "12px" }}>
-      <div className={styles.subsectionHeader} style={{ marginBottom: "4px" }}>STATS</div>
+      <div className={Style.subsectionHeader} style={{ marginBottom: "4px" }}>STATS</div>
       <div style={{ display: "flex" }}>
         <div style={{ marginRight: "15px" }}>
           <div style={{ fontSize: "12px" }}>
 						COURSES
 					</div>
-          <div className={styles.countBox}>
+          <div className={Style.countBox}>
 						{degree.metadata.stats.courses}
 					</div>
         </div>
         <div style={{ marginRight: "15px" }}>
           <div style={{ fontSize: "12px" }}>RATING</div>
-          <div className={styles.evaluateBox}>{degree.metadata.stats.rating}</div>
+          <div className={Style.evaluateBox}>{degree.metadata.stats.rating}</div>
         </div>
         <div style={{ marginRight: "15px" }}>
           <div style={{ fontSize: "12px" }}>WORKLOAD</div>
-          <div className={styles.evaluateBox}>{degree.metadata.stats.workload}</div>
+          <div className={Style.evaluateBox}>{degree.metadata.stats.workload}</div>
         </div>
         <div>
           <div style={{ fontSize: "12px" }}>TYPE</div>
-          <div className={styles.countBox}>{degree.metadata.stats.type}</div>
+          <div className={Style.countBox}>{degree.metadata.stats.type}</div>
         </div>
       </div>
     </div>
@@ -100,20 +100,20 @@ function MetadataStats(degree: Degree){
 function MetadataContent(props: {program: Program, whichDegree: number, alterCurrDegree: Function}){
   let currDegree = props.program.degrees[props.whichDegree];
   return (
-    <div className={styles.majorContainer}>
-      <MetadataTopshelf {...currDegree}/>
+    <div className={Style.majorContainer}>
+      <MetadataTopshelf program={props.program} degree={currDegree}/>
       <MetadataDegree {...props}/>
       <MetadataStats {...currDegree}/>
 
-      <div className={styles.subsectionHeader}>ABOUT</div>
+      <div className={Style.subsectionHeader}>ABOUT</div>
       <div style={{ fontSize: "12px", marginBottom: "12px" }}>{currDegree.metadata.about}</div>
 
-      <div className={styles.subsectionHeader}>DUS</div>
+      <div className={Style.subsectionHeader}>DUS</div>
       <div style={{ fontSize: "12px", marginBottom: "12px" }}>{currDegree.metadata.dus.name}; {currDegree.metadata.dus.address}</div>
 
       <div style={{ display: "flex" }}>
-        <div className={styles.linkBox}><Link className={styles.link} to={currDegree.metadata.catologLink} target="_blank">MAJOR CATALOG</Link></div>
-        <div className={styles.linkBox}><Link className={styles.link} to={currDegree.metadata.wesbiteLink} target="_blank">MAJOR WEBSITE</Link></div>
+        <div className={Style.linkBox}><Link className={Style.link} to={currDegree.metadata.catologLink} target="_blank">MAJOR CATALOG</Link></div>
+        <div className={Style.linkBox}><Link className={Style.link} to={currDegree.metadata.wesbiteLink} target="_blank">MAJOR WEBSITE</Link></div>
       </div>
     </div>
   );
@@ -137,7 +137,7 @@ function MetadataScrollButton(props: {scrollProgram: Function, seeProgram: Funct
   );
 }
 
-function ProgramMetadataBox(props: {program: Program, scrollProgram: Function, seeProgram: Function, whichDegree: number, alterCurrDegree: Function}){
+function Metadata(props: {program: Program, scrollProgram: Function, seeProgram: Function, whichDegree: number, alterCurrDegree: Function}){
   return (
     <div>
       <MetadataScrollButton scrollProgram={props.scrollProgram} seeProgram={props.seeProgram} dir={1}/>
@@ -149,4 +149,4 @@ function ProgramMetadataBox(props: {program: Program, scrollProgram: Function, s
   );
 }
 
-export default ProgramMetadataBox;
+export default Metadata;
