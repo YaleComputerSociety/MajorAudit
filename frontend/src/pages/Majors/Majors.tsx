@@ -28,6 +28,8 @@ function Majors(props: { user: User, setUser: Function }){
 
   const [currdex, setCurrdex] = useState(0);
   const [currDegree, setCurrDegree] = useState(0);
+
+	let programs: Program[] = props.user.programs;
   
   const alterCurrdex = (dir: number) => {
     if(programs && programs.length > 0){
@@ -47,8 +49,6 @@ function Majors(props: { user: User, setUser: Function }){
     setCurrDegree(num);
   };
 
-  let programs: Program[] = props.user.programs;
-
   return (
     <div>
       <NavBar/>
@@ -61,6 +61,8 @@ function Majors(props: { user: User, setUser: Function }){
           alterCurrDegree={alterCurrDegree}
         />
         <ProgramRequirementsBox
+					user={props.user}
+					setUser={props.setUser}
           degree={programs[currdex].degrees[currDegree]}
         />
       </div>

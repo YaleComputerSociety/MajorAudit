@@ -15,11 +15,12 @@ import Majors from "./pages/Majors/Majors";
 import { getAuth, getUser, syncUser } from "./api/api";
 import { AuthState, nullAuthState, User, nullUser } from "./commons/types/TypeUser";
 
-// import { Ryan } from "./commons/mock/MockStudent";
+import { Ryan } from "./commons/mock/MockStudent";
 
 function App(){
 
-  const [auth, setAuth] = useState<AuthState>(nullAuthState); 
+  // const [auth, setAuth] = useState<AuthState>({ loggedIn: true, onboard: true }); 
+	const [auth, setAuth] = useState<AuthState>(nullAuthState); 
   const checkAuth = async () => {
 		const response = await getAuth();
 		console.log("checkAuth() -> API: getAuth() -> ", response);
@@ -29,6 +30,7 @@ function App(){
 		});
 	};
 
+	// const [user, setUser] = useState<User>(Ryan); 
 	const [user, setUser] = useState<User>(nullUser); 
 	const initUser = async () => {
     const response = await getUser();
@@ -74,7 +76,7 @@ function App(){
 		<div>
 			<Globals>
 				<Routes>
-					<Route path="/"             element={<Navigate to="/graduation"/>}/>
+					<Route path="/"             element={ProtectedRoute(<Navigate to="/graduation"/>)}/>
 					<Route path="/login"        element={!auth.loggedIn ? <Login/> : (!auth.onboard ? <Navigate to="/onboard"/> : <Navigate to="/graduation"/>)}/>
 					<Route path="/onboard"      element={!auth.onboard 	? <Onboard 	checkAuth={checkAuth}/> : <Navigate to="/graduation"/>}/>
 					<Route path="/graduation" 	element={ProtectedRoute(<Graduation/>)}/> 

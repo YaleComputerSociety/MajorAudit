@@ -105,6 +105,7 @@ CPSC_Program = {
           "description": "Usually, courses with course numbers above 300 work for this requirement.",
           "subsections": [
             {
+							"flexible": True,
               "courses": []
             }
           ]

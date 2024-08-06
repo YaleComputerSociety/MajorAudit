@@ -14,12 +14,12 @@ interface DegreeMetadataStats {
     type: string;
 }
   
-type DegreeType = 'BACH_ART' | 'BACH_SCI' | 'BACH_INTENSIVE';
+// type DegreeType = 'BACH_ART' | 'BACH_SCI' | 'BACH_INTENSIVE';
   
 interface DegreeMetadata {
     name: string;
     abbreviation: string;
-    degreeType: DegreeType;
+    degreeType: string;
     stats: DegreeMetadataStats;
     students: number;
     about: string;
