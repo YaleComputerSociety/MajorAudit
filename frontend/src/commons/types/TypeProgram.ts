@@ -40,7 +40,8 @@ interface DegreeRequirement {
   
 export interface Degree {
 	metadata: DegreeMetadata;
-	codes: string[];
+	codesCore: string[];
+	codesAdded: string[];
 	requirements: DegreeRequirement[];
 }
   

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Style from "./Requirements.module.css";
 import { User } from "../../../commons/types/TypeUser";
@@ -8,45 +7,30 @@ import { StudentCourseIcon } from "../../../commons/components/icons/CourseIcon"
 import AddableCourse from "./icons/AddableCourse";
 import RemovableCourse from "./icons/RemovableCourse";
 import { OrIcon } from "../../../commons/components/icons/CourseIcon";
+import { addCourseToSubsection, removeCourseFromSubsection, resetDegree } from "./RequirementsUtils";
 
 function RequirementsContent(props: { edit: boolean, degree: Degree, user: User, setUser: Function }) {
 
-  const addCourseToSubsection = (course: StudentCourse, reqIndex: number, subIndex: number) => {
-    const newRequirements = [...props.degree.requirements];
-    newRequirements[reqIndex].subsections[subIndex].courses.push(course);
-    props.setUser({ ...props.user, degree: { ...props.degree, requirements: newRequirements } });
-  };
-
-  const removeCourseFromSubsection = (studentCourse: StudentCourse, reqIndex: number, subIndex: number) => {
-    const newRequirements = [...props.degree.requirements];
-    if (newRequirements[reqIndex]?.subsections?.[subIndex]) {
-      const updatedCourses = newRequirements[reqIndex].subsections[subIndex].courses.filter(
-        (c: StudentCourse) => c.course?.title !== studentCourse.course?.title
-      );
-      newRequirements[reqIndex].subsections[subIndex].courses = updatedCourses;
-      props.setUser({ ...props.user, degree: { ...props.degree, requirements: newRequirements } });
-    } else {
-      console.error('Invalid reqIndex or subIndex:', reqIndex, subIndex);
-    }
-  };
-
   const renderCourses = (sub: any, reqIndex: number, subIndex: number) => {
-    if (sub.courses.length > 20) {
+    // Filter out courses with status 'HIDDEN'
+    const visibleCourses = sub.courses.filter((studentCourse: StudentCourse) => studentCourse.status !== 'HIDDEN');
+
+    if (visibleCourses.length > 20) {
       return (
         <div style={{ marginBottom: "4px" }}>
-          <OrIcon studentCourses={sub.courses} />
+          <OrIcon studentCourses={visibleCourses} />
         </div>
       );
     } else {
-      return sub.courses.map((studentCourse: StudentCourse, studentCourseIndex: number) => (
+      return visibleCourses.map((studentCourse: StudentCourse, studentCourseIndex: number) => (
         <div key={studentCourseIndex} style={{ display: "flex", marginBottom: "4px" }}>
           {props.edit && sub.flexible ? (
             <RemovableCourse 
               studentCourse={studentCourse} 
-              removeStudentCourse={(studentCourse: StudentCourse) => removeCourseFromSubsection(studentCourse, reqIndex, subIndex)}
+              removeStudentCourse={(studentCourse: StudentCourse) => removeCourseFromSubsection(studentCourse, reqIndex, subIndex, props.degree, props.user, props.setUser)}
             />
           ) : (
-            <StudentCourseIcon studentCourse={studentCourse}/>
+            <StudentCourseIcon studentCourse={studentCourse} />
           )}
         </div>
       ));
@@ -86,7 +70,7 @@ function RequirementsContent(props: { edit: boolean, degree: Degree, user: User,
                 {props.edit && sub.flexible && (
                   <AddableCourse
                     user={props.user}
-                    addCourseToSubsection={(studentCourse: StudentCourse) => addCourseToSubsection(studentCourse, reqIndex, subIndex)}
+                    addCourseToSubsection={(studentCourse: StudentCourse) => addCourseToSubsection(studentCourse, reqIndex, subIndex, props.degree, props.user, props.setUser)}
                   />
                 )}
               </div>
@@ -100,13 +84,13 @@ function RequirementsContent(props: { edit: boolean, degree: Degree, user: User,
 
 function Requirements(props: { user: User, setUser: Function, degree: Degree }) {
   
-	const [edit, setEdit] = useState(false);
-	const updateEdit = () => {
+  const [edit, setEdit] = useState(false);
+  const updateEdit = () => {
     setEdit(!edit);
   };
-	
-  const resetDegree = () => {
-    // Functionality for reset icon click
+  
+  const handleResetDegree = () => {
+    resetDegree(props.degree, props.user, props.setUser);
   };
 
   return (
@@ -116,13 +100,13 @@ function Requirements(props: { user: User, setUser: Function, degree: Degree }) 
           Requirements
         </div>
         <div className={Style.row}>
-          {/* {edit && 
-						(<div onClick={resetDegree} style={{ cursor: "pointer", fontSize: "30px" }}>
-					 		⟳
-          	</div>)
-					} */}
+          {edit && 
+            (<div onClick={handleResetDegree} style={{ cursor: "pointer", fontSize: "30px" }}>
+              ⟳
+            </div>)
+          }
           <div onClick={updateEdit} style={{ cursor: "pointer", fontSize: "30px" }}>
-						⚙
+            ⚙
           </div>
         </div>
       </div>

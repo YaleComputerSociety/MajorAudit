@@ -35,13 +35,8 @@ export const Ryan = {
             "wesbiteLink": "http://cpsc.yale.edu"
           },
 
-					"codes": [
-            "CPSC 365",
-            "CPSC 323",
-            "CPSC 223",
-            "CPSC 202",
-            "CPSC 201"
-          ],
+					"codesCore": ["CPSC 201", "CPSC 202", "MATH 244", "CPSC 223", "CPSC 323", "CPSC 365", "CPSC 490"],
+					"codesAdded": [],
           "requirements": [
             {
               "name": "CORE",

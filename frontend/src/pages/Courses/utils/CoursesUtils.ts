@@ -71,7 +71,7 @@ export const xCheckMajorsAndSet = ( user: User, newCourse: StudentCourse, setUse
   // Update programs
   const updatedPrograms = user.programs.map(program => {
     const updatedDegrees = program.degrees.map(degree => {
-      if (degree.codes.some(code => newCourse.course.codes.includes(code))) {
+      if(degree.codesCore.some(code => newCourse.course.codes.includes(code))){
         const updatedRequirements = degree.requirements.map(requirement => {
           const updatedSubsections = requirement.subsections.map(subsection => ({
             ...subsection,
