@@ -59,14 +59,14 @@
 	display: flex;
 	margin-right: 3px;
 
-	width: 10px; 
-	height: 10px;
+	width: 12px; 
+	height: 12px;
 	border-radius: 50%;
 
-	background-color: #ababab;
+	background-color: #d4d4d4;
 	cursor: pointer;
 }
 
 .DeactivateButton:hover {
-	background-color: #D3D3D3; /* slightly darker grey on hover */
+	background-color: #e8e8e8; /* slightly darker grey on hover */
 }

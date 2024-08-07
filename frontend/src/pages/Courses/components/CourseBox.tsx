@@ -16,10 +16,43 @@ function RemoveCourse(props: { SC: StudentCourse, user: User, setUser: Function 
     const updatedStudentCourses = props.user.studentCourses.filter(
       (course) => course.course.title !== props.SC.course.title || course.term !== props.SC.term
     );
-    props.setUser((prevUser: User) => ({
-      ...prevUser,
-      studentCourses: updatedStudentCourses
-    }));
+
+    const updatedPrograms = props.user.programs.map((program) => {
+      const updatedDegrees = program.degrees.map((degree) => {
+        const isCoreCode = props.SC.course.codes.some(code => degree.codesCore.includes(code));
+        const isAddedCode = props.SC.course.codes.some(code => degree.codesAdded.includes(code));
+
+        if (isCoreCode || isAddedCode) {
+          const updatedRequirements = degree.requirements.map((req) => {
+            const updatedSubsections = req.subsections.map((sub) => {
+              const updatedCourses = sub.courses.filter(
+                (course) => course.course.title !== props.SC.course.title
+              );
+              return { ...sub, courses: updatedCourses };
+            });
+            return { ...req, subsections: updatedSubsections };
+          });
+
+          const newCodesAdded = degree.codesAdded.filter(code => !props.SC.course.codes.includes(code));
+
+          return {
+            ...degree,
+            requirements: updatedRequirements,
+            codesAdded: newCodesAdded
+          };
+        }
+        return degree;
+      });
+      return { ...program, degrees: updatedDegrees };
+    });
+
+    const updatedUser = {
+      ...props.user,
+      studentCourses: updatedStudentCourses,
+      programs: updatedPrograms
+    };
+
+    props.setUser(updatedUser);
   };
 
 	return( 

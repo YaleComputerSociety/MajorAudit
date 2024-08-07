@@ -1,4 +1,3 @@
-
 from copy import deepcopy
 
 from clone import CPSC_Program
@@ -14,46 +13,19 @@ def clone_programs(studentCourses):
         cloned_program = deepcopy(program)  # Make a deep copy of the program to avoid modifying the original
 
         for degree in cloned_program['degrees']:
-            if not degree["codes"].intersection(student_course_codes):
+            if not set(degree["codesCore"]).intersection(student_course_codes):
                 continue
 
             for requirement in degree['requirements']:
                 for subsection in requirement['subsections']:
-                    for i, course in enumerate(subsection['courses']):
+                    for course in subsection['courses']:
                         for studentCourse in studentCourses:
-                            if set(course['codes']).intersection(studentCourse['course']['codes']):
-                                # print(f"Replacing course {course['codes']} with student course {studentCourse['course']['codes']}")
-                                subsection['courses'][i] = studentCourse  # Replace course with studentCourse
-                                break  # Break after replacing to avoid multiple replacements
+                            if set(course['course']['codes']).intersection(studentCourse['course']['codes']):
+                                # Update course's term and status if there's a match
+                                course['term'] = studentCourse['term']
+                                course['status'] = studentCourse['status']
+                                break  # Break after updating to avoid multiple updates
 
         cloned_programs.append(cloned_program)
     
     return cloned_programs
-
-
-example_student_courses = [
-    {
-        "course": {
-            "codes": ["CPSC 201"],
-            "title": "Introduction",
-            "credit": 1,
-            "areas": [],
-            "skills": [],
-            "seasons": []
-        },
-        "term": 202401,
-        "status": "DA_COMPLETE"
-    },
-    {
-        "course": {
-            "codes": ["CPSC 202"],
-            "title": "Math Tools",
-            "credit": 1,
-            "areas": [],
-            "skills": [],
-            "seasons": []
-        },
-        "term": 202402,
-        "status": "DA_PROSPECT"
-    }
-]

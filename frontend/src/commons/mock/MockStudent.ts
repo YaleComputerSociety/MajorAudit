@@ -148,7 +148,7 @@ export const Ryan = {
         ],
         "title": "Introduction to Systems Programming and Computer Organization"
       },
-      "status": "DA_COMPLETE",
+      "status": "DA_PROSPECT",
       "term": 202401
     },
     {
@@ -208,7 +208,7 @@ export const Ryan = {
         "skills": [],
         "title": "Reading Ulysses: Modernist Classic and Postcolonial Epic"
       },
-      "status": "DA_PROSPECT",
+      "status": "MA_VALID",
       "term": 202403
     },
     {

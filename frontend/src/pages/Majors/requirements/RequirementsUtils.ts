@@ -131,7 +131,12 @@ export const resetDegree = (degree: Degree, user: User, setUser: Function) => {
         const isAddedCode = courseCodes.some(code => degree.codesAdded.includes(code));
 
         if (isCoreCode && course.status === 'HIDDEN') {
-          acc.push({ ...course, status: 'NA' });
+          const matchingStudentCourse = user.studentCourses.find(sc => sc.course.title === course.course.title);
+          if (matchingStudentCourse) {
+            acc.push({ ...course, status: matchingStudentCourse.status });
+          } else {
+            acc.push({ ...course, status: 'NA' });
+          }
         } else if (!isAddedCode) {
           acc.push(course);
         }

@@ -15,13 +15,12 @@ import Majors from "./pages/Majors/Majors";
 import { getAuth, getUser, syncUser } from "./api/api";
 import { AuthState, nullAuthState, User, nullUser } from "./commons/types/TypeUser";
 
-import { Ryan } from "./commons/mock/MockStudent";
+// import { Ryan } from "./commons/mock/MockStudent";
 
 function App(){
 
-  
-	// const [auth, setAuth] = useState<AuthState>(nullAuthState); 
-	const [auth, setAuth] = useState<AuthState>({ loggedIn: true, onboard: true }); 
+	const [auth, setAuth] = useState<AuthState>(nullAuthState); 
+	// const [auth, setAuth] = useState<AuthState>({ loggedIn: true, onboard: true }); 
   const checkAuth = async () => {
 		const response = await getAuth();
 		console.log("checkAuth() -> API: getAuth() -> ", response);
@@ -31,8 +30,8 @@ function App(){
 		});
 	};
 
-	// const [user, setUser] = useState<User>(nullUser); 
-	const [user, setUser] = useState<User>(Ryan); 
+	const [user, setUser] = useState<User>(nullUser); 
+	// const [user, setUser] = useState<User>(Ryan); 
 	const initUser = async () => {
     const response = await getUser();
 		console.log("initUser() -> API: getUser() -> ", response)
@@ -47,21 +46,21 @@ function App(){
 		});
   };
 
-	// useEffect(() => {
-	// 	checkAuth();
-  // }, []);
+	useEffect(() => {
+		checkAuth();
+  }, []);
 
-  // useEffect(() => {
-	// 	if(auth.loggedIn && auth.onboard){
-	// 		initUser();
-	// 	}
-  // }, [auth]);
+  useEffect(() => {
+		if(auth.loggedIn && auth.onboard){
+			initUser();
+		}
+  }, [auth]);
 
-	// useEffect(() => {
-	// 	if(auth.loggedIn && auth.onboard){
-	// 		syncUser(user);
-	// 	}
-  // }, [user]);
+	useEffect(() => {
+		if(auth.loggedIn && auth.onboard){
+			syncUser(user);
+		}
+  }, [user]);
 
 	const ProtectedRoute = (element: JSX.Element) => {
 		if(!auth.loggedIn){

@@ -83,12 +83,11 @@ function RequirementsContent(props: { edit: boolean, degree: Degree, user: User,
 }
 
 function Requirements(props: { user: User, setUser: Function, degree: Degree }) {
-  
   const [edit, setEdit] = useState(false);
   const updateEdit = () => {
     setEdit(!edit);
   };
-  
+
   const handleResetDegree = () => {
     resetDegree(props.degree, props.user, props.setUser);
   };
@@ -99,13 +98,19 @@ function Requirements(props: { user: User, setUser: Function, degree: Degree }) 
         <div style={{ fontSize: "30px" }}>
           Requirements
         </div>
-        <div className={Style.row}>
-          {edit && 
-            (<div onClick={handleResetDegree} style={{ cursor: "pointer", fontSize: "30px" }}>
-              ⟳
-            </div>)
-          }
-          <div onClick={updateEdit} style={{ cursor: "pointer", fontSize: "30px" }}>
+        <div className={Style.ButtonRow}>
+          <div 
+            onClick={handleResetDegree} 
+            className={`${Style.resetButton} ${edit ? Style.visible : ""}`} 
+            style={{ fontSize: "30px" }}
+          >
+            ⟳
+          </div>
+          <div 
+            onClick={updateEdit} 
+            className={Style.editButton} 
+            style={{ fontSize: "30px" }}
+          >
             ⚙
           </div>
         </div>
