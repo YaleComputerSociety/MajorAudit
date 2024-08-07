@@ -1,13 +1,13 @@
 
 .RemoveButton {
 	display: flex;
-	margin-right: 5px;
+	margin-right: 3px;
 
 	width: 10px; 
 	height: 10px;
 	border-radius: 50%;
 
-	background-color: #7d7d7d;
+	background-color: #ababab;
 	cursor: pointer;
 }
 

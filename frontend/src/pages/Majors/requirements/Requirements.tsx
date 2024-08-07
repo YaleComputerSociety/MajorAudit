@@ -1,29 +1,24 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Style from "./Requirements.module.css";
-
-// import InfoButton from "../../../navbar/InfoButton";
-
 import { User } from "../../../commons/types/TypeUser";
 import { Degree } from "../../../commons/types/TypeProgram";
-import { StudentCourse, AmbiCourse } from "../../../commons/types/TypeCourse";
+import { StudentCourse } from "../../../commons/types/TypeCourse";
 import { StudentCourseIcon } from "../../../commons/components/icons/CourseIcon";
-
 import AddableCourse from "./icons/AddableCourse";
 import RemovableCourse from "./icons/RemovableCourse";
+import { OrIcon } from "../../../commons/components/icons/CourseIcon";
 
 function RequirementsContent(props: { edit: boolean, degree: Degree, user: User, setUser: Function }) {
 
   const addCourseToSubsection = (course: StudentCourse, reqIndex: number, subIndex: number) => {
     const newRequirements = [...props.degree.requirements];
     newRequirements[reqIndex].subsections[subIndex].courses.push(course);
-    props.setUser({ ...props.user, requirements: newRequirements });
+    props.setUser({ ...props.user, degree: { ...props.degree, requirements: newRequirements } });
   };
 
-	const removeCourseFromSubsection = (studentCourse: StudentCourse, reqIndex: number, subIndex: number) => {
+  const removeCourseFromSubsection = (studentCourse: StudentCourse, reqIndex: number, subIndex: number) => {
     const newRequirements = [...props.degree.requirements];
-
-    // Ensure subsections exist at the provided indices
     if (newRequirements[reqIndex]?.subsections?.[subIndex]) {
       const updatedCourses = newRequirements[reqIndex].subsections[subIndex].courses.filter(
         (c: StudentCourse) => c.course?.title !== studentCourse.course?.title
@@ -35,7 +30,30 @@ function RequirementsContent(props: { edit: boolean, degree: Degree, user: User,
     }
   };
 
-  return(
+  const renderCourses = (sub: any, reqIndex: number, subIndex: number) => {
+    if (sub.courses.length > 20) {
+      return (
+        <div style={{ marginBottom: "4px" }}>
+          <OrIcon studentCourses={sub.courses} />
+        </div>
+      );
+    } else {
+      return sub.courses.map((studentCourse: StudentCourse, studentCourseIndex: number) => (
+        <div key={studentCourseIndex} style={{ display: "flex", marginBottom: "4px" }}>
+          {props.edit && sub.flexible ? (
+            <RemovableCourse 
+              studentCourse={studentCourse} 
+              removeStudentCourse={(studentCourse: StudentCourse) => removeCourseFromSubsection(studentCourse, reqIndex, subIndex)}
+            />
+          ) : (
+            <StudentCourseIcon studentCourse={studentCourse}/>
+          )}
+        </div>
+      ));
+    }
+  };
+
+  return (
     <div className={Style.reqsList}>
       {props.degree.requirements.map((req, reqIndex) => (
         <div key={`req-${reqIndex}`}>
@@ -64,18 +82,7 @@ function RequirementsContent(props: { edit: boolean, degree: Degree, user: User,
                 </div>
               )}
               <div style={{ display: "flex", flexWrap: "wrap" }}>
-                {sub.courses.map((studentCourse, studentCourseIndex) => (
-                  <div key={studentCourseIndex} style={{ display: "flex", marginBottom: "4px" }}>
-                    {props.edit && sub.flexible ? (
-                      <RemovableCourse 
-                        studentCourse={studentCourse} 
-                        removeStudentCourse={(studentCourse: StudentCourse) => removeCourseFromSubsection(studentCourse, reqIndex, subIndex)}
-                      />
-                    ) : (
-                      <StudentCourseIcon studentCourse={studentCourse}/>
-                    )}
-                  </div>
-                ))}
+                {renderCourses(sub, reqIndex, subIndex)}
                 {props.edit && sub.flexible && (
                   <AddableCourse
                     user={props.user}

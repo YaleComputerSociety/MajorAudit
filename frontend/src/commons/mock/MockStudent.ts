@@ -50,9 +50,40 @@ export const Ryan = {
 									"flexible": true,
                   "courses": [
                     {
-											"status": "NA", "term": 0,
+											"status": "DA_COMPLETE", "term": 202203,
                       "course": {
                         "codes": ["CPSC 201"], "title": "Introduction to Computer Science",
+												"credit": 1, "areas": [], "skills": ["QR"], "seasons": ["Fall", "Spring"]
+											},
+                    }
+                  ]
+                },
+								{
+									"flexible": true,
+                  "courses": [
+                    {
+											"status": "NA", "term": 0,
+                      "course": {
+                        "codes": ["CPSC 202"], "title": "Math Tools",
+												"credit": 1, "areas": [], "skills": ["QR"], "seasons": ["Fall", "Spring"]
+											},
+                    },
+										{
+											"status": "NA", "term": 0,
+                      "course": {
+                        "codes": ["MATH 244"], "title": "Discrete Math",
+												"credit": 1, "areas": [], "skills": ["QR"], "seasons": ["Fall", "Spring"]
+											},
+                    }
+                  ]
+                },
+								{
+									"flexible": false,
+                  "courses": [
+                    {
+											"status": "DA_COMPLETE", "term": 202301,
+                      "course": {
+                        "codes": ["CPSC 223"], "title": "Data Structures",
 												"credit": 1, "areas": [], "skills": ["QR"], "seasons": ["Fall", "Spring"]
 											},
                     }
@@ -78,6 +109,23 @@ export const Ryan = {
                 {
 									"flexible": true,
                   "courses": [],
+                }
+              ]
+            },
+            {
+              "name": "SENIOR REQUIREMENT",
+              "subsections": [
+                {
+									"flexible": false,
+                  "courses": [
+										{
+											"status": "NA", "term": 0,
+                      "course": {
+                        "codes": ["CPSC 490"], "title": "Project",
+												"credit": 1, "areas": [], "skills": ["QR"], "seasons": ["Fall", "Spring"]
+											},
+                    }
+									],
                 }
               ]
             }
@@ -154,27 +202,6 @@ export const Ryan = {
           "Hu"
         ],
         "codes": [
-          "DRST 002"
-        ],
-        "credit": 1,
-        "seasons": [
-          "Fall",
-          "Spring"
-        ],
-        "skills": [
-          "WR"
-        ],
-        "title": "Directed Studies: Literature"
-      },
-      "status": "DA_COMPLETE",
-      "term": 202301
-    },
-    {
-      "course": {
-        "areas": [
-          "Hu"
-        ],
-        "codes": [
           "ENGL 253",
           "HUMS 265"
         ],
@@ -207,27 +234,6 @@ export const Ryan = {
       },
       "status": "DA_COMPLETE",
       "term": 202203
-    },
-    {
-      "course": {
-        "areas": [
-          "Hu"
-        ],
-        "codes": [
-          "DRST 001"
-        ],
-        "credit": 1,
-        "seasons": [
-          "Fall",
-          "Spring"
-        ],
-        "skills": [
-          "WR"
-        ],
-        "title": "Directed Studies: Literature"
-      },
-      "status": "DA_COMPLETE",
-      "term": 202203
-    },
+    }
   ]
 }

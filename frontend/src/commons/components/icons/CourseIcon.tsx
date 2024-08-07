@@ -83,3 +83,16 @@ export function StudentCourseIcon(props: { studentCourse: StudentCourse, utility
     </div>
   );
 }
+
+export function OrIcon(props: { studentCourses: StudentCourse[] }) {
+  return (
+    <div className={styles.OrIconContainer}>
+      {props.studentCourses.map((studentCourse, index) => (
+        <React.Fragment key={index}>
+          <StudentCourseIcon studentCourse={studentCourse} />
+          {index < props.studentCourses.length - 1 && <div className={styles.OrSeparator}>||</div>}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}

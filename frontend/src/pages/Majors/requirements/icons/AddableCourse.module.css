@@ -1,41 +1,47 @@
 
-.satisfyCourseButton {
+.Row{
+	display: flex;
+	flex-direction: row;
+}
+
+.AddButton {
   display: flex;
   align-items: center;
   justify-content: center;
+
   width: 22px; 
   height: 22px; 
-  border-radius: 50%; /* Makes it a circle */
-  background-color: #F5F5F5;
-  font-size: 12px; /* Font size for the plus sign */
+
+	font-size: 12px;
   font-weight: bold;
+
+  border-radius: 50%;
+  background-color: #F5F5F5;
+  
   cursor: pointer;
   overflow: hidden;
 }
 
-.satisfyCourseButton.expanded {
-  width: 100px; 
-	height: 22px;
-  border-radius: 15px; 
-}
-
-.SatisfyCourseBox {
+.AddCanvas {
   display: flex;
+	flex-direction: row;
   align-items: center;
+
+	height: 20px;
+  width: 90px;
+
   background-color: #F5F5F5;
   border-radius: 15px;
-  padding: 2px 4px;
-
-	height: 22px;
-  width: 100px;
+  padding: 1px 4px;
 }
 
 .CodeSearch {
-	height: 16px;
-	font-size: 14px; /* Matching font size */
-	padding: 2px;
+	height: 14px;
+	width: 70px;
 
-	width: 76px;
+	font-size: 12px; /* Matching font size */
+	padding: 1px;
+
   border: none;
   outline: none;
   background-color: white;
@@ -44,21 +50,23 @@
 	border-radius: 10%; /* Makes it a circle */
 }
 
+
+
+
+
+
 .DeactivateButton {
-  border: 1px solid black;
-	width: 10px;
-  height: 10px;
-	border-radius: 50%; /* Makes it a circle */
-	margin-right: 2px;
-  cursor: pointer;
-}
-
-.row{
 	display: flex;
-	flex-direction: row;
+	margin-right: 3px;
+
+	width: 10px; 
+	height: 10px;
+	border-radius: 50%;
+
+	background-color: #ababab;
+	cursor: pointer;
 }
 
-
-
-
-
+.DeactivateButton:hover {
+	background-color: #D3D3D3; /* slightly darker grey on hover */
+}
