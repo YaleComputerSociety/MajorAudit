@@ -3,6 +3,11 @@
   flex-direction: row;
 }
 
+.Row {
+  display: flex;
+  flex-direction: row;
+}
+
 .NavBar {
   position: fixed;
   z-index: 2;
@@ -38,4 +43,11 @@
   margin-right: 10px;
   margin-left: 10px;
   transition: color 0.3s;
+}
+
+.Logo {
+	width: 150px;
+	height: auto;
+	margin-right: 10px;
+	margin-left: 20px;
 }

@@ -3,7 +3,7 @@ import { Course } from "../types/TypeCourse";
 export const EMPTYCOURSE: Course = { codes: ["N/A"], title: "Title NULL", credit: 1, areas: [], skills: [], seasons: [] };
 
 export const Ryan = {
-  "degrees": [],
+  "studentDegrees": [],
   "language": "Spanish, L5",
   "name": "Ryan",
   "netID": "rgg32",
@@ -34,7 +34,6 @@ export const Ryan = {
             "students": 0,
             "wesbiteLink": "http://cpsc.yale.edu"
           },
-
 					"codesCore": ["CPSC 201", "CPSC 202", "MATH 244", "CPSC 223", "CPSC 323", "CPSC 365", "CPSC 490"],
 					"codesAdded": [],
           "requirements": [
@@ -125,11 +124,90 @@ export const Ryan = {
               ]
             }
           ]
-        }
+        },
+      ],
+    },
+		{
+			"name": "Economics",
+			"abbreviation": "ECON",
+      "degrees": [
+        {
+          "metadata": {
+            "about": "Economics is much broader than the study of recessions and inflation or stocks and bonds. Economists study decision making and incentives such as how taxes create incentives for labor market and savings behavior. Many current public policy debates concern questions of economics, including causes and consequences of inequality and gender and racial wage gaps; how to address poverty; the impact of immigration and trade on the well-being of a country’s citizens; the cause of the Great Recession; and how to predict future downturns.",
+            "catologLink": "https://catalog.yale.edu/ycps/subjects-of-instruction/computer-science/",
+            "degreeType": "BACH_ART",
+            "dus": {
+              "address": "",
+              "email": "",
+              "name": ""
+            },
+            "name": "Economics",
+            "stats": {
+              "courses": 10,
+              "rating": 0,
+              "type": "QR",
+              "workload": 0
+            },
+            "students": 0,
+            "wesbiteLink": ""
+          },
+					"codesCore": [],
+					"codesAdded": [],
+          "requirements": [
+            {
+              "name": "ELECTIVES",
+              "subsections": [
+                {
+									"flexible": true,
+                  "courses": [],
+                }
+              ]
+            },
+          ]
+        },
+      ],
+    },
+		{
+			"name": "History",
+			"abbreviation": "HIST",
+      "degrees": [
+        {
+          "metadata": {
+            "about": "The History major is for students who understand that shaping the future requires knowing the past. History courses explore many centuries of human experimentation and ingenuity, from the global to the individual scale. History majors learn to be effective storytellers and analysts, and to craft arguments that speak to broad audiences. They make extensive use of Yale’s vast library resources to create pioneering original research projects. Students of history learn to think about politics and government, sexuality, the economy, cultural and intellectual life, war and society, and other themes in broadly humanistic—rather than narrowly technocratic—ways.",
+            "catologLink": "https://catalog.yale.edu/ycps/subjects-of-instruction/computer-science/",
+            "degreeType": "BACH_ART",
+            "dus": {
+              "address": "",
+              "email": "",
+              "name": ""
+            },
+            "name": "History",
+            "stats": {
+              "courses": 10,
+              "rating": 0,
+              "type": "QR",
+              "workload": 0
+            },
+            "students": 0,
+            "wesbiteLink": ""
+          },
+					"codesCore": [],
+					"codesAdded": [],
+          "requirements": [
+            {
+              "name": "ELECTIVES",
+              "subsections": [
+                {
+									"flexible": true,
+                  "courses": [],
+                }
+              ]
+            },
+          ]
+        },
       ],
     }
   ],
-
 
   "studentCourses": [
     {

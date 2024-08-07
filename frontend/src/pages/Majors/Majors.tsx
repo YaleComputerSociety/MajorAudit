@@ -1,48 +1,25 @@
 
 import { useState } from "react";
-
 import Style from "./Majors.module.css";
-import NavStyle from "./../../navbar/NavBar.module.css";
-
-import Logo from "./../../commons/images/ma_logo.png";
-import PageLinks from "./../../navbar/PageLinks";
-
-import Requirements from "./requirements/Requirements";
-import Metadata from "./metadata/Metadata";
-
 import { User } from "../../commons/types/TypeUser";
-import { Program } from "./../../commons/types/TypeProgram";
 
-function NavBar() {
-  return (
-    <div className={NavStyle.NavBar}>
-      <div style={{ marginLeft: "20px" }}>
-        <img src={Logo} alt="" style={{ width: "150px", height: "auto", marginRight: "10px" }}/>
-      </div>
-      <PageLinks/>
-    </div>
-  );
-}
+import NavBar from "./../../navbar/NavBar"
+import Pinned from "./pinned/Pinned"
+import Metadata from "./metadata/Metadata";
+import Requirements from "./requirements/Requirements";
 
 function Majors(props: { user: User, setUser: Function }){
 
   const [currdex, setCurrdex] = useState(0);
   const [currDegree, setCurrDegree] = useState(0);
 
-	let programs: Program[] = props.user.programs;
-  
-  const alterCurrdex = (dir: number) => {
-    if(programs && programs.length > 0){
-      setCurrdex((currdex + dir + programs.length) % programs.length);
-      setCurrDegree(0);
-    }
+	const alterCurrdex = (dir: number) => {
+    setCurrdex((currdex + dir + props.user.programs.length) % props.user.programs.length);
+    setCurrDegree(0);
   };
 
   const seeProgram = (dir: number) => {
-    if(programs && programs.length > 0){
-      return programs[(currdex + dir + programs.length) % programs.length];
-    }
-    return null;
+    return props.user.programs[(currdex + dir + props.user.programs.length) % props.user.programs.length];
   };
 
   const alterCurrDegree = (num: number) => {
@@ -51,10 +28,13 @@ function Majors(props: { user: User, setUser: Function }){
 
   return (
     <div>
-      <NavBar/>
+      <NavBar utility={<Pinned user={props.user} setCurrdex={setCurrdex}/>}/>
       <div className={Style.MajorsPage}>
         <Metadata
-          program={programs[currdex]}
+					user={props.user}
+					setUser={props.setUser}
+					currProgram={currdex}
+          program={props.user.programs[currdex]}
           scrollProgram={alterCurrdex}
           seeProgram={seeProgram}
           whichDegree={currDegree}
@@ -63,7 +43,7 @@ function Majors(props: { user: User, setUser: Function }){
         <Requirements
 					user={props.user}
 					setUser={props.setUser}
-          degree={programs[currdex].degrees[currDegree]}
+          degree={props.user.programs[currdex].degrees[currDegree]}
         />
       </div>
     </div>

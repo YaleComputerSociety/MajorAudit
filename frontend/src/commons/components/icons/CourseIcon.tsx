@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./CourseIcon.module.css";
 import "react-tooltip/dist/react-tooltip.css";
-import { Course, StudentCourse, AmbiCourse } from "../../types/TypeCourse";
+import { StudentCourse } from "../../types/TypeCourse";
 
 import img_fall from "./../../images/fall.png";
 import img_spring from "./../../images/spring.png";

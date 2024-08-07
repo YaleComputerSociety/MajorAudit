@@ -2,27 +2,52 @@
 import React, { useState, useEffect } from "react";
 import Style from "./Metadata.module.css";
 
+import { User } from "../../../commons/types/TypeUser";
+
 import { Button } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 
 import lgsIcon from "../../../commons/images/little_guys.png";
 // import img_plus from "../../../commons/images/plus.png";
-// import img_arrowup from "../../../commons/images/arrowup.png";
-// import img_arrowdown from "../../../commons/images/arrowdown.png";
 
 import { Program, Degree } from "../../../commons/types/TypeProgram";
 
 
-function MetadataTopshelf(props: { program: Program, degree: Degree }){
-  return(
+function MetadataTopshelf(props: { user: User, setUser: Function, currProgram: number, currDegree: number, program: Program, degree: Degree }) {
+  
+	const pinProgram = () => {
+    const { currProgram, currDegree, user, setUser } = props;
+    const existingDegree = user.studentDegrees.find(degree => degree.programIndex === currProgram);
+    
+    if (!existingDegree) {
+      const newStudentDegree = {
+        status: "PIN",
+        programIndex: currProgram,
+        degreeIndex: currDegree
+      };
+      
+      const updatedUser = {
+        ...user,
+        studentDegrees: [...user.studentDegrees, newStudentDegree]
+      };
+      
+      setUser(updatedUser);
+    }
+  };
+
+  return (
     <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
-      {/* <Button style={{ width: '28px', height: '28px', padding: 0, border: 'none', marginRight: "8px" }}>
-        <img src={img_plus} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
-      </Button> */}
+      <div 
+        className={Style.thumbtack}
+        onClick={pinProgram}
+      >
+        📌
+      </div>
+
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>{props.degree.metadata.name}</div>
-          <img src={lgsIcon} alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }}/>
+          <img src={lgsIcon} alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }} />
           <div className={Style.countBox} style={{ marginRight: "10px", marginTop: "4px" }}>{props.degree.metadata.students}</div>
           <div className={Style.pinkMajorBox} style={{ fontSize: "16px", marginTop: "2px" }}>MAJOR</div>
         </div>
@@ -97,24 +122,35 @@ function MetadataStats(degree: Degree){
   );
 }
 
-function MetadataContent(props: {program: Program, whichDegree: number, alterCurrDegree: Function}){
+function MetadataContent(props: { user: User, setUser: Function, currProgram: number, program: Program, whichDegree: number, alterCurrDegree: Function }){
   let currDegree = props.program.degrees[props.whichDegree];
   return (
     <div className={Style.majorContainer}>
-      <MetadataTopshelf program={props.program} degree={currDegree}/>
-      <MetadataDegree {...props}/>
-      <MetadataStats {...currDegree}/>
+      <MetadataTopshelf user={props.user} setUser={props.setUser} currProgram={props.currProgram} currDegree={props.whichDegree} program={props.program} degree={currDegree}/>
 
-      <div className={Style.subsectionHeader}>ABOUT</div>
-      <div style={{ fontSize: "12px", marginBottom: "12px" }}>{currDegree.metadata.about}</div>
+			<div style={{ marginLeft: "37px" }}>
+				<MetadataDegree {...props}/>
+				<MetadataStats {...currDegree}/>
 
-      <div className={Style.subsectionHeader}>DUS</div>
-      <div style={{ fontSize: "12px", marginBottom: "12px" }}>{currDegree.metadata.dus.name}; {currDegree.metadata.dus.address}</div>
+				<div className={Style.subsectionHeader}>
+					ABOUT
+				</div>
+				<div style={{ fontSize: "12px", marginBottom: "12px" }}>
+					{currDegree.metadata.about}
+				</div>
 
-      <div style={{ display: "flex" }}>
-        <div className={Style.linkBox}><Link className={Style.link} to={currDegree.metadata.catologLink} target="_blank">MAJOR CATALOG</Link></div>
-        <div className={Style.linkBox}><Link className={Style.link} to={currDegree.metadata.wesbiteLink} target="_blank">MAJOR WEBSITE</Link></div>
-      </div>
+				<div className={Style.subsectionHeader}>
+					DUS
+				</div>
+				<div style={{ fontSize: "12px", marginBottom: "12px" }}>
+					{currDegree.metadata.dus.name}; {currDegree.metadata.dus.address}
+				</div>
+
+				<div style={{ display: "flex" }}>
+					<div className={Style.linkBox}><Link className={Style.link} to={currDegree.metadata.catologLink} target="_blank">MAJOR CATALOG</Link></div>
+					<div className={Style.linkBox}><Link className={Style.link} to={currDegree.metadata.wesbiteLink} target="_blank">MAJOR WEBSITE</Link></div>
+				</div>
+			</div>
     </div>
   );
 }
@@ -123,7 +159,6 @@ function MetadataScrollButton(props: {scrollProgram: Function, seeProgram: Funct
   return(
     <Button style={{ backgroundColor: "white", border: "none", cursor: "pointer" }} onClick={() => props.scrollProgram(props.dir)}>
       <div style={{ display: "flex" }}>
-        {/* <img src={props.dir > 0 ? img_arrowup : img_arrowdown} alt="" style={{ width: "31px", height: "15px", marginTop: "8px", marginRight: "8px" }}/> */}
         <div style={{ textAlign: "left", color: "gray" }}>
           <div style={{ fontSize: "18px", fontWeight: "bold" }}>
             {props.seeProgram(props.dir).name}
@@ -137,13 +172,11 @@ function MetadataScrollButton(props: {scrollProgram: Function, seeProgram: Funct
   );
 }
 
-function Metadata(props: {program: Program, scrollProgram: Function, seeProgram: Function, whichDegree: number, alterCurrDegree: Function}){
+function Metadata(props: { user: User, setUser: Function, currProgram: number, program: Program, scrollProgram: Function, seeProgram: Function, whichDegree: number, alterCurrDegree: Function }){
   return (
     <div>
       <MetadataScrollButton scrollProgram={props.scrollProgram} seeProgram={props.seeProgram} dir={1}/>
-      <div style={{ marginLeft: "10px" }}>
-        <MetadataContent {...props} />
-      </div>
+      <MetadataContent {...props} />
       <MetadataScrollButton scrollProgram={props.scrollProgram} seeProgram={props.seeProgram} dir={-1}/>
     </div>
   );

@@ -53,10 +53,25 @@
 }
 
 .majorContainer {
-  padding: 20px;
+  padding: 20px 20px 20px 0;
   width: auto;
   height: 400px;
   background-color: white;
   margin-right: 10px;
   /* border: 1px solid black; */
+}
+
+.thumbtack {
+  font-size: 28px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.thumbtack:hover {
+  opacity: 0.7; /* Slightly lighter on hover */
+}
+
+.thumbtack:active {
+  opacity: 0.5; /* Even lighter on click */
 }

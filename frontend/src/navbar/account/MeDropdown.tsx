@@ -12,7 +12,7 @@ import {
   scrollToTop,
   useComponentVisible,
 } from "../../commons/utilities/display";
-import { SurfaceComponent, TextComponent, HoverText } from "../Typography";
+import { SurfaceComponent, TextComponent, HoverText } from "../misc/Typography";
 
 function DropdownItem({
   icon: Icon,

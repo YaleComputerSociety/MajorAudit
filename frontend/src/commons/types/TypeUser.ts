@@ -9,11 +9,17 @@ export interface Year {
 	spring: Array<StudentCourse>;
 }
 
+export interface StudentDegree {
+	status: string; // DA | ADD | PIN
+	programIndex: number;
+	degreeIndex: number;
+}
+
 export interface User {
 	netID: string;
 	onboard: boolean;
 	name: string;
-	degrees: string[];
+	studentDegrees: StudentDegree[];
 	studentCourses: StudentCourse[];
 	programs: Program[];
 	language: string;
@@ -23,7 +29,7 @@ export const nullUser: User = {
 	netID: "",
 	onboard: false,
 	name: "",
-	degrees: [],
+	studentDegrees: [],
 	studentCourses: [],
 	programs: [],
 	language: "",

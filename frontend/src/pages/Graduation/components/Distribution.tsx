@@ -6,7 +6,7 @@ import styles from "./../Graduation.module.css";
 
 import DistributionBox from "../../../commons/components/courses/DistributionBoxLarge";
 import { StudentCourseIcon } from "../../../commons/components/icons/CourseIcon";
-import InfoButton from "../../../navbar/InfoButton";
+import InfoButton from "../../../navbar/misc/InfoButton";
 
 import { StudentCourse } from "../../../commons/types/TypeCourse";
 
