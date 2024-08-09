@@ -8,22 +8,76 @@ import { Button } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 
 import lgsIcon from "../../../commons/images/little_guys.png";
-// import img_plus from "../../../commons/images/plus.png";
+import img_plus from "../../../commons/images/plus.png";
+import illegal_pin from "../../../commons/images/illegal_pin.png"
 
 import { Program, Degree } from "../../../commons/types/TypeProgram";
 
 
 function MetadataTopshelf(props: { user: User, setUser: Function, currProgram: number, currDegree: number, program: Program, degree: Degree }) {
   
-	const pinProgram = () => {
-    const { currProgram, currDegree, user, setUser } = props;
+  const pinProgram = () => {
+    const { currProgram, user, setUser } = props;
     const existingDegree = user.studentDegrees.find(degree => degree.programIndex === currProgram);
     
-    if (!existingDegree) {
+    if (existingDegree) {
+      if (existingDegree.status === "PIN") {
+        // Unpin the program (remove the studentDegree)
+        const updatedUser = {
+          ...user,
+          studentDegrees: user.studentDegrees.filter(degree => degree.programIndex !== currProgram)
+        };
+        setUser(updatedUser);
+      } else {
+        // Do nothing if it's already added (status: "ADD")
+      }
+    } else {
+      // Pin the program if it's not already pinned or added
       const newStudentDegree = {
         status: "PIN",
         programIndex: currProgram,
-        degreeIndex: currDegree
+        degreeIndex: props.currDegree
+      };
+      
+      const updatedUser = {
+        ...user,
+        studentDegrees: [...user.studentDegrees, newStudentDegree]
+      };
+      
+      setUser(updatedUser);
+    }
+  };
+
+  const addProgram = () => {
+    const { currProgram, user, setUser } = props;
+    const existingDegree = user.studentDegrees.find(degree => degree.programIndex === currProgram);
+    
+    if (existingDegree) {
+      if (existingDegree.status === "ADD") {
+        // Unadd the program (remove the studentDegree)
+        const updatedUser = {
+          ...user,
+          studentDegrees: user.studentDegrees.filter(degree => degree.programIndex !== currProgram)
+        };
+        setUser(updatedUser);
+      } else if (existingDegree.status === "PIN") {
+        // Change status from "PIN" to "ADD"
+        const updatedUser = {
+          ...user,
+          studentDegrees: user.studentDegrees.map(degree =>
+            degree.programIndex === currProgram
+              ? { ...degree, status: "ADD" }
+              : degree
+          )
+        };
+        setUser(updatedUser);
+      }
+    } else {
+      // Add the program if it's not already pinned or added
+      const newStudentDegree = {
+        status: "ADD",
+        programIndex: currProgram,
+        degreeIndex: props.currDegree
       };
       
       const updatedUser = {
@@ -37,13 +91,12 @@ function MetadataTopshelf(props: { user: User, setUser: Function, currProgram: n
 
   return (
     <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
-      <div 
-        className={Style.thumbtack}
-        onClick={pinProgram}
-      >
-        📌
+			<div className={Style.thumbtack} onClick={pinProgram}>
+			<img src={illegal_pin} alt="Add Program" style={{ width: "30px" }}/>
       </div>
-
+      <div className={Style.thumbtack} onClick={addProgram}>
+				<img src={img_plus} alt="Add Program" style={{ width: "30px" }}/>
+      </div>
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>{props.degree.metadata.name}</div>
@@ -128,7 +181,7 @@ function MetadataContent(props: { user: User, setUser: Function, currProgram: nu
     <div className={Style.majorContainer}>
       <MetadataTopshelf user={props.user} setUser={props.setUser} currProgram={props.currProgram} currDegree={props.whichDegree} program={props.program} degree={currDegree}/>
 
-			<div style={{ marginLeft: "37px" }}>
+			<div style={{ marginLeft: "79px" }}>
 				<MetadataDegree {...props}/>
 				<MetadataStats {...currDegree}/>
 

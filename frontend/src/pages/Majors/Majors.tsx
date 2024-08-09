@@ -4,7 +4,7 @@ import Style from "./Majors.module.css";
 import { User } from "../../commons/types/TypeUser";
 
 import NavBar from "./../../navbar/NavBar"
-import Pinned from "./pinned/Pinned"
+import Overhead from "./overhead/Overhead";
 import Metadata from "./metadata/Metadata";
 import Requirements from "./requirements/Requirements";
 
@@ -28,7 +28,7 @@ function Majors(props: { user: User, setUser: Function }){
 
   return (
     <div>
-      <NavBar utility={<Pinned user={props.user} setCurrdex={setCurrdex}/>}/>
+      <NavBar utility={<Overhead user={props.user} setCurrdex={setCurrdex}/>}/>
       <div className={Style.MajorsPage}>
         <Metadata
 					user={props.user}
