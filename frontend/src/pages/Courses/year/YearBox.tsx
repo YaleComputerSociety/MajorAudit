@@ -1,8 +1,8 @@
 
-import styles from "./../Courses.module.css";
-import SemesterBox from "./SemesterBox";
+import React from "react";
+import Style from "./YearBox.module.css";
+import SemesterBox from "./semester/SemesterBox";
 import { User, Year } from "../../../commons/types/TypeUser";
-// import { StudentCourse } from "../../../commons/types/TypeCourse";
 
 const convertGrade = (grade: number) => {
   switch (grade) {
@@ -22,10 +22,10 @@ const convertGrade = (grade: number) => {
 export default function YearBox(props: {year: Year, edit: boolean, user: User, setUser: Function }){
 
   return(
-    <div className={styles.yearComponent}>
+    <div className={Style.yearComponent}>
 
-        <div className={styles.row} style={{ marginBottom: "4px" }}>
-            <div className={styles.Grade}>
+        <div className={Style.row} style={{ marginBottom: "4px" }}>
+            <div className={Style.Grade}>
               {convertGrade(props.year["grade"])}
             </div>
             <div style={{ fontSize: "14px", fontWeight: "600", color: "#727272", alignSelf: "flex-end", marginBottom: "2.5px" }}>
@@ -33,7 +33,7 @@ export default function YearBox(props: {year: Year, edit: boolean, user: User, s
             </div>
         </div>
 
-        <div className={styles.row}>
+        <div className={Style.row}>
             <div style={{ marginRight: "20px" }}>
               <SemesterBox  edit={props.edit} user={props.user} setUser={props.setUser} term={props.year["terms"][0]} TermSC={props.year["fall"]}/>
             </div>

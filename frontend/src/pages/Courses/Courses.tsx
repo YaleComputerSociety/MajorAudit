@@ -2,9 +2,9 @@
 import { useState, useEffect } from "react";
 import { Year } from "../../commons/types/TypeUser";
 
-import styles from "./Courses.module.css";
+import Style from "./Courses.module.css";
 
-import YearBox from "./components/YearBox";
+import YearBox from "./year/YearBox";
 import nav_styles from "./../../navbar/NavBar.module.css";
 import logo from "./../../commons/images/ma_logo.png";
 import PageLinks from "./../../navbar/PageLinks";
@@ -12,7 +12,7 @@ import PageLinks from "./../../navbar/PageLinks";
 import { User } from "../../commons/types/TypeUser";
 // import { StudentCourse } from "../../commons/types/TypeCourse";
 
-import { yearTreeify } from "./utils/CoursesUtils";
+import { yearTreeify } from "./CoursesUtils";
 
 function NavBar() {
   return (
@@ -50,11 +50,11 @@ function Courses(props: { user: User, setUser: Function }){
   return(
     <div>
       <NavBar/>
-      <div className={styles.CoursesPage}>
-        <button className={styles.AddCourseButton} onClick={updateEdit}>
+      <div className={Style.CoursesPage}>
+        <button className={Style.EditButton} onClick={updateEdit}>
 
 				</button>
-        <div className={styles.column}>
+        <div className={Style.Column}>
           {renderedYears}
         </div>
       </div>

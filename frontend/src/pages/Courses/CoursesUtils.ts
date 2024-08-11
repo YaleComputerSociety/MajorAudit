@@ -1,6 +1,6 @@
 
-import { User, Year } from "../../../commons/types/TypeUser";
-import { StudentCourse } from "../../../commons/types/TypeCourse";
+import { User, Year } from "../../commons/types/TypeUser";
+import { StudentCourse } from "../../commons/types/TypeCourse";
 
 export const yearTreeify = (courses: StudentCourse[]): Year[] => {
   const academicYears: { [key: number]: Year } = {};
