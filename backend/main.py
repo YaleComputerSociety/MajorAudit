@@ -33,6 +33,7 @@ from flask_cors import cross_origin
 # Ryan
 from course import *
 from user import *
+from program import *
 
 # * * * APP * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -64,60 +65,61 @@ app.secret_key = secrets.token_urlsafe(16)
 # LOGIN
 @app.get('/user_login')
 def login():
-    service=get_redirect_url()
-    cookies={}
+  service = get_redirect_url()
+  cookies = {}
 
-    if 'NETID' in session:
-        redirect_url = 'http://127.0.0.1:3000'
-
-        current_app.logger.info(f'Redirecting: {redirect_url}')
-        resp = make_response(redirect(redirect_url))
-        for c in cookies:
-            resp.set_cookie(c, cookies[c])
-        return resp
-
-    login_url=f'''https://secure.its.yale.edu/cas/login?service={service}'''
-    redirect_url=login_url
-
-    if 'ticket' in request.args:
-        session['CAS_TOKEN'] = request.args['ticket']
-
-    if 'CAS_TOKEN' in session:
-        redirect_url = '/'
-        validation=validate(session['CAS_TOKEN'], service)
-        if validation[0]:
-
-            if 'NETID' in session:
-                cookies['wtf']=session['NETID']
-
-            netID = validation[1]
-            if db.collection("Users").document(netID).get().exists:
-                pass
-            else:
-                new_user = User(
-									netID=netID, 
-									onboard=False, 
-									name="", 
-									degrees=[], 
-									studentCourses=[],
-                  language=""
-                )
-                db.collection("Users").document(netID).set(new_user.__dict__)
-
-            redirect_url = 'http://127.0.0.1:3000'
-
-        else:
-            token=session['CAS_TOKEN']
-            del session['CAS_TOKEN']
-            if "NETID" in session:
-                del session["NETID"]
-            return make_response(f'Failed Validation: {token} @ URL {validation[1]}')
+  if 'NETID' in session:
+    redirect_url = 'http://127.0.0.1:3000'
 
     current_app.logger.info(f'Redirecting: {redirect_url}')
-    resp=make_response(redirect(redirect_url))
+    resp = make_response(redirect(redirect_url))
     for c in cookies:
-        resp.set_cookie(c, cookies[c])
+      resp.set_cookie(c, cookies[c])
     return resp
+
+  login_url = f'''https://secure.its.yale.edu/cas/login?service={service}'''
+  redirect_url = login_url
+
+  if 'ticket' in request.args:
+    session['CAS_TOKEN'] = request.args['ticket']
+
+  if 'CAS_TOKEN' in session:
+    redirect_url = '/'
+    validation = validate(session['CAS_TOKEN'], service)
+    if validation[0]:
+
+      if 'NETID' in session:
+        cookies['wtf'] = session['NETID']
+
+      netID = validation[1]
+      if db.collection("Users").document(netID).get().exists:
+        pass
+      else:
+        new_user = User(
+          netID = netID, 
+          onboard = False, 
+          name = "", 
+          degrees = [], 
+          studentCourses = [],
+          programs = [],
+          language = ""
+        )
+        db.collection("Users").document(netID).set(new_user.__dict__)
+
+      redirect_url = 'http://127.0.0.1:3000'
+
+    else:
+      token = session['CAS_TOKEN']
+      del session['CAS_TOKEN']
+      if "NETID" in session:
+        del session["NETID"]
+      return make_response(f'Failed Validation: {token} @ URL {validation[1]}')
+
+  current_app.logger.info(f'Redirecting: {redirect_url}')
+  resp = make_response(redirect(redirect_url))
+  for c in cookies:
+    resp.set_cookie(c, cookies[c])
+  return resp
 
 
 def get_redirect_url():
@@ -176,129 +178,121 @@ def getAuth():
 
 @app.route("/getUser", methods = ["GET"])
 def getUser():
-    # Validate
-    loc_netid = session.get("NETID")
-    if not loc_netid:
-        return make_response(jsonify({"Error": "Not Authenticated"}), 401)
+	# Validate
+	loc_netid = session.get("NETID")
+	if not loc_netid:
+		return make_response(jsonify({"Error": "Not Authenticated"}), 401)
 
-    # Retrieve
-    user_doc = db.collection("Users").document(loc_netid).get()
+	# Retrieve
+	user_doc = db.collection("Users").document(loc_netid).get()
 
-    # Return
-    if not user_doc.exists:
-        return make_response(jsonify({"Error": "Data Not Found"}), 404)
-    
-    response_body = jsonify(user_doc.to_dict())
-    return make_response(response_body, 200)
+	# Return
+	if not user_doc.exists:
+		return make_response(jsonify({"Error": "Data Not Found"}), 404)
+	
+	response_body = jsonify(user_doc.to_dict())
+	return make_response(response_body, 200)
 
 
-@app.get("/CT_Courses")
-def get_ct_courses():
-    key = request.args.get('key')
-    if not key:
-        return jsonify({"error": "Missing Param"}), 400
+@app.get("/getCTCourses")
+def getCTCourses():
+	key = request.args.get('key')
+	if not key:
+		result = {"Error": "Missing Param"}
+		status_code = 400
 
-    cookies = { 
-        'session': 'enter_session_here', 
-        'session.sig': 'enter_session_sig_here' 
-    }
-    url = f"https://api.coursetable.com/api/catalog/public/{key}"
-
-    try:
-        response = requests.get(url, cookies=cookies)
-        response.raise_for_status()
-        return jsonify(response.json())
-    except requests.exceptions.RequestException as e:
-        return jsonify({"Error": str(e)}), 500
+	cookies = { 
+			'session': 'enter_session_here', 
+			'session.sig': 'enter_session_sig_here' 
+		}
+	url = f"https://api.coursetable.com/api/catalog/public/{key}"
+						
+	try:
+		response = requests.get(url, cookies=cookies)
+		course_data = response.json()
+		transformed_data = simplify_CT_courses(course_data)
+		result = transformed_data
+		status_code = 200
+	except requests.exceptions.RequestException as e:
+		result = {"Error": str(e)}
+		status_code = 500
   
-
-@app.route('/get_majors', methods=['POST', 'GET'])
-def get_majors():
-    if "NETID" in session:
-        majors = db.collection('Majors').stream()
-        data = []
-        for m in majors:
-            data.append(m.to_dict())
-        return jsonify(data)
-    return jsonify()
-
+	# output_file = "output.json"
+	# with open(output_file, "w") as f:
+	# 	json.dump(result, f, indent=2)
+	# print(f"Result -> {output_file}")
+     
+	return jsonify(result), status_code
+  
 
 # * * * POST * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 @app.route("/onboardUser", methods = ["POST"])
 def onboardUser():
-    # Validate
-    loc_netid = session.get("NETID")
-    if not loc_netid:
-        return make_response(jsonify({"Error": "Not Authenticated"}), 401)
-    
-    # Check
-    data = request.json
-    required_fields = ["name", "degrees", "courses", "language"]
-    if not data or not all(field in data for field in required_fields):
-        return make_response(jsonify({"Error": "Invalid Data"}), 400)
+	""""""
+	# Validate
+	loc_netid = session.get("NETID")
+	if not loc_netid:
+		return make_response(jsonify({"Error": "Not Authenticated"}), 401)
 
-    # Process
-    try:
-        studentCourses = distill_dacourses(data)
-    except Exception as e:
-        return make_response(jsonify({"Error": str(e)}), 500)
+	# Check
+	data = request.json
+	required_fields = ["name", "degrees", "courses", "language"]
+	if not data or not all(field in data for field in required_fields):
+		return make_response(jsonify({"Error": "Invalid Data"}), 400)
 
-    # Store
-    try:
-        user = User(
-            netID=loc_netid, 
-            onboard=True,
-            name=data["name"], 
-            degrees=data["degrees"], 
-            studentCourses=studentCourses, 
-            language=data["language"],
-        )
-        db.collection("Users").document(loc_netid).set(user.__dict__)
-    except Exception as e:
-        return make_response(jsonify({"Error": str(e)}), 500)
+	# Process
+	studentCourses = distill_dacourses(data)
+	studentPrograms = clone_programs(studentCourses)
+	
+	# Store
+	user = User(
+		netID=loc_netid, 
+		onboard=True,
+		name=data["name"], 
+		degrees=data["degrees"], 
+		studentCourses=studentCourses, 
+    programs=studentPrograms,
+		language=data["language"],
+	)
+	db.collection("Users").document(loc_netid).set(user.__dict__)
 
-    # Transfer
-    return make_response(jsonify(data), 200)
+	# Transfer
+	return make_response(jsonify(data), 200)
 
 
-@app.route("/syncUser", methods = ["POST"])
+@app.route("/syncUser", methods=["POST"])
 def syncUser():
-    """"""
-    # Validate
-    loc_netid = session.get("NETID")
-    if not loc_netid:
-        return make_response(jsonify({"Error": "Not Authenticated"}), 401)
-    
-    # Parse
-    try:
-      data = json.loads(request.data)
-    except json.JSONDecodeError:
-      return make_response(jsonify({"Error": "Invalid JSON"}), 400)
-    
-		# Validate
-    required_fields = ["netID", "onboard", "name", "degrees", "studentCourses", "language"]
-    if not all(field in data for field in required_fields):
-      return make_response(jsonify({"Error": "Invalid Data"}), 400)
+	# Validate
+	loc_netid = session.get("NETID")
+	if not loc_netid:
+		return make_response(jsonify({"Error": "Not Authenticated"}), 401)
+     
+	print("NETID IN SESSION: ", loc_netid)
 
+	# Parse
+	try:
+		data = request.get_json()
+	except json.JSONDecodeError:
+		return make_response(jsonify({"Error": "Invalid JSON"}), 400)
 
-    data = request.json
-    required_fields = ["netID", "onboard", "name", "degrees", "studentCourses", "language"]
-    if not data or not all(field in data for field in required_fields):
-      return make_response(jsonify({"Error": "Invalid Data"}), 400)
+	# Validate
+	required_fields = ["netID", "onboard", "name", "degrees", "studentCourses", "programs", "language"]
+	if not all(field in data for field in required_fields):
+		return make_response(jsonify({"Error": "Invalid Data"}), 400)
 
-    user = User(
-        netID=loc_netid, 
-        onboard=data["onboard"],
-        name=data["name"], 
-        degrees=data["degrees"], 
-        studentCourses=data["studentCourses"], 
-        language=data["language"],
-    )
-    db.collection("Users").document(loc_netid).set(user.__dict__)
+	user = User(
+	netID=loc_netid, 
+	onboard=data["onboard"],
+	name=data["name"], 
+	degrees=data["degrees"], 
+	studentCourses=data["studentCourses"], 
+	programs=data["programs"],
+	language=data["language"]
+	)
 
-    # Transfer
-    return make_response(200)
+	db.collection("Users").document(loc_netid).set(user.__dict__)
+	return make_response(jsonify({"Message": "Nice"}), 200)
 
 
 # * * * OTHER * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

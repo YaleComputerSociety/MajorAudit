@@ -1,52 +1,52 @@
 
-import { Course, StudentCourse } from "./TypeCourse";
+import { StudentCourse } from "./TypeCourse";
 
 interface DUS {
-    name: string;
-    address: string;
-    email: string;
+	name: string;
+	address: string;
+	email: string;
 }
   
 interface DegreeMetadataStats {
-    courses: number;
-    rating: number;
-    workload: number;
-    type: string;
+	courses: number;
+	rating: number;
+	workload: number;
+	type: string;
 }
   
-type DegreeType = 'BACH_ART' | 'BACH_SCI' | 'BACH_INTENSIVE';
-  
 interface DegreeMetadata {
-    name: string;
-    abbreviation: string;
-    degreeType: DegreeType;
-    stats: DegreeMetadataStats;
-    students: number;
-    about: string;
-    dus: DUS;
-    catologLink: string;
-    wesbiteLink: string;
+	name: string;
+	degreeType: string;
+	stats: DegreeMetadataStats;
+	students: number;
+	about: string;
+	dus: DUS;
+	catologLink: string;
+	wesbiteLink: string;
 }
   
 interface DegreeRequirementsSubsection {
-    name?: string;
-    description?: string;
-    courses: Array<Course>;
+	name?: string;
+	description?: string;
+	flexible: boolean;
+	courses: StudentCourse[];
 }
   
-interface DegreeRequirements {
-    name: string;
-    description?: string;
-    subsections: Array<DegreeRequirementsSubsection>;
+interface DegreeRequirement {
+	name: string;
+	description?: string;
+	subsections: DegreeRequirementsSubsection[];
 }
   
 export interface Degree {
-    metadata: DegreeMetadata;
-    requirements: Array<DegreeRequirements>;
+	metadata: DegreeMetadata;
+	codesCore: string[];
+	codesAdded: string[];
+	requirements: DegreeRequirement[];
 }
   
 export interface Program {
-    name: string;
-    abbreviation: string;
-    degrees: Array<Degree>;
+	name: string;
+	abbreviation: string;
+	degrees: Array<Degree>;
 }

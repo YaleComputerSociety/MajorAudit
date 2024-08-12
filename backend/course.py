@@ -39,29 +39,29 @@ class StudentCourse:
 # Functions
 
 def distill_dacourses(data):
-    dacourses = {}
-    season_map = {"Spring": "01", "Fall": "03"}
-    
-    for c in data["courses"]:
-        season, year = c["term"].split()
-        c["term"] = f"{year}{season_map.get(season)}"
-        dacourses[c["code"]] = c  # Assuming course code is unique
+	dacourses = {}
+	season_map = {"Spring": "01", "Fall": "03"}
+	
+	for c in data["courses"]:
+			season, year = c["term"].split()
+			c["term"] = f"{year}{season_map.get(season)}"
+			dacourses[c["code"]] = c  # Assuming course code is unique
 
-    dacourses = list(dacourses.values())
+	dacourses = list(dacourses.values())
 
-    grouped_dacourses = defaultdict(list)
-    for dacourse in dacourses:
-        grouped_dacourses[dacourse["term"]].append(dacourse)
-    grouped_dacourses = list(grouped_dacourses.values())
+	grouped_dacourses = defaultdict(list)
+	for dacourse in dacourses:
+			grouped_dacourses[dacourse["term"]].append(dacourse)
+	grouped_dacourses = list(grouped_dacourses.values())
 
-    consolidate = []
-    for group in grouped_dacourses:
-        result = coursify(group)  # Assuming coursify is a function you defined
-        if result: 
-            consolidate.extend(result)
+	consolidate = []
+	for group in grouped_dacourses:
+			result = coursify(group)  # Assuming coursify is a function you defined
+			if result: 
+					consolidate.extend(result)
 
-    all_courses = [studentCourse.to_dict() for studentCourse in consolidate]
-    return all_courses
+	all_courses = [studentCourse.to_dict() for studentCourse in consolidate]
+	return all_courses
     
 
 def coursify(dacourses):
@@ -97,3 +97,17 @@ def coursify(dacourses):
 
     return student_courses
 
+
+def simplify_CT_courses(course_list):
+    transformed_list = []
+    for course_obj in course_list:
+        transformed_obj = {
+            "course_code": course_obj["course_code"],
+            "title": course_obj["course"]["title"],
+            "credits": course_obj["course"]["credits"],
+            "skills": course_obj["course"]["skills"],
+            "areas": course_obj["course"]["areas"],
+            "listings": [listing["course_code"] for listing in course_obj["course"]["listings"]],
+        }
+        transformed_list.append(transformed_obj)
+    return transformed_list

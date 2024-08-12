@@ -1,96 +1,11 @@
+
 .MajorsPage {
   position: absolute;
 
   display: flex;
   flex-direction: row;
-
   justify-content: center;
 
   padding: 20px calc(50% - 500px);
   margin-top: 100px;
 }
-
-.majorContainer {
-  padding: 20px;
-  width: auto;
-  height: 400px;
-  background-color: white;
-  margin-right: 10px;
-  /* border: 1px solid black; */
-}
-
-.reqsContainer {
-  padding: 20px;
-  border-radius: 25px;
-  width: 490px;
-  height: 490px;
-  min-width: 390px;
-  background-color: white;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-}
-
-.reqsList {
-  height: 430px;
-  scrollbar-color: rgb(131, 131, 131) transparent;
-  scrollbar-width: thin;
-  overflow-y: scroll;
-  padding-right: 7px;
-  overflow-x: hidden;
-}
-
-.subsectionHeader {
-  color: grey;
-  font-size: 18px;
-  font-weight: 501;
-}
-
-/* Major Metadata ************************************************************/
-
-.pinkMajorBox {
-  font-size: 12px;
-  font-weight: bold;
-  border: 1px solid #d69cd8;
-  color: #d69cd8;
-  border-radius: 4px;
-  text-align: center;
-}
-
-.countBox {
-  display: inline-block; /* Display as inline block */
-  width: max-content; /* Set width to maximum content size */
-  padding: 0 6px;
-  font-size: 12px;
-  border: 1px solid grey;
-  color: black; /* Black text */
-  border-radius: 4px; /* Rounded corners */
-  text-align: center;
-}
-
-.evaluateBox {
-  display: inline-block; /* Display as inline block */
-  width: max-content; /* Set width to maximum content size */
-  padding: 0 6px;
-  font-size: 12px;
-  border: 1px solid white;
-  color: #66c10a; /* Dark green text */
-  background-color: #d9f4cf; /* Light green background fill */
-  border-radius: 4px; /* Rounded corners */
-  text-align: center;
-}
-
-.link {
-  text-decoration: none;
-}
-
-.linkBox {
-  font-size: 15px;
-  padding: 0 16px;
-  border: 1px solid gray;
-  border-radius: 8px; /* Rounded corners */
-  text-decoration: none;
-  border-style: solid;
-  text-align: center;
-  margin-right: 10px;
-}
-
-/* Major Requirements *********************************************************/
