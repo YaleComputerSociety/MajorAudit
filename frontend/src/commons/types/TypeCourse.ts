@@ -17,4 +17,14 @@ export interface StudentCourse {
   status: string; 	// "DA_COMPLETE" | "DA_PROSPECT" | "MA_VALID" | "MA_HYPOTHETICAL"
 }
 
-export type AmbiCourse = Course | StudentCourse;
+export interface AddCourseDisplay {
+	active: boolean;
+	dropVis: boolean;
+}
+
+export const nullAddCourseDisplay: AddCourseDisplay = {
+	active: false,
+	dropVis: false,
+}
+
+

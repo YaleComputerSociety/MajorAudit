@@ -1,7 +1,10 @@
+
 import { useRef, useState, useEffect } from "react";
 import Style from "./AddButton.module.css";
 import { User } from "../../../../../commons/types/TypeUser";
 import { fetchAndCacheCourses, handleAddCourse } from "./AddUtils";
+
+import { AddCourseDisplay, nullAddCourseDisplay } from "../../../../../commons/types/TypeCourse";
 
 const termMappings: { [key: string]: number } = {
   "Spring 2025": 202501,
@@ -16,72 +19,66 @@ const terms = Object.keys(termMappings);
 function AddButton(props: { term: number; user: User; setUser: Function }) {
   
   const inputRef = useRef<HTMLInputElement>(null);
-  const addButtonRef = useRef<HTMLDivElement>(null);
+  const addRef = useRef<HTMLDivElement>(null);
 
-  const [active, setActive] = useState(false);
-	const [dropVis, setDropVis] = useState(false);
+  const [addDisplay, setAddDisplay] = useState<AddCourseDisplay>(nullAddCourseDisplay);
 
 	const [selectedTerm, setSelectedTerm] = useState(props.term);
   const [searchData, setSearchData] = useState<any[]>([]);
 
   useEffect(() => {
-    if(active){
+    if(addDisplay.active){
       document.addEventListener("mousedown", handleClickOutside);
       inputRef.current?.focus();
       fetchAndCacheCourses(selectedTerm, setSearchData);
-    }else{
-      document.removeEventListener("mousedown", handleClickOutside);
     }
+
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+			if(addDisplay.active){
+				document.removeEventListener("mousedown", handleClickOutside);
+			}
     };
-  }, [active, selectedTerm]);
-
-  useEffect(() => {
-		console.log("dropVis updated:", dropVis);
-	}, [dropVis]);
- 
-  const chooseTerm = (term: string) => {
-    setSelectedTerm(termMappings[term]);
-    setDropVis(false);
-  };
-
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if(event.key === "Enter"){
-      handleAddCourse(inputRef, searchData, selectedTerm, props, setActive);
-    }
-  };
+  }, [addDisplay]);
 
 	const handleClickOutside = (event: MouseEvent) => {
-    if(addButtonRef.current && !addButtonRef.current.contains(event.target as Node)){
-      if(dropVis){
-        setDropVis(false);
-				console.log("dropVis")
+    if(addRef.current && !addRef.current.contains(event.target as Node)){
+      if(addDisplay.dropVis){
+        setAddDisplay((prevState) => ({...prevState, dropVis: false}));
+				setTimeout(() => {
+					if(inputRef.current){
+							inputRef.current.focus();
+						}
+				}, 0);
       }else{
-        setActive(false)
-				console.log("failure: ", dropVis)
+				setAddDisplay((prevState) => ({...prevState, active: false}));
       }
     }
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === "Enter"){
+      handleAddCourse(inputRef, searchData, selectedTerm, props, setAddDisplay);
+    }
+  };
+
   return (
-    <div ref={addButtonRef}>
-      {!active ? (
-        <div className={Style.AddButton} onClick={() => setActive(true)}>
+    <div ref={addRef}>
+      {!addDisplay.active ? (
+        <div className={Style.AddButton} onClick={() => setAddDisplay((prevState) => ({...prevState, active: true}))}>
           +
         </div>
       ) : (
         <div className={Style.AddCanvas}>
           <div className={Style.Row} style={{ alignItems: "center" }}>
-            <div className={Style.RemoveButton} onClick={() => setActive(false)}>
+            <div className={Style.RemoveButton} onClick={() => setAddDisplay((prevState) => ({...prevState, active: false}))}>
 
 						</div>
-            <div className={Style.TermBox} onClick={() => setDropVis(!dropVis)}>
+            <div className={Style.TermBox} onClick={() => setAddDisplay((prevState) => ({...prevState, dropVis: !addDisplay.dropVis}))}>
               {Object.keys(termMappings).find((key) => termMappings[key] === selectedTerm)}
-              {dropVis && (
+              {addDisplay.dropVis && (
                 <div className={Style.TermOptions}>
                   {terms.map((term, index) => (
-                    <div key={index} onClick={() => chooseTerm(term)} className={termMappings[term] === selectedTerm ? Style.SelectedTerm : ""}>
+                    <div key={index} onClick={() => setSelectedTerm(termMappings[term])} className={termMappings[term] === selectedTerm ? Style.SelectedTerm : ""}>
                       {term}
                     </div>
                   ))}
@@ -91,7 +88,7 @@ function AddButton(props: { term: number; user: User; setUser: Function }) {
             <input ref={inputRef} type="text" placeholder="FREN 403"  maxLength={9} onKeyPress={handleKeyPress} className={Style.CodeBox}>
 				
 						</input>
-            <div className={Style.ConfirmButton} onClick={() => handleAddCourse(inputRef, searchData, selectedTerm, props, setActive)}>
+            <div className={Style.ConfirmButton} onClick={() => handleAddCourse(inputRef, searchData, selectedTerm, props, setAddDisplay)}>
 
 						</div>
           </div>

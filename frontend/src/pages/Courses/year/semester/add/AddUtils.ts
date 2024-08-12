@@ -3,6 +3,7 @@ import { StudentCourse } from "../../../../../commons/types/TypeCourse";
 import { User } from "../../../../../commons/types/TypeUser";
 import { xCheckMajorsAndSet } from "./../../../CoursesUtils";
 import { getCTCourses } from "../../../../../api/api";
+import { AddCourseDisplay } from "../../../../../commons/types/TypeCourse";
 
 export async function fetchAndCacheCourses(
   selectedTerm: number,
@@ -37,7 +38,7 @@ export function handleAddCourse(
   searchData: any[],
   selectedTerm: number,
   props: { term: number; user: User; setUser: Function },
-  setActive: Function
+  setAddDisplay: Function
 ) {
   if (inputRef.current) {
     const code = inputRef.current.value;
@@ -65,7 +66,10 @@ export function handleAddCourse(
         console.log("Duplicate");
       } else {
         xCheckMajorsAndSet(props.user, newCourse, props.setUser);
-        setActive(false);
+        setAddDisplay((prevState: AddCourseDisplay) => ({
+					...prevState,
+					active: false,
+				}));
       }
     }
   }
