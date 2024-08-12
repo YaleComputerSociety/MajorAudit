@@ -41,7 +41,7 @@ app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-allowed_CORS_origins=['http://127.0.0.1:5000', 'http://127.0.0.1:5000/graduation', 'http://127.0.0.1:5000/login', 'http://127.0.0.1:5000/courses', 'http://127.0.0.1:5000/onboard', 'http://127.0.0.1:5000']
+allowed_CORS_origins=['http://127.0.0.1:3000', 'http://127.0.0.1:3000/graduation', 'http://127.0.0.1:3000/login', 'http://127.0.0.1:3000/courses', 'http://127.0.0.1:3000/onboard', 'http://127.0.0.1:3000']
 
 class User:
 	def __init__(self, netID, onboard, name, degrees, studentCourses, language):
@@ -68,7 +68,7 @@ def login():
     cookies={}
 
     if 'NETID' in session:
-        redirect_url = 'http://127.0.0.1:5000'
+        redirect_url = 'http://127.0.0.1:3000'
 
         current_app.logger.info(f'Redirecting: {redirect_url}')
         resp = make_response(redirect(redirect_url))
@@ -104,7 +104,7 @@ def login():
                 )
                 db.collection("Users").document(netID).set(new_user.__dict__)
 
-            redirect_url = 'http://127.0.0.1:5000'
+            redirect_url = 'http://127.0.0.1:3000'
 
         else:
             token=session['CAS_TOKEN']
@@ -156,7 +156,7 @@ def validate(ticket, service):
 
 @app.route('/logout')
 def logout():
-    service="127.0.0.1:5000/login"
+    service="127.0.0.1:3000/login"
     response = make_response(redirect(f'https://secure.its.yale.edu/cas/logout'))
     response.set_cookie('netid', '', expires=0, path='/') 
     return response
@@ -169,7 +169,7 @@ def getAuth():
 	if "NETID" in session:
 		document = db.collection("Users").document(session['NETID']).get()
 		onboard = document.to_dict().get("onboard")
-		return jsonify({"loggedIn": True, "onboard": onboard})
+		return jsonify({"loggedIn": False, "onboard": onboard})
 	else:
 		return jsonify({"loggedIn": False, "onboard": False})
 
@@ -227,7 +227,6 @@ def get_majors():
 
 @app.route("/onboardUser", methods = ["POST"])
 def onboardUser():
-    """"""
     # Validate
     loc_netid = session.get("NETID")
     if not loc_netid:
@@ -240,18 +239,24 @@ def onboardUser():
         return make_response(jsonify({"Error": "Invalid Data"}), 400)
 
     # Process
-    studentCourses = distill_dacourses(data)
+    try:
+        studentCourses = distill_dacourses(data)
+    except Exception as e:
+        return make_response(jsonify({"Error": str(e)}), 500)
 
     # Store
-    user = User(
-        netID=loc_netid, 
-        onboard=True,
-        name=data["name"], 
-        degrees=data["degrees"], 
-        studentCourses=studentCourses, 
-        language=data["language"],
-    )
-    db.collection("Users").document(loc_netid).set(user.__dict__)
+    try:
+        user = User(
+            netID=loc_netid, 
+            onboard=True,
+            name=data["name"], 
+            degrees=data["degrees"], 
+            studentCourses=studentCourses, 
+            language=data["language"],
+        )
+        db.collection("Users").document(loc_netid).set(user.__dict__)
+    except Exception as e:
+        return make_response(jsonify({"Error": str(e)}), 500)
 
     # Transfer
     return make_response(jsonify(data), 200)
