@@ -38,7 +38,7 @@ function OptionOne(props: { checkAuth: Function, handleParsedData: Function, onP
     const [isTyping, setIsTyping] = useState(true);
     const [isFocused, setIsFocused] = useState(false);
     const indexRef = useRef(0);
-    const textRef = useRef("Paaste DegreeAudit data here...");
+    const textRef = useRef("Paste DegreeAudit data here...");
     const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const blinkIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -122,11 +122,15 @@ function OptionOne(props: { checkAuth: Function, handleParsedData: Function, onP
             degreeList = [`${degreeMatch[1].trim()} ${majorMatch[1].trim()}`];
         }
 
+        const firstCourseYear = courses.length ? parseInt(courses[0].term.split(' ')[1], 10) : new Date().getFullYear();
+        const classYear = (firstCourseYear + 3).toString().slice(-2);
+
         return {
             name: nameMatch ? nameMatch[1].split(',')[1].trim() : '',
             degrees: degreeList,
             courses: groupCoursesByYear(courses),
             language: placementLanguageMatch ? placementLanguageMatch[1].trim() : '',
+            classYear,
         };
     };
 
@@ -189,9 +193,9 @@ function OptionOne(props: { checkAuth: Function, handleParsedData: Function, onP
 
 function OptionTwo(props: OptionTwoProps) {
     const { parsedData, handleRemoveCourse, handleParsedData } = props;
-    const [hoveredCourse, setHoveredCourse] = useState<string | null>(null);
-    const [editingCourse, setEditingCourse] = useState<string | null>(null);
-    const [tempCourseCode, setTempCourseCode] = useState<string>('');
+    const [editingCourse, setEditingCourse] = useState<{ year: string, term: string } | null>(null);
+    const [newCourseCode, setNewCourseCode] = useState<string>('');
+    const [newCourseCredits, setNewCourseCredits] = useState<number>(1); // New state for credits
 
     const getSeasonIcon = (term: string) => {
         if (term.toLowerCase().includes('fall')) {
@@ -210,53 +214,62 @@ function OptionTwo(props: OptionTwoProps) {
                 className={`${Style.courseBox} ${
                     course.status === 'COMPLETE' ? Style.completeCourse : Style.inProgressCourse
                 }`}
-                onMouseEnter={() => setHoveredCourse(course.code)}
-                onMouseLeave={() => setHoveredCourse(null)}
             >
                 <img src={getSeasonIcon(term)} alt="" className={Style.seasonIcon} />
                 <div className={Style.courseContent}>
-                    {editingCourse === course.code ? (
-                        <input
-                            type="text"
-                            value={tempCourseCode}
-                            onChange={(e) => setTempCourseCode(e.target.value)}
-                            onBlur={() => handleCourseCodeChange(course)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') handleCourseCodeChange(course);
-                            }}
-                            className={Style.courseCodeInput}
-                            autoFocus
-                        />
-                    ) : (
-                        <span
-                            className={`${Style.courseCode} ${hoveredCourse === course.code ? Style.courseCodeHover : ''}`}
-                            onClick={() => handleCourseCodeEdit(course.code)}
-                        >
-                            {course.code}
-                        </span>
-                    )}
+                    <span className={Style.courseCode}>{course.code}</span>
                 </div>
-                {hoveredCourse === course.code && (
-                    <span
-                        className={Style.removeCourse}
-                        onClick={() => handleRemoveCourse(year, term, course.code)}
-                    >
-                        ✕
-                    </span>
-                )}
+                <span
+                    className={Style.removeCourse}
+                    onClick={() => handleRemoveCourse(year, term, course.code)}
+                >
+                    ✕
+                </span>
             </div>
         ));
     };
 
-    const handleCourseCodeEdit = (courseCode: string) => {
-        setEditingCourse(courseCode);
-        setTempCourseCode(courseCode);
+    const handleAddCourse = (year: string, term: string) => {
+        if (!newCourseCode.trim()) return;
+
+        const currentYear = new Date().getFullYear();
+        const isFuture = parseInt(year) >= currentYear;
+        const status = isFuture ? 'IP' : 'COMPLETE';
+
+        const newCourse = { code: newCourseCode.trim(), credits: newCourseCredits.toString(), term, status };
+        if (!parsedData.courses) {
+            parsedData.courses = {};
+        }
+        if (!parsedData.courses[year]) {
+            parsedData.courses[year] = { Fall: [], Spring: [] };
+        }
+        parsedData.courses[year][term].push(newCourse);
+
+        setEditingCourse(null);
+        setNewCourseCode('');
+        setNewCourseCredits(1); // Reset credits
+        handleParsedData(parsedData);
     };
 
-    const handleCourseCodeChange = (course: DACourse) => {
-        course.code = tempCourseCode;
-        setEditingCourse(null);
-        handleParsedData(parsedData);
+    const handleCourseCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewCourseCode(event.target.value);
+    };
+
+    const handleCourseCreditsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseInt(event.target.value);
+        setNewCourseCredits(isNaN(value) ? 1 : value); // Handle invalid input
+    };
+
+    const renderPlusButton = (year: string, term: string, backgroundColor: string) => {
+        return (
+            <button
+                onClick={() => setEditingCourse({ year, term })}
+                style={{ backgroundColor }}
+                className={`${Style.addCourseButton} ${Style.circularButton}`} // Ensure button is circular
+            >
+                +
+            </button>
+        );
     };
 
     const getCoursesBySchoolYear = (schoolYear: string, years: string) => {
@@ -269,10 +282,70 @@ function OptionTwo(props: OptionTwoProps) {
                 </h2>
                 <div className={Style.courseRow}>
                     {displayCourses(fallYear, 'Fall')}
+                    {editingCourse?.year === fallYear && editingCourse?.term === 'Fall' ? (
+                        <div className={`${Style.courseBox} ${Style.courseInputBox}`}>
+                            <img src={fallIcon} alt="" className={Style.seasonIcon} />
+                            <input
+                                type="text"
+                                value={newCourseCode}
+                                onChange={handleCourseCodeChange}
+                                onBlur={() => handleAddCourse(fallYear, 'Fall')}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') handleAddCourse(fallYear, 'Fall');
+                                }}
+                                className={Style.courseCodeInput}
+                                placeholder="MATH 225"
+                                autoFocus
+                            />
+                            <input
+                                type="number"
+                                value={newCourseCredits}
+                                onChange={handleCourseCreditsChange}
+                                className={Style.courseCreditsInput}
+                                placeholder="1"
+                                min="0.5"
+                                max="5"
+                                step="0.5"
+                            />
+                            <span className={Style.creditsText}>credit(s)</span>
+                        </div>
+                    ) : (
+                        renderPlusButton(fallYear, 'Fall', 'rgba(255, 0, 0, 0.5)')
+                    )}
                 </div>
                 <div style={{ marginBottom: '20px' }}></div> {/* Add gap between Fall and Spring */}
                 <div className={Style.courseRow}>
                     {displayCourses(springYear, 'Spring')}
+                    {editingCourse?.year === springYear && editingCourse?.term === 'Spring' ? (
+                        <div className={`${Style.courseBox} ${Style.courseInputBox}`}>
+                            <img src={springIcon} alt="" className={Style.seasonIcon} />
+                            <input
+                                type="text"
+                                value={newCourseCode}
+                                onChange={handleCourseCodeChange}
+                                onBlur={() => handleAddCourse(springYear, 'Spring')}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') handleAddCourse(springYear, 'Spring');
+                                }}
+                                className={Style.courseCodeInput}
+                                placeholder="MATH 225"
+                                autoFocus
+                            />
+                            <input
+                                type="number"
+                                value={newCourseCredits}
+                                onChange={handleCourseCreditsChange}
+                                className={Style.courseCreditsInput}
+                                placeholder="1"
+                                min="0.5"
+                                max="5"
+                                step="0.5"
+                            />
+                            <span className={Style.creditsText}>credit(s)</span>
+                        </div>
+                    ) : (
+                        renderPlusButton(springYear, 'Spring', 'rgba(0, 255, 0, 0.5)')
+                    )}
                 </div>
             </div>
         );
@@ -287,7 +360,7 @@ function OptionTwo(props: OptionTwoProps) {
                 Senior: ''
             };
         }
-        
+
         const years = Object.keys(parsedData.courses).map(year => parseInt(year)).sort();
         const firstYear = years[0] || 0; // Default to 0 if no years are present
         return {
@@ -302,10 +375,10 @@ function OptionTwo(props: OptionTwoProps) {
 
     return (
         <div className={Style.CourseDisplayBox}>
-            {schoolYears.Freshman && getCoursesBySchoolYear('Freshman', schoolYears.Freshman)}
-            {schoolYears.Sophomore && getCoursesBySchoolYear('Sophomore', schoolYears.Sophomore)}
-            {schoolYears.Junior && getCoursesBySchoolYear('Junior', schoolYears.Junior)}
-            {schoolYears.Senior && getCoursesBySchoolYear('Senior', schoolYears.Senior)}
+            {getCoursesBySchoolYear('Freshman', schoolYears.Freshman)}
+            {getCoursesBySchoolYear('Sophomore', schoolYears.Sophomore)}
+            {getCoursesBySchoolYear('Junior', schoolYears.Junior)}
+            {getCoursesBySchoolYear('Senior', schoolYears.Senior)}
         </div>
     );
 }
@@ -320,7 +393,8 @@ function ResultsWindow(props: { parsedData: any; syncAndGo: Function; handlePars
     const [modalVisible, setModalVisible] = useState(false);
     const [courseToRemove, setCourseToRemove] = useState<{ year: string; term: string; courseCode: string } | null>(null);
     const [editingName, setEditingName] = useState(false);
-    const [tempName, setTempName] = useState(parsedData.name);
+    const [tempName, setTempName] = useState(parsedData.name || '');
+    const [classYear, setClassYear] = useState(parsedData.classYear || '28'); // Default class year
 
     const formRef = useRef<HTMLDivElement>(null);
 
@@ -353,7 +427,10 @@ function ResultsWindow(props: { parsedData: any; syncAndGo: Function; handlePars
     const handleFormSubmit = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
         const [term, year] = newCourseTerm.split(' ');
-        const newCourse = { code: newCourseCode, credits: '3', term, status: newCourseStatus === 'Complete' ? 'COMPLETE' : 'IP' };
+        const currentYear = new Date().getFullYear();
+        const isFuture = parseInt(year) >= currentYear;
+        const status = isFuture ? 'IP' : 'COMPLETE';
+        const newCourse = { code: newCourseCode, credits: '3', term, status };
         if (!parsedData.courses) {
             parsedData.courses = {};
         }
@@ -392,6 +469,14 @@ function ResultsWindow(props: { parsedData: any; syncAndGo: Function; handlePars
     const handleNameChange = () => {
         setEditingName(false);
         parsedData.name = tempName;
+        parsedData.classYear = classYear;
+        handleParsedData(parsedData);
+    };
+
+    const handleClassYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newClassYear = e.target.value.slice(-2); // Keep only the last two digits
+        setClassYear(newClassYear);
+        parsedData.classYear = newClassYear;
         handleParsedData(parsedData);
     };
 
@@ -423,14 +508,41 @@ function ResultsWindow(props: { parsedData: any; syncAndGo: Function; handlePars
                                 if (e.key === 'Enter') handleNameChange();
                             }}
                             className={Style.nameInput}
+                            placeholder="Your Name"
+                            style={{ width: `${Math.max(tempName.length, 10)}ch` }} // Dynamic width
                             autoFocus
                         />
                     ) : (
                         <span
                             className={Style.name}
                             onClick={() => setEditingName(true)}
+                            style={{ color: tempName ? "black" : "gray" }} // Gray color for placeholder
                         >
-                            {parsedData.name}
+                            {tempName || 'Your Name'}, Class of 20
+                        </span>
+                    )}
+                    {editingName ? (
+                        <input
+                            type="text"
+                            value={classYear}
+                            onChange={handleClassYearChange}
+                            onBlur={handleNameChange}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') handleNameChange();
+                            }}
+                            className={Style.yearInput}
+                            placeholder="28"
+                            maxLength={2}
+                            style={{ width: "2ch", color: classYear ? "black" : "gray" }} // Dynamic width and gray placeholder
+                            autoFocus
+                        />
+                    ) : (
+                        <span
+                            className={Style.classYear}
+                            onClick={() => setEditingName(true)}
+                            style={{ color: classYear ? "black" : "gray" }} // Gray color for placeholder
+                        >
+                            {classYear}
                         </span>
                     )}
                 </div>
@@ -458,39 +570,7 @@ function ResultsWindow(props: { parsedData: any; syncAndGo: Function; handlePars
                     <OptionTwo parsedData={parsedData} handleRemoveCourse={handleRemoveCourse} handleParsedData={handleParsedData} />
                 )}
             </div>
-            <div ref={formRef} className={`${Style.AddCourseContainer} ${showAddCourseForm ? Style.show : ''}`}>
-                <form onSubmit={handleFormSubmit} className={Style.AddCourseForm}>
-                    <input
-                        type="text"
-                        placeholder="Course Code"
-                        value={newCourseCode}
-                        onChange={(e) => setNewCourseCode(e.target.value)}
-                        required
-                        className={Style.courseCodeInput}
-                    />
-                    <select
-                        value={newCourseTerm}
-                        onChange={(e) => setNewCourseTerm(e.target.value)}
-                        required
-                        className={Style.termSelect}
-                    >
-                        <option value="" disabled>Select Term</option>
-                        {Array.from({ length: 9 }, (_, i) => 2020 + i).flatMap(year => [
-                            <option key={`Fall ${year}`} value={`Fall ${year}`}>{`Fall ${year}`}</option>,
-                            <option key={`Spring ${year}`} value={`Spring ${year}`}>{`Spring ${year}`}</option>
-                        ])}
-                    </select>
-                    <select
-                        value={newCourseStatus}
-                        onChange={(e) => setNewCourseStatus(e.target.value)}
-                        required
-                        className={Style.statusSelect}
-                    >
-                        <option value="Complete">Complete</option>
-                        <option value="In Progress (IP)">In Progress (IP)</option>
-                    </select>
-                </form>
-            </div>
+            
             {modalVisible && (
                 <div className={Style.ModalOverlay}>
                     <div className={Style.Modal}>
@@ -502,12 +582,12 @@ function ResultsWindow(props: { parsedData: any; syncAndGo: Function; handlePars
                     </div>
                 </div>
             )}
-            <button 
+            {/* <button 
                 onClick={handleAddButtonClick}
                 className={`${Style.AddCourseButton} ${isFormValid ? Style.validForm : ''}`}
             >
                 +
-            </button>
+            </button> */}
         </div>
     );
 }

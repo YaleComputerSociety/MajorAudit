@@ -58,6 +58,14 @@ html, body {
     font-size: 2.5rem;
     color: black;
     font-weight: 700;
+    display: flex;
+    align-items: baseline; /* Align year with name */
+}
+
+.HeaderText input {
+    font-size: inherit;
+    font-weight: inherit;
+    color: gray;
 }
 
 .Content {
@@ -114,358 +122,6 @@ html, body {
     padding-right: 10px;
     transition: filter 0.4s ease;
     margin-right: 10px;
-    flex: 0 1 auto;
-}
-
-.completeCourse {
-    background-color: #dfe9f7;
-}
-
-.inProgressCourse {
-    background-color: #f5f5f5;
-}
-
-.courseBox:hover {
-    cursor: pointer;
-    filter: brightness(95%);
-}
-
-.courseContent {
-    display: flex;
-    flex-direction: column;
-    margin-left: 5px; /* Adjust this value to change spacing between icon and course code */
-    flex: 1; /* Allow content to grow */
-}
-
-.courseCode {
-    font-weight: bold;
-}
-
-.courseTitle {
-    font-size: 0.75em;
-    color: #555;
-}
-
-.removeCourse {
-    color: red;
-    font-size: 1rem;
-    margin-left: 10px;
-    cursor: pointer;
-}
-
-.seasonIcon {
-    width: 16px;
-    height: 16px;
-    margin-right: 5px; /* Adjust this value to change spacing between icon and course code */
-}
-
-.YearHeader {
-    font-weight: 600;
-    font-size: 25px;
-    margin-bottom: 10px;
-}
-
-.yearRange {
-    font-size: 0.8em;
-    color: gray;
-    margin-left: 10px;
-}
-
-.yearComponent {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-    transition: transform 0.5s ease, height 0.5s ease, width 0.5s ease;
-}
-
-.courseRow {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px; /* Adjust this value to change horizontal spacing */
-}
-
-.TabContainer {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 10px;
-}
-
-.TabButtons {
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-}
-
-.Header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.HeaderText {
-    flex-grow: 1;
-}
-
-.TabButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 8px;
-    transition: background-color 0.3s;
-}
-
-.TabButton svg {
-    width: 24px;
-    height: 24px;
-}
-
-.ActiveTab {
-    background-color: #d3d3d3;
-}
-
-.OptionContent {
-    width: 100%;
-    border: 1px solid black;
-    border-radius: 8px;
-    padding: 10px;
-    background-color: white;
-}
-
-.TabContent {
-    margin-top: 20px;
-    flex-grow: 1;
-    overflow-y: auto;
-}
-
-.JSONContainer {
-    height: 400px;
-    overflow-y: scroll;
-}
-
-.JSONPre {
-    white-space: pre-wrap;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    background-color: #f5f5f5;
-}
-
-.btn {
-    border: none;
-    text-decoration: none;
-    padding: 8px 24px;
-    border-radius: 10px;
-    font-weight: 500;
-    color: #f0f6f8;
-    background-color: #4692e8;
-    transition: transform 0.3s, filter 0.3s;
-    margin-top: 8px;
-    font-size: large;
-    cursor: pointer;
-    margin-bottom: 20px;
-}
-
-.btn:hover {
-    text-decoration: none;
-    transform: translateY(-5px);
-    filter: brightness(90%);
-}
-
-.TextArea {
-    width: 100%;
-    min-height: 24rem;
-    padding: 10px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    resize: none;
-}
-
-.Step {
-    text-align: left;
-    padding-top: 150px;
-    padding-left: 80px;
-    opacity: 0;
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    transform: translateY(20px);
-}
-
-.Step:first-child {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.StepVisible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.NumFlip {
-    background-color: transparent;
-    font-size: calc( 2 * var(--num-font-size)); /* Adjust the font size dynamically */
-}
-
-.NumContainer {
-    overflow: hidden;
-    height: calc(2 * var(--num-container-height)); /* Match the height of a single number dynamically */
-    position: relative;
-    background-color: transparent; /* Background color to blend with the main background */
-}
-
-.NumFullContainer {
-    position: fixed;
-    top: var(--num-margin-top); /* Adjust this value for desired distance from the top */
-    left: var(--num-margin-left); /* Adjust this value for desired distance from the left */
-    background-color: transparent;
-    z-index: 1000;
-    display: flex;
-}
-
-.Zero {
-    font-size: calc( 2 * var(--num-font-size)); /* Adjust the font size dynamically */
-}
-
-.Padder {
-    height: 80vh; 
-    background-color: #ffffff;
-}
-
-.AddCourseContainer {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-    max-width: 100%;
-    box-sizing: border-box;
-    right: 0;
-    bottom: 0;
-    transition: transform 0.3s ease-in-out;
-    transform: translateX(100%);
-    z-index: 1001;
-}
-
-.AddCourseContainer.show {
-    transform: translateX(0);
-}
-
-.AddCourseButton {
-    background-color: lightgray;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    padding: 16px;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    height: 48px;
-    width: 48px;
-}
-
-.validForm {
-    background-color: green;
-}
-
-.AddCourseForm .courseCodeInput {
-    flex: 1;
-    min-width: 150px; /* Reduced width of course code input */
-    margin-right: 10px; /* Added space between course code input and select */
-}
-
-.AddCourseForm .termSelect,
-.AddCourseForm .statusSelect {
-    flex: 1;
-    min-width: 100px;
-    margin-right: 10px;
-}
-
-.AddCourseForm {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    width: calc(100% - 70px); /* Ensure the add button is visible */
-    box-sizing: border-box;
-}
-
-.CompleteCheckbox {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    white-space: nowrap;
-    margin-right: 10px; /* Added margin to the right for spacing */
-}
-
-.CompleteCheckbox input[type="checkbox"] {
-    appearance: none;
-    width: 18px; /* Adjusted width */
-    height: 18px; /* Adjusted height */
-    background-color: #e0e0e0;
-    border-radius: 4px;
-    border: 1px solid #b0b0b0;
-    outline: none;
-    cursor: pointer;
-    transition: background-color 0.3s, border-color 0.3s;
-}
-
-.CompleteCheckbox input[type="checkbox"]:checked {
-    background-color: #4692e8;
-    border-color: #4692e8;
-}
-
-.CompleteCheckbox input[type="checkbox"]:hover {
-    border-color: #0073e6;
-}
-
-.ResultsContainer {
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-    border-radius: 25px;
-    padding: 20px;
-    background-color: white;
-    width: 100%;
-    max-width: 1000px;
-    box-sizing: border-box;
-    position: relative;
-    min-height: 25rem;
-    max-height: 50rem;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.CloseButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.courseBox {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 36px;
-    border-radius: 16px;
-    margin-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    transition: filter 0.4s ease;
     flex: 0 1 auto;
 }
 
@@ -816,25 +472,69 @@ html, body {
     font-size: 2.5rem;
     font-weight: 700;
     outline: none;
-}
-
-.name {
-    font-size: 2.5rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: border-bottom 0.3s;
-    display: inline-block;
+    width: fit-content; /* Size to content */
+    margin-bottom: 10px; /* Add space between name and year */
 }
 
 .name:hover {
-    border-bottom: 1px solid #000;
+    color: #0073e6;
+    cursor: pointer;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+
+.yearInput {
+    border: none;
+    border-bottom: 1px solid #000;
+    font-size: 2.5rem;
+    font-weight: 700;
+    outline: none;
+    color: gray; /* Placeholder color for year input */
+    width: 2ch; /* Size the year input to 2 characters */
+}
+
+.classYear {
+    margin-left: 5px;
+    color: gray;
+    cursor: pointer;
+}
+
+.addCourseButton {
+    border: none;
+    background-color: #d3d3d3;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.addCourseButton:hover {
+    background-color: #a9a9a9;
+}
+
+.courseCreditsInput {
+    width: 50px;
+    margin-left: 5px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.courseInputBox {
+    display: flex;
+    align-items: center;
+}
+
+.creditsText {
+    color: gray;
+    font-size: 12px;
+    margin-left: 5px;
 }
