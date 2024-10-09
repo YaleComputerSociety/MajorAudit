@@ -186,17 +186,31 @@ def getUser():
 def getCatalog():
     key = request.args.get('key')
     if not key:
+        print("Error: Missing 'key' parameter in request.")
         return jsonify({"Error": "Missing Param"}), 400
 
-    # Access Firestore
     try:
-        slices_ref = db.collection("Catalogs").document(key).collection("Slices")
-        slices_docs = slices_ref.stream()
+        collections = db.collections()
+        root_collection_names = [collection.id for collection in collections]
 
+        if 'Catalogs' not in root_collection_names:
+            return jsonify({"Error": "Catalogs Nonexistent"}), 404
+
+        print(f"Key: {key}")
+        slices_ref = db.collection("Catalogs").document(key).collection("Slices")
+        slices_docs = list(slices_ref.stream()) 
+        
+        print(f"# Slices: {len(slices_docs)}")
+        
         combined_list = []
         for slice_doc in slices_docs:
-            slice_data = slice_doc.to_dict().get('list', [])
-            combined_list.extend(slice_data)
+            slice_data = slice_doc.to_dict().get('C', "")
+
+            try:
+                parsed_data = json.loads(slice_data)
+                combined_list.extend(parsed_data)
+            except json.JSONDecodeError as e:
+                return jsonify({"Error": f"Invalid JSON Document {slice_doc.id}"}), 500
 
         if not combined_list:
             return jsonify({"Error": "Data Not Found"}), 404
@@ -204,8 +218,9 @@ def getCatalog():
         return jsonify(combined_list), 200
 
     except Exception as e:
+        print(f"Error Firestore: {str(e)}")
         return jsonify({"Error": str(e)}), 500
-  
+
 
 # * * * POST * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
