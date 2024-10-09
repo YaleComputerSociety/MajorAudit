@@ -113,7 +113,7 @@ function CourseBox(props: {edit: boolean, SC: StudentCourse, user: User, setUser
 				</div>
 				<div>
 					<div className={Style.row} style={{ alignItems: "center" }}>
-						<DistributionsCircle distributions={[...course.areas, ...course.skills]} />
+						<DistributionsCircle distributions={course.dist} />
 					</div>
 				</div>
 			</div>

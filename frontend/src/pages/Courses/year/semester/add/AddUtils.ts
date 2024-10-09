@@ -2,7 +2,7 @@
 import { StudentCourse } from "../../../../../commons/types/TypeCourse";
 import { User } from "../../../../../commons/types/TypeUser";
 import { xCheckMajorsAndSet } from "./../../../CoursesUtils";
-import { getCTCourses } from "../../../../../api/api";
+import { getCatalog } from "../../../../../api/api";
 import { AddCourseDisplay } from "../../../../../commons/types/TypeCourse";
 
 export async function fetchAndCacheCourses(
@@ -10,12 +10,12 @@ export async function fetchAndCacheCourses(
   setSearchData: Function
 ) {
   const cachedData = localStorage.getItem(`courses-${selectedTerm}`);
-  if (cachedData) {
+  if(cachedData){
     setSearchData(JSON.parse(cachedData));
     console.log("Loaded From Cache");
-  } else {
-    try {
-      const data = await getCTCourses(selectedTerm.toString());
+  }else{
+    try{
+      const data = await getCatalog(selectedTerm.toString());
       setSearchData(data);
       try {
         localStorage.setItem(`courses-${selectedTerm}`, JSON.stringify(data));
@@ -39,22 +39,22 @@ export function handleAddCourse(
   selectedTerm: number,
   props: { term: number; user: User; setUser: Function },
   setAddDisplay: Function
-) {
-  if (inputRef.current) {
-    const code = inputRef.current.value;
-    const offering = searchData.find((course) => course["course_code"] === code);
+){
+  if(inputRef.current){
+    const targetCode = inputRef.current.value;
+    const targetCourse = searchData.find((fireCourse) => fireCourse["c"].includes(targetCode));
 
-    if (offering) {
-      const codes = offering["listings"];
-      const title = offering["title"];
-      const credit = offering["credits"];
-      const areas = offering["areas"];
-      const skills = offering["skills"];
+    if(targetCourse){
+      const codes = targetCourse["c"];
+      const title = targetCourse["t"];
+      const credit = targetCourse["r"];
+      const dist = targetCourse["d"];
       const seasons = ["Fall", "Spring"];
-      const course = { codes, title, credit, areas, skills, seasons };
+      
+			const course = { codes, title, credit, dist, seasons };
       const status = selectedTerm === props.term ? "MA_VALID" : "MA_HYPOTHETICAL";
       const term = props.term;
-      const newCourse: StudentCourse = { course, term, status };
+      const newCourse: StudentCourse = { course, status, term };
 
       const isDuplicate = props.user.studentCourses.some(
         (existingCourse) =>

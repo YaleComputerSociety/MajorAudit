@@ -66,7 +66,7 @@ export function StudentCourseIcon(props: { studentCourse: StudentCourse, utility
     return <div className={styles.Mark}>{mark}</div>;
   };
 
-  const dist = [...(props.studentCourse.course.areas || []), ...(props.studentCourse.course.skills || [])];
+  const dist = props.studentCourse.course.dist || [];
 
   return (
     <div 

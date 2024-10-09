@@ -1,6 +1,6 @@
 import { Course } from "../types/TypeCourse";
 
-export const EMPTYCOURSE: Course = { codes: ["N/A"], title: "Title NULL", credit: 1, areas: [], skills: [], seasons: [] };
+export const EMPTYCOURSE: Course = { codes: ["N/A"], title: "Title NULL", credit: 1, dist: [], seasons: [] };
 
 export const Ryan = {
   "studentDegrees": [],
@@ -47,26 +47,7 @@ export const Ryan = {
 											"status": "DA_COMPLETE", "term": 202203,
                       "course": {
                         "codes": ["CPSC 201"], "title": "Introduction to Computer Science",
-												"credit": 1, "areas": [], "skills": ["QR"], "seasons": ["Fall", "Spring"]
-											},
-                    }
-                  ]
-                },
-								{
-									"flexible": true,
-                  "courses": [
-                    {
-											"status": "NA", "term": 0,
-                      "course": {
-                        "codes": ["CPSC 202"], "title": "Math Tools",
-												"credit": 1, "areas": [], "skills": ["QR"], "seasons": ["Fall", "Spring"]
-											},
-                    },
-										{
-											"status": "NA", "term": 0,
-                      "course": {
-                        "codes": ["MATH 244"], "title": "Discrete Math",
-												"credit": 1, "areas": [], "skills": ["QR"], "seasons": ["Fall", "Spring"]
+												"credit": 1, "dist": ["QR"], "seasons": ["Fall", "Spring"]
 											},
                     }
                   ]
@@ -78,7 +59,7 @@ export const Ryan = {
 											"status": "DA_COMPLETE", "term": 202301,
                       "course": {
                         "codes": ["CPSC 223"], "title": "Data Structures",
-												"credit": 1, "areas": [], "skills": ["QR"], "seasons": ["Fall", "Spring"]
+												"credit": 1, "dist": ["QR"], "seasons": ["Fall", "Spring"]
 											},
                     }
                   ]
@@ -90,36 +71,10 @@ export const Ryan = {
 											"status": "DA_COMPLETE", "term": 202401,
                       "course": {
                         "codes": ["CPSC 323"], "title": "Introduction to Systems Programming and Computer Organization",
-												"credit": 1, "areas": [], "skills": ["QR"], "seasons": ["Fall", "Spring"]
+												"credit": 1, "dist": ["QR"], "seasons": ["Fall", "Spring"]
 											},
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "name": "ELECTIVES",
-              "subsections": [
-                {
-									"flexible": true,
-                  "courses": [],
-                }
-              ]
-            },
-            {
-              "name": "SENIOR REQUIREMENT",
-              "subsections": [
-                {
-									"flexible": false,
-                  "courses": [
-										{
-											"status": "NA", "term": 0,
-                      "course": {
-                        "codes": ["CPSC 490"], "title": "Project",
-												"credit": 1, "areas": [], "skills": ["QR"], "seasons": ["Fall", "Spring"]
-											},
-                    }
-									],
                 }
               ]
             }
@@ -212,7 +167,6 @@ export const Ryan = {
   "studentCourses": [
     {
       "course": {
-        "areas": [],
         "codes": [
           "CPSC 323"
         ],
@@ -221,7 +175,7 @@ export const Ryan = {
           "Fall",
           "Spring"
         ],
-        "skills": [
+        "dist": [
           "QR"
         ],
         "title": "Introduction to Systems Programming and Computer Organization"
@@ -231,7 +185,7 @@ export const Ryan = {
     },
     {
       "course": {
-        "areas": [
+        "dist": [
           "Hu"
         ],
         "codes": [
@@ -242,7 +196,6 @@ export const Ryan = {
           "Fall",
           "Spring"
         ],
-        "skills": [],
         "title": "Theories and Histories of the Western Novel"
       },
       "status": "DA_COMPLETE",
@@ -250,8 +203,8 @@ export const Ryan = {
     },
     {
       "course": {
-        "areas": [
-          "So"
+        "dist": [
+          "So", "QR"
         ],
         "codes": [
           "ECON 110"
@@ -261,9 +214,6 @@ export const Ryan = {
           "Fall",
           "Spring"
         ],
-        "skills": [
-          "QR"
-        ],
         "title": "An Introduction to Microeconomic Analysis"
       },
       "status": "DA_COMPLETE",
@@ -271,7 +221,7 @@ export const Ryan = {
     },
     {
       "course": {
-        "areas": [
+        "dist": [
           "Hu"
         ],
         "codes": [
@@ -283,28 +233,14 @@ export const Ryan = {
           "Fall",
           "Spring"
         ],
-        "skills": [],
         "title": "Reading Ulysses: Modernist Classic and Postcolonial Epic"
       },
       "status": "MA_VALID",
       "term": 202403
     },
     {
-      "course": {
-        "areas": [],
-        "codes": [
-          "CPSC 201"
-        ],
-        "credit": 1,
-        "seasons": [
-          "Fall",
-          "Spring"
-        ],
-        "skills": [
-          "QR"
-        ],
-        "title": "Introduction to Computer Science"
-      },
+      "course": { "codes": ["CPSC 201"], "credit": 1, "seasons": ["Fall", "Spring"],
+        "dist": ["QR"], "title": "Introduction to Computer Science" },
       "status": "DA_COMPLETE",
       "term": 202203
     }

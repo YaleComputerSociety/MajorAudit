@@ -201,27 +201,27 @@ function DistributionTable(props: { year: number; studentCourses: StudentCourse[
   let LList: StudentCourse[] = [];
 
   props.studentCourses.forEach((studentCourse) => {
-    const { areas, skills } = studentCourse.course;
+    const dist = studentCourse.course.dist;
 
-    if (areas.includes('Hu')) {
-      HuList.push(studentCourse);
-    }
-    if (areas.includes('So')) {
-      SoList.push(studentCourse);
-    }
-    if (areas.includes('Sc')) {
-      ScList.push(studentCourse);
-    }
-
-    if (skills.includes('QR')) {
-      QRList.push(studentCourse);
-    }
-    if (skills.includes('WR')) {
-      WRList.push(studentCourse);
-    }
-    if (skills.some(skill => skill.startsWith('L'))) {
-      LList.push(studentCourse);
-    }
+    if (dist && dist.includes('Hu')) {
+			HuList.push(studentCourse);
+		}
+		if (dist && dist.includes('So')) {
+			SoList.push(studentCourse);
+		}
+		if (dist && dist.includes('Sc')) {
+			ScList.push(studentCourse);
+		}
+		
+		if (dist && dist.includes('QR')) {
+			QRList.push(studentCourse);
+		}
+		if (dist && dist.includes('WR')) {
+			WRList.push(studentCourse);
+		}
+		if (dist && dist.some(skill => skill.startsWith('L'))) {
+			LList.push(studentCourse);
+		}
   });
 
   if(props.year === 1){

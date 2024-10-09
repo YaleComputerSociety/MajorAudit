@@ -182,35 +182,29 @@ def getUser():
 	return make_response(response_body, 200)
 
 
-@app.get("/getCTCourses")
-def getCTCourses():
-	key = request.args.get('key')
-	if not key:
-		result = {"Error": "Missing Param"}
-		status_code = 400
+@app.get("/getCatalog")
+def getCatalog():
+    key = request.args.get('key')
+    if not key:
+        return jsonify({"Error": "Missing Param"}), 400
 
-	cookies = { 
-			'session': 'enter_session_here', 
-			'session.sig': 'enter_session_sig_here' 
-		}
-	url = f"https://api.coursetable.com/api/catalog/public/{key}"
-						
-	try:
-		response = requests.get(url, cookies=cookies)
-		course_data = response.json()
-		transformed_data = simplify_CT_courses(course_data)
-		result = transformed_data
-		status_code = 200
-	except requests.exceptions.RequestException as e:
-		result = {"Error": str(e)}
-		status_code = 500
-  
-	# output_file = "output.json"
-	# with open(output_file, "w") as f:
-	# 	json.dump(result, f, indent=2)
-	# print(f"Result -> {output_file}")
-     
-	return jsonify(result), status_code
+    # Access Firestore
+    try:
+        slices_ref = db.collection("Catalogs").document(key).collection("Slices")
+        slices_docs = slices_ref.stream()
+
+        combined_list = []
+        for slice_doc in slices_docs:
+            slice_data = slice_doc.to_dict().get('list', [])
+            combined_list.extend(slice_data)
+
+        if not combined_list:
+            return jsonify({"Error": "Data Not Found"}), 404
+
+        return jsonify(combined_list), 200
+
+    except Exception as e:
+        return jsonify({"Error": str(e)}), 500
   
 
 # * * * POST * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
