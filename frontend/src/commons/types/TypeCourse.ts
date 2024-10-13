@@ -6,8 +6,7 @@ export interface Course {
   codes: Array<string>; 		// ["FREN 403", "HUMS 409"]
   title: string; 						// "Proust Interpretations: Reading <i>Remembrance of Things Past</i>"
   credit: number 						// 1
-  areas: Array<string>; 		// ["Hu"]
-  skills: Array<string> 		// ["WR"]
+  dist: Array<string>; 		// ["Hu"] # Combine pt. 1
   seasons: Array<string>; 	// ["Spring"] # Figure This Out
 }
 
@@ -17,4 +16,14 @@ export interface StudentCourse {
   status: string; 	// "DA_COMPLETE" | "DA_PROSPECT" | "MA_VALID" | "MA_HYPOTHETICAL"
 }
 
-export type AmbiCourse = Course | StudentCourse;
+export interface AddCourseDisplay {
+	active: boolean;
+	dropVis: boolean;
+}
+
+export const nullAddCourseDisplay: AddCourseDisplay = {
+	active: false,
+	dropVis: false,
+}
+
+

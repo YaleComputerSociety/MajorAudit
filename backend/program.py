@@ -1,8 +1,8 @@
 from copy import deepcopy
 
-from clone import CPSC_Program
+from clone import CPSC_Program, ECON_Program, HIST_Program
 
-all_programs = [CPSC_Program]
+all_programs = [CPSC_Program, ECON_Program, HIST_Program]
 
 def clone_programs(studentCourses):
     # Extract course codes from student courses
@@ -21,7 +21,6 @@ def clone_programs(studentCourses):
                     for course in subsection['courses']:
                         for studentCourse in studentCourses:
                             if set(course['course']['codes']).intersection(studentCourse['course']['codes']):
-                                # Update course's term and status if there's a match
                                 course['term'] = studentCourse['term']
                                 course['status'] = studentCourse['status']
                                 break  # Break after updating to avoid multiple updates

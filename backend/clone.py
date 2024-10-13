@@ -6,13 +6,12 @@ CPSC_Program = {
         {
             "metadata": {
                 "name": "Computer Science",
-                "abbreviation": "CPSC",
                 "degreeType": "BACH_ART",
                 "stats": {
-                    "courses": 10,
+                    "courses": 12,
                     "rating": 0,
                     "workload": 0,
-                    "type": "QR"
+                    "type": "So"
                 },
                 "students": 0,
                 "about": (
@@ -42,8 +41,8 @@ CPSC_Program = {
                             "flexible": True,
                             "courses": [
                                 {
-                                    "status": "DA_COMPLETE",
-                                    "term": 202203,
+                                    "status": "NA",
+                                    "term": 0,
                                     "course": {
                                         "codes": ["CPSC 201"],
                                         "title": "Introduction to Computer Science",
@@ -88,8 +87,8 @@ CPSC_Program = {
                             "flexible": False,
                             "courses": [
                                 {
-                                    "status": "DA_COMPLETE",
-                                    "term": 202301,
+                                    "status": "NA",
+                                    "term": 0,
                                     "course": {
                                         "codes": ["CPSC 223"],
                                         "title": "Data Structures",
@@ -105,8 +104,8 @@ CPSC_Program = {
                             "flexible": False,
                             "courses": [
                                 {
-                                    "status": "DA_COMPLETE",
-                                    "term": 202401,
+                                    "status": "NA",
+                                    "term": 0,
                                     "course": {
                                         "codes": ["CPSC 323"],
                                         "title": "Introduction to Systems Programming and Computer Organization",
@@ -149,6 +148,115 @@ CPSC_Program = {
                                     }
                                 }
                             ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+
+
+ECON_Program = {
+    "name": "Economics",
+    "abbreviation": "ECON",
+    "degrees": [
+        {
+            "metadata": {
+                "name": "Economics",
+                "degreeType": "BACH_ART",
+                "stats": {
+                    "courses": 10,
+                    "rating": 0,
+                    "workload": 0,
+                    "type": "So"
+                },
+                "students": 0,
+                "about": "Economics is much broader than the study of recessions and inflation or stocks and bonds. Economists study decision making and incentives such as how taxes create incentives for labor market and savings behavior. Many current public policy debates concern questions of economics, including causes and consequences of inequality and gender and racial wage gaps; how to address poverty; the impact of immigration and trade on the well-being of a country’s citizens; the cause of the Great Recession; and how to predict future downturns.",
+                "dus": {
+                    "name": "Giovanni Maggi",
+                    "address": "115 Prospect St., Rosenkranz Hall, Room 334",
+                    "email": "cpsc.yale.edu"
+                },
+                "catologLink": "https://catalog.yale.edu/ycps/subjects-of-instruction/economics/",
+                "wesbiteLink": "economics.yale.edu/undergraduate-program"
+            },
+            "codesCore": ["ECON 490"],
+            "codesAdded": [],
+            "requirements": [
+                {
+                    "name": "ELECTIVES",
+                    "description": "Usually, courses with course numbers above 200 work for this requirement.",
+                    "subsections": [
+                        {
+                            "flexible": True,
+                            "courses": []
+                        }
+                    ]
+                },
+                {
+                    "name": "SENIOR REQUIREMENT",
+                    "subsections": [
+                        {
+                            "flexible": False,
+                            "courses": [
+                                {
+                                    "status": "NA",
+                                    "term": 0,
+                                    "course": {
+                                        "codes": ["ECON 490"],
+                                        "title": "Project",
+                                        "credit": 1,
+                                        "areas": [],
+                                        "skills": ["QR"],
+                                        "seasons": ["Fall", "Spring"]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+
+HIST_Program = {
+    "name": "History",
+    "abbreviation": "HIST",
+    "degrees": [
+        {
+            "metadata": {
+                "name": "History",
+                "degreeType": "BACH_ART",
+                "stats": {
+                    "courses": 10,
+                    "rating": 0,
+                    "workload": 0,
+                    "type": "So"
+                },
+                "students": 0,
+                "about": "Economics is much broader than the study of recessions and inflation or stocks and bonds. Economists study decision making and incentives such as how taxes create incentives for labor market and savings behavior. Many current public policy debates concern questions of economics, including causes and consequences of inequality and gender and racial wage gaps; how to address poverty; the impact of immigration and trade on the well-being of a country’s citizens; the cause of the Great Recession; and how to predict future downturns.",
+                "dus": {
+                    "name": "Giovanni Maggi",
+                    "address": "115 Prospect St., Rosenkranz Hall, Room 334",
+                    "email": "cpsc.yale.edu"
+                },
+                "catologLink": "https://catalog.yale.edu/ycps/subjects-of-instruction/economics/",
+                "wesbiteLink": "economics.yale.edu/undergraduate-program"
+            },
+            "codesCore": [],
+            "codesAdded": [],
+            "requirements": [
+                {
+                    "name": "ELECTIVES",
+                    "description": "Usually, courses with course numbers above 200 work for this requirement.",
+                    "subsections": [
+                        {
+                            "flexible": True,
+                            "courses": []
                         }
                     ]
                 }

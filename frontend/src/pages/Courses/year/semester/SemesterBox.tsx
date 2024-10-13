@@ -1,12 +1,12 @@
 
 import React from "react";
-import styles from "./../Courses.module.css";
+import Style from "./SemesterBox.module.css"
 
-import { StudentCourse } from "../../../commons/types/TypeCourse";
-import { User } from "../../../commons/types/TypeUser";
+import { StudentCourse } from "../../../../commons/types/TypeCourse";
+import { User } from "../../../../commons/types/TypeUser";
 
-import CourseBox from "./CourseBox";
-import AddButton from "./AddButton";
+import CourseBox from "./course/CourseBox";
+import AddButton from "./add/AddButton";
 
 function SemesterBox(props: { edit: boolean, user: User, setUser: Function; term: number, TermSC: StudentCourse[] }) {
   
@@ -15,7 +15,7 @@ function SemesterBox(props: { edit: boolean, user: User, setUser: Function; term
   ));
 
   return (
-    <div className={styles.column}>
+    <div className={Style.column}>
       <div style={{ marginBottom: "6px" }}>
       </div>
       {SCBoxes}

@@ -3,11 +3,13 @@ import { useState } from "react";
 import styles from "./Graduation.module.css";
 
 import GraduationDistribution from "./components/Distribution";
-import GraduationOverview from "./components/Overview";
+// import GraduationOverview from "./components/Overview";
 
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
 import PageLinks from "./../../navbar/PageLinks";
+
+import { User } from "../../commons/types/TypeUser";
 
 function NavBar() {
   return (
@@ -21,15 +23,15 @@ function NavBar() {
   );
 }
 
-function Recommendations() {
-  return(
-    <div>
-      <div style={{ fontSize: "30px", fontWeight: "500" }}>Hello, Ryn!</div>
-    </div>
-  );
-}
+// function Recommendations() {
+//   return(
+//     <div>
 
-function Graduation(){
+//     </div>
+//   );
+// }
+
+function Graduation(props: { user: User, setUser: Function }){
 
   const UserYear = () => {
     return 2;
@@ -45,7 +47,12 @@ function Graduation(){
       <div className={styles.GraduationPage}>
         <div className={styles.row}>
           <div className={styles.column} style={{ marginRight: "60px" }}>
-            <Recommendations/>
+            {/* <Recommendations/> */}
+						<div>
+							<div style={{ fontSize: "30px", fontWeight: "500" }}>
+								Hello, {props.user.name}!
+							</div>
+						</div>
             <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
           </div>
         </div>
