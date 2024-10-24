@@ -56,7 +56,7 @@ export function handleAddCourse(
       const term = props.term;
       const newCourse: StudentCourse = { course, status, term };
 
-      const isDuplicate = props.user.studentCourses.some(
+      const isDuplicate = props.user.FYP.studentCourses.some(
         (existingCourse) =>
           existingCourse.course.title === newCourse.course.title &&
           existingCourse.term === newCourse.term

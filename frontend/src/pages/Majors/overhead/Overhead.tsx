@@ -5,14 +5,14 @@ import { User } from "../../../commons/types/TypeUser";
 import MajorSearchBar from "./search/MajorSearch";
 import Pinned from "./pinned/Pinned";
 
-function Overhead(props: { user: User, setCurrdex: Function }) {
+function Overhead(props: { user: User, setProgramIndex: Function }) {
   return (
 		<div className={Style.Row}>
-			<MajorSearchBar user={props.user} setCurrdex={props.setCurrdex}/>
+			<MajorSearchBar user={props.user} setProgramIndex={props.setProgramIndex}/>
 			<div className={Style.Pinned}>
 				PINNED
 			</div>
-			<Pinned user={props.user} setCurrdex={props.setCurrdex}/>
+			<Pinned user={props.user} setProgramIndex={props.setProgramIndex}/>
 		</div>
   );
 }

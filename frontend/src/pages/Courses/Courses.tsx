@@ -36,9 +36,9 @@ function Courses(props: { user: User, setUser: Function }){
   };
 
   useEffect(() => {
-    const transformedData = yearTreeify(props.user.studentCourses);
+    const transformedData = yearTreeify(props.user.FYP.studentCourses);
     setYearTree(transformedData);
-  }, [props.user.studentCourses]);
+  }, [props.user.FYP.studentCourses]);
 
   useEffect(() => {
     const newRenderedYears = yearTree.map((year, index) => (

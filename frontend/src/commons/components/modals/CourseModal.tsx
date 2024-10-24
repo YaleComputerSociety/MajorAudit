@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./CourseModal.module.css";
 import { useModal } from "../../../hooks/modalContext";
 import { Dialog } from "@headlessui/react";
-import { EMPTYCOURSE } from "../../mock/MockStudent";
+import { EMPTYCOURSE } from "../../mock/MockUser";
 
 export default function CourseModal() {
   const { isOpen, setModalOpen } = useModal();

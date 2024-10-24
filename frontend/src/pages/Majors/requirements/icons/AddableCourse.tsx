@@ -25,7 +25,7 @@ function AddableCourse(props: { user: User, addCourseToSubsection: Function }) {
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && inputRef.current) {
       const code = inputRef.current.value.trim().toUpperCase();
-      const course = props.user.studentCourses.find(sc => sc.course.codes.includes(code));
+      const course = props.user.FYP.studentCourses.find(sc => sc.course.codes.includes(code));
 
       if (course) {
         props.addCourseToSubsection(course);
@@ -45,13 +45,7 @@ function AddableCourse(props: { user: User, addCourseToSubsection: Function }) {
           <div className={Style.DeactivateButton} onClick={deactivate}>
 
 					</div>
-					<input
-						ref={inputRef}
-						type="text"
-						placeholder="Code..."
-						maxLength={9}
-						onKeyPress={handleKeyPress}
-						className={Style.CodeSearch}
+					<input ref={inputRef} type="text" placeholder="" maxLength={9} onKeyPress={handleKeyPress} className={Style.CodeSearch}
 						// onBlur={deactivate} // Deactivate input when it loses focus
 					/>
         </div>

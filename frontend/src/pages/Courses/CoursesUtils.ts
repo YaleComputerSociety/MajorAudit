@@ -53,7 +53,7 @@ export const yearTreeify = (courses: StudentCourse[]): Year[] => {
 export const xCheckMajorsAndSet = ( user: User, newCourse: StudentCourse, setUser: Function ): void => {
 
   // Update student courses
-  let updatedStudentCourses = user.studentCourses.map(existingCourse => {
+  let updatedStudentCourses = user.FYP.studentCourses.map(existingCourse => {
     if (existingCourse.course.codes.some(code => newCourse.course.codes.includes(code))) {
       return newCourse;
     }
@@ -68,29 +68,34 @@ export const xCheckMajorsAndSet = ( user: User, newCourse: StudentCourse, setUse
     updatedStudentCourses.push(newCourse);
   }
 
-  // Update programs
-  const updatedPrograms = user.programs.map(program => {
-    const updatedDegrees = program.degrees.map(degree => {
-      if(degree.codesCore.some(code => newCourse.course.codes.includes(code))){
-        const updatedRequirements = degree.requirements.map(requirement => {
-          const updatedSubsections = requirement.subsections.map(subsection => ({
-            ...subsection,
-            courses: subsection.courses.map(course => {
-              if (course.course.codes.some(code => newCourse.course.codes.includes(code))) {
-                // Update only the term and status attributes
-                return { ...course, term: newCourse.term, status: newCourse.status };
-              }
-              return course;
-            })
-          }));
-          return { ...requirement, subsections: updatedSubsections };
-        });
-        return { ...degree, requirements: updatedRequirements };
-      }
-      return degree;
-    });
-    return { ...program, degrees: updatedDegrees };
-  });
+  const updatedDegreeConfigurations = user.FYP.degreeConfigurations.map(configurationList =>
+    configurationList.map(configuration => {
+      const updatedRequirements = configuration.degreeRequirements.map(requirement => {
+        const updatedSubsections = requirement.subsections.map(subsection => ({
+          ...subsection,
+          courses: subsection.courses.map(course => {
+            if (course.course.codes.some(code => newCourse.course.codes.includes(code))) {
+              return { ...course, term: newCourse.term, status: newCourse.status };
+            }
+            return course;
+          })
+        }));
+        return { ...requirement, subsections: updatedSubsections };
+      });
 
-  setUser({ ...user, studentCourses: updatedStudentCourses, programs: updatedPrograms });
+      return {
+        ...configuration,
+        degreeRequirements: updatedRequirements
+      };
+    })
+  );
+	
+	setUser({
+		...user,
+		FYP: {
+			...user.FYP,
+			studentCourses: updatedStudentCourses,
+			degreeConfigurations: updatedDegreeConfigurations
+		}
+	});
 };

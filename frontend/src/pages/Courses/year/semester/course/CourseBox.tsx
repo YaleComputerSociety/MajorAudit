@@ -13,44 +13,42 @@ import { User } from "../../../../../commons/types/TypeUser";
 function RemoveCourse(props: { SC: StudentCourse, user: User, setUser: Function }){
 
 	const remove = () => {
-    const updatedStudentCourses = props.user.studentCourses.filter(
+    const updatedStudentCourses = props.user.FYP.studentCourses.filter(
       (course) => course.course.title !== props.SC.course.title || course.term !== props.SC.term
     );
 
-    const updatedPrograms = props.user.programs.map((program) => {
-      const updatedDegrees = program.degrees.map((degree) => {
-        const isCoreCode = props.SC.course.codes.some(code => degree.codesCore.includes(code));
-        const isAddedCode = props.SC.course.codes.some(code => degree.codesAdded.includes(code));
-
-        if (isCoreCode || isAddedCode) {
-          const updatedRequirements = degree.requirements.map((req) => {
-            const updatedSubsections = req.subsections.map((sub) => {
-              const updatedCourses = sub.courses.filter(
-                (course) => course.course.title !== props.SC.course.title
-              );
-              return { ...sub, courses: updatedCourses };
-            });
-            return { ...req, subsections: updatedSubsections };
-          });
-
-          const newCodesAdded = degree.codesAdded.filter(code => !props.SC.course.codes.includes(code));
-
-          return {
-            ...degree,
-            requirements: updatedRequirements,
-            codesAdded: newCodesAdded
-          };
-        }
-        return degree;
-      });
-      return { ...program, degrees: updatedDegrees };
-    });
+    const updatedDegreeConfigurations = props.user.FYP.degreeConfigurations.map((configurationList) =>
+			configurationList.map((configuration) => {
+				const updatedRequirements = configuration.degreeRequirements.map((requirement) => {
+					const updatedSubsections = requirement.subsections.map((subsection) => {
+						const updatedCourses = subsection.courses.filter(
+							(course) => course.course.title !== props.SC.course.title
+						);
+						return { ...subsection, courses: updatedCourses };
+					});
+		
+					return { ...requirement, subsections: updatedSubsections };
+				});
+		
+				const newCodesAdded = configuration.codesAdded.filter(
+					(code) => !props.SC.course.codes.includes(code)
+				);
+		
+				return {
+					...configuration,
+					degreeRequirements: updatedRequirements,
+					codesAdded: newCodesAdded
+				};
+			})
+		);
 
     const updatedUser = {
-      ...props.user,
-      studentCourses: updatedStudentCourses,
-      programs: updatedPrograms
-    };
+			...props.user,
+			FYP: {
+				...props.user.FYP,
+				degreeConfigurations: updatedDegreeConfigurations
+			}
+		};
 
     props.setUser(updatedUser);
   };

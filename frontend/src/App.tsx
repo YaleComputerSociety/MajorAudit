@@ -15,7 +15,7 @@ import Majors from "./pages/Majors/Majors";
 import { getAuth, getUser, syncUser } from "./api/api";
 import { AuthState, nullAuthState, User, nullUser } from "./commons/types/TypeUser";
 
-import { Ryan } from "./commons/mock/MockStudent";
+import { Ryan } from "./commons/mock/MockUser";
 
 function App(){
 
@@ -36,13 +36,10 @@ function App(){
     const response = await getUser();
 		// console.log("initUser() -> API: getUser() -> ", response)
 		setUser({
+			name: response.name,
 			netID: response.netID,
 			onboard: response.onboard,
-			name: response.name,
-			studentDegrees: response.studentDegrees,
-			studentCourses: response.studentCourses,
-			programs: response.programs,
-			language: response.language
+			FYP: response.FYP,
 		});
   };
 

@@ -1,12 +1,12 @@
 
 import { StudentCourse } from "./TypeCourse";
-import { Program } from "./TypeProgram";
+import { DegreeConfiguration, Degree, DegreeMetadata } from "./TypeProgram";
 
 export interface Year {
 	grade: number;
-	terms: Array<number>; // e.g. [202203, 202201]
-	fall: Array<StudentCourse>;
-	spring: Array<StudentCourse>;
+	terms: number[]; // e.g. [202203, 202201]
+	fall: StudentCourse[];
+	spring: StudentCourse[];
 }
 
 export interface StudentDegree {
@@ -15,24 +15,27 @@ export interface StudentDegree {
 	degreeIndex: number;
 }
 
+export interface FYP {
+	studentCourses: StudentCourse[];
+	languageRequirement: string;
+	degreeConfigurations: DegreeConfiguration[][];
+	degreeDeclarations: StudentDegree[];
+}
+
 export interface User {
+	name: string;
 	netID: string;
 	onboard: boolean;
-	name: string;
-	studentDegrees: StudentDegree[];
-	studentCourses: StudentCourse[];
-	programs: Program[];
-	language: string;
+	FYP: FYP;
 }
+
+// empty
 
 export const nullUser: User = {
 	netID: "",
 	onboard: false,
 	name: "",
-	studentDegrees: [],
-	studentCourses: [],
-	programs: [],
-	language: "",
+	FYP: { studentCourses: [], languageRequirement: "", degreeConfigurations: [], degreeDeclarations: []},
 }
 
 export interface AuthState {

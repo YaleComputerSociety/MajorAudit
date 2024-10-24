@@ -2,12 +2,12 @@
 import { useState, useEffect, useRef } from "react";
 import Style from "./Pinned.module.css";
 import { StudentDegree, User } from "../../../../commons/types/TypeUser";
-import { Program } from "../../../../commons/types/TypeProgram";
+import { ALL_PROGRAM_METADATAS } from "../../../../commons/mock/MockDegreeMetadata";
 
 import MajorSearchBar from "../search/MajorSearch";
 
 
-function DegreeIcon(props: { studentDegree: StudentDegree, programs: Program[], setCurrdex: Function }) {
+function DegreeIcon(props: { studentDegree: StudentDegree, setProgramIndex: Function }) {
   const mark = (status: string) => {
     let mark = "";
     switch (status) {
@@ -31,21 +31,20 @@ function DegreeIcon(props: { studentDegree: StudentDegree, programs: Program[], 
   };
 
   return (
-    <div className={Style.DegreeIcon} onClick={() => props.setCurrdex(props.studentDegree.programIndex)}>
-      {mark(props.studentDegree.status)}{props.programs[props.studentDegree.programIndex].abbreviation}
+    <div className={Style.DegreeIcon} onClick={() => props.setProgramIndex(props.studentDegree.programIndex)}>
+      {mark(props.studentDegree.status)}{ALL_PROGRAM_METADATAS[props.studentDegree.programIndex][0].abbr}
     </div>
   );
 }
 
-function Pinned(props: { user: User, setCurrdex: Function }) {
+function Pinned(props: { user: User, setProgramIndex: Function }) {
   return (
 		<div>
-			{props.user.studentDegrees.map((studentDegree, index) => (
+			{props.user.FYP.degreeDeclarations.map((studentDegree, index) => (
 				<DegreeIcon
 					key={index}
 					studentDegree={studentDegree}
-					programs={props.user.programs}
-					setCurrdex={props.setCurrdex}
+					setProgramIndex={props.setProgramIndex}
 				/>
 			))}
 		</div>

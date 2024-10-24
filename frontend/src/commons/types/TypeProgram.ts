@@ -6,16 +6,17 @@ interface DUS {
 	address: string;
 	email: string;
 }
-  
+
 interface DegreeMetadataStats {
 	courses: number;
 	rating: number;
 	workload: number;
 	type: string;
 }
-  
-interface DegreeMetadata {
+
+export interface DegreeMetadata {
 	name: string;
+	abbr: string;
 	degreeType: string;
 	stats: DegreeMetadataStats;
 	students: number;
@@ -24,29 +25,28 @@ interface DegreeMetadata {
 	catologLink: string;
 	wesbiteLink: string;
 }
-  
+
 interface DegreeRequirementsSubsection {
 	name?: string;
 	description?: string;
 	flexible: boolean;
 	courses: StudentCourse[];
 }
-  
+
 interface DegreeRequirement {
 	name: string;
 	description?: string;
 	subsections: DegreeRequirementsSubsection[];
 }
-  
-export interface Degree {
-	metadata: DegreeMetadata;
+
+export interface DegreeConfiguration {
 	codesCore: string[];
 	codesAdded: string[];
-	requirements: DegreeRequirement[];
+	degreeRequirements: DegreeRequirement[];
 }
-  
-export interface Program {
-	name: string;
-	abbreviation: string;
-	degrees: Array<Degree>;
+
+export interface Degree {
+	metadata: DegreeMetadata;
+	configuration: DegreeConfiguration;
 }
+

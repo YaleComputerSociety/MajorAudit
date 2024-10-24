@@ -1,24 +1,27 @@
 
 import { useState, useEffect, useRef } from "react";
 import Style from "./MajorSearch.module.css";
-import { StudentDegree, User } from "../../../../commons/types/TypeUser";
-import { Program } from "../../../../commons/types/TypeProgram";
+import { User, StudentDegree } from "../../../../commons/types/TypeUser";
+import { ALL_PROGRAM_METADATAS } from "../../../../commons/mock/MockDegreeMetadata";
 
-function MajorSearchBar(props: { user: User, setCurrdex: Function }) {
+function MajorSearchBar(props: { 
+	user: User, 
+	setProgramIndex: Function 
+}){
 	const [searchTerm, setSearchTerm] = useState("");
   const [filteredPrograms, setFilteredPrograms] = useState<string[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [isFullSelection, setIsFullSelection] = useState(false); // Track if a full name was selected
+  const [isFullSelection, setIsFullSelection] = useState(false); 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;
     setSearchTerm(term);
-    setIsFullSelection(false); // Reset the full selection flag on manual input
-    if (term) {
-      const filtered = props.user.programs
-        .map(program => program.name)
+    setIsFullSelection(false); 
+    if(term){
+      const filtered = ALL_PROGRAM_METADATAS
+        .map(program => program[0].name)
         .filter(name => name.toLowerCase().includes(term.toLowerCase()));
       setFilteredPrograms(filtered);
       setShowDropdown(true);
@@ -29,8 +32,8 @@ function MajorSearchBar(props: { user: User, setCurrdex: Function }) {
   };
 
   const handleSelect = (name: string) => {
-    const index = props.user.programs.findIndex(program => program.name === name);
-    props.setCurrdex(index);
+    const index = ALL_PROGRAM_METADATAS.findIndex(program => program[0].name === name);
+    props.setProgramIndex(index);
     setSearchTerm(name);
     setIsFullSelection(true); // Indicate that a full name was selected
     setFilteredPrograms([]);
@@ -46,8 +49,8 @@ function MajorSearchBar(props: { user: User, setCurrdex: Function }) {
 
   const handleInputFocus = () => {
     if (searchTerm) {
-      const filtered = props.user.programs
-        .map(program => program.name)
+      const filtered = ALL_PROGRAM_METADATAS
+        .map(program => program[0].name)
         .filter(name => name.toLowerCase().includes(searchTerm.toLowerCase()));
       setFilteredPrograms(filtered);
       setShowDropdown(true);
