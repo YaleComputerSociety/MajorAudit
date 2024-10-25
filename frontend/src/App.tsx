@@ -11,6 +11,8 @@ import Onboard from "./pages/Onboard/Onboard";
 import Graduation from "./pages/Graduation/Graduation";
 import Courses from "./pages/Courses/Courses";
 import Majors from "./pages/Majors/Majors";
+import About from "./pages/About/About";
+import FAQ from "./pages/FAQ/FAQ"
 
 import { getAuth, getUser, syncUser } from "./api/api";
 import { AuthState, nullAuthState, User, nullUser } from "./commons/types/TypeUser";
@@ -82,6 +84,8 @@ function App(){
 					<Route path="/graduation" 	element={ProtectedRoute(<Graduation user={user} setUser={setUser}/>)}/> 
 					<Route path="/courses" 			element={ProtectedRoute(<Courses 		user={user} setUser={setUser}/>)}/> 
 					<Route path="/majors" 			element={ProtectedRoute(<Majors  		user={user} setUser={setUser}/>)}/> 
+					<Route path="/about" 		element={ProtectedRoute(<About />)} />
+					<Route path="/faq" 		element={ProtectedRoute(<FAQ />)} />
 				</Routes>
 				<CourseModal/>
 			</Globals>
@@ -90,3 +94,4 @@ function App(){
 }
 
 export default App;
+export {};

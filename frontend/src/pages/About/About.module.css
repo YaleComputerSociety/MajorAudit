@@ -1,0 +1,94 @@
+/* Container for the entire About page content, with padding to adjust for spacing, 
+   a maximum width for readability, centered alignment, and font styles */
+   .container {
+    padding: 80px 20px; /* Provides space around the content, adjusting for the navbar */
+    max-width: 900px; /* Limits the maximum width of the container to improve readability */
+    margin: 0 auto; /* Centers the container horizontally */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Sets the font style */
+}
+
+/* Styling for the hero section, which includes introductory content */
+.heroSection {
+    text-align: center; /* Centers the content within the hero section */
+    margin-bottom: 40px; /* Adds space below the hero section */
+}
+
+/* Styling for the main heading within the hero section */
+.heroSection h1 {
+    font-size: 3rem; /* Large font size for the main heading */
+    color: #333; /* Dark grey color for the text */
+    font-weight: 700; /* Bold text for emphasis */
+}
+
+/* Styling for the paragraph text in the hero section */
+.heroSection p {
+    font-size: 1.5rem; /* Slightly large font size for emphasis */
+    color: #555; /* Medium grey color for the text */
+    line-height: 1.6; /* Adds spacing between lines for better readability */
+}
+
+/* Container for all content sections on the page, excluding the hero section */
+.contentSection {
+    margin-top: 20px; /* Adds space above the content section */
+}
+
+/* General styling for individual sections of the page */
+.section {
+    margin-bottom: 40px; /* Adds space below each section */
+}
+
+/* Styling for the headings in each section */
+.section h2 {
+    font-size: 2rem; /* Font size for section headings */
+    color: #444; /* Dark grey color for the text */
+    font-weight: 600; /* Semi-bold text weight */
+    margin-bottom: 1rem; /* Adds space below the heading */
+}
+
+/* Styling for the paragraph text within each section */
+.section p {
+    font-size: 1.2rem; /* Font size for section paragraph text */
+    line-height: 1.8; /* Increases spacing between lines for better readability */
+    color: #666; /* Light grey color for the text */
+}
+
+/* Container for the team members, utilizing flexbox to organize them into rows */
+.teamContainer {
+    display: flex; /* Uses flexbox to arrange team member items */
+    flex-wrap: wrap; /* Allows items to wrap to the next row when necessary */
+    gap: 20px; /* Adds space between team member items */
+    justify-content: center; /* Centers the items within the container */
+}
+
+/* Styling for each individual team member card */
+.teamMember {
+    text-align: center; /* Centers the text within each team member card */
+    width: calc(20% - 20px); /* Each item takes 20% of the row width minus the gap */
+    padding: 20px; /* Adds padding inside each team member card for spacing */
+    border: 2px solid #e0e0e0; /* Adds a slim, light grey border around each card */
+    border-radius: 10px; /* Rounds the corners of each card */
+    background-color: #ffffff; /* Sets the background color to white */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a light shadow for depth */
+}
+
+/* Styling for the team member images */
+.teamImage {
+    border-radius: 50%; /* Makes the image circular */
+    width: 150px; /* Sets a fixed width for the image */
+    height: 150px; /* Sets a fixed height for the image */
+    object-fit: cover; /* Ensures the image covers the entire area without distortion */
+    margin-bottom: 10px; /* Adds space below the image */
+}
+
+/* Styling for the team member names */
+.teamMember h3 {
+    font-size: 1.1rem; /* Font size for the team member's name */
+    color: #333; /* Dark grey color for the text */
+    margin-bottom: 5px; /* Adds space below the name */
+}
+
+/* Styling for the team member roles */
+.teamMember p {
+    font-size: 1rem; /* Font size for the team member's role */
+    color: #777; /* Light grey color for the text */
+}
