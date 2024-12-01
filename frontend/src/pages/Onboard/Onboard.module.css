@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 :root {
     --base-font-size: 16px;
-    --num-font-size: 5vw;
+    --num-font-size: 4vw;
     --num-container-height: 6vw;
     --num-margin-top: 8rem;
     --num-margin-left: 4rem;
@@ -10,6 +12,8 @@ html, body {
     height: 100%;
     margin: 0;
     font-size: var(--base-font-size);
+    font-family: 'Open Sans', sans-serif;
+
 }
 
 .MainContainer {
@@ -49,7 +53,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     padding-left: 40px;
-    padding-right: 40px;
+    padding-right: 60px;
     box-sizing: border-box;
     padding-top: 20px; 
 }
@@ -59,7 +63,8 @@ html, body {
     color: black;
     font-weight: 700;
     display: flex;
-    align-items: baseline; /* Align year with name */
+    align-items: baseline;
+    font-family: inherit; /* Ensure the font family is inherited */
 }
 
 .HeaderText input {
@@ -88,7 +93,7 @@ html, body {
     padding: 20px;
     background-color: white;
     width: 100%;
-    min-height: 30rem; 
+    min-height: 24rem; 
     max-width: 50vw;
     box-sizing: border-box;
     margin-top: calc(var(--num-margin-top) + 0.1666 * var(--num-container-height));
@@ -113,17 +118,46 @@ html, body {
 .courseBox {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
     align-items: center;
     height: 36px;
     border-radius: 16px;
-    margin-bottom: 5px; /* Adjust this value to change vertical spacing */
-    padding-left: 10px;
-    padding-right: 10px;
-    transition: filter 0.4s ease;
-    margin-right: 10px;
-    flex: 0 1 auto;
+    margin-bottom: 5px;
+    padding-left:  0px; /* Initial padding on left and right */
+    transition: padding 0.3s ease, width 0.3s ease; /* Added transition for padding */
+    width: fit-content;
+    max-width: fit-content; /* Initially fit content */
+    box-sizing: content-box; /* Ensure padding is included in width calculation */
 }
+
+.courseBox:hover {
+    padding-right: 15px; /* Expand padding to make room for the X button */
+    max-width: 100%; /* Allow expansion */
+    cursor: pointer;
+}
+
+.courseCode {
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+
+.courseCode::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 1px;
+    background: black;
+    transition: width 0.3s ease;
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+}
+
+.courseCode:hover::after {
+    width: 100%;
+}
+
 
 .completeCourse {
     background-color: #dfe9f7;
@@ -133,16 +167,13 @@ html, body {
     background-color: #f5f5f5;
 }
 
-.courseBox:hover {
-    cursor: pointer;
-    filter: brightness(95%);
-}
 
 .courseContent {
     display: flex;
     flex-direction: column;
     margin-left: 5px; /* Adjust this value to change spacing between icon and course code */
     flex: 1; /* Allow content to grow */
+    margin-right: -20px;
 }
 
 .courseCode {
@@ -154,17 +185,29 @@ html, body {
     color: #555;
 }
 
+
+
 .removeCourse {
     color: red;
     font-size: 1rem;
-    margin-left: 10px;
+    margin-left: 30px;
     cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .seasonIcon {
     width: 16px;
     height: 16px;
     margin-right: 5px; /* Adjust this value to change spacing between icon and course code */
+    margin-left: 8px;
+}
+
+.addSeasonIcon {
+    width: 16px;
+    height: 16px;
+    margin-right: 15px; /* Adjust this value to change spacing between icon and course code */
+    margin-left: 8px; 
 }
 
 .YearHeader {
@@ -202,6 +245,12 @@ html, body {
     display: flex;
     justify-content: flex-start;
     gap: 10px;
+}
+
+.TabButton:not(.ActiveTab):hover {
+    cursor: pointer; 
+    transition: 0.3s; 
+    background-color: #f5f5f5; /* Apply background color only on non-active tabs */
 }
 
 .Header {
@@ -276,8 +325,14 @@ html, body {
 
 .btn:hover {
     text-decoration: none;
-    transform: translateY(-5px);
+    transition: 0.3s; 
     filter: brightness(90%);
+}
+
+.textAreaContainer {
+    position: relative;
+    width: 100%;
+    min-height: 24rem;
 }
 
 .TextArea {
@@ -288,6 +343,42 @@ html, body {
     border: 1px solid #ccc;
     border-radius: 8px;
     resize: none;
+    outline: none; 
+}
+
+.parseButton {
+    position: absolute;
+    bottom: 4.5px; /* Align to the bottom of the text area */
+    right: 0; /* Align to the right of the text area */
+    padding: 8px 16px; /* Adjust padding to better fit inside the text area */
+    border: none;
+    border-radius: 8px 0 8px 0; /* Rounded bottom-right corner */
+    background-color: #cccccc;
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    opacity: 90%; 
+}
+
+/* Styles for when the button is active */
+.parseButton.active {
+    transition: background-color 0.9s ease;
+    background-color: #2d7dbd; /* Light blue color when text contains "Yale College" */
+}
+
+/* Hover effect when the button is active */
+.parseButton.active:hover {
+    transition: background-color 0.3s; 
+    background-color: #2d7dbd; /* Slightly brighter blue */
+    opacity: 100%; /* Increase opacity slightly */
+}
+
+/* Hover effect when the button is not active */
+.parseButton:hover {
+    transition: background-color 0.3s; 
+    background-color: #999999; /* Gray background when not active */
 }
 
 .Step {
@@ -336,6 +427,7 @@ html, body {
 
 .Padder {
     background-color: #ffffff;
+    height: 50vh; 
 }
 
 .ModalOverlay {
@@ -365,11 +457,10 @@ html, body {
 }
 
 .courseCode {
+    font-weight: bold;
     cursor: pointer;
-}
-
-.courseCodeHover {
-    text-decoration: underline;
+    position: relative;
+    display: inline-block;
 }
 
 .VideoContainer {
@@ -388,15 +479,33 @@ html, body {
 }
 
 .courseCodeInput {
-    border: 1px solid #ccc;
-    background: none;
+    border: none;
+    border-bottom: 1px solid black;
     font-family: inherit;
     font-size: inherit;
     color: inherit;
     outline: none;
+    padding-left: 2px;
     margin-left: -2px;
-    padding: 8px;
-    border-radius: 4px;
+    background-color: transparent;
+    width: 9ch;
+    min-width: 5.5ch; 
+}
+
+.courseContent {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+    flex: 1;
+    position: relative;
+    /* border: 1px solid #ccc;  */
+}
+
+
+
+.courseBox:hover .removeCourse {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .TextContainer {
@@ -443,71 +552,227 @@ html, body {
 .syncButtonContainer {
     display: flex;
     justify-content: center;
-    margin-top: 10vh;
+    margin-top: 20vh;
 }
 
 .syncButton {
+    font-size: 2.5rem; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* Space between text and icon */
+    padding: 20px 40px;
+    background-color: #2d7dbd;
+    color: white;
     border: none;
-    text-decoration: none;
-    padding: 8px 24px;
     border-radius: 10px;
-    font-weight: 500;
-    color: #f0f6f8;
-    background-color: #4692e8;
-    transition: filter 0.3s;
-    font-size: large;
     cursor: pointer;
-    align-self: center;
+    transition: background-color 0.3s ease;
+    margin-top: 150px; 
+}
+
+.syncIcon {
+    margin-top: 4px;
+    width: 32px;  /* Smaller size for the icon */
+    height: 32px; /* Smaller size for the icon */
+    stroke: currentColor;
 }
 
 .syncButton:hover {
     text-decoration: none;
+    transition: 0.3s;
     filter: brightness(90%);
 }
 
 /* Add this to your CSS file to style the input field and name hover effect */
-.nameInput {
+.nameInput{
     border: none;
     border-bottom: 1px solid #000;
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: inherit;
+    font-weight: inherit;
+    font-family: inherit;
     outline: none;
-    width: fit-content; /* Size to content */
-    margin-bottom: 10px; /* Add space between name and year */
+    background: none;
+    width: fit-content;
+    min-width: 5.5ch; /* Ensure the input field doesn't collapse */
+    color: black;
+    letter-spacing: normal;
+    padding-left: 0.2ch; /* Small padding to ensure alignment */
+    margin-left: -0.2ch; /* Prevent shifting */
 }
-
-.name:hover {
-    color: #0073e6;
-    cursor: pointer;
-}
-
 
 .yearInput {
-    border: none;
-    border-bottom: 1px solid #000;
-    font-size: 2.5rem;
-    font-weight: 700;
-    outline: none;
-    color: gray; /* Placeholder color for year input */
-    width: 2ch; /* Size the year input to 2 characters */
+    border-bottom: 1px solid black; /* Always underline */
+    font-size: 1rem; /* Keep the font size consistent */
+    font-weight: inherit;
+    font-family: inherit;
+    outline: none; /* Remove the default focus outline */
+    background: none;
+    width: 2ch; /* Keep the width fit for two digits */
+    color: black;
+    line-height: 1; 
+    padding-left: 0; /* Ensure there is no padding */
+    margin-left: 0ch; /* Prevent any shifting */
+    position: relative; /* Ensure it stays aligned */
+    top: 0; /* Prevent downward shift */
 }
 
+
+.classYearEditable {
+    font-size: 1rem;
+    color: gray;
+    display: flex;
+    text-decoration: none; /* Prevent underline on hover */
+    margin-left: 0.45ch;
+    margin-top: -20px;
+    height: 24px; 
+    flex-grow: 1; 
+}
+
+
+
+
+
 .classYear {
+    font-size: 1rem;
     margin-left: 5px;
     color: gray;
     cursor: pointer;
+    display: inline-block;
+    min-width: 2ch; /* Adjust this value as needed */
+
+
+}
+
+.graduationYear {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.5rem; /* Adjust to match your design */
+    margin-left: 10px; /* Adjust spacing between name and year */
+    position: relative; /* Ensure the positioning is consistent */
+    line-height: 1; /* Ensures line height consistency */
+
+}
+
+.yearIcon {
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Ensure the icon size is consistent */
+    margin-right: 5px; /* Space between the icon and the year */
+    vertical-align: middle;
+    position: relative;
+    top: 2px; /* Adjust to align with the year */
+}
+
+/* Style for the static "class of 20" text */
+.noHover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.noHover:hover {
+    text-decoration: none; /* Remove underline on hover */
+    color: inherit; /* Ensure text color doesn't change */
+}
+
+.name:hover, .classYearEditable:hover {
+    cursor: pointer;
+}
+
+.placeholder {
+    color: black; /* Placeholder color for empty fields */
+    border-bottom: 1px solid #000;
+
+}
+
+.yearPlaceholder {
+    color: gray; /* Placeholder color for empty fields */
+    border-bottom: 1px solid #000;
+
+}
+
+
+.classYear:focus, 
+.yearInput:focus, 
+.classYearEditable:focus, 
+.nameInput:focus {
+    outline: none; /* Remove the default focus outline */
+    box-shadow: none; /* Ensure no box shadow is applied */
+    border: none; /* Ensure no border is applied on focus */
+}
+
+/* Remove any hover effects that might add a box */
+.classYear:hover, 
+.yearInput:hover, 
+.classYearEditable:hover, 
+.nameInput:hover {
+    box-shadow: none; 
+    border: none; 
+}
+
+
+
+.yearInput:empty::before {
+    content: attr(placeholder);
+    color: gray;
+    font-weight: inherit;
+    font-family: inherit;
+    width: 2ch;
+    display: inline-block;
+    border-bottom: 1px solid #000; /* Ensures underline is visible */
+    margin-top: -20px; 
+}
+
+.yearInput:empty::after {
+    content: attr(placeholder);
+    color: gray;
+    font-weight: inherit;
+    font-family: inherit;
+    width: 2ch;
+    display: inline-block;
+}
+
+.yearInput::placeholder {
+    color: gray;
+    opacity: 1; /* Ensure placeholder is visible */
+}
+
+.yearInput:not(:focus)::placeholder {
+    color: transparent; /* Hide placeholder when not in focus */
+}
+
+.classYear {
+    font-size: 1rem;
+    margin-left: 5px;
+    color: gray;
+    cursor: pointer;
+    display: inline-block;
+    min-width: 2ch; /* Adjust this value as needed */
+
+}
+
+.classYearNum {
+    font-size: 1rem;
+    margin-top: 5px; 
+    color: gray;
+    cursor: pointer;
+    display: inline-block;
+    min-width: 2ch; /* Adjust this value as needed */
+    border-bottom: 1px solid black;
+
+
 }
 
 .addCourseButton {
     border: none;
     background-color: #d3d3d3;
+    opacity: 0.9;
     border-radius: 50%;
     width: 36px;
     height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 18px;
     color: white;
     margin: 0;
     padding: 0;
@@ -518,11 +783,13 @@ html, body {
 
 .addCourseButton:hover {
     background-color: #a9a9a9;
+    transition: 0.3s; 
+    opacity: 1;
 }
 
 .courseCreditsInput {
-    width: 50px;
-    margin-left: 5px;
+    width: 40px;
+    margin-left: 15px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -538,3 +805,4 @@ html, body {
     font-size: 12px;
     margin-left: 5px;
 }
+

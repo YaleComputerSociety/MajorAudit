@@ -18,7 +18,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "declarationMap": true,   // Generate source maps for .d.ts files
+    "declaration": true,      // Generate .d.ts files
   },
   "include": [
     "src"

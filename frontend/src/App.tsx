@@ -46,21 +46,21 @@ function App(){
 		});
   };
 
-	useEffect(() => {
-		checkAuth();
-  }, []);
+// 	useEffect(() => {
+// 		checkAuth();
+//   }, []);
 
-  useEffect(() => {
-		if(auth.loggedIn && auth.onboard){
-			initUser();
-		}
-  }, [auth]);
+//   useEffect(() => {
+// 		if(auth.loggedIn && auth.onboard){
+// 			initUser();
+// 		}
+//   }, [auth]);
 
-	useEffect(() => {
-		if(auth.loggedIn && auth.onboard){
-			syncUser(user);
-		}
-  }, [user]);
+// 	useEffect(() => {
+// 		if(auth.loggedIn && auth.onboard){
+// 			syncUser(user);
+// 		}
+//   }, [user]);
 
 	const ProtectedRoute = (element: JSX.Element) => {
 		if(!auth.loggedIn){
