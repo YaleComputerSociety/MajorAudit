@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import Style from "./AddCourseButton.module.css";
 
 import { User, StudentCourse } from "@/types/type-user";
-import { getCatalogCourse } from "@/database/catalog";
+import { getCatalogCourse } from "@/database/data-catalog";
 
 interface AddCourseDisplay {
 	active: boolean;
