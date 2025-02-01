@@ -5,7 +5,7 @@ import { DegreeMetadata } from "../../types/TypeProgram";
 import { ALL_PROGRAM_METADATAS } from "../../commons/mock/MockDegreeMetadata";
 
 import Style from "./Majors.module.css";
-import NavBar from "./../../navbar/NavBar"
+import NavBar from "../../navbar/NavBar"
 import Overhead from "./overhead/Overhead";
 import Metadata from "./metadata/Metadata";
 import Requirements from "./requirements/Requirements";

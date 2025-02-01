@@ -7,7 +7,7 @@ import GraduationDistribution from "./components/Distribution";
 
 import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
-import PageLinks from "./../../navbar/PageLinks";
+import PageLinks from "../../navbar/PageLinks";
 
 import { User } from "../../types/TypeUser";
 

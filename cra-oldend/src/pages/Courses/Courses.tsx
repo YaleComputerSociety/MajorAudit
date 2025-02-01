@@ -4,7 +4,7 @@ import Style from "./Courses.module.css";
 
 import { User } from "../../types/TypeUser";
 
-import NavBar from "./../../navbar/NavBar"
+import NavBar from "../../navbar/NavBar"
 import SemesterBox from "./semester/SemesterBox";
 
 function AddSemesterButton(){
