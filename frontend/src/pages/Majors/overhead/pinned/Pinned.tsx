@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Style from "./Pinned.module.css";
-import { StudentDegree, User } from "../../../../commons/types/TypeUser";
+import { StudentDegree, User } from "../../../../types/TypeUser";
 import { ALL_PROGRAM_METADATAS } from "../../../../commons/mock/MockDegreeMetadata";
 
 import MajorSearchBar from "../search/MajorSearch";

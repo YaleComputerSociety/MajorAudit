@@ -2,7 +2,7 @@
 import React from "react";
 import styles from "./../Graduation.module.css";
 
-import { Degree } from "../../../commons/types/TypeProgram"
+import { Degree } from "../../../types/TypeProgram"
 // import { StudentCourse } from "../../../commons/types/TypeCourse";
 
 // import ProgramRequirementsBox from "../../Majors/components/ProgramRequirementsBox";

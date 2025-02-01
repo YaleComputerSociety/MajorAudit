@@ -5,7 +5,7 @@ import {
     useCallback,
     useMemo,
   } from "react";
-  import { Course } from "../commons/types/TypeCourse";
+  import { Course } from "../types/TypeCourse";
   import { EMPTYCOURSE } from "../commons/mock/MockUser";
   
   type Store = {

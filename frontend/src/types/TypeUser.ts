@@ -15,9 +15,15 @@ export interface StudentDegree {
 	degreeIndex: number;
 }
 
-export interface FYP {
+export interface StudentSemester {
+	season: number;
 	studentCourses: StudentCourse[];
+}
+
+export interface FYP {
 	languageRequirement: string;
+	studentSemesters: StudentSemester[]
+
 	degreeConfigurations: DegreeConfiguration[][];
 	degreeDeclarations: StudentDegree[];
 }
@@ -35,7 +41,7 @@ export const nullUser: User = {
 	netID: "",
 	onboard: false,
 	name: "",
-	FYP: { studentCourses: [], languageRequirement: "", degreeConfigurations: [], degreeDeclarations: []},
+	FYP: { studentSemesters: [], languageRequirement: "", degreeConfigurations: [], degreeDeclarations: []},
 }
 
 export interface AuthState {

@@ -1,7 +1,7 @@
 
 import React from "react";
 import Style from "./RemovableCourse.module.css";
-import { StudentCourse } from "../../../../commons/types/TypeCourse";
+import { StudentCourse } from "../../../../types/TypeCourse";
 import { StudentCourseIcon } from "../../../../commons/components/icons/CourseIcon";
 
 function RemoveButton(props: { removeStudentCourse: () => void }) {

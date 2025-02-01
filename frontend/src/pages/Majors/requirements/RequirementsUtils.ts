@@ -1,7 +1,7 @@
 
 // // RequirementsUtils.ts
 
-import { User } from "../../../commons/types/TypeUser";
+import { User } from "../../../types/TypeUser";
 // import { Degree } from "../../../commons/types/TypeProgram";
 // import { StudentCourse } from "../../../commons/types/TypeCourse";
 

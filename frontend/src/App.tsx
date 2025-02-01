@@ -13,9 +13,9 @@ import Courses from "./pages/Courses/Courses";
 import Majors from "./pages/Majors/Majors";
 
 import { getAuth, getUser, syncUser } from "./api/api";
-import { AuthState, nullAuthState, User, nullUser } from "./commons/types/TypeUser";
+import { AuthState, nullAuthState, User, nullUser } from "./types/TypeUser";
 
-import { Ryan } from "./commons/mock/MockUser";
+import { Ryan } from "./database/User";
 
 function App(){
 

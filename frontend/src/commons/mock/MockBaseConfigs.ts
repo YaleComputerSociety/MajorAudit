@@ -1,4 +1,4 @@
-import { DegreeConfiguration } from "../types/TypeProgram";
+import { DegreeConfiguration } from "../../types/TypeProgram";
 
 export const baseDegreeConfigurations: DegreeConfiguration[][] = [
 	[

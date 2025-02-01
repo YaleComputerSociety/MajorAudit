@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Style from "./MajorSearch.module.css";
-import { User, StudentDegree } from "../../../../commons/types/TypeUser";
+import { User, StudentDegree } from "../../../../types/TypeUser";
 import { ALL_PROGRAM_METADATAS } from "../../../../commons/mock/MockDegreeMetadata";
 
 function MajorSearchBar(props: { 

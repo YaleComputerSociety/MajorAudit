@@ -1,6 +1,6 @@
 
 import $ from "jquery"
-import { User, AuthState } from "../commons/types/TypeUser";
+import { User, AuthState } from "../types/TypeUser";
 
 /* * * GET * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 

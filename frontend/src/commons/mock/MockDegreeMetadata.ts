@@ -1,5 +1,5 @@
 
-import { DegreeMetadata } from "../types/TypeProgram";
+import { DegreeMetadata } from "../../types/TypeProgram";
 
 export const ALL_PROGRAM_METADATAS: DegreeMetadata[][] = [
   [{ 

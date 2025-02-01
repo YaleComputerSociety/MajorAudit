@@ -1,5 +1,5 @@
 
-import { User } from "../../../commons/types/TypeUser";
+import { User } from "../../../types/TypeUser";
 
 // Utility function to pin a program
 export function pinProgram(currProgram: number, currDegree: number, user: User, setUser: Function) {

@@ -1,7 +1,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import Style from "./AddableCourse.module.css";
-import { User } from "../../../../commons/types/TypeUser";
+import { User } from "../../../../types/TypeUser";
 
 function AddableCourse(props: { user: User, addCourseToSubsection: Function }) {
   
@@ -25,10 +25,10 @@ function AddableCourse(props: { user: User, addCourseToSubsection: Function }) {
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && inputRef.current) {
       const code = inputRef.current.value.trim().toUpperCase();
-      const course = props.user.FYP.studentCourses.find(sc => sc.course.codes.includes(code));
+      // const course = props.user.FYP.studentCourses.find(sc => sc.course.codes.includes(code));
 
-      if (course) {
-        props.addCourseToSubsection(course);
+      if (false) {
+        // props.addCourseToSubsection(course);
         deactivate();
       }
     }

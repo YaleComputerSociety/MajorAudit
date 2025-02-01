@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Style from "./Requirements.module.css";
-import { User } from "../../../commons/types/TypeUser";
-import { Degree, DegreeConfiguration } from "../../../commons/types/TypeProgram";
-import { StudentCourse } from "../../../commons/types/TypeCourse";
+import { User } from "../../../types/TypeUser";
+import { Degree, DegreeConfiguration } from "../../../types/TypeProgram";
+import { StudentCourse } from "../../../types/TypeCourse";
 import { StudentCourseIcon } from "../../../commons/components/icons/CourseIcon";
 import AddableCourse from "./icons/AddableCourse";
 import RemovableCourse from "./icons/RemovableCourse";

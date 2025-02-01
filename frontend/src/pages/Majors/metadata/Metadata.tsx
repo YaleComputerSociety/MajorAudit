@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from 'react-router-dom';
-import { User } from "../../../commons/types/TypeUser";
-import { Degree, DegreeMetadata } from "../../../commons/types/TypeProgram";
+import { User } from "../../../types/TypeUser";
+import { Degree, DegreeMetadata } from "../../../types/TypeProgram";
 import { pinProgram, addProgram } from "./MetadataUtils";
 
 import Style from "./Metadata.module.css";

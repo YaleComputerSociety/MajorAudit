@@ -8,7 +8,7 @@ import DistributionBox from "../../../commons/components/courses/DistributionBox
 import { StudentCourseIcon } from "../../../commons/components/icons/CourseIcon";
 import InfoButton from "../../../navbar/misc/InfoButton";
 
-import { StudentCourse } from "../../../commons/types/TypeCourse";
+import { StudentCourse } from "../../../types/TypeCourse";
 
 
 // account for credit/d taking

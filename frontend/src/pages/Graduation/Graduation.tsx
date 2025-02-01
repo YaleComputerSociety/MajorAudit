@@ -9,7 +9,7 @@ import nav_styles from "./../../navbar/NavBar.module.css";
 import img_logo from "./../../commons/images/ma_logo.png";
 import PageLinks from "./../../navbar/PageLinks";
 
-import { User } from "../../commons/types/TypeUser";
+import { User } from "../../types/TypeUser";
 
 function NavBar() {
   return (

@@ -1,7 +1,7 @@
 
 import { useState } from "react";
-import { User } from "../../commons/types/TypeUser";
-import { DegreeMetadata } from "./../../commons/types/TypeProgram";
+import { User } from "../../types/TypeUser";
+import { DegreeMetadata } from "../../types/TypeProgram";
 import { ALL_PROGRAM_METADATAS } from "../../commons/mock/MockDegreeMetadata";
 
 import Style from "./Majors.module.css";

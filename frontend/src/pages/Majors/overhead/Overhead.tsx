@@ -1,6 +1,6 @@
 
 import Style from "./Overhead.module.css";
-import { User } from "../../../commons/types/TypeUser";
+import { User } from "../../../types/TypeUser";
 
 import MajorSearchBar from "./search/MajorSearch";
 import Pinned from "./pinned/Pinned";
