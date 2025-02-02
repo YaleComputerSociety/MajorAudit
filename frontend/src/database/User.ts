@@ -20,7 +20,7 @@ export const Ryan: User = {
 			[
 			],
 			[
-			],
+			]
 		],
 	}
 }

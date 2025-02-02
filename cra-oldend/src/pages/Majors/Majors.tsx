@@ -10,6 +10,8 @@ import Overhead from "./overhead/Overhead";
 import Metadata from "./metadata/Metadata";
 import Requirements from "./requirements/Requirements";
 
+import { ALL_PROGRAM_METADATAS } from "../../commons/mock/MockDegreeMetadata";
+
 function Majors(props: { user: User, setUser: Function }){
 
   const [programIndex, setProgramIndex] = useState(0);

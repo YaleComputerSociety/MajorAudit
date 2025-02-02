@@ -35,8 +35,6 @@ export interface User {
 	FYP: FYP;
 }
 
-// empty
-
 export const nullUser: User = {
 	netID: "",
 	onboard: false,

@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Navigate, Route, Routes } from 'react-router-dom'; 
 
 import Globals from './Globals';
@@ -32,16 +32,16 @@ function App(){
 
 	// const [user, setUser] = useState<User>(nullUser); 
 	const [user, setUser] = useState<User>(Ryan); 
-	const initUser = async () => {
-    const response = await getUser();
-		// console.log("initUser() -> API: getUser() -> ", response)
-		setUser({
-			name: response.name,
-			netID: response.netID,
-			onboard: response.onboard,
-			FYP: response.FYP,
-		});
-  };
+	// const initUser = async () => {
+  //   const response = await getUser();
+	// 	// console.log("initUser() -> API: getUser() -> ", response)
+	// 	setUser({
+	// 		name: response.name,
+	// 		netID: response.netID,
+	// 		onboard: response.onboard,
+	// 		FYP: response.FYP,
+	// 	});
+  // };
 
 	// useEffect(() => {
 	// 	checkAuth();

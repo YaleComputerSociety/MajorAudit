@@ -25,7 +25,7 @@ import {
   
     const setModalOpen = useCallback((course: Course) => {
       setIsOpen(course);
-    }, [isOpen]);
+    }, []);
   
     const store: Store = useMemo(
       () => ({

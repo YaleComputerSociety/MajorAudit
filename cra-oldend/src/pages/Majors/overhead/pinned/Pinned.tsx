@@ -1,11 +1,8 @@
 
-import { useState, useEffect, useRef } from "react";
+import React from "react";
 import Style from "./Pinned.module.css";
 import { StudentDegree, User } from "../../../../types/TypeUser";
 import { ALL_PROGRAM_METADATAS } from "../../../../commons/mock/MockDegreeMetadata";
-
-import MajorSearchBar from "../search/MajorSearch";
-
 
 function DegreeIcon(props: { studentDegree: StudentDegree, setProgramIndex: Function }) {
   const mark = (status: string) => {

@@ -26,17 +26,26 @@ export interface DegreeMetadata {
 	wesbiteLink: string;
 }
 
-interface DegreeRequirementsSubsection {
-	name?: string;
-	description?: string;
+interface DegreeRequirementSubsection {
+	name: string;
+	description: string;
+	count: number;
 	flexible: boolean;
 	courses: StudentCourse[];
 }
 
 interface DegreeRequirement {
 	name: string;
-	description?: string;
-	subsections: DegreeRequirementsSubsection[];
+	description: string;
+	count: number;
+	degreeRequirementSubsections?: DegreeRequirementSubsection[];
+	degreeOverlapRequirements?: DegreeOverlapRequirement[];
+}
+
+interface DegreeOverlapRequirement {
+	name: string;
+	count: number;
+	rule: string;
 }
 
 export interface DegreeConfiguration {

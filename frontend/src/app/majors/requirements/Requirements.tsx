@@ -1,7 +1,12 @@
+
 import { useState } from "react";
-import { User } from "../../../commons/types/TypeUser";
-import { DegreeConfiguration } from "../../../commons/types/TypeProgram";
 import Style from "./Requirements.module.css";
+
+import { User } from "@/types/type-user";
+import { DegreeConfiguration } from "@/types/type-program";
+// import AddableCourse from "./icons/AddableCourse";
+// import RemovableCourse from "./icons/RemovableCourse";
+// import { addCourseToSubsection, removeCourseFromSubsection, resetDegree } from "./RequirementsUtils";
 
 function RequirementsContent(props: { 
 	edit: boolean, 

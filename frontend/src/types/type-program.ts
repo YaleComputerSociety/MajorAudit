@@ -26,6 +26,14 @@ export interface DegreeMetadata {
 	wesbiteLink: string;
 }
 
+
+
+
+
+
+
+// \BEGIN{MAJOR MAGIC}
+
 interface DegreeRequirementsSubsection {
 	name?: string;
 	description?: string;
@@ -40,8 +48,6 @@ interface DegreeRequirement {
 }
 
 export interface DegreeConfiguration {
-	codesCore: string[];
-	codesAdded: string[];
 	degreeRequirements: DegreeRequirement[];
 }
 
@@ -50,14 +56,16 @@ export interface Degree {
 	configuration: DegreeConfiguration;
 }
 
+// \END{MAJOR MAGIC}
+
+
+
+
+
+
+
 export interface StudentDegree {
 	status: string; // DA | ADD | PIN
 	programIndex: number;
 	degreeIndex: number;
 }
-
-
-
-
-
-

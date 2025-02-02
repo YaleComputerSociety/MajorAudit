@@ -6,7 +6,7 @@ export interface Course {
   codes: Array<string>; 		// ["FREN 403", "HUMS 409"]
   title: string; 						// "Proust Interpretations: Reading <i>Remembrance of Things Past</i>"
   credit: number 						// 1
-  dist: Array<string>; 		// ["Hu"] # Combine pt. 1
+  dist: Array<string>; 			// ["Hu"] 
   seasons: Array<string>; 	// ["Spring"] # Figure This Out
 }
 
