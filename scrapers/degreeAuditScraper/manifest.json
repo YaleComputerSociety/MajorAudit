@@ -5,29 +5,21 @@
 	"permissions": ["tabs", "activeTab", "scripting"],
 	"content_scripts": [
 		{
+			"matches": ["http://127.0.0.1:3000/*"],
+			"js": ["majorAuditContent.js"]
+		},
+		{
 			"matches": ["https://degreeaudit.yale.edu/responsive/worksheets/WEB31"],
 			"js": ["degreeAuditContent.js"]
-		},
-		{
-			"matches": ["http://127.0.0.1:5000/dashboard"],
-			"js": ["majorAuditContent.js"]
-		},
-		{
-			"matches": ["http://127.0.0.1:5001/majoraudit/us-central1/functions/dashboard"],
-			"js": ["majorAuditContent.js"]
-		},
-		{
-			"matches": ["http://127.0.0.1:5000/"],
-			"js": ["majorAuditContent.js"]
 		}
 	],
 	"host_permissions": [
-		"https://degreeaudit.yale.edu/responsive/worksheets/WEB31",
-		"http://localhost:8000/*",
-		"http://localhost:5001/*",
-		"http://127.0.0.1:5000/"
+		"http://127.0.0.1:3000/graduation",
+		"http://127.0.0.1:3000/*",
+		"https://degreeaudit.yale.edu/responsive/worksheets/WEB31"
 	],
 	"background": {
 	  "service_worker": "background.js"
 	}
   }
+
