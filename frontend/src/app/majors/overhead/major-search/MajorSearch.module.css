@@ -1,0 +1,36 @@
+
+.SearchContainer{
+	margin-right: 10px;
+}
+
+.searchBarInput {
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.searchBarDropdown {
+	width: 200px;
+  position: absolute;
+
+  top: 50px;
+
+  z-index: 9999;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.searchBarItem {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.searchBarItem:hover {
+  background-color: #f0f0f0;
+}
+
