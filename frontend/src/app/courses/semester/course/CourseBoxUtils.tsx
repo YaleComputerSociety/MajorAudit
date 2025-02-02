@@ -57,10 +57,10 @@ export function RenderMark(props: { edit: boolean, studentCourse: StudentCourse,
 
 export function SeasonIcon(props: { studentCourse: StudentCourse })
 {
-	// const getSeasonImage = () => (String(props.studentCourse.term).endsWith("3") ? fall : fall);
+	const getSeasonImage = () => (String(props.studentCourse.term).endsWith("3") ? "/fall.svg" : "/spring.svg");
 	return(
 		<div>
-			<Image className={Style.SeasonImage} src="/fall.svg" alt="" width={20} height={20}/>
+			<Image className={Style.SeasonImage} src={getSeasonImage()} alt="" width={20} height={20}/>
 		</div>
 	)
 }
