@@ -23,7 +23,7 @@ function executeAddCourse(
     const targetCourse = getCatalogCourse(selectedTerm, targetCode);
 
     if(targetCourse){
-      const status = selectedTerm === props.term ? "MA_VALID" : "MA_HYPOTHETICAL";
+      const status = selectedTerm === props.term ? "DA" : "MA";
       const newCourse: StudentCourse = { course: targetCourse, status, term: props.term };
 
       const updatedSemesters = props.user.FYP.studentSemesters.map((semester) => {

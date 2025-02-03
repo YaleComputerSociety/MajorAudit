@@ -12,7 +12,7 @@ export interface Course {
 export interface StudentCourse {
   course: Course; 	
 	term: number; 		// 202401
-  status: string; 	// "DA_COMPLETE" | "DA_PROSPECT" | "MA_VALID" | "MA_HYPOTHETICAL"
+  status: string; 	// "DA" || "MA"
 }
 
 export interface StudentSemester {
