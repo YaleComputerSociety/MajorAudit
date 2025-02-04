@@ -12,17 +12,22 @@ export interface Course {
 export interface StudentCourse {
   course: Course; 	
 	term: number; 		// 202401
-  status: string; 	// "DA" || "MA"
+  status: string; 	// "DA" or "MA"
 }
 
 export interface StudentSemester {
-	season: number;
+	term: number;
 	studentCourses: StudentCourse[];
+}
+
+export interface StudentYear {
+	grade: string; 		// "First-Year" | "Sophomore" | "Junior" | "Senior"
+	studentSemesters: StudentSemester[];
 }
 
 export interface FYP {
 	languageRequirement: string;
-	studentSemesters: StudentSemester[]
+	studentCourses: StudentCourse[];
 	degreeConfigurations: DegreeConfiguration[][];
 	degreeDeclarations: StudentDegree[];
 }

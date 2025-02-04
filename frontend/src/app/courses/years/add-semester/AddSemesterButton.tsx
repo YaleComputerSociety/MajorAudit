@@ -15,7 +15,7 @@ function executeAddSemester(props: { user: User; setUser: Function }, inputRef: 
 
     const newTermNumber = Number(newTermString);
     const newSemester: StudentSemester = {
-      season: newTermNumber,
+      term: newTermNumber,
       studentCourses: [],
     };
 
