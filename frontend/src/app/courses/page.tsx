@@ -13,21 +13,25 @@ import YearBox from "./years/YearBox";
 function Courses(){
 	const { user, setUser } = useAuth();
 
-	const studentYears = BuildStudentYears(user.FYP.studentCourses);
-  const [renderedYears, setRenderedYears] = useState<React.ReactNode[]>([]);
-  
 	const [edit, setEdit] = useState(false);
   const toggleEdit = () => { setEdit(!edit); };
 
 	const [columns, setColumns] = useState(true); 
 	const toggleColumns = () => { setColumns(!columns); }
 
+	const [studentYears, setStudentYears] = useState<StudentYear[]>(() => BuildStudentYears(user.FYP.studentCourses));
+	const [renderedYears, setRenderedYears] = useState<React.ReactNode[]>([]);
+
+	useEffect(() => {
+		setStudentYears(BuildStudentYears(user.FYP.studentCourses));
+  }, [user.FYP.studentCourses]);
+
 	useEffect(() => {
 		const newRenderedYears = studentYears.map((studentYear: StudentYear, index: number) => (
-			<YearBox key={index} edit={edit} columns={columns} studentYear={studentYear} user={user} setUser={setUser}/>
+			<YearBox key={index} edit={edit} columns={columns} studentYear={studentYear} setStudentYears={setStudentYears} user={user} setUser={setUser}/>
 		));
 		setRenderedYears(newRenderedYears);
-  }, [edit, columns, user]);
+  }, [edit, columns, studentYears, user]);
 
   return(
     <div>

@@ -17,11 +17,13 @@ export interface StudentCourse {
 
 export interface StudentSemester {
 	term: number;
+	active: boolean;
 	studentCourses: StudentCourse[];
 }
 
 export interface StudentYear {
 	grade: string; 		// "First-Year" | "Sophomore" | "Junior" | "Senior"
+	active: boolean;
 	studentSemesters: StudentSemester[];
 }
 

@@ -27,7 +27,7 @@
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	width: 425px;
+	width: 200px;
 	height: 36px;
 	border-radius: 16px;
 	margin-bottom: 5px;
@@ -123,31 +123,14 @@
 
 /* */
 
-.ConfirmButton {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 18px;
-	height: 18px;
-	border-radius: 50%;
-	background-color: #dbdbdb;
-	cursor: pointer;
-	margin-right: 5px;
-}
-.ConfirmButton:hover {
-	background-color: #D3D3D3;
-}
-
-/* */
-
 .RemoveButton {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 16px;
-	height: 16px;
+	width: 20px;
+	height: 20px;
 	border-radius: 50%;
-	background-color: #ededed;
+	background-color: white;
 	cursor: pointer;
 	margin-right: 5px;
 }

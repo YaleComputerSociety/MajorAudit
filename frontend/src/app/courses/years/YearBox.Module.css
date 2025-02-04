@@ -8,3 +8,10 @@
 	display: flex;
 	flex-direction: row;
 }
+
+.Grade {
+	font-weight: 600;
+	font-size: 25px;
+	margin-right: 10px;
+ }
+ 
