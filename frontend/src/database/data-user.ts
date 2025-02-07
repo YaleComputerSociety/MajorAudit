@@ -25,3 +25,24 @@ export const Ryan: User = {
 		],
 	}
 }
+
+export const NullUser: User = {
+	name: "",
+	netID: "",
+	onboard: false,
+	FYP: {
+		studentCourses: [],
+		languageRequirement: "",
+		degreeDeclarations: [],
+		degreeConfigurations: [
+			[
+			],
+			[
+			],
+			[
+			],
+			[
+			]
+		],
+	}
+}

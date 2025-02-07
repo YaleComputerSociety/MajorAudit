@@ -2,12 +2,11 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "./providers";
+import { useAuth } from "@/app/providers";
 
-export default function MajorAudit()
-{
+export default function NotFoundPage() {
+  const { auth } = useAuth();
   const router = useRouter();
-	const { auth } = useAuth();
 
   useEffect(() => {
     if (auth.loggedIn) {
@@ -15,11 +14,7 @@ export default function MajorAudit()
     } else {
       router.replace("/login");
     }
-  }, [auth, router]);
+  }, [auth.loggedIn, router]);
 
-  return(
-    <div>
-			Loading...
-    </div>
-  );
+  return <div>Redirecting...</div>;
 }
