@@ -51,10 +51,6 @@ We're working fullstack.
     ```bash
     pip install -r requirements.txt
     ```
-7. Deactivate the virtual environment:
-    ```bash
-    deactivate
-    ```
 
 ### Secrets Setup
 8. Create a `secrets` directory in the `/backend` folder:
@@ -109,7 +105,7 @@ We're working fullstack.
     2. Modify the `initLocalStorage()` method in `Graduation.tsx` to use `MockStudent` instead of calling the `getData()` API.
     3. Run the frontend in development mode:
         ```bash
-        npm start
+        npm run dev
         ```
     4. The frontend will now automatically update as you make changes.
 
