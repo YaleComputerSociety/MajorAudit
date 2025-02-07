@@ -1,0 +1,82 @@
+{
+  usersCollection {
+    edges {
+      node {
+        id
+        net_id
+        first_name
+        last_name
+      }
+    }
+  }
+  majorsCollection {
+    edges {
+      node {
+        id
+        major_name
+        major_code
+        description
+      }
+    }
+  }
+  major_typesCollection {
+    edges {
+      node {
+        id
+        major_id
+        type
+      }
+    }
+  }
+  major_versionsCollection {
+    edges {
+      node {
+        id
+        major_type_id
+        catalog_year
+      }
+    }
+  }
+  student_majorsCollection {
+    edges {
+      node {
+        id
+        student_id
+        major_version_id
+        declaration_date
+      }
+    }
+  }
+  major_requirementsCollection {
+    edges {
+      node {
+        id
+        major_version_id
+        requirement_name
+        description
+        requirement_type
+        required
+      }
+    }
+  }
+  major_subrequirementsCollection {
+    edges {
+      node {
+        id
+        major_requirements_id
+        requirement_name
+        required
+      }
+    }
+  }
+  subrequirement_coursesCollection {
+    edges {
+      node {
+        id
+        major_subrequirement_id
+        course_id
+        additional_course_id
+      }
+    }
+  }
+}
