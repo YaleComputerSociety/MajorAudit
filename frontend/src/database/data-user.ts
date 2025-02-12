@@ -4,7 +4,7 @@ import { User } from "./../types/type-user";
 export const Ryan: User = {
 	name: "Ryan",
 	netID: "rgg32",
-	onboard: true,
+	onboard: false,
 	FYP: {
 		studentCourses: [
 			{ term: 202403, status: "DA", course: { codes: ["CPSC 201"], title: "Intro To Computer Science", credit: 1, dist: ["QR"], seasons: [] } },

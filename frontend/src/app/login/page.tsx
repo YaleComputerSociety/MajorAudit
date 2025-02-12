@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Style from "./Login.module.css";
 
 import { useAuth } from "../providers";
+import NavBar from "@/components/navbar/NavBar";
 
 function Login() 
 {
@@ -22,7 +23,12 @@ function Login()
       setAuth({ loggedIn: true });
       setUser(data);
 
-      router.push("/graduation");
+			if(!data.onboard){
+				router.push("/account");
+			}else{
+				router.push("/graduation");
+			}
+      
     } catch (error) {
       console.error("❌ Login error:", error);
     }
@@ -31,6 +37,7 @@ function Login()
 
   return (
     <div>
+			<NavBar loggedIn={false}/>
       <div className={Style.centerDiv}>
         <div style={{ width: "450px" }}>
           <h1>Plan Your Major @ Yale</h1>
