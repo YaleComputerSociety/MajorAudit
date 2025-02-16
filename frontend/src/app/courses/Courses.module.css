@@ -9,8 +9,9 @@
 	top: 75px;
 	
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: center;
+	align-items: center;
 
 	width: 100%;
 
@@ -38,4 +39,36 @@
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
 
 	z-index: 2;
+}
+
+.ViewToggleButton {
+	position: fixed;
+
+	top: 95px;
+	left: 60px;
+
+	width: 30px;
+	height: 30px;
+
+	color: white;
+	text-align: center;
+	line-height: 30px;
+	font-size: 20px;
+
+	background-color: lightgreen;
+	border: none;
+	border-radius: 50%;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+
+	z-index: 2;
+}
+
+.SemesterAll{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+.SemesterButton{
+	margin-right: auto;
 }

@@ -13,7 +13,7 @@ import DistributionCircle from "@/components/distribution-circle/DistributionsCi
 
 // import { useModal } from "../../../hooks/modalContext";
 
-function CourseBox(props: {edit: boolean, studentCourse: StudentCourse, user: User, setUser: Function }) 
+function CourseBox(props: {edit: boolean, studentCourse: StudentCourse, user: User, setUser: Function, width?: string}) 
 {
 	// const { setModalOpen } = useModal();
 	// function openModal() {
@@ -21,10 +21,12 @@ function CourseBox(props: {edit: boolean, studentCourse: StudentCourse, user: Us
 	// }
 
 	const getBackgroundColor = () => (props.studentCourse.status === "DA_COMPLETE" ? "#E1E9F8" : "#F5F5F5");
+
+	const width = props.width || "560px";
 	
 
 	return (
-		<div className={Style.courseBox}  style={{ backgroundColor: getBackgroundColor() }}> 
+		<div className={Style.courseBox}  style={{ backgroundColor: getBackgroundColor(), width: width}}> 
 			{/* onClick={openModal} */}
 			<div className={Style.row} style={{ alignItems: "center" }}>
 				<RenderMark edit={props.edit} studentCourse={props.studentCourse} user={props.user} setUser={props.setUser}/>

@@ -1,0 +1,73 @@
+.yearView {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; /* Space between years */
+    padding: 1.25rem;
+    padding-bottom:5px;
+  }
+  
+  .yearContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .yearHeader {
+    font-size: 2rem; /* 18px */
+    font-weight: 550;
+    margin-bottom: 0.0rem; /* 10px */
+  }
+
+  .yearHeader_year {
+    color:gray;
+    font-size: 0.9rem; /* 18px */
+    font-weight: 550;
+  }
+  
+  /* Arrange semesters in a row, Fall on the left and Spring on the right */
+  .semesterRow {
+    display: flex;
+    flex-direction: row; /* Row-based layout */
+    gap: 2rem; /* Space between Fall and Spring */
+    justify-content: flex-start; /* Align semesters properly */
+    /*flex-wrap: wrap; /* Allow wrapping if necessary */
+  }
+  
+  .semesterContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.01rem; /* 5px, space between semester header and courses */
+    /*width: 48%; /* Ensure both semesters fit side by side */ /* maybe change width based on number in group*/
+    width: calc(100% / var(--num-semesters) - var(--gap) * (var(--num-semesters) - 1));
+  }
+  
+  .semesterHeader {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    margin-bottom: 0.1rem; /* 5px */
+    line-height: 1.4; /* Improve readability */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .yearView {
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    .semesterRow {
+        flex-direction: column; /* Stack semesters vertically on smaller screens */
+        gap: 1rem;
+      }
+  
+    .yearHeader {
+      font-size: 1rem;
+    }
+  
+    .semesterContainer {
+      width: 100%; /* Full width on small screens */
+    }
+  
+    .semesterHeader {
+      font-size: 0.8125rem;
+    }
+  }

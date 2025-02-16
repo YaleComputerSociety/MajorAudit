@@ -1,0 +1,7 @@
+.semesterView {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between semesters */
+    padding: 20px; 
+    padding-bottom:5px;
+  }

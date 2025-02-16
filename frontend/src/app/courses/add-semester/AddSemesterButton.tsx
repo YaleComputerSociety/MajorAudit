@@ -20,8 +20,10 @@ function executeAddSemester(props: { user: User; setUser: Function }, inputRef: 
     };
 
     const updatedSemesters = [...props.user.FYP.studentSemesters, newSemester];
-    props.setUser({ ...props.user, FYP: { ...props.user.FYP, studentSemesters: updatedSemesters } });
-    setDropVis(false);
+	const updatedUser = { ...props.user, FYP: { ...props.user.FYP, studentSemesters: updatedSemesters } };
+    props.setUser(updatedUser);
+    console.log("Updated User:", updatedUser);
+	setDropVis(false);
   }
 }
 

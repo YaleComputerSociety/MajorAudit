@@ -18,11 +18,16 @@ function executeAddCourse(
   selectedTerm: number,
   setAddDisplay: Function
 ){
+  console.log("Trying to add course")
   if(inputRef.current){
+    console.log("im in")
     const targetCode = inputRef.current.value;
+    console.log(targetCode)
+    console.log(selectedTerm)
     const targetCourse = getCatalogCourse(selectedTerm, targetCode);
 
     if(targetCourse){
+      console.log("target acquired")
       const status = selectedTerm === props.term ? "MA_VALID" : "MA_HYPOTHETICAL";
       const newCourse: StudentCourse = { course: targetCourse, status, term: props.term };
 
@@ -39,7 +44,9 @@ function executeAddCourse(
   }
 }
 
-function AddCourseButton(props: { term: number; user: User; setUser: Function }) {
+function AddCourseButton(props: { term: number; user: User; setUser: Function , width?: String}) {
+
+  const width = props.width || "560px";
   
   const inputRef = useRef<HTMLInputElement>(null);
   const addRef = useRef<HTMLDivElement>(null);
@@ -88,7 +95,7 @@ function AddCourseButton(props: { term: number; user: User; setUser: Function })
           +
         </div>
       ) : (
-        <div className={Style.AddCanvas}>
+        <div className={Style.AddCanvas} style={{width: String(width)}}>
           <div className={Style.Row} style={{ alignItems: "center" }}>
             <div className={Style.RemoveButton} onClick={() => setAddDisplay((prevState) => ({...prevState, active: false}))}>
 
