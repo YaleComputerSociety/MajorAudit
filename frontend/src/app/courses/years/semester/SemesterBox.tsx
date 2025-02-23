@@ -38,7 +38,7 @@ function SemesterBox(props: { edit: boolean, studentSemester: StudentSemester, u
       </div>
 			<div>
 				{renderedCourses}
-				{(props.edit && IsTermActive(props.studentSemester.term)) && <AddCourseButton term={props.studentSemester.term} user={props.user} setUser={props.setUser}/>}
+				{props.edit && <AddCourseButton term={props.studentSemester.term} user={props.user} setUser={props.setUser}/>}
 			</div>
     </div>
   );

@@ -82,7 +82,7 @@ function FirstShelf() {
   };
 
   return (
-    <div className={Style.Row}>
+    <div className={Style.Row} style={{ marginBottom: "12px" }}>
       <div className={Style.InputContainer} style={{ marginRight: "14px" }}>
 				<div className={Style.Label}>
 					Name 

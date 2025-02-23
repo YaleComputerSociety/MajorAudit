@@ -1,5 +1,5 @@
 
-import { StudentCourse } from "./type-user";
+import { Course, StudentCourse } from "./type-user";
 
 interface DUS {
 	name: string;
@@ -34,21 +34,39 @@ export interface DegreeMetadata {
 
 // \BEGIN{MAJOR MAGIC}
 
-interface DegreeRequirementsSubsection {
-	name?: string;
-	description?: string;
-	flexible: boolean;
-	courses: StudentCourse[];
+export interface Range {
+	department: string;
+	min_code: number;
+	max_code: number;
 }
 
-interface DegreeRequirement {
-	name: string;
-	description?: string;
-	subsections: DegreeRequirementsSubsection[];
+export interface TypeOneSubrequirement {
+	requirement_name: string;
+	requirement_description: string;
+	must_choose_n_courses: number;
+	course_options?: Course[];
+	elective_range?: Range;
+	any?: boolean;
 }
+
+export interface TypeOneRequirement {
+	requirement_name: string;
+	requirement_description: string;
+	must_choose_n_subrequirements: number;
+	subrequirements: TypeOneSubrequirement[];
+}
+
+export interface TypeTwoRequirement {
+	requirement_name: string;
+	requirement_description: string;
+	checkbox_boolean: boolean;
+}
+
+
+export type DegreeRequirement = TypeOneRequirement | TypeTwoRequirement;
 
 export interface DegreeConfiguration {
-	degreeRequirements: DegreeRequirement[];
+  degreeRequirements: DegreeRequirement[];
 }
 
 export interface Degree {

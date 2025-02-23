@@ -36,7 +36,7 @@ function YearBox(props: { edit: boolean, columns: boolean, studentYear: StudentY
 			</div>
 			<div className={props.columns ? Style.Column : Style.Row}>
 				{renderedSemesters}
-				{(props.edit && props.studentYear.active) && <AddSemesterButton studentYear={props.studentYear} setStudentYears={props.setStudentYears}/>}
+				{(props.edit && (props.studentYear.studentSemesters.length < 3)) && <AddSemesterButton studentYear={props.studentYear} setStudentYears={props.setStudentYears}/>}
 			</div>
 		</div>
   );

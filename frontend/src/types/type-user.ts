@@ -1,6 +1,11 @@
 
 import { DegreeConfiguration, StudentDegree } from "./type-program";
 
+export interface LanguagePlacement {
+	language: string;
+	level: number;
+}
+
 export interface Course {
   codes: string[]; 		// ["FREN 403", "HUMS 409"]
   title: string; 			// "Proust Interpretations: Reading <i>Remembrance of Things Past</i>"
@@ -13,23 +18,30 @@ export interface StudentCourse {
   course: Course; 	
 	term: number; 		// 202401
   status: string; 	// "DA" or "MA"
+	result: string; 	// "IP" or "GRADE_PASS" or "GRADE_FAIL" or "CR" or "W"
 }
 
 export interface StudentSemester {
 	term: number;
-	active: boolean;
 	studentCourses: StudentCourse[];
 }
 
 export interface StudentYear {
 	grade: string; 		// "First-Year" | "Sophomore" | "Junior" | "Senior"
-	active: boolean;
 	studentSemesters: StudentSemester[];
 }
 
+export interface StudentTermArrangement {
+	first_year: number[];
+	sophomore: number[];
+	junior: number[];
+	senior: number[];
+}
+
 export interface FYP {
-	languageRequirement: string;
+	languagePlacement: LanguagePlacement;
 	studentCourses: StudentCourse[];
+	studentTermArrangement: StudentTermArrangement;
 	degreeConfigurations: DegreeConfiguration[][];
 	degreeDeclarations: StudentDegree[];
 }

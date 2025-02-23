@@ -19,12 +19,12 @@ function Courses(){
 	const [columns, setColumns] = useState(true); 
 	const toggleColumns = () => { setColumns(!columns); }
 
-	const [studentYears, setStudentYears] = useState<StudentYear[]>(() => BuildStudentYears(user.FYP.studentCourses));
+	const [studentYears, setStudentYears] = useState<StudentYear[]>(() => BuildStudentYears(user));
 	const [renderedYears, setRenderedYears] = useState<React.ReactNode[]>([]);
 
 	useEffect(() => {
-		setStudentYears(BuildStudentYears(user.FYP.studentCourses));
-  }, [user.FYP.studentCourses]);
+		setStudentYears(BuildStudentYears(user));
+  }, [user]);
 
 	useEffect(() => {
 		const newRenderedYears = studentYears.map((studentYear: StudentYear, index: number) => (
