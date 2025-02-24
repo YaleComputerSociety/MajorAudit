@@ -152,7 +152,7 @@ function Metadata(props: {
 	peekProgram: Function
 }) {
   return (
-    <div>
+    <div className={Style.MetadataContainer}>
       <MetadataScrollButton shiftProgramIndex={props.shiftProgramIndex} peekProgram={props.peekProgram} dir={1}/>
       <MetadataContent user={props.user} setUser={props.setUser} degreeMetadata={props.programMetadatas[0]} programIndex={props.programIndex}/>
       <MetadataScrollButton shiftProgramIndex={props.shiftProgramIndex} peekProgram={props.peekProgram} dir={-1}/>

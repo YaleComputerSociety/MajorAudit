@@ -32,7 +32,7 @@ function SemesterBox(props: { edit: boolean, studentSemester: StudentSemester, u
 	}, [props.edit, props.studentSemester, props.user]);
 
   return(
-    <div className={Style.Column} style={{ marginBottom: "8px" }}>
+    <div className={Style.Column} style={{ minWidth: "440px", marginBottom: "8px" }}>
       <div style={{ marginBottom: "6px" }}>
 				{TransformTermNumber(props.studentSemester.term)}
       </div>

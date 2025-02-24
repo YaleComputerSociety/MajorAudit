@@ -1,5 +1,5 @@
 
-import { Course, StudentCourse } from "./type-user";
+import { Course } from "./type-user";
 
 interface DUS {
 	name: string;
@@ -44,7 +44,7 @@ export interface TypeOneSubrequirement {
 	requirement_name: string;
 	requirement_description: string;
 	must_choose_n_courses: number;
-	course_options?: Course[];
+	courses: Course[];
 	elective_range?: Range;
 	any?: boolean;
 }
@@ -56,17 +56,17 @@ export interface TypeOneRequirement {
 	subrequirements: TypeOneSubrequirement[];
 }
 
-export interface TypeTwoRequirement {
-	requirement_name: string;
-	requirement_description: string;
-	checkbox_boolean: boolean;
-}
+// export interface TypeTwoRequirement {
+// 	requirement_name: string;
+// 	requirement_description: string;
+// 	checkbox_boolean: boolean;
+// }
 
 
-export type DegreeRequirement = TypeOneRequirement | TypeTwoRequirement;
+// export type DegreeRequirement = TypeOneRequirement | TypeTwoRequirement;
 
 export interface DegreeConfiguration {
-  degreeRequirements: DegreeRequirement[];
+  degreeRequirements: TypeOneRequirement[];
 }
 
 export interface Degree {
@@ -76,14 +76,8 @@ export interface Degree {
 
 // \END{MAJOR MAGIC}
 
-
-
-
-
-
-
 export interface StudentDegree {
-	status: string; // DA | ADD | PIN
+	status: string; 				// DA | ADD | PIN
 	programIndex: number;
 	degreeIndex: number;
 }

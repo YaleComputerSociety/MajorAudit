@@ -1,10 +1,25 @@
 
-.row{
+.Column {
+	display: flex;
+	flex-direction: column;
+}
+
+.Row{
 	display: flex;
 	flex-direction: row;
 }
 
-.reqsList {
+.RequirementsContainer {
+  padding: 20px;
+  border-radius: 25px;
+  width: 500px;
+  height: 500px;
+  min-width: 390px;
+  background-color: white;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.ReqsList {
   height: 430px;
   scrollbar-color: rgb(131, 131, 131) transparent;
   scrollbar-width: thin;
@@ -13,20 +28,16 @@
   overflow-x: hidden;
 }
 
-.subsectionHeader {
+.ReqHeader {
   color: grey;
   font-size: 18px;
   font-weight: 501;
 }
 
-.reqsContainer {
-  padding: 20px;
-  border-radius: 25px;
-  width: 490px;
-  height: 490px;
-  min-width: 390px;
-  background-color: white;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+.SubHeader {
+  color: grey;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 

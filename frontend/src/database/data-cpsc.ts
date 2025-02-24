@@ -4,10 +4,10 @@ import { DegreeConfiguration, TypeOneRequirement, TypeOneSubrequirement } from "
 
 
 const CPSC_201: TypeOneSubrequirement = {
-	requirement_name: "INTRODUCTION",
+	requirement_name: "INTRO",
 	requirement_description: "",
 	must_choose_n_courses: 1,
-	course_options: [{ codes: ["CPSC 201"], title: "Introduction To Computer Science", credit: 1, dist: ["QR"], seasons: [] }],
+	courses: [{ codes: ["CPSC 201"], title: "Introduction To Computer Science", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }],
 	any: true,
 }
 
@@ -15,34 +15,34 @@ const CPSC_202: TypeOneSubrequirement = {
 	requirement_name: "MATH",
 	requirement_description: "",
 	must_choose_n_courses: 1,
-	course_options: [
-		{ codes: ["CPSC 202"], title: "Math Tools For Computer Scientists", credit: 1, dist: ["QR"], seasons: [] },
-		{ codes: ["MATH 244"], title: "Discrete Mathematics", credit: 1, dist: ["QR"], seasons: [] },
+	courses: [
+		{ codes: ["CPSC 202"], title: "Math Tools For Computer Scientists", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] },
+		{ codes: ["MATH 244"], title: "Discrete Mathematics", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] },
 	],
 	any: true,
 }
 
 const CPSC_223: TypeOneSubrequirement = {
-	requirement_name: "SYSTEMS",
+	requirement_name: "DATA STRUCTURES",
 	requirement_description: "",
 	must_choose_n_courses: 1,
-	course_options: [{ codes: ["CPSC 223"], title: "Data Structures", credit: 1, dist: ["QR"], seasons: [] }],
+	courses: [{ codes: ["CPSC 223"], title: "Data Structures", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }],
 }
 
 const CPSC_323: TypeOneSubrequirement = {
 	requirement_name: "SYSTEMS",
 	requirement_description: "",
 	must_choose_n_courses: 1,
-	course_options: [{ codes: ["CPSC 323"], title: "Systems", credit: 1, dist: ["QR"], seasons: [] }],
+	courses: [{ codes: ["CPSC 323"], title: "Systems", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }],
 }
 
 const CPSC_365: TypeOneSubrequirement = {
 	requirement_name: "ALGORITHMS",
 	requirement_description: "",
 	must_choose_n_courses: 1,
-	course_options: [
-		{ codes: ["CPSC 365"], title: "Algorithms", credit: 1, dist: ["QR"], seasons: [] },
-		{ codes: ["CPSC 366"], title: "Intensive Algorithms", credit: 1, dist: ["QR"], seasons: [] },
+	courses: [
+		{ codes: ["CPSC 365"], title: "Algorithms", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] },
+		{ codes: ["CPSC 366"], title: "Intensive Algorithms", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] },
 	],
 }
 
@@ -57,6 +57,7 @@ const CPSC_ELEC: TypeOneSubrequirement = {
 	requirement_name: "",
 	requirement_description: "",
 	must_choose_n_courses: 1,
+	courses: [],
 	elective_range: { department: "CPSC", min_code: 300, max_code: 999 }
 }
 
@@ -71,7 +72,7 @@ const CPSC_SENIOR_CLASS: TypeOneSubrequirement = {
 	requirement_name: "",
 	requirement_description: "",
 	must_choose_n_courses: 1,
-	course_options: [{ codes: ["CPSC 323"], title: "Systems", credit: 1, dist: ["QR"], seasons: [] }],
+	courses: [{ codes: ["CPSC 490"], title: "Systems", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }],
 }
 
 const CPSC_SENIOR: TypeOneRequirement = {

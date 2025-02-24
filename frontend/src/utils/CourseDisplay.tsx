@@ -53,16 +53,16 @@ export function GetCourseColor(term: number): string {
   return IsTermActive(term) ? "#F5F5F5" : "#E1E9F8";
 }
 
-export function RenderMark(props: { edit: boolean, studentCourse: StudentCourse, user: User, setUser: Function })
+export function RenderMark(props: { status: string })
 {
-	if(props.studentCourse.status === "DA"){
+	if(props.status === "DA"){
     return(
       <div className={Style.Checkmark}>
         ✓
       </div>
     );
   }else 
-	if(props.studentCourse.status === "MA"){
+	if(props.status === "MA"){
     return(
 			<div className={Style.Checkmark}>
 				⚠

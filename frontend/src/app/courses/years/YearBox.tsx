@@ -8,15 +8,17 @@ import AddSemesterButton from "./add-semester/AddSemesterButton"
 
 function RenderSemesters(props: { edit: boolean; columns: boolean; studentYear: StudentYear, setStudentYears: Function, user: User, setUser: Function }) 
 {
-  const newRenderedSemesters = props.studentYear.studentSemesters.map((studentSemester: StudentSemester) => (
-		<SemesterBox key={studentSemester.term} edit={props.edit} studentSemester={studentSemester} user={props.user} setUser={props.setUser}/>
-  ));
+  const newRenderedSemesters = props.studentYear.studentSemesters
+    .filter((studentSemester: StudentSemester) => studentSemester.term !== 0)
+    .map((studentSemester: StudentSemester) => (
+      <SemesterBox key={studentSemester.term} edit={props.edit} studentSemester={studentSemester} user={props.user} setUser={props.setUser}/>
+    ));
 
-	return( 
-		<div className={props.columns ? Style.Column : Style.Row}>
-			{newRenderedSemesters}
-		</div>
-	);
+  return( 
+    <div className={props.columns ? Style.Column : Style.Row}>
+      {newRenderedSemesters}
+    </div>
+  );
 }
 
 function YearBox(props: { edit: boolean, columns: boolean, studentYear: StudentYear, setStudentYears: Function, user: User, setUser: Function  })

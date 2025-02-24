@@ -1,4 +1,9 @@
 
+
+.MetadataContainer{
+	width: 600px;
+}
+
 .countBox {
   display: inline-block; /* Display as inline block */
   width: max-content; /* Set width to maximum content size */
