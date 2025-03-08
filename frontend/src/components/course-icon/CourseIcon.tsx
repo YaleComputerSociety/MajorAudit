@@ -54,15 +54,17 @@ export function StudentCourseIcon(props: { studentCourse: StudentCourse, utility
   
   const dist = props.studentCourse.course.dist || [];
 
+	// style={{ backgroundColor: GetCourseColor(props.studentCourse.term) }}
+
   return (
-    <div className={styles.CourseIcon} style={{ backgroundColor: GetCourseColor(props.studentCourse.term) }}>
+    <div className={styles.CourseIcon} style={{ backgroundColor: "#E1E9F8" }}> 
       {props.utilityButton && props.utilityButton}
       {props.studentCourse.status === "" 
         ? <CourseSeasonIcon seasons={props.studentCourse.course.seasons || []} />
-        : <RenderMark status={props.studentCourse.status}/>
+        : <RenderMark status="DA"/>
       }
       {props.studentCourse.course.codes[0]}
-      <DistCircDiv dist={dist} />
+      {/* <DistCircDiv dist={dist}/> */}
     </div>
   );
 }

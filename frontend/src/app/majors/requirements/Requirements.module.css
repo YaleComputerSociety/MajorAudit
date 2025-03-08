@@ -12,8 +12,7 @@
 .RequirementsContainer {
 	/* border: 1px solid green; */
 
-	margin-top: 25px;
-	margin-left: 25px;
+	margin-top: 37px;
 
 	width: 600px;
 	height: 650px;
@@ -27,7 +26,7 @@
 }
 
 .ReqsList {
-	/* border: 1px solid orange; */
+	border: 1px solid white;
 /* 
   height: 430px;
   scrollbar-color: rgb(131, 131, 131) transparent;
@@ -47,6 +46,39 @@
   color: grey;
   font-size: 14px;
   font-weight: 500;
+}
+
+.SubDesc {
+  color: grey;
+	font-style: italic;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+
+.EmptyCourse {
+  border-radius: 15px;
+  padding: 2px 2px;
+  background-color: #e7e7e7c3;
+  transition: filter 0.4s ease;
+  width: 15px; /* Adjust width to match CourseIcon */
+  height: 15px; /* Adjust height to match CourseIcon */
+  display: inline-block; /* Keeps it inline with other elements */
+}
+
+.EmptyCourse:hover {
+	cursor: pointer;
+	filter: brightness(95%);
+}
+
+.ToggleButton {
+	margin-top: 3px;
+
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #65a8f0;
+  font-size: 14px;
 }
 
 

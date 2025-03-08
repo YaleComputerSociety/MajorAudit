@@ -1,7 +1,8 @@
 
-
 import { DegreeConfiguration, DegreeRequirement, DegreeSubrequirement } from "@/types/type-program";
-import { CPSC_201, CPSC_202, MATH_244, CPSC_223, CPSC_323, CPSC_365, CPSC_366, CPSC_490 } from "./data-catalog";
+
+import { CPSC_201, CPSC_202, MATH_244, CPSC_223, CPSC_323, CPSC_365, CPSC_366, CPSC_490 } from "./data-courses";
+import { SC_CPSC_201, SC_CPSC_202, SC_CPSC_223, SC_CPSC_323 } from "./data-studentcourses";
 
 const CPSC_INTRO: DegreeSubrequirement = {
 	subreq_type_id: 1,
@@ -11,7 +12,7 @@ const CPSC_INTRO: DegreeSubrequirement = {
 	courses_options: [CPSC_201],
 	courses_elective_range: null,
 	courses_any_bool: false,
-	user_courses_satisfying: [CPSC_201],
+	student_courses_satisfying: [SC_CPSC_201],
 }
 
 const CPSC_MATH: DegreeSubrequirement = {
@@ -22,7 +23,7 @@ const CPSC_MATH: DegreeSubrequirement = {
 	courses_options: [CPSC_202, MATH_244],
 	courses_elective_range: null,
 	courses_any_bool: false,
-	user_courses_satisfying: [],
+	student_courses_satisfying: [],
 }
 
 const CPSC_DATA: DegreeSubrequirement = {
@@ -33,7 +34,7 @@ const CPSC_DATA: DegreeSubrequirement = {
 	courses_options: [CPSC_223],
 	courses_elective_range: null,
 	courses_any_bool: false,
-	user_courses_satisfying: [CPSC_223],
+	student_courses_satisfying: [SC_CPSC_223],
 }
 
 const CPSC_SYSTEMS: DegreeSubrequirement = {
@@ -44,7 +45,7 @@ const CPSC_SYSTEMS: DegreeSubrequirement = {
 	courses_options: [CPSC_323],
 	courses_elective_range: null,
 	courses_any_bool: false,
-	user_courses_satisfying: [CPSC_323],
+	student_courses_satisfying: [SC_CPSC_323],
 }
 
 const CPSC_ALGOS: DegreeSubrequirement = {
@@ -55,45 +56,51 @@ const CPSC_ALGOS: DegreeSubrequirement = {
 	courses_options: [CPSC_365, CPSC_366],
 	courses_elective_range: null,
 	courses_any_bool: false,
-	user_courses_satisfying: [],
+	student_courses_satisfying: [],
 }
 
 const CPSC_CORE: DegreeRequirement = {
 	req_type_id: 1,
 	req_name: "CORE",
 	req_desc: "",
-	subreqs_required: 5,
+
+	courses_required_count: 5,
+	courses_satisfied_count: 3,
+
 	subreqs_list: [CPSC_INTRO, CPSC_MATH, CPSC_DATA, CPSC_SYSTEMS, CPSC_ALGOS]
 }
 
 const CPSC_RANGE_ELECS: DegreeSubrequirement = {
 	subreq_type_id: 1,
 	subreq_name: "",
-	subreq_desc: "",
+	subreq_desc: "Standard elective or DUS approved extra-department substitution.",
 	courses_required: 1,
-	courses_options: [],
+	courses_options: [null],
 	courses_elective_range: { dept: "CPSC", min_code: 300, max_code: 999 },
 	courses_any_bool: false,
-	user_courses_satisfying: []
+	student_courses_satisfying: []
 }
 
 const CPSC_SUB_ELEC: DegreeSubrequirement = {
 	subreq_type_id: 1,
 	subreq_name: "",
-	subreq_desc: "",
+	subreq_desc: "Intermediate or advanced CPSC courses, traditionally numbered 300+.",
 	courses_required: 3,
-	courses_options: [],
+	courses_options: [null, null, null],
 	courses_elective_range: { dept: "CPSC", min_code: 300, max_code: 999 },
 	courses_any_bool: true,
-	user_courses_satisfying: []
+	student_courses_satisfying: []
 }
 
 const CPSC_ELECTIVES: DegreeRequirement = {
 	req_type_id: 1,
 	req_name: "ELECTIVE",
 	req_desc: "",
-	subreqs_required: 4,
-	subreqs_list: [CPSC_RANGE_ELECS, CPSC_SUB_ELEC]
+
+	courses_required_count: 4,
+	courses_satisfied_count: 0,
+
+	subreqs_list: [CPSC_SUB_ELEC, CPSC_RANGE_ELECS]
 }
 
 const CPSC_SENPROJ: DegreeSubrequirement = {
@@ -104,14 +111,17 @@ const CPSC_SENPROJ: DegreeSubrequirement = {
 	courses_options: [CPSC_490],
 	courses_elective_range: null,
 	courses_any_bool: false,
-	user_courses_satisfying: []
+	student_courses_satisfying: []
 }
 
 const CPSC_SENIOR: DegreeRequirement = {
 	req_type_id: 1,
 	req_name: "SENIOR",
 	req_desc: "",
-	subreqs_required: 1,
+
+	courses_required_count: 1,
+	courses_satisfied_count: 0,
+
 	subreqs_list: [CPSC_SENPROJ]
 }
 

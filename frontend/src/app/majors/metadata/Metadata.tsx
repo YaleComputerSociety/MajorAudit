@@ -86,7 +86,7 @@ function MetadataContent(props: {
 	programIndex: number, 
 }){
   return (
-    <div className={Style.majorContainer}>
+    <div className={Style.MajorContainer}>
       <MetadataTopshelf user={props.user} setUser={props.setUser} degreeMetadata={props.degreeMetadata} programIndex={props.programIndex}/>
 			<div style={{ marginLeft: "79px" }}>
 				<MetadataStats degreeMetadata={props.degreeMetadata}/>

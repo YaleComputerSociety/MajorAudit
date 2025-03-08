@@ -1,5 +1,5 @@
 
-import { Course } from "./type-user";
+import { Course, StudentCourse } from "./type-user";
 
 export interface StudentDegree {
 	status: string; 				// DA | ADD | PIN
@@ -49,11 +49,11 @@ export interface DegreeSubrequirement {
 	subreq_desc: string;
 
 	courses_required: number;
-	courses_options: Course[];
+	courses_options: (Course | null)[];
 	courses_elective_range: SubreqElectiveRange;
 	courses_any_bool: boolean;
 
-	user_courses_satisfying: Course[];
+	student_courses_satisfying: StudentCourse[];
 }
 
 export interface DegreeRequirement {
@@ -61,7 +61,9 @@ export interface DegreeRequirement {
 	req_name: string;
 	req_desc: string;
 	
-	subreqs_required: number;
+	courses_required_count: number;
+	courses_satisfied_count: number;
+	
 	subreqs_list: DegreeSubrequirement[];
 }
 

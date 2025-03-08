@@ -19,10 +19,10 @@
 .Divider {
 	border-right: 1px solid gray;
 
-	position: absolute;
-	top: 50px;
-	bottom: 50px;
+	margin-top: 50px;
+	margin-right: 25px;
+	margin-left: 25px;
 
-	width: 5px;
+	width: 1px;
 	height: calc(100% - 100px);
 }

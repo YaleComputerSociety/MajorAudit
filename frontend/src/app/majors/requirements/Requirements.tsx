@@ -6,32 +6,68 @@ import { User, Course } from "@/types/type-user";
 import { DegreeConfiguration, DegreeRequirement, DegreeSubrequirement } from "@/types/type-program";
 import { CourseIcon } from "@/components/course-icon/CourseIcon";
 
-function RenderSubrequirementCourse(props: { course: Course, subreq: DegreeSubrequirement; user: User }){
 
 
+function RenderSubrequirementCourse(props: { course: Course | null, subreq: DegreeSubrequirement; user: User }){
+
+	// TODO
+	
+	if(props.course === null){
+    return(
+      <div className={Style.EmptyCourse} style={{ marginRight: "2px" }}/>
+    );
+  }
+
+	const matchingStudentCourse = props.subreq.student_courses_satisfying.find(
+    (studentCourse) => studentCourse.course === props.course
+  );
 
 	return(
-		<div>
-			<CourseIcon course={props.course}/>
+		<div style={{ marginRight: "2px", marginBottom: "2px" }}>
+			<CourseIcon course={props.course} studentCourse={matchingStudentCourse}/>
 		</div>
 	)
 }
 
 function RenderSubrequirement(props: { subreq: DegreeSubrequirement, user: User })
 {
+  const [showAll, setShowAll] = useState(false);
+
+  // Extract non-null courses
+  const nonNullCourses = props.subreq.courses_options.filter((course) => course !== null) as Course[];
+  const satisfiedCourses = props.subreq.student_courses_satisfying.map((studentCourse) => studentCourse.course);
+
+  // Determine which courses to show based on satisfaction condition
+  const isSatisfied = props.subreq.student_courses_satisfying.length === props.subreq.courses_required;
+  const displayedCourses = showAll
+    ? nonNullCourses
+    : isSatisfied
+    ? satisfiedCourses
+    : nonNullCourses.slice(0, 4);
+
+		const extraCoursesCount = showAll ? 0 : nonNullCourses.length - displayedCourses.length;
+
 	return(
 		<div className={Style.Column} style={{ marginBottom: "12px" }}>
 			<div className={Style.SubHeader}>
-				{props.subreq.user_courses_satisfying.length}|{props.subreq.courses_required} {props.subreq.subreq_name} 
+				{props.subreq.student_courses_satisfying.length}|{props.subreq.courses_required} {props.subreq.subreq_name} 
 			</div>
-			<div className={Style.Row} style={{ marginLeft: "20px" }}>
-				{props.subreq.courses_options.map((course, index) => (
+			<div className={Style.SubDesc}>
+				{props.subreq.subreq_desc}
+			</div>
+			<div className={Style.Row} style={{ flexWrap: "wrap", marginLeft: "20px" }}>
+				{displayedCourses.map((course, index) => (
 					<div key={index}>
 						<RenderSubrequirementCourse course={course} subreq={props.subreq} user={props.user}/>
 					</div>
 				))}
+				{/* Show More / Show Less Button */}
+				{nonNullCourses.length > 4 && (
+					<div className={Style.ToggleButton} onClick={() => setShowAll(!showAll)}>
+						{showAll ? "<<" : ">>"}
+					</div>)
+				}
 			</div>
-
 		</div>
 	)
 }
@@ -46,7 +82,7 @@ function RenderRequirement(props: { req: DegreeRequirement, user: User })
 					{props.req.req_name}
 				</div>
 				<div className={Style.ReqHeader} style={{ marginRight: "20px" }}>
-					0|{props.req.subreqs_required}
+					{props.req.courses_satisfied_count}|{props.req.courses_required_count}
 				</div>
 			</div>
 			
@@ -91,7 +127,9 @@ function Requirements(props: { user: User, setUser: Function, degreeConfiguratio
           </div>
         </div>
       </div>
-      <RequirementsContent edit={edit} degreeConfiguration={props.degreeConfiguration} user={props.user} setUser={props.setUser} />
+			<div style={{ marginLeft: "10px" }}>
+				<RequirementsContent edit={edit} degreeConfiguration={props.degreeConfiguration} user={props.user} setUser={props.setUser} />
+			</div>
     </div>
   );
 }
