@@ -20,18 +20,11 @@ function RenderSubrequirementCourse(props: { course: Course, subreq: DegreeSubre
 function RenderSubrequirement(props: { subreq: DegreeSubrequirement, user: User })
 {
 	return(
-		<div className={Style.Column} style={{ marginLeft: "20px", marginBottom: "10px" }}>
-			
-			<div className={Style.Row} style={{ justifyContent: "space-between", marginRight: "40px" }}>
-				<div className={Style.SubHeader}>
-					{props.subreq.subreq_name} 
-				</div>
-				<div className={Style.SubHeader}>
-					{props.subreq.user_courses_satisfying.length}/{props.subreq.courses_required}
-				</div>
+		<div className={Style.Column} style={{ marginBottom: "12px" }}>
+			<div className={Style.SubHeader}>
+				{props.subreq.user_courses_satisfying.length}|{props.subreq.courses_required} {props.subreq.subreq_name} 
 			</div>
-			
-			<div className={Style.Row}>
+			<div className={Style.Row} style={{ marginLeft: "20px" }}>
 				{props.subreq.courses_options.map((course, index) => (
 					<div key={index}>
 						<RenderSubrequirementCourse course={course} subreq={props.subreq} user={props.user}/>
@@ -47,10 +40,17 @@ function RenderRequirement(props: { req: DegreeRequirement, user: User })
 {
 	return(
 		<div className={Style.Column}>
-			<div className={Style.ReqHeader}>
-				{props.req.req_name}
+			
+			<div className={Style.Row} style={{ marginBottom: "2px", justifyContent: "space-between" }}>
+				<div className={Style.ReqHeader}>
+					{props.req.req_name}
+				</div>
+				<div className={Style.ReqHeader} style={{ marginRight: "20px" }}>
+					0|{props.req.subreqs_required}
+				</div>
 			</div>
-			<div>
+			
+			<div style={{ marginLeft: "30px" }}>
 				{props.req.subreqs_list.map((subreq, index) => (
 					<RenderSubrequirement key={index} subreq={subreq} user={props.user}/>
 				))}		

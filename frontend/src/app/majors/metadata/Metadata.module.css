@@ -1,7 +1,22 @@
 
+.Column {
+	display: flex;
+	flex-direction: column;
+}
+
+.Row{
+	display: flex;
+	flex-direction: row;
+}
 
 .MetadataContainer{
+	/* border: 1px solid red; */
+
+	margin-top: 50px;
+	margin-right: 25px;
+
 	width: 600px;
+	height: 600px;
 }
 
 .countBox {
@@ -58,12 +73,10 @@
 }
 
 .majorContainer {
-  padding: 20px 20px 20px 0;
+
   width: auto;
   height: 400px;
   background-color: white;
-  margin-right: 10px;
-  /* border: 1px solid black; */
 }
 
 .thumbtack {

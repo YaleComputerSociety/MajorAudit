@@ -1,7 +1,9 @@
 
 .MajorsPage {
+	/* border: 1px solid blue; */
+
   position: absolute;
-	top: 75px;
+	top: 75px; 
 
   display: flex;
   flex-direction: row;
@@ -9,5 +11,18 @@
   justify-content: center;
 
 	width: 100%;
-  padding-top: 50px;
+	height: calc(100vh - 75px);
+
+  /* padding-top: 50px; */
+}
+
+.Divider {
+	border-right: 1px solid gray;
+
+	position: absolute;
+	top: 50px;
+	bottom: 50px;
+
+	width: 5px;
+	height: calc(100% - 100px);
 }

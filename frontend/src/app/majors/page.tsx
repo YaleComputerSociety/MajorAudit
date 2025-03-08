@@ -20,7 +20,7 @@ function Majors()
 
 	const allProgramMetadatas: DegreeMetadata[][] = ALL_PROGRAM_METADATAS;
 
-	const shiftProgramIndex = (dir: number) => {
+	const shiftProgramIndex: Function = (dir: number) => {
     setProgramIndex((programIndex + dir + allProgramMetadatas.length) % allProgramMetadatas.length);
   };
 
@@ -40,6 +40,7 @@ function Majors()
 					shiftProgramIndex={shiftProgramIndex}
 					peekProgram={peekProgram}
         />
+				<div className={Style.Divider}/>
         <Requirements
 					user={user}
 					setUser={setUser}

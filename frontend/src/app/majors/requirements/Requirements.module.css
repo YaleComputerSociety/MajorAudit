@@ -10,22 +10,31 @@
 }
 
 .RequirementsContainer {
-  padding: 20px;
-  border-radius: 25px;
-  width: 500px;
-  height: 500px;
-  min-width: 390px;
-  background-color: white;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	/* border: 1px solid green; */
+
+	margin-top: 25px;
+	margin-left: 25px;
+
+	width: 600px;
+	height: 650px;
+
+  /* min-width: 390px; */
+
+  /* background-color: white; */
+	/* padding: 20px; */
+  /* border-radius: 25px; */
+  /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); */
 }
 
 .ReqsList {
+	/* border: 1px solid orange; */
+/* 
   height: 430px;
   scrollbar-color: rgb(131, 131, 131) transparent;
   scrollbar-width: thin;
   overflow-y: scroll;
   padding-right: 7px;
-  overflow-x: hidden;
+  overflow-x: hidden; */
 }
 
 .ReqHeader {
