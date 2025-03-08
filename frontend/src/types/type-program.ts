@@ -1,6 +1,12 @@
 
 import { Course } from "./type-user";
 
+export interface StudentDegree {
+	status: string; 				// DA | ADD | PIN
+	programIndex: number;
+	degreeIndex: number;
+}
+
 interface DUS {
 	name: string;
 	address: string;
@@ -26,47 +32,52 @@ export interface DegreeMetadata {
 	wesbiteLink: string;
 }
 
-
-
-
-
-
-
 // \BEGIN{MAJOR MAGIC}
 
-export interface Range {
-	department: string;
+export interface ElectiveRange {
+	dept: string;
 	min_code: number;
 	max_code: number;
 }
 
-export interface TypeOneSubrequirement {
-	requirement_name: string;
-	requirement_description: string;
-	must_choose_n_courses: number;
-	courses: Course[];
-	elective_range?: Range;
-	any?: boolean;
+export type SubreqElectiveRange = ElectiveRange| null;
+
+// subreq: 1 | set options
+export interface DegreeSubrequirement {
+	subreq_type_id: number;
+	subreq_name: string;
+	subreq_desc: string;
+
+	courses_required: number;
+	courses_options: Course[];
+	courses_elective_range: SubreqElectiveRange;
+	courses_any_bool: boolean;
+
+	user_courses_satisfying: Course[];
 }
 
-export interface TypeOneRequirement {
-	requirement_name: string;
-	requirement_description: string;
-	must_choose_n_subrequirements: number;
-	subrequirements: TypeOneSubrequirement[];
+export interface DegreeRequirement {
+	req_type_id: number;
+	req_name: string;
+	req_desc: string;
+	
+	subreqs_required: number;
+	subreqs_list: DegreeSubrequirement[];
 }
 
-// export interface TypeTwoRequirement {
-// 	requirement_name: string;
-// 	requirement_description: string;
-// 	checkbox_boolean: boolean;
+// export interface DegreeRequirementTypeTwo {
+// 	req_type_id: number;
+// 	req_name: string;
+// 	req_desc: string;
+
+// 	checkbox_bool: boolean;
+// 	user_courses_satisfying: Course[];
 // }
 
-
-// export type DegreeRequirement = TypeOneRequirement | TypeTwoRequirement;
+// export type DegreeRequirement = DegreeRequirementTypeOne | DegreeRequirementTypeTwo;
 
 export interface DegreeConfiguration {
-  degreeRequirements: TypeOneRequirement[];
+  reqs_list: DegreeRequirement[];
 }
 
 export interface Degree {
@@ -75,9 +86,3 @@ export interface Degree {
 }
 
 // \END{MAJOR MAGIC}
-
-export interface StudentDegree {
-	status: string; 				// DA | ADD | PIN
-	programIndex: number;
-	degreeIndex: number;
-}

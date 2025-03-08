@@ -8,10 +8,6 @@ import { RenderMark, GetCourseColor } from "@/utils/CourseDisplay";
 import DistributionCircle from "../distribution-circle/DistributionsCircle";
 
 
-
-// import { useModal } from "../../../hooks/modalContext";
-// import "react-tooltip/dist/react-tooltip.css";
-
 function CourseSeasonIcon(props: { seasons: Array<string> }) {
   const seasonImageMap: { [key: string]: string } = {
     "Fall":  "./fall.svg",
@@ -34,6 +30,7 @@ function CourseSeasonIcon(props: { seasons: Array<string> }) {
     </div>
   );
 }
+
 
 function DistCircDiv(props: { dist: string[] }) 
 {
@@ -71,8 +68,14 @@ export function StudentCourseIcon(props: { studentCourse: StudentCourse, utility
 }
 
 
-export function CourseIcon(props: { course: Course }){
+export function CourseIcon(props: { course: Course, studentCourse?: StudentCourse }){
   
+	if(props.studentCourse){
+		return(
+			<StudentCourseIcon studentCourse={props.studentCourse} />
+		);
+	}
+
   return(
     <div className={styles.CourseIcon} style={{ backgroundColor: "F5F5F5" }}>
       <CourseSeasonIcon seasons={props.course.seasons || []} />

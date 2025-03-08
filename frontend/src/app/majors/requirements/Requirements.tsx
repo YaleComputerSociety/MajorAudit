@@ -2,64 +2,77 @@
 import { useState } from "react";
 import Style from "./Requirements.module.css";
 
-import { User } from "@/types/type-user";
-import { DegreeConfiguration, TypeOneRequirement, TypeOneSubrequirement } from "@/types/type-program";
+import { User, Course } from "@/types/type-user";
+import { DegreeConfiguration, DegreeRequirement, DegreeSubrequirement } from "@/types/type-program";
 import { CourseIcon } from "@/components/course-icon/CourseIcon";
 
+function RenderSubrequirementCourse(props: { course: Course, subreq: DegreeSubrequirement; user: User }){
 
 
-// import AddableCourse from "./icons/AddableCourse";
-// import RemovableCourse from "./icons/RemovableCourse";
-// import { addCourseToSubsection, removeCourseFromSubsection, resetDegree } from "./RequirementsUtils";
 
-function RenderSubrequirement(props: { subrequirement: TypeOneSubrequirement }){
 	return(
-		<div className={Style.Column} style={{ marginLeft: "20px", marginBottom: "10px" }}>
-			<div className={Style.SubHeader}>
-				{props.subrequirement.requirement_name}
-			</div>
-			<div className={Style.Row}>
-				{props.subrequirement.courses.map((course, index) => (
-					<div key={index}>
-						<CourseIcon course={course}/>
-					</div>
-				))}
-			</div>
+		<div>
+			<CourseIcon course={props.course}/>
 		</div>
 	)
 }
 
-function RenderRequirement(props: { requirement: TypeOneRequirement }){
+function RenderSubrequirement(props: { subreq: DegreeSubrequirement, user: User })
+{
+	return(
+		<div className={Style.Column} style={{ marginLeft: "20px", marginBottom: "10px" }}>
+			
+			<div className={Style.Row} style={{ justifyContent: "space-between", marginRight: "40px" }}>
+				<div className={Style.SubHeader}>
+					{props.subreq.subreq_name} 
+				</div>
+				<div className={Style.SubHeader}>
+					{props.subreq.user_courses_satisfying.length}/{props.subreq.courses_required}
+				</div>
+			</div>
+			
+			<div className={Style.Row}>
+				{props.subreq.courses_options.map((course, index) => (
+					<div key={index}>
+						<RenderSubrequirementCourse course={course} subreq={props.subreq} user={props.user}/>
+					</div>
+				))}
+			</div>
+
+		</div>
+	)
+}
+
+function RenderRequirement(props: { req: DegreeRequirement, user: User })
+{
 	return(
 		<div className={Style.Column}>
 			<div className={Style.ReqHeader}>
-				{props.requirement.requirement_name}
+				{props.req.req_name}
 			</div>
 			<div>
-				{props.requirement.subrequirements.map((subrequirement, index) => (
-					<RenderSubrequirement key={index} subrequirement={subrequirement}/>
+				{props.req.subreqs_list.map((subreq, index) => (
+					<RenderSubrequirement key={index} subreq={subreq} user={props.user}/>
 				))}		
 			</div>		
 		</div>
 	)
 }
 
-function RequirementsContent(props: { edit: boolean, degreeConfiguration: DegreeConfiguration, user: User, setUser: Function }){
+function RequirementsContent(props: { edit: boolean, degreeConfiguration: DegreeConfiguration, user: User, setUser: Function })
+{
 
   return(
     <div className={Style.ReqsList}>
-			{props.degreeConfiguration.degreeRequirements.map((requirement, index) => (
-				<RenderRequirement key={index} requirement={requirement}/>
+			{props.degreeConfiguration.reqs_list.map((req, index) => (
+				<RenderRequirement key={index} req={req} user={props.user}/>
 			))}
     </div>
   );
 }
 
-function Requirements(props: { 
-	user: User, 
-	setUser: Function, 
-	degreeConfiguration: DegreeConfiguration 
-}){
+function Requirements(props: { user: User, setUser: Function, degreeConfiguration: DegreeConfiguration })
+{
   
 	const [edit, setEdit] = useState(false);
   const updateEdit = () => {
