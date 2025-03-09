@@ -63,7 +63,11 @@ export interface DegreeRequirement {
 	
 	courses_required_count: number;
 	courses_satisfied_count: number;
-	
+
+	subreqs_required_count?: number;
+	subreqs_satisfied_count?: number;
+
+	checkbox?: boolean;
 	subreqs_list: DegreeSubrequirement[];
 }
 

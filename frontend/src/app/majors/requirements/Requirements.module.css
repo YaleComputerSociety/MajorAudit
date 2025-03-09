@@ -58,11 +58,11 @@
 
 .EmptyCourse {
   border-radius: 15px;
-  padding: 2px 2px;
-  background-color: #e7e7e7c3;
+  /* padding: 2px 2px; e7e7e7c3 */
+  background-color: #F5F5F5; 
   transition: filter 0.4s ease;
-  width: 15px; /* Adjust width to match CourseIcon */
-  height: 15px; /* Adjust height to match CourseIcon */
+  width: 24px; /* Adjust width to match CourseIcon */
+  height: 24px; /* Adjust height to match CourseIcon */
   display: inline-block; /* Keeps it inline with other elements */
 }
 
@@ -109,4 +109,29 @@
 
 .resetButton:active, .editButton:active {
   color: #333; /* Darker color on click */
+}
+
+
+
+
+.ButtonRow {
+  display: flex;
+  gap: 6px;
+	margin-bottom: 2px;
+}
+
+.SubreqButton {
+	font-size: 10px;
+	padding: 3px;
+
+  cursor: pointer;
+  border-radius: 6px;
+
+  background-color: rgb(211, 211, 211);
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.SubreqButton.Selected {
+  background-color: rgb(100, 178, 238);
 }

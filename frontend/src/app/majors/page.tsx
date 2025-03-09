@@ -44,6 +44,7 @@ function Majors()
         <Requirements
 					user={user}
 					setUser={setUser}
+					programIndex={programIndex}
           degreeConfiguration={user.FYP.degreeConfigurations[programIndex][0]}
         />
       </div>
