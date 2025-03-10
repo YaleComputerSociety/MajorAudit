@@ -5,11 +5,11 @@ import Style from "./Requirements.module.css";
 import { useAuth } from "@/app/providers";
 
 import { User, Course } from "@/types/type-user";
-import { DegreeConfiguration, DegreeRequirement, DegreeSubrequirement } from "@/types/type-program";
+import { ConcentrationSubrequirement, ConcentrationRequirement, DegreeConcentration } from "@/types/type-program";
 import { CourseIcon } from "@/components/course-icon/CourseIcon";
 
 
-function RenderSubrequirementCourse(props: { course: Course | null, subreq: DegreeSubrequirement; user: User }){
+function RenderSubrequirementCourse(props: { course: Course | null, subreq: ConcentrationSubrequirement; user: User }){
 
 	// TODO
 	
@@ -30,7 +30,7 @@ function RenderSubrequirementCourse(props: { course: Course | null, subreq: Degr
 	)
 }
 
-function RenderSubrequirement(props: { subreq: DegreeSubrequirement; user: User }) {
+function RenderSubrequirement(props: { subreq: ConcentrationSubrequirement; user: User }) {
   const [showAll, setShowAll] = useState(false);
 
   // Separate null and non-null courses
@@ -74,61 +74,67 @@ function RenderSubrequirement(props: { subreq: DegreeSubrequirement; user: User 
   );
 }
 
-function RenderRequirement(props: { programIndex: number, req: DegreeRequirement; user: User }){
+function RenderRequirement(props: { req: ConcentrationRequirement }){
 
-	const { user, setUser } = useAuth();
-  const { req, programIndex } = props;
-  const { subreqs_list, subreqs_required_count } = req;
+	// const { user, setUser } = useAuth();
+  // const { req, programIndex, degreeIndex } = props;
+  const { subreqs_list, subreqs_required_count } = props.req;
 
-  // Get the correct degree configuration (assumes only one degree per program)
-  const degreeConfig = user.FYP.degreeConfigurations[programIndex][0];
+  // // Get the correct degree configuration (assumes only one degree per program)
+  // const degreeConfig = user.FYP.degreeConfigurations[programIndex][0];
 
   // Find the corresponding requirement in `degreeConfig`
-  const requirement = degreeConfig.reqs_list.find((r: DegreeRequirement) => r.req_name === req.req_name);
+  // const requirement = degreeConfig[0].reqs_list.find((r: DegreeRequirement) => r.req_name === req.req_name);
 
-  if (!requirement) return null; // Fail-safe, shouldn't happen
+  // if (!requirement) return null; // Fail-safe, shouldn't happen
 
   // Move clicked subreq to the front if it's beyond the first `subreqs_required_count`
-  const handleSubreqClick = (subreq: DegreeSubrequirement) => {
-    if (!subreqs_required_count) return; // Ignore clicks if not applicable
+  // const handleSubreqClick = (subreq: DegreeSubrequirement) => {
+  //   if (!subreqs_required_count) return; // Ignore clicks if not applicable
 
-    setUser((prevUser: User) => {
-      const newUser = { ...prevUser };
+  //   setUser((prevUser: User) => {
+  //     const newUser = { ...prevUser };
 
-      // Get the degree and requirement again inside state update
-      const updatedDegree = newUser.FYP.degreeConfigurations[programIndex][0];
-      const updatedRequirement = updatedDegree.reqs_list.find((r) => r.req_name === req.req_name);
+  //     // Get the degree and requirement again inside state update
+  //     const updatedDegree = newUser.FYP.degreeConfigurations[programIndex][degreeIndex];
+  //     const updatedRequirement = updatedDegree[0].reqs_list.find((r) => r.req_name === req.req_name); // FIXXX
 
-      if (!updatedRequirement) return prevUser; // Failsafe
+  //     if (!updatedRequirement) return prevUser; // Failsafe
 
-      const updatedSubreqs = [...updatedRequirement.subreqs_list];
-      const index = updatedSubreqs.findIndex((s) => s.subreq_name === subreq.subreq_name);
+  //     const updatedSubreqs = [...updatedRequirement.subreqs_list];
+  //     const index = updatedSubreqs.findIndex((s) => s.subreq_name === subreq.subreq_name);
 
-      if (index >= subreqs_required_count) {
-        // Move it to the front
-        updatedSubreqs.splice(index, 1);
-        updatedSubreqs.unshift(subreq);
-      }
+  //     if (index >= subreqs_required_count) {
+  //       // Move it to the front
+  //       updatedSubreqs.splice(index, 1);
+  //       updatedSubreqs.unshift(subreq);
+  //     }
 
-      // Update the requirement's subreqs_list in user state
-      updatedRequirement.subreqs_list = updatedSubreqs;
+  //     // Update the requirement's subreqs_list in user state
+  //     updatedRequirement.subreqs_list = updatedSubreqs;
 
-      return newUser;
-    });
-  };
+  //     return newUser;
+  //   });
+  // };
 
 
   return (
     <div className={Style.Column}>
       <div className={Style.Row} style={{ marginBottom: "2px", justifyContent: "space-between" }}>
-        <div className={Style.ReqHeader}>{props.req.req_name}</div>
+        <div className={Style.ReqHeader}>
+					{props.req.req_name}
+				</div>
         <div className={Style.ReqHeader} style={{ marginRight: "20px" }}>
           {props.req.checkbox !== undefined ? props.req.courses_satisfied_count === props.req.courses_required_count ? "✅" : "❌" : `${props.req.courses_satisfied_count}|${props.req.courses_required_count}`}
         </div>
       </div>
 
+			<div className={Style.SubDesc} style={{ marginBottom: "4px" }}>
+					{props.req.req_desc}
+			</div>
+
 			{/* Subreq Toggle Buttons - Only show if subreqs_required_count exists and < total subreqs */}
-      {subreqs_required_count && subreqs_list.length > subreqs_required_count && (
+      {/* {subreqs_required_count && subreqs_list.length > subreqs_required_count && (
         <div className={Style.ButtonRow}>
           {subreqs_list.map((subreq, index) => (
             <div key={subreq.subreq_name} className={`${Style.SubreqButton} ${index < subreqs_required_count ? Style.Selected : ""}`} onClick={() => handleSubreqClick(subreq)}>
@@ -136,7 +142,7 @@ function RenderRequirement(props: { programIndex: number, req: DegreeRequirement
             </div>
           ))}
         </div>
-      )}
+      )} */}
 
       {/* Display Selected Subreqs - Enforce subreqs_required_count if present */}
       <div style={{ marginLeft: "30px" }}>
@@ -153,25 +159,26 @@ function RenderRequirement(props: { programIndex: number, req: DegreeRequirement
 }
 
 
-function RequirementsContent(props: { edit: boolean, programIndex: number, degreeConfiguration: DegreeConfiguration, user: User, setUser: Function })
+// function RequirementsContent(props: { edit: boolean, programIndex: number, degreeIndex: number, degreeConfiguration: DegreeConfiguration, user: User, setUser: Function })
+function RequirementsContent(props: { conc: DegreeConcentration })
 {
 
   return(
     <div className={Style.ReqsList}>
-			{props.degreeConfiguration.reqs_list.map((req, index) => (
-				<RenderRequirement key={index} req={req} programIndex={props.programIndex} user={props.user}/>
+			{props.conc.conc_reqs.map((req, index) => (
+				<RenderRequirement key={index} req={req}/>
 			))}
     </div>
   );
 }
 
-function Requirements(props: { user: User, setUser: Function, programIndex: number, degreeConfiguration: DegreeConfiguration })
+// function Requirements(props: { user: User, setUser: Function, programIndex: number, degreeIndex: number, degreeConfiguration: DegreeConfiguration })
+function Requirements(props: { conc: DegreeConcentration })
 {
-  
-	const [edit, setEdit] = useState(false);
-  const updateEdit = () => {
-    setEdit(!edit);
-  };
+	// const [edit, setEdit] = useState(false);
+  // const updateEdit = () => {
+  //   setEdit(!edit);
+  // };
 
   return(
     <div className={Style.RequirementsContainer}>
@@ -180,13 +187,15 @@ function Requirements(props: { user: User, setUser: Function, programIndex: numb
           Requirements
         </div>
         <div className={Style.ButtonRow}>
-          <div onClick={updateEdit} className={Style.editButton} style={{ fontSize: "30px" }}>
+					{/* <div onClick={updateEdit} className={Style.editButton} style={{ fontSize: "30px" }}> */}
+          <div className={Style.editButton} style={{ fontSize: "30px" }}>
             ⚙
           </div>
         </div>
       </div>
 			<div style={{ marginLeft: "10px" }}>
-				<RequirementsContent edit={edit} programIndex={props.programIndex} degreeConfiguration={props.degreeConfiguration} user={props.user} setUser={props.setUser} />
+				{/* <RequirementsContent edit={edit} programIndex={props.programIndex} degreeIndex={props.degreeIndex} degreeConfiguration={props.degreeConfiguration} user={props.user} setUser={props.setUser} /> */}
+				<RequirementsContent conc={props.conc}/>
 			</div>
     </div>
   );

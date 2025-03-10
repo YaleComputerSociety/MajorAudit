@@ -3,7 +3,7 @@ import Style from "./Pinned.module.css";
 
 import { User } from "@/types/type-user";
 import { StudentDegree } from "@/types/type-program";
-import { ALL_PROGRAM_METADATAS } from "@/database/data-degree";
+import { ALL_PROGRAM_METADATAS } from "@/database/programs/metas/meta-econ";
 
 function DegreeIcon(props: { studentDegree: StudentDegree, setProgramIndex: Function }) {
   const mark = (status: string) => {

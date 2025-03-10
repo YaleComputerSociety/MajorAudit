@@ -93,3 +93,37 @@
 .thumbtack:active {
   opacity: 0.5; /* Even lighter on click */
 }
+
+
+.ScrollButton {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  display: inline-block;
+}
+
+.ToggleContainer {
+  display: flex;
+	flex-direction: row;
+
+	margin-left: 80px;
+	margin-bottom: 8px;
+}
+
+.ToggleOption {
+	padding: 4px 10px;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 5px;
+
+	border: 1px solid rgb(196, 196, 196);
+	
+}
+
+.ToggleOption.active {
+  background-color: #598ff4;
+  color: white;
+}

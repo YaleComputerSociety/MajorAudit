@@ -7,33 +7,6 @@ export interface StudentDegree {
 	degreeIndex: number;
 }
 
-interface DUS {
-	name: string;
-	address: string;
-	email: string;
-}
-
-interface DegreeMetadataStats {
-	courses: number;
-	rating: number;
-	workload: number;
-	type: string;
-}
-
-export interface DegreeMetadata {
-	name: string;
-	abbr: string;
-	degreeType: string;
-	stats: DegreeMetadataStats;
-	students: number;
-	about: string;
-	dus: DUS;
-	catologLink: string;
-	wesbiteLink: string;
-}
-
-// \BEGIN{MAJOR MAGIC}
-
 export interface ElectiveRange {
 	dept: string;
 	min_code: number;
@@ -42,9 +15,7 @@ export interface ElectiveRange {
 
 export type SubreqElectiveRange = ElectiveRange| null;
 
-// subreq: 1 | set options
-export interface DegreeSubrequirement {
-	subreq_type_id: number;
+export interface ConcentrationSubrequirement {
 	subreq_name: string;
 	subreq_desc: string;
 
@@ -56,8 +27,7 @@ export interface DegreeSubrequirement {
 	student_courses_satisfying: StudentCourse[];
 }
 
-export interface DegreeRequirement {
-	req_type_id: number;
+export interface ConcentrationRequirement {
 	req_name: string;
 	req_desc: string;
 	
@@ -68,27 +38,36 @@ export interface DegreeRequirement {
 	subreqs_satisfied_count?: number;
 
 	checkbox?: boolean;
-	subreqs_list: DegreeSubrequirement[];
+	subreqs_list: ConcentrationSubrequirement[];
 }
 
-// export interface DegreeRequirementTypeTwo {
-// 	req_type_id: number;
-// 	req_name: string;
-// 	req_desc: string;
-
-// 	checkbox_bool: boolean;
-// 	user_courses_satisfying: Course[];
-// }
-
-// export type DegreeRequirement = DegreeRequirementTypeOne | DegreeRequirementTypeTwo;
-
-export interface DegreeConfiguration {
-  reqs_list: DegreeRequirement[];
+export interface DegreeConcentration {
+	conc_name: string;
+	conc_desc: string;
+  conc_reqs: ConcentrationRequirement[];
 }
 
-export interface Degree {
-	metadata: DegreeMetadata;
-	configuration: DegreeConfiguration;
+export interface ProgramDegree {
+	deg_type: string;
+	deg_concs: DegreeConcentration[];
 }
 
-// \END{MAJOR MAGIC}
+interface ProgDUS {
+	dus_name: string;
+	dus_email: string;
+	dus_address: string; 
+}
+
+interface ProgramMetadata {
+	prog_name: string;
+	prog_abbr: string;
+	prog_stud_count: number;
+	prog_dus: ProgDUS;
+	prog_catolog: string;
+	prog_website: string;
+}
+
+export interface Program {
+	prog_data: ProgramMetadata;
+	prog_degs: ProgramDegree[];
+}

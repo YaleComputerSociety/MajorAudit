@@ -3,9 +3,6 @@
 import { useState } from "react";
 import { useAuth } from "../providers";
 
-import { DegreeMetadata } from "@/types/type-program";
-import { ALL_PROGRAM_METADATAS } from "@/database/data-degree";
-
 import Style from "./Majors.module.css";
 import NavBar from "@/components/navbar/NavBar";
 import Overhead from "./overhead/Overhead";
@@ -15,37 +12,31 @@ import Requirements from "./requirements/Requirements";
 function Majors()
 {
 	const { user, setUser } = useAuth();
+	const { programs } = user.FYP.programs;
 
-  const [programIndex, setProgramIndex] = useState(0);
+	const [index, setIndex]  = useState({ conc: 0, deg: 0, prog: 0});
+  const updateIndex: Function = (index: { conc: number, deg: number, prog: number}) => {
+		setIndex(index)
+	};
 
-	const allProgramMetadatas: DegreeMetadata[][] = ALL_PROGRAM_METADATAS;
-
-	const shiftProgramIndex: Function = (dir: number) => {
-    setProgramIndex((programIndex + dir + allProgramMetadatas.length) % allProgramMetadatas.length);
-  };
-
-  const peekProgram = (dir: number) => {
-    return allProgramMetadatas[(programIndex + dir + allProgramMetadatas.length) % allProgramMetadatas.length][0];
+	const peekProgram = (dir: number) => {
+    return programs[(index.prog + dir + programs.length) % programs.length];
   };
 
   return(
     <div>
-      <NavBar utility={<Overhead user={user} setProgramIndex={setProgramIndex}/>}/>
+			{/* utility={<Overhead user={user} setProgramIndex={updateProgramIndex}/>} */}
+      <NavBar/>
       <div className={Style.MajorsPage}>
         <Metadata
-					user={user} 
-					setUser={setUser}
-          programMetadatas={allProgramMetadatas[programIndex]}
-					programIndex={programIndex}
-					shiftProgramIndex={shiftProgramIndex}
+          program={programs[index.prog]}
+					index={index}
+					setIndex={updateIndex}
 					peekProgram={peekProgram}
         />
 				<div className={Style.Divider}/>
         <Requirements
-					user={user}
-					setUser={setUser}
-					programIndex={programIndex}
-          degreeConfiguration={user.FYP.degreeConfigurations[programIndex][0]}
+					conc={programs[index.prog][index.deg][index.conc]}
         />
       </div>
     </div>

@@ -1,10 +1,6 @@
 
 import { User } from "./../types/type-user";
-
-import { CPSC_CONFIG } from "./configs/data-cpsc";
-import { ECON_CONFIG } from "./configs/data-econ";
-import { HIST_CONFIG } from "./configs/data-hist";
-import { PLSC_CONFIG } from "./configs/data-plsc";
+import { PROG_CPSC } from "./programs/data-program";
 
 export const Ryan: User = {
 	name: "Ryan",
@@ -19,38 +15,33 @@ export const Ryan: User = {
 			senior: [0, 202703, 202801],
 		},
 		languagePlacement: { language: "Spanish", level: 5 },
-		degreeDeclarations: [],
-		degreeConfigurations: [
-			[HIST_CONFIG],
-			[CPSC_CONFIG],
-			[PLSC_CONFIG],
-			[ECON_CONFIG]
-		],
+		programs: [PROG_CPSC],
+		declarations: [],
 	}
 }
 
-export const NullUser: User = {
-	name: "",
-	netID: "",
-	onboard: false,
-	FYP: {
-		studentCourses: [],
-		studentTermArrangement: {
-			first_year: [],
-			sophomore: [],
-			junior: [],
-			senior: [],
-		},
-		languagePlacement: { language: "", level: 0 },
-		degreeDeclarations: [],
-		degreeConfigurations: [
-			[],
-			[],
-			[],
-			[]
-		],
-	}
-}
+// export const NullUser: User = {
+// 	name: "",
+// 	netID: "",
+// 	onboard: false,
+// 	FYP: {
+// 		studentCourses: [],
+// 		studentTermArrangement: {
+// 			first_year: [],
+// 			sophomore: [],
+// 			junior: [],
+// 			senior: [],
+// 		},
+// 		languagePlacement: { language: "", level: 0 },
+// 		degreeDeclarations: [],
+// 		degreeConfigurations: [
+// 			[],
+// 			[],
+// 			[],
+// 			[]
+// 		],
+// 	}
+// }
 
 
 

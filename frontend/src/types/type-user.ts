@@ -1,5 +1,5 @@
 
-import { DegreeConfiguration, StudentDegree } from "./type-program";
+import { Program, StudentDegree } from "./type-program";
 
 export interface LanguagePlacement {
 	language: string;
@@ -42,8 +42,8 @@ export interface FYP {
 	languagePlacement: LanguagePlacement;
 	studentCourses: StudentCourse[];
 	studentTermArrangement: StudentTermArrangement;
-	degreeConfigurations: DegreeConfiguration[][];
-	degreeDeclarations: StudentDegree[];
+	programs: Program[];
+	declarations: StudentDegree[];
 }
 
 export interface User {
