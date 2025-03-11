@@ -3,129 +3,129 @@ import { useState, useEffect } from "react";
 import Link from 'next/link';
 
 import { User } from "@/types/type-user";
-import { Program } from "@/types/type-program";
+import { MajorsIndex, Program } from "@/types/type-program";
 import { pinProgram, addProgram } from "./MetadataUtils";
 
 import Style from "./Metadata.module.css";
 
-function MetadataTopshelf(props: { 
-	user: User, 
-	setUser: Function, 
-	programIndex: number, 
-	degreeMetadata: DegreeMetadata 
-}) {
+function MetadataTopshelf(props: { program: Program }) 
+{
   return (
     <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-      <div className={Style.thumbtack} onClick={() => pinProgram(props.programIndex, 0, props.user, props.setUser)}>
+      {/* <div className={Style.thumbtack} onClick={() => pinProgram(props.programIndex, 0, props.user, props.setUser)}>
         <img src="./illegal_pin.png" alt="" style={{ width: "30px" }}/>
       </div>
       <div className={Style.thumbtack} onClick={() => addProgram(props.programIndex, 0, props.user, props.setUser)}>
         <img src="./plus.png" alt="" style={{ width: "30px" }}/>
-      </div>
+      </div> */}
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>{props.degreeMetadata.name}</div>
+          <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>
+						{props.program.prog_data.prog_name}
+					</div>
           <img src="./little_guys.png" alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }} />
           <div className={Style.countBox} style={{ marginRight: "10px", marginTop: "4px" }}>
-						{props.degreeMetadata.info.students}
+						{props.program.prog_data.prog_stud_count}
 					</div>
           <div className={Style.pinkMajorBox} style={{ fontSize: "16px", marginTop: "2px" }}>
 						MAJOR
 					</div>
         </div>
         <div>
-					{props.degreeMetadata.abbr}
+					{props.program.prog_data.prog_abbr}
 				</div>
       </div>
     </div>
   );
 }
 
-function MetadataStats(props: { concMetadata: ConcMetadata }){
-  return(
-    <div style={{ color: "grey", marginBottom: "12px" }}>
-      <div className={Style.subsectionHeader} style={{ marginBottom: "4px" }}>
-				STATS
-			</div>
-      <div style={{ display: "flex" }}>
-        <div style={{ marginRight: "15px" }}>
-          <div style={{ fontSize: "12px" }}>
-						COURSES
-					</div>
-          <div className={Style.countBox}>
-						{props.concMetadata.stats.courses}
-					</div>
-        </div>
-        <div style={{ marginRight: "15px" }}>
-          <div style={{ fontSize: "12px" }}>
-						RATING
-					</div>
-          <div className={Style.evaluateBox}>{props.concMetadata.stats.rating}</div>
-        </div>
-        <div style={{ marginRight: "15px" }}>
-          <div style={{ fontSize: "12px" }}>
-						WORKLOAD
-					</div>
-          <div className={Style.evaluateBox}>{props.concMetadata.stats.workload}</div>
-        </div>
-        <div>
-          <div style={{ fontSize: "12px" }}>
-						TYPE
-					</div>
-          <div className={Style.countBox}>{props.concMetadata.stats.type}</div>
-        </div>
-      </div>
-    </div>
-  );
-}
+// function MetadataStats(props: { concMetadata: ConcMetadata }){
+//   return(
+//     <div style={{ color: "grey", marginBottom: "12px" }}>
+//       <div className={Style.subsectionHeader} style={{ marginBottom: "4px" }}>
+// 				STATS
+// 			</div>
+//       <div style={{ display: "flex" }}>
+//         <div style={{ marginRight: "15px" }}>
+//           <div style={{ fontSize: "12px" }}>
+// 						COURSES
+// 					</div>
+//           <div className={Style.countBox}>
+// 						{props.concMetadata.stats.courses}
+// 					</div>
+//         </div>
+//         <div style={{ marginRight: "15px" }}>
+//           <div style={{ fontSize: "12px" }}>
+// 						RATING
+// 					</div>
+//           <div className={Style.evaluateBox}>{props.concMetadata.stats.rating}</div>
+//         </div>
+//         <div style={{ marginRight: "15px" }}>
+//           <div style={{ fontSize: "12px" }}>
+// 						WORKLOAD
+// 					</div>
+//           <div className={Style.evaluateBox}>{props.concMetadata.stats.workload}</div>
+//         </div>
+//         <div>
+//           <div style={{ fontSize: "12px" }}>
+// 						TYPE
+// 					</div>
+//           <div className={Style.countBox}>{props.concMetadata.stats.type}</div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
-function MetadataBody(props: { concIndex: number, degreeMetadata: DegreeMetadata }){
-
-	const { concIndex, degreeMetadata } = props;
+function MetadataBody(props: { program: Program, index: MajorsIndex }){
 
 	return(
 		<div style={{ marginLeft: "80px" }}>
-			<MetadataStats concMetadata={degreeMetadata.concs[concIndex]}/>
+			{/* <MetadataStats concMetadata={degreeMetadata.concs[concIndex]}/> */}
 			<div className={Style.subsectionHeader}>
 				ABOUT
 			</div>
 			<div style={{ fontSize: "12px", marginBottom: "12px" }}>
-				{degreeMetadata.concs[concIndex].about}
+				{props.program.prog_degs[props.index.deg].deg_concs[props.index.conc].conc_desc}
 			</div>
 			<div className={Style.subsectionHeader}>
 				DUS
 			</div>
 			<div style={{ fontSize: "12px", marginBottom: "12px" }}>
-				{degreeMetadata.info.dus.name}; {degreeMetadata.info.dus.address}
+				{props.program.prog_data.prog_dus.dus_name}; {props.program.prog_data.prog_dus.dus_email}
 			</div>
 			<div style={{ display: "flex" }}>
-				<div className={Style.linkBox}><Link className={Style.link} href={degreeMetadata.info.catologLink} target="_blank">MAJOR CATALOG</Link></div>
-				<div className={Style.linkBox}><Link className={Style.link} href={degreeMetadata.info.wesbiteLink} target="_blank">MAJOR WEBSITE</Link></div>
+				<div className={Style.linkBox}><Link className={Style.link} href={props.program.prog_data.prog_catolog} target="_blank">MAJOR CATALOG</Link></div>
+				<div className={Style.linkBox}><Link className={Style.link} href={props.program.prog_data.prog_website} target="_blank">MAJOR WEBSITE</Link></div>
 			</div>
 		</div>
 	);
 }
 
-function MetadataToggle(props: { degreeMetadatas: DegreeMetadata[], degreeIndex: number, setDegreeIndex: Function, concIndex: number, setConcIndex: Function }){
-	// TODO
-	// If the currently selected degreeMetadata's concs attribute has length greater than 1, then 
-	// display an additional set of identical toggle buttons below the current set where
-	// each divs content is now conc.conc_name and clicking on one calls setConcIndex for the newly clicked one.
-
+function MetadataToggle(props: { program: Program, index: MajorsIndex, setIndex: Function })
+{
 	return (
 		<div className={Style.Column}>
 			<div className={Style.ToggleContainer}>
-				{props.degreeMetadatas.map((metadata, index) => (
-					<div key={index} className={`${Style.ToggleOption} ${props.degreeIndex === index ? Style.active : ""}`} onClick={() => props.setDegreeIndex(index)}>
-						{metadata.degreeType}
+				{props.program.prog_degs.map((deg, index) => (
+					<div 
+						key={index} 
+						className={`${Style.ToggleOption} ${props.index.deg === index ? Style.active : ""}`} 
+						onClick={() => props.setIndex({ prog: props.index.prog, deg: index, conc: props.index.conc })}
+					>
+						{deg.deg_type}
 					</div>
 				))}
 			</div>
 
-			{props.degreeMetadatas[props.degreeIndex].concs.length > 1 && (
+			{props.program.prog_degs[props.index.deg].deg_concs.length > 1 && (
 				<div className={Style.ToggleContainer}>
-					{props.degreeMetadatas[props.degreeIndex].concs.map((conc, index) => (
-						<div key={index} className={`${Style.ToggleOption} ${props.concIndex === index ? Style.active : ""}`} onClick={() => props.setConcIndex(index)}>
+					{props.program.prog_degs[props.index.deg].deg_concs.map((conc, index) => (
+						<div 
+							key={index} 
+							className={`${Style.ToggleOption} ${props.index.conc === index ? Style.active : ""}`} 
+							onClick={() => props.setIndex({ prog: props.index.prog, deg: props.index.deg, conc: index })}
+						>
 							{conc.conc_name}
 						</div>
 					))}
@@ -136,42 +136,28 @@ function MetadataToggle(props: { degreeMetadatas: DegreeMetadata[], degreeIndex:
 	);
 }
 
-function MetadataContent(props: { 
-	user: User, 
-	setUser: Function, 
-	programIndex: number, 
-	degreeMetadatas: DegreeMetadata[], 
-	degreeIndex: number,
-	setDegreeIndex: Function
-	concIndex: number,
-	setConcIndex: Function
-}){
+function MetadataContent(props: { program: Program, index: MajorsIndex, setIndex: Function })
+{
   return (
     <div className={Style.MajorContainer}>
-      <MetadataTopshelf user={props.user} setUser={props.setUser} degreeMetadata={props.degreeMetadatas[props.degreeIndex]} programIndex={props.programIndex}/>
-			<MetadataToggle 
-				degreeMetadatas={props.degreeMetadatas} 
-				degreeIndex={props.degreeIndex} 
-				setDegreeIndex={props.setDegreeIndex} 
-				concIndex={props.concIndex} 
-				setConcIndex={props.setConcIndex}
-			/>
-			<MetadataBody degreeMetadata={props.degreeMetadatas[props.degreeIndex]} concIndex={props.concIndex}/>
+      <MetadataTopshelf program={props.program}/>
+			<MetadataToggle program={props.program} index={props.index} setIndex={props.setIndex}/>
+			<MetadataBody program={props.program} index={props.index}/>
     </div>
   );
 }
 
-function MetadataScrollButton(props: { shiftProgramIndex: Function; peekProgram: Function; dir: number }) 
+function MetadataScrollButton(props: { index: MajorsIndex, setIndex: Function; peekProgram: Function; dir: number }) 
 {
   return (
-    <div className={Style.ScrollButton} onClick={() => props.shiftProgramIndex(props.dir)}>
+    <div className={Style.ScrollButton} onClick={() => props.setIndex({ conc: 0, deg: 0, prog: props.index.prog + props.dir  })}>
       <div style={{ display: "flex" }}>
         <div style={{ textAlign: "left", color: "gray" }}>
           <div style={{ fontSize: "18px", fontWeight: "bold" }}>
-            {props.peekProgram(props.dir).name}
+            {props.peekProgram(props.dir).prog_name}
           </div>
           <div style={{ fontSize: "10px" }}>
-            {props.peekProgram(props.dir).abbr}
+            {props.peekProgram(props.dir).prog_abbr}
           </div>
         </div>
       </div>
@@ -180,20 +166,13 @@ function MetadataScrollButton(props: { shiftProgramIndex: Function; peekProgram:
 }
 
 
-function Metadata(props: { 
-	program: Program,
-	index: { conc: number, deg: number, prog: number }
-	peekProgram: Function
-}) {
+function Metadata(props: { program: Program, index: MajorsIndex, setIndex: Function, peekProgram: Function}) 
+{
   return (
     <div className={Style.MetadataContainer}>
-      <MetadataScrollButton shiftProgramIndex={props.shiftProgramIndex} peekProgram={props.peekProgram} dir={1}/>
-      <MetadataContent 
-				
-			
-				
-			/>
-      <MetadataScrollButton shiftProgramIndex={props.shiftProgramIndex} peekProgram={props.peekProgram} dir={-1}/>
+      <MetadataScrollButton index={props.index} setIndex={props.setIndex} peekProgram={props.peekProgram} dir={1}/>
+      <MetadataContent program={props.program} index={props.index} setIndex={props.setIndex}/>
+      <MetadataScrollButton index={props.index} setIndex={props.setIndex} peekProgram={props.peekProgram} dir={-1}/>
     </div>
   );
 }

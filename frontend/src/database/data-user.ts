@@ -1,6 +1,6 @@
 
 import { User } from "./../types/type-user";
-import { PROG_CPSC } from "./programs/data-program";
+import { PROG_CPSC, PROG_ECON, PROG_HIST, PROG_PLSC } from "./programs/data-program";
 
 export const Ryan: User = {
 	name: "Ryan",
@@ -15,7 +15,7 @@ export const Ryan: User = {
 			senior: [0, 202703, 202801],
 		},
 		languagePlacement: { language: "Spanish", level: 5 },
-		programs: [PROG_CPSC],
+		programs: [PROG_CPSC, PROG_ECON, PROG_HIST, PROG_PLSC],
 		declarations: [],
 	}
 }

@@ -1,8 +1,14 @@
 
 import { Course } from "@/types/type-user"
 
-// HSAR ONE
+// HSAR PROGRAM
 export const HSAR_401: Course = { codes: ["HSAR 401"], title: "Critical Approaches To Art History", 					credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
+
+// PLSC PROGRAM
+export const PLSC_474: Course = { codes: ["PSLC 474"], title: "", credit: 1, dist: ["So"], seasons: ["Spring"]}
+export const PLSC_490: Course = { codes: ["PSLC 490"], title: "", credit: 1, dist: ["So"], seasons: ["Fall", "Spring"]}
+export const PLSC_493: Course = { codes: ["PSLC 493"], title: "", credit: 1, dist: ["So"], seasons: ["Fall", "Spring"]}
+
 
 // CPSC PROGRAM
 export const CPSC_201: Course = { codes: ["CPSC 201"], title: "Introduction To Computer Science", 						credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }

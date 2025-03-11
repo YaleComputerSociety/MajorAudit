@@ -71,3 +71,9 @@ export interface Program {
 	prog_data: ProgramMetadata;
 	prog_degs: ProgramDegree[];
 }
+
+export interface MajorsIndex {
+	prog: number;
+	deg: number;
+	conc: number;
+}

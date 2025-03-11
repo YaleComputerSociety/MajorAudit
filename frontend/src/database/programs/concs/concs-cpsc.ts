@@ -1,8 +1,8 @@
 
 import { ConcentrationSubrequirement, ConcentrationRequirement, DegreeConcentration } from "@/types/type-program";
 
-import { CPSC_201, CPSC_202, MATH_244, CPSC_223, CPSC_323, CPSC_365, CPSC_366, CPSC_490 } from "./../data-courses";
-import { SC_CPSC_201, SC_CPSC_223, SC_CPSC_323 } from "./../data-studentcourses";
+import { CPSC_201, CPSC_202, MATH_244, CPSC_223, CPSC_323, CPSC_365, CPSC_366, CPSC_490 } from "../../data-courses";
+import { SC_CPSC_201, SC_CPSC_223, SC_CPSC_323 } from "../../data-studentcourses";
 
 // CORE
 
@@ -69,8 +69,8 @@ const CPSC_CORE: ConcentrationRequirement = {
 const ELEC_MULT_BA: ConcentrationSubrequirement = {
 	subreq_name: "",
 	subreq_desc: "Intermediate or advanced CPSC courses, traditionally numbered 300+.",
-	courses_required: 4,
-	courses_options: [null, null, null, null],
+	courses_required: 3,
+	courses_options: [null, null, null],
 	courses_elective_range: { dept: "CPSC", min_code: 300, max_code: 999 },
 	courses_any_bool: false,
 	student_courses_satisfying: []
@@ -79,8 +79,8 @@ const ELEC_MULT_BA: ConcentrationSubrequirement = {
 const ELEC_MULT_BS: ConcentrationSubrequirement = {
 	subreq_name: "",
 	subreq_desc: "Intermediate or advanced CPSC courses, traditionally numbered 300+.",
-	courses_required: 6,
-	courses_options: [null, null, null, null, null, null],
+	courses_required: 5,
+	courses_options: [null, null, null, null, null],
 	courses_elective_range: { dept: "CPSC", min_code: 300, max_code: 999 },
 	courses_any_bool: false,
 	student_courses_satisfying: []
