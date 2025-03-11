@@ -1,8 +1,7 @@
 
 import { ConcentrationSubrequirement, ConcentrationRequirement, DegreeConcentration } from "@/types/type-program";
 
-import { CPSC_201, CPSC_202, MATH_244, CPSC_223, CPSC_323, CPSC_365, CPSC_366, CPSC_490 } from "../../data-courses";
-import { SC_CPSC_201, SC_CPSC_223, SC_CPSC_323 } from "../../data-studentcourses";
+import { CPSC_201, CPSC_202, MATH_244, CPSC_223, CPSC_323, CPSC_365, CPSC_366, CPSC_490, SC_CPSC_201, SC_CPSC_223, SC_CPSC_323 } from "../../data-courses";
 
 // CORE
 

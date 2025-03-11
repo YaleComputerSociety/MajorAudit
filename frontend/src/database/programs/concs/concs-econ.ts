@@ -1,8 +1,7 @@
 
 import { ConcentrationSubrequirement, ConcentrationRequirement, DegreeConcentration } from "@/types/type-program";
 
-import { ECON_108, ECON_110, ECON_111, ECON_115, ECON_116, ECON_117, ECON_121, ECON_122, ECON_123, ECON_125, ECON_126, ECON_136, MATH_110, MATH_111, MATH_112, MATH_115, MATH_116, MATH_118, MATH_120, ENAS_151 } from "./../../data-courses";
-import { SC_ECON_110 } from "./../../data-studentcourses";
+import { ECON_108, ECON_110, ECON_111, ECON_115, ECON_116, ECON_117, ECON_121, ECON_122, ECON_123, ECON_125, ECON_126, ECON_136, MATH_110, MATH_111, MATH_112, MATH_115, MATH_116, MATH_118, MATH_120, ENAS_151, SC_ECON_110 } from "./../../data-courses";
 
 // INTRO
 

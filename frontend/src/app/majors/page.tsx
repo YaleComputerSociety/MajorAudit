@@ -13,30 +13,34 @@ import Requirements from "./requirements/Requirements";
 function Majors()
 {
 	const { user } = useAuth();
-	const [index, setIndex] = useState<MajorsIndex>({ conc: 0, deg: 0, prog: 0 });
-	
-	useEffect(() => {
+
+	const [index, setIndex] = useState<MajorsIndex | null>(null);
+
+  useEffect(() => {
     if(typeof window !== "undefined"){
       const storedIndex = sessionStorage.getItem("majorsIndex");
-      if(storedIndex){
-        setIndex(JSON.parse(storedIndex));
-      }
+      setIndex(storedIndex ? JSON.parse(storedIndex) : { conc: 0, deg: 0, prog: 0 });
     }
   }, []);
 
   useEffect(() => {
-    if(typeof window !== "undefined"){
+    if(typeof window !== "undefined" && index !== null){
       sessionStorage.setItem("majorsIndex", JSON.stringify(index));
     }
   }, [index]);
 
-	const updateIndex = (newIndex: MajorsIndex) => {
-		if(newIndex.conc === -1){
-			setIndex({ ...newIndex, deg: 0, conc: index.conc === -1 ? 0 : -1 });
-			return;
-		}
-		setIndex({ ...newIndex, prog: (newIndex.prog + user.FYP.programs.length) % user.FYP.programs.length });
-	};
+  const updateIndex = (newIndex: MajorsIndex) => {
+    setIndex((prev) => ({
+      ...prev!,
+      ...newIndex,
+      prog: newIndex.prog !== undefined
+        ? (newIndex.prog + user.FYP.programs.length) % user.FYP.programs.length
+        : prev!.prog,
+      conc: newIndex.conc === -1 ? (prev!.conc === -1 ? 0 : -1) : newIndex.conc,
+    }));
+  };
+
+  if(index === null) return null;
 
 	return(
     <div>
