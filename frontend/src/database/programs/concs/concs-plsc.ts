@@ -208,12 +208,14 @@ const PLSC_SEN_INTE: ConcentrationRequirement = {
 // EXPORT
 
 export const CONC_PLSC_BA_STAN: DegreeConcentration = {
+	user_status: 0,
 	conc_name: "STANDARD",
 	conc_desc: "",
 	conc_reqs: [PLSC_INTRO, PLSC_CORE_STAN, PLSC_SUB, PLSC_SEMINAR, PLSC_SEN_STAN]
 }
 
 export const CONC_PLSC_BA_INTE: DegreeConcentration = {
+	user_status: 0,
 	conc_name: "INTENSIVE",
 	conc_desc: "",
 	conc_reqs: [PLSC_INTRO, PLSC_CORE_INTE, PLSC_SUB, PLSC_SEMINAR, PLSC_SEN_INTE]

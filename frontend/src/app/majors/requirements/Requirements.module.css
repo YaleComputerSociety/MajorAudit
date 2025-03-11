@@ -11,18 +11,9 @@
 
 .RequirementsContainer {
 	/* border: 1px solid green; */
-
 	margin-top: 37px;
-
 	width: 600px;
 	height: 650px;
-
-  /* min-width: 390px; */
-
-  /* background-color: white; */
-	/* padding: 20px; */
-  /* border-radius: 25px; */
-  /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); */
 }
 
 .ReqsList {
@@ -33,7 +24,8 @@
   scrollbar-width: thin;
   overflow-y: scroll;
   padding-right: 7px;
-  overflow-x: hidden; */
+  overflow-x: hidden; 
+*/
 }
 
 .ReqHeader {
@@ -55,10 +47,8 @@
   font-weight: 500;
 }
 
-
 .EmptyCourse {
   border-radius: 15px;
-  /* padding: 2px 2px; e7e7e7c3 */
   background-color: #F5F5F5; 
   transition: filter 0.4s ease;
   width: 24px; /* Adjust width to match CourseIcon */
@@ -81,20 +71,10 @@
   font-size: 14px;
 }
 
-
-.ButtonRow {
-  display: flex;
-  flex-direction: row;
-}
-
 .resetButton {
   margin-right: 10px; /* Add margin to the right of the reset button */
   opacity: 0; /* Make it invisible */
   pointer-events: none; /* Make it unclickable */
-}
-
-.editButton {
-  margin-right: 0; /* Remove margin for the last child */
 }
 
 .resetButton.visible {
@@ -102,17 +82,9 @@
   pointer-events: auto; /* Make it clickable */
 }
 
-.resetButton:hover, .editButton:hover {
-  color: #666; /* Slightly lighter color on hover */
-  cursor: pointer; /* Show pointer cursor on hover */
-}
-
 .resetButton:active, .editButton:active {
   color: #333; /* Darker color on click */
 }
-
-
-
 
 .ButtonRow {
   display: flex;
@@ -134,4 +106,24 @@
 
 .SubreqButton.Selected {
   background-color: rgb(100, 178, 238);
+}
+
+
+
+.RequirementsContainerHeader {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	font-size: 30px;
+	padding: 2px 8px;
+}
+
+.GoldBackground {
+  background-color: rgba(255, 215, 0, 0.3); /* Gold with 40% opacity */
+	border-radius: 2px;
+}
+
+.EditButton:hover {
+  cursor: pointer; /* Show pointer cursor on hover */
 }

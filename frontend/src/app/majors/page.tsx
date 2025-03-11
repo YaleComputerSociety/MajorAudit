@@ -6,7 +6,7 @@ import { MajorsIndex } from "@/types/type-program";
 
 import Style from "./Majors.module.css";
 import NavBar from "@/components/navbar/NavBar";
-// import Overhead from "./overhead/Overhead";
+import Overhead from "./overhead/Overhead";
 import Metadata from "./metadata/Metadata";
 import Requirements from "./requirements/Requirements";
 
@@ -34,7 +34,7 @@ function Majors()
       ...prev!,
       ...newIndex,
       prog: newIndex.prog !== undefined
-        ? (newIndex.prog + user.FYP.programs.length) % user.FYP.programs.length
+        ? (newIndex.prog + user.FYP.prog_list.length) % user.FYP.prog_list.length
         : prev!.prog,
       conc: newIndex.conc === -1 ? (prev!.conc === -1 ? 0 : -1) : newIndex.conc,
     }));
@@ -44,11 +44,12 @@ function Majors()
 
 	return(
     <div>
-      <NavBar utility={<div className={Style.EditButton} onClick={() => updateIndex({ ...index, conc: -1 })}/>}/>
+      <NavBar utility={<Overhead user={user} setIndex={setIndex}/>}/>
       <div className={Style.MajorsPage}>
-				<Metadata programs={user.FYP.programs} index={index} setIndex={updateIndex}/>
+				<div className={Style.EditButton} onClick={() => updateIndex({ ...index, conc: -1 })}/>
+				<Metadata programs={user.FYP.prog_list} index={index} setIndex={updateIndex}/>
 				<div className={Style.Divider}/>
-				<Requirements conc={index.conc === -1 ? null : user.FYP.programs[index.prog].prog_degs[index.deg].deg_concs[index.conc]} />
+				<Requirements conc={index.conc === -1 ? null : user.FYP.prog_list[index.prog].prog_degs[index.deg].deg_concs[index.conc]} />
       </div>
     </div>
   );

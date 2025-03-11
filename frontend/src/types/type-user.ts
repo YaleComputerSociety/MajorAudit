@@ -1,5 +1,5 @@
 
-import { Program, StudentDegree } from "./type-program";
+import { MajorsIndex, Program } from "./type-program";
 
 export interface LanguagePlacement {
 	language: string;
@@ -38,12 +38,17 @@ export interface StudentTermArrangement {
 	senior: number[];
 }
 
+export interface StudentConc {
+	user_status: number;
+	majors_index: MajorsIndex;
+}
+
 export interface FYP {
 	languagePlacement: LanguagePlacement;
 	studentCourses: StudentCourse[];
 	studentTermArrangement: StudentTermArrangement;
-	programs: Program[];
-	declarations: StudentDegree[];
+	prog_list: Program[];
+	decl_list: StudentConc[];
 }
 
 export interface User {

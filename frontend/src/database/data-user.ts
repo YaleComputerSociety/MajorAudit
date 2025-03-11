@@ -15,8 +15,8 @@ export const Ryan: User = {
 			senior: [0, 202703, 202801],
 		},
 		languagePlacement: { language: "Spanish", level: 5 },
-		programs: [PROG_CPSC, PROG_ECON, PROG_HIST, PROG_PLSC],
-		declarations: [],
+		prog_list: [PROG_CPSC, PROG_ECON, PROG_HIST, PROG_PLSC],
+		decl_list: [{ user_status: 1, majors_index: { conc: 0, deg: 0, prog: 0 } }],
 	}
 }
 

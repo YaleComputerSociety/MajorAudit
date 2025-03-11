@@ -7,11 +7,13 @@ import { ConcentrationSubrequirement, ConcentrationRequirement, DegreeConcentrat
 import { CourseIcon } from "@/components/course-icon/CourseIcon";
 
 
-function RenderSubrequirementCourse(props: { course: Course | null, subreq: ConcentrationSubrequirement }){
+function RenderSubrequirementCourse(props: { edit?: boolean, course: Course | null, subreq: ConcentrationSubrequirement }){
 
 	if(props.course === null){
     return(
-      <div className={Style.EmptyCourse} style={{ marginRight: "2px" }}/>
+      <div className={Style.EmptyCourse} style={{ marginRight: "2px" }}>
+				{props.edit ? (<div>e</div>) : (<div></div>)}
+			</div>
     );
   }
 
@@ -26,7 +28,7 @@ function RenderSubrequirementCourse(props: { course: Course | null, subreq: Conc
 	)
 }
 
-function RenderSubrequirement(props: { subreq: ConcentrationSubrequirement }) {
+function RenderSubrequirement(props: { edit: boolean, subreq: ConcentrationSubrequirement }) {
   const [showAll, setShowAll] = useState(false);
 
   // Separate null and non-null courses
@@ -56,7 +58,11 @@ function RenderSubrequirement(props: { subreq: ConcentrationSubrequirement }) {
       <div className={Style.Row} style={{ flexWrap: "wrap", marginLeft: "20px" }}>
         {displayedCourses.map((course, index) => (
           <div key={index}>
-            <RenderSubrequirementCourse course={course} subreq={props.subreq}/>
+            <RenderSubrequirementCourse 
+							course={course} 
+							subreq={props.subreq}
+							{...(props.subreq.courses_any_bool ? { edit: props.edit } : {})} 
+						/>
           </div>
         ))}
         {/* Toggle Button to Expand / Collapse */}
@@ -70,7 +76,7 @@ function RenderSubrequirement(props: { subreq: ConcentrationSubrequirement }) {
   );
 }
 
-function RenderRequirement(props: { req: ConcentrationRequirement }){
+function RenderRequirement(props: { edit: boolean, req: ConcentrationRequirement }){
 
 	// const { user, setUser } = useAuth();
   // const { req, programIndex, degreeIndex } = props;
@@ -144,23 +150,22 @@ function RenderRequirement(props: { req: ConcentrationRequirement }){
       <div style={{ marginLeft: "30px" }}>
         {subreqs_required_count
           ? subreqs_list.slice(0, subreqs_required_count).map((subreq, index) => (
-              <RenderSubrequirement key={index} subreq={subreq}/>
+              <RenderSubrequirement key={index} edit={props.edit} subreq={subreq}/>
             ))
           : subreqs_list.map((subreq, index) => (
-              <RenderSubrequirement key={index} subreq={subreq}/>
+              <RenderSubrequirement key={index} edit={props.edit} subreq={subreq}/>
             ))}
       </div>
     </div>
   );
 }
 
-function RequirementsContent(props: { conc: DegreeConcentration })
+function RequirementsContent(props: { edit: boolean, conc: DegreeConcentration })
 {
-
   return(
     <div className={Style.ReqsList}>
 			{props.conc.conc_reqs.map((req, index) => (
-				<RenderRequirement key={index} req={req}/>
+				<RenderRequirement key={index} edit={props.edit} req={req}/>
 			))}
     </div>
   );
@@ -168,32 +173,27 @@ function RequirementsContent(props: { conc: DegreeConcentration })
 
 function Requirements(props: { conc: DegreeConcentration | null })
 {
-	// const [edit, setEdit] = useState(false);
-  // const updateEdit = () => {
-  //   setEdit(!edit);
-  // };
+	const [edit, setEdit] = useState(false);
+
+	if(props.conc == null){
+		return(
+			<div className={Style.RequirementsContainer}>
+				<div className={Style.RequirementsContainerHeader}>
+          Requirements
+        </div>
+			</div>
+		)
+	}
 
 	return(
     <div className={Style.RequirementsContainer}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
-        <div style={{ fontSize: "30px" }}>
-          Requirements
-        </div>
-        <div className={Style.ButtonRow}>
-					{/* <div onClick={updateEdit} className={Style.editButton} style={{ fontSize: "30px" }}> */}
-          <div className={Style.editButton} style={{ fontSize: "30px" }}>
-            ⚙
-          </div>
-        </div>
+      <div className={`${Style.RequirementsContainerHeader} ${props.conc.user_status == 1 ? Style.GoldBackground : ""}`}>
+        <div>Requirements</div>
+				{props.conc.user_status == 1 ? (<div className={Style.EditButton} onClick={() => setEdit(!edit)}>⚙</div>) : (<div/>)}
       </div>
-			{props.conc == null ? (
-					<div/>
-				) : (
-					<div style={{ marginLeft: "10px" }}>
-						<RequirementsContent conc={props.conc}/>
-					</div>
-				)
-			}
+			<div style={{ marginLeft: "10px" }}>
+				<RequirementsContent edit={edit} conc={props.conc}/>
+			</div>
     </div>
   );
 }

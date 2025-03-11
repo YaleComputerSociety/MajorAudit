@@ -136,6 +136,7 @@ const ECON_SEN: ConcentrationRequirement = {
 // // FINAL
 
 export const CONC_ECON_BA_I: DegreeConcentration = {
+	user_status: 0,
 	conc_name: "",
 	conc_desc: "",
 	conc_reqs: [ECON_INTRO, ECON_CORE, ECON_ELECTIVE, ECON_SEN]

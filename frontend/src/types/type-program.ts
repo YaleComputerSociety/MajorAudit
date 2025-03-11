@@ -1,12 +1,6 @@
 
 import { Course, StudentCourse } from "./type-user";
 
-export interface StudentDegree {
-	status: string; 				// DA | ADD | PIN
-	programIndex: number;
-	degreeIndex: number;
-}
-
 export interface ElectiveRange {
 	dept: string;
 	min_code: number;
@@ -42,6 +36,7 @@ export interface ConcentrationRequirement {
 }
 
 export interface DegreeConcentration {
+	user_status: number;
 	conc_name: string;
 	conc_desc: string;
   conc_reqs: ConcentrationRequirement[];

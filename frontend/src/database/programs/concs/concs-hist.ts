@@ -221,12 +221,14 @@ const HIST_SEN: ConcentrationRequirement = {
 // EXPORT
 
 export const CONC_HIST_BA_GLOB: DegreeConcentration = {
+	user_status: 0,
 	conc_name: "GLOBALIST",
 	conc_desc: "",
 	conc_reqs: [HIST_PRE, HIST_GLOB_CORE, HIST_SEM, HIST_GLOB_ELEC, HIST_SEN]
 }
 
 export const CONC_HIST_BA_SPEC: DegreeConcentration = {
+	user_status: 0,
 	conc_name: "SPECIALIST",
 	conc_desc: "",
 	conc_reqs: [HIST_PRE, HIST_SPEC_CORE, HIST_SEM, HIST_SPEC_ELEC, HIST_SEN]
