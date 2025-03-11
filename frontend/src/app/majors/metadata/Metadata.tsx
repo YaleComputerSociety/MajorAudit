@@ -1,12 +1,9 @@
 
 import { useState, useEffect } from "react";
-import Link from 'next/link';
-
-import { User } from "@/types/type-user";
-import { MajorsIndex, Program } from "@/types/type-program";
-import { pinProgram, addProgram } from "./MetadataUtils";
-
 import Style from "./Metadata.module.css";
+
+import Link from 'next/link';
+import { MajorsIndex, Program } from "@/types/type-program";
 
 function MetadataTopshelf(props: { program: Program }) 
 {
@@ -80,7 +77,8 @@ function MetadataTopshelf(props: { program: Program })
 function MetadataBody(props: { program: Program, index: MajorsIndex }){
 
 	return(
-		<div style={{ marginLeft: "80px" }}>
+		// style={{ marginLeft: "80px" }}
+		<div>
 			{/* <MetadataStats concMetadata={degreeMetadata.concs[concIndex]}/> */}
 			<div className={Style.subsectionHeader}>
 				ABOUT
@@ -147,17 +145,17 @@ function MetadataContent(props: { program: Program, index: MajorsIndex, setIndex
   );
 }
 
-function MetadataScrollButton(props: { index: MajorsIndex, setIndex: Function; peekProgram: Function; dir: number }) 
+function MetadataScrollButton(props: { programs: Program[], index: MajorsIndex, setIndex: Function; dir: number }) 
 {
-  return (
+  return(
     <div className={Style.ScrollButton} onClick={() => props.setIndex({ conc: 0, deg: 0, prog: props.index.prog + props.dir  })}>
       <div style={{ display: "flex" }}>
         <div style={{ textAlign: "left", color: "gray" }}>
           <div style={{ fontSize: "18px", fontWeight: "bold" }}>
-            {props.peekProgram(props.dir).prog_name}
+            {props.programs[(props.index.prog + props.dir + props.programs.length) % props.programs.length].prog_data.prog_name}
           </div>
           <div style={{ fontSize: "10px" }}>
-            {props.peekProgram(props.dir).prog_abbr}
+            {props.programs[(props.index.prog + props.dir + props.programs.length) % props.programs.length].prog_data.prog_abbr}
           </div>
         </div>
       </div>
@@ -165,14 +163,38 @@ function MetadataScrollButton(props: { index: MajorsIndex, setIndex: Function; p
   );
 }
 
+function ProgramContent(props: { programs: Program[], index: MajorsIndex, setIndex: Function }){
+	return(
+		<div>
+			<MetadataScrollButton programs={props.programs} index={props.index} setIndex={props.setIndex} dir={1}/>
+      <MetadataContent program={props.programs[props.index.prog]} index={props.index} setIndex={props.setIndex}/>
+      <MetadataScrollButton programs={props.programs} index={props.index} setIndex={props.setIndex} dir={-1}/>
+		</div>
+	)
+}
 
-function Metadata(props: { program: Program, index: MajorsIndex, setIndex: Function, peekProgram: Function}) 
+function ProgramList(props: { programs: Program[], setIndex: Function }){
+	return(
+		<div>
+			{props.programs.map((program: Program, prog_index: number) => (
+				<div key={prog_index} className={Style.ProgramOption} onClick={() => props.setIndex({ conc: 0, deg: 0, prog: prog_index })}>
+					{program.prog_data.prog_name}  {program.prog_data.prog_abbr}
+				</div>
+			))}
+		</div>
+	)
+}
+
+function Metadata(props: { programs: Program[], index: MajorsIndex, setIndex: Function }) 
 {
-  return (
+	return(
     <div className={Style.MetadataContainer}>
-      <MetadataScrollButton index={props.index} setIndex={props.setIndex} peekProgram={props.peekProgram} dir={1}/>
-      <MetadataContent program={props.program} index={props.index} setIndex={props.setIndex}/>
-      <MetadataScrollButton index={props.index} setIndex={props.setIndex} peekProgram={props.peekProgram} dir={-1}/>
+      {props.index.conc == -1 ? (
+					<ProgramList programs={props.programs} setIndex={props.setIndex}/>
+				) : (
+					<ProgramContent programs={props.programs} index={props.index} setIndex={props.setIndex}/>
+				)
+			}
     </div>
   );
 }

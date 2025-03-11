@@ -2,17 +2,13 @@
 import { useState } from "react";
 import Style from "./Requirements.module.css";
 
-import { useAuth } from "@/app/providers";
-
-import { User, Course } from "@/types/type-user";
+import { Course } from "@/types/type-user";
 import { ConcentrationSubrequirement, ConcentrationRequirement, DegreeConcentration } from "@/types/type-program";
 import { CourseIcon } from "@/components/course-icon/CourseIcon";
 
 
-function RenderSubrequirementCourse(props: { course: Course | null, subreq: ConcentrationSubrequirement; user: User }){
+function RenderSubrequirementCourse(props: { course: Course | null, subreq: ConcentrationSubrequirement }){
 
-	// TODO
-	
 	if(props.course === null){
     return(
       <div className={Style.EmptyCourse} style={{ marginRight: "2px" }}/>
@@ -30,7 +26,7 @@ function RenderSubrequirementCourse(props: { course: Course | null, subreq: Conc
 	)
 }
 
-function RenderSubrequirement(props: { subreq: ConcentrationSubrequirement; user: User }) {
+function RenderSubrequirement(props: { subreq: ConcentrationSubrequirement }) {
   const [showAll, setShowAll] = useState(false);
 
   // Separate null and non-null courses
@@ -60,7 +56,7 @@ function RenderSubrequirement(props: { subreq: ConcentrationSubrequirement; user
       <div className={Style.Row} style={{ flexWrap: "wrap", marginLeft: "20px" }}>
         {displayedCourses.map((course, index) => (
           <div key={index}>
-            <RenderSubrequirementCourse course={course} subreq={props.subreq} user={props.user} />
+            <RenderSubrequirementCourse course={course} subreq={props.subreq}/>
           </div>
         ))}
         {/* Toggle Button to Expand / Collapse */}
@@ -148,18 +144,16 @@ function RenderRequirement(props: { req: ConcentrationRequirement }){
       <div style={{ marginLeft: "30px" }}>
         {subreqs_required_count
           ? subreqs_list.slice(0, subreqs_required_count).map((subreq, index) => (
-              <RenderSubrequirement key={index} subreq={subreq} user={props.user} />
+              <RenderSubrequirement key={index} subreq={subreq}/>
             ))
           : subreqs_list.map((subreq, index) => (
-              <RenderSubrequirement key={index} subreq={subreq} user={props.user} />
+              <RenderSubrequirement key={index} subreq={subreq}/>
             ))}
       </div>
     </div>
   );
 }
 
-
-// function RequirementsContent(props: { edit: boolean, programIndex: number, degreeIndex: number, degreeConfiguration: DegreeConfiguration, user: User, setUser: Function })
 function RequirementsContent(props: { conc: DegreeConcentration })
 {
 
@@ -172,15 +166,14 @@ function RequirementsContent(props: { conc: DegreeConcentration })
   );
 }
 
-// function Requirements(props: { user: User, setUser: Function, programIndex: number, degreeIndex: number, degreeConfiguration: DegreeConfiguration })
-function Requirements(props: { conc: DegreeConcentration })
+function Requirements(props: { conc: DegreeConcentration | null })
 {
 	// const [edit, setEdit] = useState(false);
   // const updateEdit = () => {
   //   setEdit(!edit);
   // };
 
-  return(
+	return(
     <div className={Style.RequirementsContainer}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
         <div style={{ fontSize: "30px" }}>
@@ -193,10 +186,14 @@ function Requirements(props: { conc: DegreeConcentration })
           </div>
         </div>
       </div>
-			<div style={{ marginLeft: "10px" }}>
-				{/* <RequirementsContent edit={edit} programIndex={props.programIndex} degreeIndex={props.degreeIndex} degreeConfiguration={props.degreeConfiguration} user={props.user} setUser={props.setUser} /> */}
-				<RequirementsContent conc={props.conc}/>
-			</div>
+			{props.conc == null ? (
+					<div/>
+				) : (
+					<div style={{ marginLeft: "10px" }}>
+						<RequirementsContent conc={props.conc}/>
+					</div>
+				)
+			}
     </div>
   );
 }
