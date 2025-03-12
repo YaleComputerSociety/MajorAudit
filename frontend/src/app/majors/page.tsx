@@ -49,7 +49,7 @@ function Majors()
 				<div className={Style.EditButton} onClick={() => updateIndex({ ...index, conc: -1 })}/>
 				<Metadata programs={user.FYP.prog_list} index={index} setIndex={updateIndex}/>
 				<div className={Style.Divider}/>
-				<Requirements conc={index.conc === -1 ? null : user.FYP.prog_list[index.prog].prog_degs[index.deg].deg_concs[index.conc]} />
+				<Requirements conc={index.conc === -1 ? null : user.FYP.prog_list[index.prog].prog_degs[index.deg].deg_concs[index.conc]}/>
       </div>
     </div>
   );

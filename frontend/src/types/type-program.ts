@@ -16,7 +16,9 @@ export interface ConcentrationSubrequirement {
 	courses_required: number;
 	courses_options: (Course | null)[];
 	courses_elective_range: SubreqElectiveRange;
+	
 	courses_any_bool: boolean;
+	flags?: string[];
 
 	student_courses_satisfying: StudentCourse[];
 }

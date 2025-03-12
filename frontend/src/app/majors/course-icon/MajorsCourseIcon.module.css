@@ -1,0 +1,24 @@
+
+.CourseIcon {
+	display: flex;
+	flex-direction: row;
+	
+	align-items: center;
+
+	border-radius: 15px;
+
+	width: max-content;
+	padding: 2px 4px;
+	min-height: 18px;
+
+	font-size: 14px;
+	font-weight: bold;
+
+	background-color: #F5F5F5;
+	transition: filter 0.4s ease;
+}
+
+.CourseIcon:hover {
+	cursor: pointer;
+	filter: brightness(95%);
+}

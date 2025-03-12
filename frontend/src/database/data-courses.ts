@@ -51,7 +51,7 @@ export const SC_CPSC_201: StudentCourse = { term: 202403, status: "DA", result: 
 // export const SC_CPSC_202: StudentCourse = { term: 202403, status: "DA", result: "GRADE_PASS", course: CPSC_202 }
 export const SC_CPSC_223: StudentCourse = { term: 202501, status: "DA", result: "GRADE_PASS", course: CPSC_223 }
 export const SC_CPSC_323: StudentCourse = { term: 202503, status: "DA", result: "GRADE_PASS", course: CPSC_323 }
-export const SC_CPSC_381: StudentCourse = { term: 202503, status: "MA", result: "IP", course: CPSC_381 }
+export const SC_CPSC_381: StudentCourse = { term: 202503, status: "DA", result: "GRADE_PASS", course: CPSC_381 }
 
 // ECON COURSES
 export const SC_ECON_110: StudentCourse = { term: 202403, status: "DA", result: "GRADE_PASS", course: ECON_110 }

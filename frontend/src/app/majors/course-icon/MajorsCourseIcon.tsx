@@ -1,11 +1,11 @@
 
 import React from "react";
-import styles from "./CourseIcon.module.css";
+import Style from "./MajorsCourseIcon.module.css"
 
 import { StudentCourse, Course } from "@/types/type-user";
 import { RenderMark, GetCourseColor } from "@/utils/course-display/CourseDisplay";
 
-import DistributionCircle from "../distribution-circle/DistributionsCircle";
+import DistributionCircle from "@/components/distribution-circle/DistributionsCircle";
 
 
 function CourseSeasonIcon(props: { seasons: Array<string> }) {
@@ -57,7 +57,7 @@ export function StudentCourseIcon(props: { studentCourse: StudentCourse, utility
 	// style={{ backgroundColor: GetCourseColor(props.studentCourse.term) }}
 
   return (
-    <div className={styles.CourseIcon} style={{ backgroundColor: "#E1E9F8" }}> 
+    <div className={Style.CourseIcon} style={{ backgroundColor: "#E1E9F8" }}> 
       {props.utilityButton && props.utilityButton}
       {props.studentCourse.status === "" 
         ? <CourseSeasonIcon seasons={props.studentCourse.course.seasons || []} />
@@ -79,7 +79,7 @@ export function CourseIcon(props: { course: Course, studentCourse?: StudentCours
 	}
 
   return(
-    <div className={styles.CourseIcon} style={{ backgroundColor: "F5F5F5" }}>
+    <div className={Style.CourseIcon} style={{ backgroundColor: "F5F5F5" }}>
       <CourseSeasonIcon seasons={props.course.seasons || []} />
       {props.course.codes[0]}
       <DistCircDiv dist={props.course.dist} />

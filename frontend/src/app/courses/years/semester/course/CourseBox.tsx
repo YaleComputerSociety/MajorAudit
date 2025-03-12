@@ -2,7 +2,7 @@
 import Style from "./CourseBox.module.css";
 import { User, StudentCourse } from "@/types/type-user";
 
-import { RenderMark, SeasonIcon, GetCourseColor, IsTermActive } from "./../../../../../utils/CourseDisplay";
+import { RenderMark, SeasonIcon, GetCourseColor, IsTermActive } from "../../../../../utils/course-display/CourseDisplay";
 import DistributionCircle from "@/components/distribution-circle/DistributionsCircle";
 
 // import { useModal } from "../../../hooks/modalContext";

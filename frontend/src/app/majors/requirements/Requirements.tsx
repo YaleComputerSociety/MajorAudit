@@ -4,8 +4,7 @@ import Style from "./Requirements.module.css";
 
 import { Course } from "@/types/type-user";
 import { ConcentrationSubrequirement, ConcentrationRequirement, DegreeConcentration } from "@/types/type-program";
-import { CourseIcon } from "@/components/course-icon/CourseIcon";
-
+import { CourseIcon } from "../course-icon/MajorsCourseIcon";
 
 function RenderSubrequirementCourse(props: { edit?: boolean, course: Course | null, subreq: ConcentrationSubrequirement }){
 
@@ -160,7 +159,7 @@ function RenderRequirement(props: { edit: boolean, req: ConcentrationRequirement
   );
 }
 
-function RequirementsContent(props: { edit: boolean, conc: DegreeConcentration })
+function RequirementsList(props: { edit: boolean, conc: DegreeConcentration })
 {
   return(
     <div className={Style.ReqsList}>
@@ -192,7 +191,7 @@ function Requirements(props: { conc: DegreeConcentration | null })
 				{props.conc.user_status == 1 ? (<div className={Style.EditButton} onClick={() => setEdit(!edit)}>⚙</div>) : (<div/>)}
       </div>
 			<div style={{ marginLeft: "10px" }}>
-				<RequirementsContent edit={edit} conc={props.conc}/>
+				<RequirementsList edit={edit} conc={props.conc}/>
 			</div>
     </div>
   );
