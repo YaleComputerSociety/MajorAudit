@@ -1,9 +1,10 @@
 
+"use client";
 import React from "react";
 import Style from "./MajorsCourseIcon.module.css"
 
+import { ConcentrationSubrequirement } from "@/types/type-program";
 import { StudentCourse, Course } from "@/types/type-user";
-import { RenderMark, GetCourseColor } from "@/utils/course-display/CourseDisplay";
 
 import DistributionCircle from "@/components/distribution-circle/DistributionsCircle";
 
@@ -31,58 +32,92 @@ function CourseSeasonIcon(props: { seasons: Array<string> }) {
   );
 }
 
-
-function DistCircDiv(props: { dist: string[] }) 
-{
-  if(!Array.isArray(props.dist) || props.dist.length === 0){
-    return(
-			<div>
-
-			</div>
-		);
-  }
-
-  return(
-    <div style={{ marginLeft: "2px", marginTop: "2px" }}>
-      <DistributionCircle distributions={props.dist} />
-    </div>
-  );
-}
-
-
-export function StudentCourseIcon(props: { studentCourse: StudentCourse, utilityButton?: React.ReactNode }) {
-  
-  const dist = props.studentCourse.course.dist || [];
-
-	// style={{ backgroundColor: GetCourseColor(props.studentCourse.term) }}
-
+// ✅ Modify `MajorsCourseIcon` to handle remove clicks
+function MajorsCourseIcon(props: { 
+  edit: boolean; 
+  course: Course; 
+  subreq: ConcentrationSubrequirement; 
+  onRemoveCourse: Function;
+}) {
   return (
-    <div className={Style.CourseIcon} style={{ backgroundColor: "#E1E9F8" }}> 
-      {props.utilityButton && props.utilityButton}
-      {props.studentCourse.status === "" 
-        ? <CourseSeasonIcon seasons={props.studentCourse.course.seasons || []} />
-        : <RenderMark status="DA"/>
-      }
-      {props.studentCourse.course.codes[0]}
-      {/* <DistCircDiv dist={dist}/> */}
-    </div>
-  );
-}
-
-
-export function CourseIcon(props: { course: Course, studentCourse?: StudentCourse }){
-  
-	if(props.studentCourse){
-		return(
-			<StudentCourseIcon studentCourse={props.studentCourse} />
-		);
-	}
-
-  return(
-    <div className={Style.CourseIcon} style={{ backgroundColor: "F5F5F5" }}>
+    <div className={`${Style.Icon} ${Style.CourseIcon}`}>
+      {/* ✅ Only show remove button in edit mode */}
+      {props.edit && (
+        <RemoveButton onClick={() => props.onRemoveCourse(props.course, props.subreq, false)} />
+      )}
       <CourseSeasonIcon seasons={props.course.seasons || []} />
       {props.course.codes[0]}
-      <DistCircDiv dist={props.course.dist} />
+      <DistributionCircle distributions={props.course.dist} />
     </div>
+  );
+}
+
+// ✅ Modify `MajorsStudentCourseIcon` to handle remove clicks
+function MajorsStudentCourseIcon(props: { 
+  edit: boolean; 
+  studentCourse: StudentCourse; 
+  subreq: ConcentrationSubrequirement; 
+  onRemoveCourse: Function;
+}) {
+  return (
+    <div className={`${Style.Icon} ${Style.StudentCourseIcon}`}>
+      {/* ✅ Only show remove button in edit mode */}
+      {props.edit && (
+        <RemoveButton onClick={() => props.onRemoveCourse(props.studentCourse.course, props.subreq, true)} />
+      )}
+      ✓ {props.studentCourse.course.codes[0]}
+    </div>
+  );
+}
+
+// ✅ Modify `RemoveButton` to accept an `onClick` prop
+function RemoveButton({ onClick }: { onClick: () => void }) {
+  return (
+    <div className={Style.RemoveButton} onClick={onClick}>
+      ❌ {/* Placeholder remove icon */}
+    </div>
+  );
+}
+
+function MajorsEmptyIcon({ edit }: { edit: boolean }) {
+  return (
+    <div className={`${Style.Icon} ${Style.EmptyIcon}`}>
+      {edit && (
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 5V19M5 12H19" stroke="black" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      )}
+    </div>
+  );
+}
+
+export function MajorsIcon(props: { 
+  edit: boolean; 
+  contentCourse: Course | StudentCourse | null; 
+  subreq: ConcentrationSubrequirement; 
+  onRemoveCourse: Function;
+}) {
+  // If no course exists, render the "Add" icon
+  if (!props.contentCourse) {
+    return <MajorsEmptyIcon edit={props.edit} />;
+  }
+
+  // ✅ Determine if `contentCourse` is a StudentCourse (i.e., has a `course` field inside)
+  const isStudentCourse = "course" in props.contentCourse;
+
+  return isStudentCourse ? (
+    <MajorsStudentCourseIcon 
+      edit={props.edit} 
+      studentCourse={props.contentCourse as StudentCourse} 
+      subreq={props.subreq}
+      onRemoveCourse={props.onRemoveCourse} 
+    />
+  ) : (
+    <MajorsCourseIcon 
+      edit={props.edit} 
+      course={props.contentCourse as Course} 
+      subreq={props.subreq}
+      onRemoveCourse={props.onRemoveCourse} 
+    />
   );
 }

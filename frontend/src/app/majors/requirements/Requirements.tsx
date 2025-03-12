@@ -1,51 +1,42 @@
 
+"use client";
 import { useState } from "react";
+import { useAuth } from "@/app/providers";
 import Style from "./Requirements.module.css";
 
 import { Course } from "@/types/type-user";
-import { ConcentrationSubrequirement, ConcentrationRequirement, DegreeConcentration } from "@/types/type-program";
-import { CourseIcon } from "../course-icon/MajorsCourseIcon";
+import { ConcentrationSubrequirement, ConcentrationRequirement, DegreeConcentration, MajorsIndex } from "@/types/type-program";
 
-function RenderSubrequirementCourse(props: { edit?: boolean, course: Course | null, subreq: ConcentrationSubrequirement }){
+import { updateCourseInSubreq } from "./RequirementsUtils";
+import { MajorsIcon } from "../course-icon/MajorsCourseIcon";
 
-	if(props.course === null){
-    return(
-      <div className={Style.EmptyCourse} style={{ marginRight: "2px" }}>
-				{props.edit ? (<div>e</div>) : (<div></div>)}
-			</div>
-    );
-  }
-
-	const matchingStudentCourse = props.subreq.student_courses_satisfying.find(
+function RenderSubrequirementCourse(props: { 
+  edit?: boolean; 
+  course: Course | null; 
+  subreq: ConcentrationSubrequirement; 
+  onRemoveCourse: Function; 
+}) 
+{
+  // Find if this course exists in student_courses_satisfying (meaning it's a StudentCourse)
+  const matchingStudentCourse = props.subreq.student_courses_satisfying.find(
     (studentCourse) => studentCourse.course === props.course
   );
 
-	return(
-		<div style={{ marginRight: "2px", marginBottom: "2px" }}>
-			<CourseIcon course={props.course} studentCourse={matchingStudentCourse}/>
-		</div>
-	)
+  return (
+    <div style={{ marginRight: "2px", marginBottom: "2px" }}>
+      {/* ✅ Pass `onRemoveCourse` down to `MajorsIcon`, along with subreq & whether it's a StudentCourse */}
+      <MajorsIcon 
+        edit={props.edit ?? false} 
+        contentCourse={matchingStudentCourse ?? props.course} 
+        subreq={props.subreq} 
+        onRemoveCourse={props.onRemoveCourse} 
+      />
+    </div>
+  );
 }
 
-function RenderSubrequirement(props: { edit: boolean, subreq: ConcentrationSubrequirement }) {
-  const [showAll, setShowAll] = useState(false);
-
-  // Separate null and non-null courses
-  const nullCourses = props.subreq.courses_options.filter((course) => course === null);
-  const nonNullCourses = props.subreq.courses_options.filter((course) => course !== null) as Course[];
-  const satisfiedCourses = props.subreq.student_courses_satisfying.map((studentCourse) => studentCourse.course);
-
-  // Determine which courses to show
-  const isSatisfied = props.subreq.student_courses_satisfying.length === props.subreq.courses_required;
-  const displayedNonNullCourses = showAll
-    ? nonNullCourses
-    : isSatisfied
-    ? satisfiedCourses
-    : nonNullCourses.slice(0, 4);
-
-  // Ensure null courses are always displayed
-  const displayedCourses = [...nullCourses, ...displayedNonNullCourses];
-
+function RenderSubrequirement(props: { edit: boolean, subreq: ConcentrationSubrequirement, onRemoveCourse: Function }) 
+{
   return (
     <div className={Style.Column} style={{ marginBottom: "12px" }}>
       <div className={Style.SubHeader} style={{ marginBottom: "2px" }}>
@@ -55,27 +46,23 @@ function RenderSubrequirement(props: { edit: boolean, subreq: ConcentrationSubre
 				{props.subreq.subreq_desc}
 			</div>
       <div className={Style.Row} style={{ flexWrap: "wrap", marginLeft: "20px" }}>
-        {displayedCourses.map((course, index) => (
-          <div key={index}>
-            <RenderSubrequirementCourse 
-							course={course} 
-							subreq={props.subreq}
-							{...(props.subreq.courses_any_bool ? { edit: props.edit } : {})} 
-						/>
-          </div>
+        {props.subreq.courses_options.map((course, index) => (
+          <RenderSubrequirementCourse 
+						key={index}
+						course={course} 
+						subreq={props.subreq}
+						edit={props.edit}
+						// {...(props.subreq.courses_any_bool ? { edit: props.edit } : {})} 
+						onRemoveCourse={props.onRemoveCourse}
+					/>
         ))}
-        {/* Toggle Button to Expand / Collapse */}
-        {nonNullCourses.length > 4 && (
-          <div className={Style.ToggleButton} onClick={() => setShowAll(!showAll)}>
-            {showAll ? "<<" : ">>"}
-          </div>
-        )}
       </div>
     </div>
   );
 }
 
-function RenderRequirement(props: { edit: boolean, req: ConcentrationRequirement }){
+function RenderRequirement(props: { edit: boolean, req: ConcentrationRequirement, onRemoveCourse: Function })
+{
 
 	// const { user, setUser } = useAuth();
   // const { req, programIndex, degreeIndex } = props;
@@ -149,30 +136,32 @@ function RenderRequirement(props: { edit: boolean, req: ConcentrationRequirement
       <div style={{ marginLeft: "30px" }}>
         {subreqs_required_count
           ? subreqs_list.slice(0, subreqs_required_count).map((subreq, index) => (
-              <RenderSubrequirement key={index} edit={props.edit} subreq={subreq}/>
+              <RenderSubrequirement key={index} edit={props.edit} subreq={subreq} onRemoveCourse={props.onRemoveCourse}/>
             ))
           : subreqs_list.map((subreq, index) => (
-              <RenderSubrequirement key={index} edit={props.edit} subreq={subreq}/>
+              <RenderSubrequirement key={index} edit={props.edit} subreq={subreq} onRemoveCourse={props.onRemoveCourse}/>
             ))}
       </div>
     </div>
   );
 }
 
-function RequirementsList(props: { edit: boolean, conc: DegreeConcentration })
+function RequirementsList(props: { edit: boolean, conc: DegreeConcentration, onRemoveCourse: Function })
 {
   return(
     <div className={Style.ReqsList}>
 			{props.conc.conc_reqs.map((req, index) => (
-				<RenderRequirement key={index} edit={props.edit} req={req}/>
+				<RenderRequirement key={index} edit={props.edit} req={req} onRemoveCourse={props.onRemoveCourse}/>
 			))}
     </div>
   );
 }
 
-function Requirements(props: { conc: DegreeConcentration | null })
+function Requirements(props: { conc: DegreeConcentration | null, index: MajorsIndex })
 {
 	const [edit, setEdit] = useState(false);
+
+	const { user, setUser } = useAuth();
 
 	if(props.conc == null){
 		return(
@@ -184,6 +173,15 @@ function Requirements(props: { conc: DegreeConcentration | null })
 		)
 	}
 
+	function onRemoveCourse(course: Course | null, subreq: ConcentrationSubrequirement, isStudentCourse: boolean = false) {
+    updateCourseInSubreq(user, setUser, props.index, subreq, course, "remove", isStudentCourse);
+  }
+
+  // ✅ Handles adding a new course
+  // function onAddCourse(course: Course, subreq: ConcentrationSubrequirement) {
+  //   updateCourseInSubreq(user, setUser, props.index, subreq, course, "add");
+  // }
+
 	return(
     <div className={Style.RequirementsContainer}>
       <div className={`${Style.RequirementsContainerHeader} ${props.conc.user_status == 1 ? Style.GoldBackground : ""}`}>
@@ -191,7 +189,7 @@ function Requirements(props: { conc: DegreeConcentration | null })
 				{props.conc.user_status == 1 ? (<div className={Style.EditButton} onClick={() => setEdit(!edit)}>⚙</div>) : (<div/>)}
       </div>
 			<div style={{ marginLeft: "10px" }}>
-				<RequirementsList edit={edit} conc={props.conc}/>
+				<RequirementsList edit={edit} conc={props.conc} onRemoveCourse={onRemoveCourse}/>
 			</div>
     </div>
   );

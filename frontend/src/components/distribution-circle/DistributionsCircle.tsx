@@ -25,7 +25,12 @@ function getData(distributions: string[]) {
 const width = 12;
 const height = 12;
 
-export default function DistributionCircle(props: { distributions: string[] }) {
+export default function DistributionCircle(props: { distributions: string[] }) 
+{
+	if(props.distributions.length == 0){
+    return <div/>;
+  }
+
   const radius = Math.min(width, height) / 2;
   const data = useMemo(() => getData(props.distributions), [props.distributions]);
 
@@ -48,7 +53,7 @@ export default function DistributionCircle(props: { distributions: string[] }) {
 
   return (
     <div style={{ position: "relative" }}>
-      <svg width={width} height={height} style={{ display: "inline-block" }}>
+      <svg width={width + 2} height={height + 2} viewBox={`0 0 ${width + 2} ${height + 2}`} style={{ display: "inline-block", overflow: "visible" }}>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
           {arcs.map((arc: string | null, i: number) =>
             arc ? <path key={i} d={arc} fill={skillsAreasColors[props.distributions[i]]} /> : null

@@ -1,5 +1,5 @@
 
-.CourseIcon {
+.Icon {
 	display: flex;
 	flex-direction: row;
 	
@@ -18,7 +18,50 @@
 	transition: filter 0.4s ease;
 }
 
-.CourseIcon:hover {
+.Icon:hover {
 	cursor: pointer;
 	filter: brightness(95%);
+}
+
+.CourseIcon {
+  background-color: #F5F5F5;
+}
+
+.StudentCourseIcon {
+  background-color: #E1E9F8;
+}
+
+.EmptyIcon {
+  width: 18px; /* Ensure it's a perfect circle */
+  height: 18px;
+  aspect-ratio: 1 / 1; /* Keeps it circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%; /* Ensures a perfect circle */
+  background-color: #f5f5f5;
+}
+
+.EmptyIcon svg {
+  width: 10px; /* Increase size of "+" */
+  height: 10px;
+}
+
+.RemoveButton {
+	margin-right: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: white;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  /* position: absolute;
+  top: -5px;
+  right: -5px;
+  z-index: 10;  */
 }

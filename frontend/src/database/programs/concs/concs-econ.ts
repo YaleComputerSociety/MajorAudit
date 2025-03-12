@@ -9,7 +9,7 @@ const INTRO_MATH: ConcentrationSubrequirement = {
 	subreq_name: "MATH",
 	subreq_desc: "118 or 120 recommended. Any MATH 200+ satisfies.",
 	courses_required: 1,
-	courses_options: [MATH_110, MATH_111, MATH_112, MATH_115, MATH_116, MATH_118, MATH_120, ENAS_151],
+	courses_options: [MATH_118, MATH_120],
 	courses_elective_range: null,
 	courses_any_bool: false,
 	student_courses_satisfying: [],
