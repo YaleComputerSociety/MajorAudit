@@ -1,6 +1,5 @@
 
-"use client";
-import React from "react";
+import { useState, useRef, useEffect } from "react";
 import Style from "./MajorsCourseIcon.module.css"
 
 import { ConcentrationSubrequirement } from "@/types/type-program";
@@ -32,7 +31,6 @@ function CourseSeasonIcon(props: { seasons: Array<string> }) {
   );
 }
 
-// ✅ Modify `MajorsCourseIcon` to handle remove clicks
 function MajorsCourseIcon(props: { 
   edit: boolean; 
   course: Course; 
@@ -52,7 +50,6 @@ function MajorsCourseIcon(props: {
   );
 }
 
-// ✅ Modify `MajorsStudentCourseIcon` to handle remove clicks
 function MajorsStudentCourseIcon(props: { 
   edit: boolean; 
   studentCourse: StudentCourse; 
@@ -70,26 +67,70 @@ function MajorsStudentCourseIcon(props: {
   );
 }
 
-// ✅ Modify `RemoveButton` to accept an `onClick` prop
 function RemoveButton({ onClick }: { onClick: () => void }) {
   return (
     <div className={Style.RemoveButton} onClick={onClick}>
-      ❌ {/* Placeholder remove icon */}
+
     </div>
   );
 }
 
-function MajorsEmptyIcon({ edit }: { edit: boolean }) {
+function MajorsEmptyIcon(props: { edit: boolean }) {
+  const [isAdding, setIsAdding] = useState(false);
+  const [courseCode, setCourseCode] = useState("");
+  const popupRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // 🔹 Close input box when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+        setIsAdding(false);
+      }
+    }
+
+    if (isAdding) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isAdding]);
+
+  // 🔹 Auto-focus input when it appears
+  useEffect(() => {
+    if (isAdding) {
+      inputRef.current?.focus();
+    }
+  }, [isAdding]);
+
   return (
-    <div className={`${Style.Icon} ${Style.EmptyIcon}`}>
-      {edit && (
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 5V19M5 12H19" stroke="black" strokeWidth="2" strokeLinecap="round" />
-        </svg>
+    <div className={Style.IconContainer}> {/* ✅ Keeps relative positioning */}
+      {props.edit ? (
+        <>
+          <div className={Style.EmptyIcon} onClick={() => setIsAdding(true)}>+</div>
+
+          {isAdding && (
+            <div ref={popupRef} className={Style.AddCoursePopup}>
+              <input
+                ref={inputRef}
+                type="text"
+                value={courseCode}
+                onChange={(e) => setCourseCode(e.target.value)}
+              />
+            </div>
+          )}
+        </>
+      ) : (
+        <div className={Style.EmptyIcon}></div>  // ✅ Non-editable version stays a simple gray circle
       )}
     </div>
   );
 }
+
+
+
 
 export function MajorsIcon(props: { 
   edit: boolean; 

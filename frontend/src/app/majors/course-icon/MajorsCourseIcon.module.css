@@ -31,37 +31,61 @@
   background-color: #E1E9F8;
 }
 
-.EmptyIcon {
-  width: 18px; /* Ensure it's a perfect circle */
-  height: 18px;
-  aspect-ratio: 1 / 1; /* Keeps it circular */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%; /* Ensures a perfect circle */
-  background-color: #f5f5f5;
-}
-
-.EmptyIcon svg {
-  width: 10px; /* Increase size of "+" */
-  height: 10px;
-}
-
 .RemoveButton {
 	margin-right: 4px;
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background-color: white;
-  color: black;
+  background-color: rgb(237, 237, 237);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
   font-weight: bold;
   cursor: pointer;
-  /* position: absolute;
-  top: -5px;
-  right: -5px;
-  z-index: 10;  */
+}
+
+
+
+
+
+
+
+
+.IconContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.EmptyIcon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  cursor: default;
+}
+
+.EmptyIcon:hover {
+  cursor: pointer;
+  background-color: #e0e0e0;
+}
+
+.AddCoursePopup {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid #ddd;
+  padding: 6px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 5px;
+  z-index: 10;
+  min-width: 120px;
 }
