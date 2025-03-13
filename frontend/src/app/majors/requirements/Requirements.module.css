@@ -93,8 +93,8 @@
 }
 
 .GoldBackground {
-  background-color: rgba(255, 215, 0, 0.3); /* Gold with 40% opacity */
-	border-radius: 2px;
+  /* background-color: rgba(255, 215, 0, 0.3);
+	border-radius: 2px; */
 }
 
 .EditButton:hover {

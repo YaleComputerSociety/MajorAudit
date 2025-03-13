@@ -64,6 +64,8 @@ export function addCourseInSubreq(
   subreqIndex: number,
   courseCode: string
 ): boolean {
+  let success = false; // ✅ Track success state
+
   setUser((prevUser: User) => {
     const program = prevUser.FYP.prog_list[majorsIndex.prog];
     const degree = program.prog_degs[majorsIndex.deg];
@@ -83,7 +85,7 @@ export function addCourseInSubreq(
     const firstNullIndex = updatedCoursesOptions.indexOf(null);
     if (firstNullIndex === -1) return prevUser; // 🚨 No space available, no update
 
-    updatedCoursesOptions[firstNullIndex] = matchingStudentCourse.course; // Replace null with new course
+    updatedCoursesOptions[firstNullIndex] = matchingStudentCourse.course; // ✅ Replace null with new course
 
     // ✅ Add the StudentCourse to `student_courses_satisfying`
     const updatedStudentCourses = [...subreq.student_courses_satisfying, matchingStudentCourse];
@@ -95,10 +97,12 @@ export function addCourseInSubreq(
       student_courses_satisfying: updatedStudentCourses
     };
 
+    // ✅ Update state with new data
+    success = true; // ✅ Mark operation as successful
     return updateUserWithNewSubreq(prevUser, majorsIndex, reqIndex, subreqIndex, updatedSubreq);
   });
 
-  return true; // ✅ Successfully added course
+  return success; // ✅ Now properly returns success/failure
 }
 
 export function removeCourseInSubreq(

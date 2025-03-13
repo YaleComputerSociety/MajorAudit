@@ -75,21 +75,22 @@ function RemoveButton({ onClick }: { onClick: () => void }) {
   );
 }
 
-function MajorsEmptyIcon(props: { edit: boolean }) {
+function MajorsEmptyIcon(props: { edit: boolean, onAddCourse: Function }) 
+{
   const [isAdding, setIsAdding] = useState(false);
   const [courseCode, setCourseCode] = useState("");
   const popupRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // 🔹 Close input box when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
         setIsAdding(false);
+				setCourseCode("");
       }
     }
 
-    if (isAdding) {
+    if(isAdding){
       document.addEventListener("mousedown", handleClickOutside);
     }
 
@@ -98,49 +99,54 @@ function MajorsEmptyIcon(props: { edit: boolean }) {
     };
   }, [isAdding]);
 
-  // 🔹 Auto-focus input when it appears
   useEffect(() => {
     if (isAdding) {
       inputRef.current?.focus();
     }
   }, [isAdding]);
 
-  return (
+	function handleAddCourse() {
+    const success = props.onAddCourse(courseCode);
+    if(success){
+      setIsAdding(false);
+      setCourseCode("");
+    }
+  }
+
+  return(
     <div className={Style.IconContainer}> {/* ✅ Keeps relative positioning */}
       {props.edit ? (
-        <>
-          <div className={Style.EmptyIcon} onClick={() => setIsAdding(true)}>+</div>
+        <div>
+          <div className={Style.EmptyIcon} onClick={() => setIsAdding(true)}>
+						+
+					</div>
 
           {isAdding && (
             <div ref={popupRef} className={Style.AddCoursePopup}>
-              <input
-                ref={inputRef}
-                type="text"
-                value={courseCode}
-                onChange={(e) => setCourseCode(e.target.value)}
-              />
+              <input ref={inputRef} type="text" value={courseCode} onChange={(e) => setCourseCode(e.target.value)}/>
+							<div className={Style.ConfirmButton} onClick={handleAddCourse}>✔</div>
             </div>
           )}
-        </>
+        </div>
       ) : (
-        <div className={Style.EmptyIcon}></div>  // ✅ Non-editable version stays a simple gray circle
+        <div className={Style.EmptyIcon}>
+
+				</div>
       )}
     </div>
   );
 }
-
-
-
 
 export function MajorsIcon(props: { 
   edit: boolean; 
   contentCourse: Course | StudentCourse | null; 
   subreq: ConcentrationSubrequirement; 
   onRemoveCourse: Function;
+	onAddCourse: Function;
 }) {
   // If no course exists, render the "Add" icon
   if (!props.contentCourse) {
-    return <MajorsEmptyIcon edit={props.edit} />;
+    return <MajorsEmptyIcon edit={props.edit} onAddCourse={props.onAddCourse}/>;
   }
 
   // ✅ Determine if `contentCourse` is a StudentCourse (i.e., has a `course` field inside)

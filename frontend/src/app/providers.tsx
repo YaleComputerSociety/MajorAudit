@@ -3,11 +3,12 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 import { User } from "@/types/type-user";
-import { NullUser, Ryan } from "@/database/data-user";
+import { Ryan } from "@/database/data-user";
 
 const AuthContext = createContext<any>(null);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }: { children: React.ReactNode }) 
+{
   const [auth, setAuth] = useState({ loggedIn: false });
   const [user, setUser] = useState<User>(Ryan);
 

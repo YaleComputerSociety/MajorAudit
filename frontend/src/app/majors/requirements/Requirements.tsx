@@ -8,10 +8,10 @@ import Style from "./Requirements.module.css";
 import { Course } from "@/types/type-user";
 import { ConcentrationSubrequirement, ConcentrationRequirement, DegreeConcentration, MajorsIndex } from "@/types/type-program";
 
-import { removeCourseInSubreq } from "./RequirementsUtils";
+import { removeCourseInSubreq, addCourseInSubreq } from "./RequirementsUtils";
 import { MajorsIcon } from "../course-icon/MajorsCourseIcon";
 
-function RenderSubrequirementCourse(props: { edit?: boolean; course: Course | null; subreq: ConcentrationSubrequirement; onRemoveCourse: Function }) 
+function RenderSubrequirementCourse(props: { edit?: boolean; course: Course | null; subreq: ConcentrationSubrequirement; onRemoveCourse: Function, onAddCourse: Function }) 
 {
   const matchingStudentCourse = props.subreq.student_courses_satisfying.find(
     (studentCourse) => studentCourse.course === props.course
@@ -24,6 +24,7 @@ function RenderSubrequirementCourse(props: { edit?: boolean; course: Course | nu
         contentCourse={matchingStudentCourse ?? props.course} 
         subreq={props.subreq} 
         onRemoveCourse={props.onRemoveCourse} 
+				onAddCourse={props.onAddCourse} 
       />
     </div>
   );
@@ -32,8 +33,13 @@ function RenderSubrequirementCourse(props: { edit?: boolean; course: Course | nu
 function RenderSubrequirement(props: { edit: boolean, majorsIndex: MajorsIndex, reqIndex: number, subreqIndex: number, subreq: ConcentrationSubrequirement }) 
 {
 	const { setUser } = useAuth();
-	function handleRemoveCourse(course: Course | null, isStudentCourse: boolean = false) {
+
+	function handleRemoveCourse(course: Course | null, isStudentCourse: boolean = false){
     removeCourseInSubreq(setUser, props.majorsIndex, props.reqIndex, props.subreqIndex, course, isStudentCourse);
+  }
+
+	function handleAddCourse(courseCode: string){
+    return addCourseInSubreq(setUser, props.majorsIndex, props.reqIndex, props.subreqIndex, courseCode);
   }
 
   return (
@@ -53,6 +59,7 @@ function RenderSubrequirement(props: { edit: boolean, majorsIndex: MajorsIndex, 
 						edit={props.edit}
 						// {...(props.subreq.courses_any_bool ? { edit: props.edit } : {})} 
 						onRemoveCourse={handleRemoveCourse}
+						onAddCourse={handleAddCourse}
 					/>
         ))}
       </div>
