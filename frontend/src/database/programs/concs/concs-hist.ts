@@ -211,7 +211,7 @@ const SEN_TWO: ConcentrationSubrequirement = {
 const HIST_SEN: ConcentrationRequirement = {
 	req_name: "SENIOR",
 	req_desc: "",
-	courses_required_count: 0,
+	courses_required_count: -1,
 	courses_satisfied_count: 0,
 	subreqs_required_count: 1,
 	subreqs_satisfied_count: 0,

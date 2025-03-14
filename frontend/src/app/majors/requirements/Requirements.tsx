@@ -104,6 +104,13 @@ function RenderRequirement(props: {
 		}
 	}
 
+	let dynamicRequiredCount: number | string = props.req.courses_required_count;
+	if (props.req.courses_required_count === -1) {
+		dynamicRequiredCount = selectedSubreqs.length > 0 
+			? selectedSubreqs.reduce((sum, idx) => sum + props.req.subreqs_list[idx].courses_required, 0)
+			: "~"; 
+	}
+
   return(
     <div className={Style.Column}>
       <div className={Style.Row} style={{ marginBottom: "2px", justifyContent: "space-between" }}>
@@ -111,8 +118,11 @@ function RenderRequirement(props: {
 					{props.req.req_name}
 				</div>
         <div className={Style.ReqHeader} style={{ marginRight: "20px" }}>
-          {props.req.checkbox !== undefined ? props.req.courses_satisfied_count === props.req.courses_required_count ? "✅" : "❌" : `${props.req.courses_satisfied_count}|${props.req.courses_required_count}`}
-        </div>
+					{props.req.checkbox !== undefined 
+            ? props.req.courses_satisfied_count === props.req.courses_required_count ? "✅" : "❌" 
+            : `${props.req.courses_satisfied_count}|${dynamicRequiredCount}`
+          }        
+				</div>
       </div>
 			<div className={Style.SubDesc}>
 					{props.req.req_desc}
