@@ -43,6 +43,7 @@ export interface StudentConc {
 	user_status: number;
 	user_conc: DegreeConcentration;
 	user_conc_name: string;
+	selected_subreqs: Record<number, number[]>;
 }
 
 export interface FYP {

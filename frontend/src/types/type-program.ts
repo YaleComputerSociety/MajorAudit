@@ -21,6 +21,8 @@ export interface ConcentrationSubrequirement {
 	flags?: string[];
 
 	student_courses_satisfying: StudentCourse[];
+
+	// selected?: boolean;
 }
 
 export interface ConcentrationRequirement {

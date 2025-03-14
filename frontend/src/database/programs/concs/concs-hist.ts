@@ -8,7 +8,7 @@ const PRE_REQ: ConcentrationSubrequirement = {
 	courses_required: 2,
 	courses_options: [null, null],
 	courses_elective_range: null,
-	courses_any_bool: false,
+	courses_any_bool: true,
 	student_courses_satisfying: [],
 }
 

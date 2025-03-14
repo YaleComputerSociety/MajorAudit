@@ -32,8 +32,9 @@ export function toggleConcentrationPin(
     const newStudentConc: StudentConc = {
       conc_majors_index: majorsIndex,
       user_status: 1, // Assume 1 means pinned
-      user_conc: { ...newConc }, // Clone conc so changes don't affect `progList`
+      user_conc: { ...newConc }, 
       user_conc_name: newConc.conc_name,
+			selected_subreqs: {},
     };
 
     return {

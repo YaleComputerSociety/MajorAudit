@@ -34,8 +34,6 @@ function Majors()
   }, [index]);
 
   const updateIndex = (newIndex: MajorsIndex) => {
-		console.log("old");
-		console.log(newIndex);
     setIndex((prev) => ({
       ...prev!,
       ...newIndex,
@@ -44,8 +42,6 @@ function Majors()
         : prev!.prog,
       conc: newIndex.conc === -1 ? (prev!.conc === -1 ? 0 : -1) : newIndex.conc,
     }));
-		console.log("new");
-		console.log(index);
   };
 
   if(index === null) return null;

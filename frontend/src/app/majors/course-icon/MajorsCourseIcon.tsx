@@ -116,7 +116,7 @@ function MajorsEmptyIcon(props: { edit: boolean, onAddCourse: Function })
     <div className={Style.IconContainer}>
       {props.edit ? (
         <>
-          <div className={Style.EmptyIcon} style={{ background: "green" }} onClick={() => setIsAdding(true)}>
+          <div className={Style.EmptyIcon} style={{ background: "grey" }} onClick={() => setIsAdding(true)}>
 						
 					</div>
 

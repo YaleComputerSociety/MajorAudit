@@ -50,6 +50,18 @@
 	margin-bottom: 4px;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 .ToggleButton {
 	margin-top: 3px;
 
@@ -66,7 +78,17 @@
 	margin-bottom: 2px;
 }
 
-.SubreqButton {
+
+
+
+.SubreqSelectionRow {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.SubreqOption {
 	font-size: 10px;
 	padding: 3px;
 
@@ -78,9 +100,25 @@
   transition: background-color 0.3s ease;
 }
 
-.SubreqButton.Selected {
+.SubreqOption.Selected {
   background-color: rgb(100, 178, 238);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

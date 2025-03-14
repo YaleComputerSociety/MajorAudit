@@ -21,7 +21,7 @@ const CORE_MATH: ConcentrationSubrequirement = {
 	courses_required: 1,
 	courses_options: [CPSC_202, MATH_244],
 	courses_elective_range: null,
-	courses_any_bool: false,
+	courses_any_bool: true,
 	student_courses_satisfying: [],
 }
 
@@ -31,7 +31,7 @@ const CORE_DATA: ConcentrationSubrequirement = {
 	courses_required: 1,
 	courses_options: [CPSC_223],
 	courses_elective_range: null,
-	courses_any_bool: false,
+	courses_any_bool: true,
 	student_courses_satisfying: [SC_CPSC_223],
 }
 

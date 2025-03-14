@@ -9,7 +9,7 @@ import Style from "./Requirements.module.css";
 import { Course, StudentConc } from "@/types/type-user";
 import { ConcentrationSubrequirement, ConcentrationRequirement, MajorsIndex } from "@/types/type-program";
 
-import { removeCourseInSubreq, addCourseInSubreq } from "./RequirementsUtils";
+import { getStudentConcentration, removeCourseInSubreq, addCourseInSubreq, toggleSubreqSelection } from "./RequirementsUtils";
 import { MajorsIcon } from "../course-icon/MajorsCourseIcon";
 
 function RenderSubrequirementCourse(props: { 
@@ -90,6 +90,20 @@ function RenderRequirement(props: {
 	reqIndex: number, 
 	req: ConcentrationRequirement 
 }){
+	const { user, setUser } = useAuth();
+	const userConc = getStudentConcentration(user, props.majorsIndex);
+	const selectedSubreqs = userConc?.selected_subreqs[props.reqIndex] ?? [];
+
+	const visibleSubreqs = selectedSubreqs.length > 0 
+    ? props.req.subreqs_list.filter((_, i) => selectedSubreqs.includes(i))
+    : props.req.subreqs_list;
+
+	function handleToggleSubreq(subreqIndex: number) {
+		if(userConc){
+			toggleSubreqSelection(setUser, props.majorsIndex, props.reqIndex, subreqIndex, props.req.subreqs_required_count ?? props.req.subreqs_list.length);
+		}
+	}
+
   return(
     <div className={Style.Column}>
       <div className={Style.Row} style={{ marginBottom: "2px", justifyContent: "space-between" }}>
@@ -103,14 +117,29 @@ function RenderRequirement(props: {
 			<div className={Style.SubDesc}>
 					{props.req.req_desc}
 			</div>
+
+			{(props.req.subreqs_required_count !== undefined && props.req.subreqs_required_count < props.req.subreqs_list.length) && (
+        <div className={Style.SubreqSelectionRow}>
+          {props.req.subreqs_list.map((subreq, i) => (
+            <div 
+              key={i} 
+              className={`${Style.SubreqOption} ${selectedSubreqs.includes(i) ? Style.Selected : ""}`}
+              onClick={() => handleToggleSubreq(i)}
+            >
+              {subreq.subreq_name}
+            </div>
+          ))}
+        </div>
+      )}
+
 			<div className={Style.SubreqsList}>
-        {props.req.subreqs_list.map((subreq, i) => (
+        {visibleSubreqs.map((subreq, subreqIndex) => (
           <RenderSubrequirement 
-						key={i} 
+						key={subreqIndex} 
 						edit={props.edit} 
 						majorsIndex={props.majorsIndex}
 						reqIndex={props.reqIndex} 
-						subreqIndex={i} 
+						subreqIndex={subreqIndex} 
 						subreq={subreq} 
 					/>
         ))}
