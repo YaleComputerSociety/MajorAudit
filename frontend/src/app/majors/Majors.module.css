@@ -23,7 +23,7 @@
 	height: calc(100% - 100px);
 }
 
-.EditButton {
+.ListButton {
 	position: fixed;
 
 	top: 95px;

@@ -1,7 +1,8 @@
 
 import { User } from "./../types/type-user";
-import { PROG_CPSC, PROG_ECON, PROG_HIST, PROG_PLSC } from "./programs/data-program";
 import { SC_CPSC_201 } from "./data-courses";
+
+import { CONC_CPSC_BS_I } from "./programs/concs/concs-cpsc";
 
 export const Ryan: User = {
 	name: "Ryan",
@@ -16,33 +17,13 @@ export const Ryan: User = {
 			senior: [0, 202703, 202801],
 		},
 		languagePlacement: { language: "Spanish", level: 5 },
-		prog_list: [PROG_CPSC, PROG_ECON, PROG_HIST, PROG_PLSC],
-		decl_list: [{ user_status: 1, majors_index: { conc: 0, deg: 0, prog: 0 } }],
+		decl_list: [
+			{ 
+				conc_majors_index: { conc: 0, deg: 1, prog: 0 }, // check
+				user_status: 1,
+				user_conc: CONC_CPSC_BS_I,
+				user_conc_name: "cpsc bs",
+			}
+		],
 	}
 }
-
-// export const NullUser: User = {
-// 	name: "",
-// 	netID: "",
-// 	onboard: false,
-// 	FYP: {
-// 		studentCourses: [],
-// 		studentTermArrangement: {
-// 			first_year: [],
-// 			sophomore: [],
-// 			junior: [],
-// 			senior: [],
-// 		},
-// 		languagePlacement: { language: "", level: 0 },
-// 		degreeDeclarations: [],
-// 		degreeConfigurations: [
-// 			[],
-// 			[],
-// 			[],
-// 			[]
-// 		],
-// 	}
-// }
-
-
-

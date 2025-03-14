@@ -6,8 +6,8 @@ import { User, StudentConc } from "@/types/type-user";
 function ConcIcon(props: { user: User, setIndex: Function, studentConc: StudentConc }) {
 
   return(
-    <div className={Style.DegreeIcon} onClick={() => props.setIndex(props.studentConc.majors_index)}>
-      📌{props.user.FYP.prog_list[props.studentConc.majors_index.prog].prog_data.prog_abbr}
+    <div className={Style.DegreeIcon} onClick={() => props.setIndex(props.studentConc.conc_majors_index)}>
+      📌{props.studentConc.user_conc_name}
     </div>
   );
 }

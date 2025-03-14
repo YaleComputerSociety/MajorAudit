@@ -11,7 +11,7 @@ const CORE_INTRO: ConcentrationSubrequirement = {
 	courses_required: 1,
 	courses_options: [CPSC_201],
 	courses_elective_range: null,
-	courses_any_bool: false,
+	courses_any_bool: true,
 	student_courses_satisfying: [],
 }
 

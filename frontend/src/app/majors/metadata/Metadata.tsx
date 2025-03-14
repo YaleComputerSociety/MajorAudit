@@ -4,19 +4,29 @@ import Style from "./Metadata.module.css";
 
 import Link from 'next/link';
 import { MajorsIndex, Program } from "@/types/type-program";
+import { usePrograms } from "@/context/ProgramProvider";
+import { useAuth } from "@/context/AuthProvider";
 
-function MetadataTopshelf(props: { program: Program }) 
-{
-  return (
+import { toggleConcentrationPin } from "./MetadataUtils";
+
+function MetadataTopshelf(props: { 
+	program: Program;
+	index: MajorsIndex;
+}){
+	const { setUser } = useAuth();
+  const { progList } = usePrograms();
+
+  function handlePinClick() {
+    toggleConcentrationPin(setUser, progList, props.index);
+  }
+
+  return(
     <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-      {/* <div className={Style.thumbtack} onClick={() => pinProgram(props.programIndex, 0, props.user, props.setUser)}>
-        <img src="./illegal_pin.png" alt="" style={{ width: "30px" }}/>
-      </div>
-      <div className={Style.thumbtack} onClick={() => addProgram(props.programIndex, 0, props.user, props.setUser)}>
-        <img src="./plus.png" alt="" style={{ width: "30px" }}/>
-      </div> */}
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
+					<div style={{ fontSize: "30px", marginRight: "6px", cursor: "pointer" }} onClick={handlePinClick}>
+						📌
+					</div>
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>
 						{props.program.prog_data.prog_name}
 					</div>
@@ -74,34 +84,11 @@ function MetadataTopshelf(props: { program: Program })
 //   );
 // }
 
-function MetadataBody(props: { program: Program, index: MajorsIndex }){
-
-	return(
-		// style={{ marginLeft: "80px" }}
-		<div>
-			{/* <MetadataStats concMetadata={degreeMetadata.concs[concIndex]}/> */}
-			<div className={Style.subsectionHeader}>
-				ABOUT
-			</div>
-			<div style={{ fontSize: "12px", marginBottom: "12px" }}>
-				{props.program.prog_degs[props.index.deg].deg_concs[props.index.conc].conc_desc}
-			</div>
-			<div className={Style.subsectionHeader}>
-				DUS
-			</div>
-			<div style={{ fontSize: "12px", marginBottom: "12px" }}>
-				{props.program.prog_data.prog_dus.dus_name}; {props.program.prog_data.prog_dus.dus_email}
-			</div>
-			<div style={{ display: "flex" }}>
-				<div className={Style.linkBox}><Link className={Style.link} href={props.program.prog_data.prog_catolog} target="_blank">MAJOR CATALOG</Link></div>
-				<div className={Style.linkBox}><Link className={Style.link} href={props.program.prog_data.prog_website} target="_blank">MAJOR WEBSITE</Link></div>
-			</div>
-		</div>
-	);
-}
-
-function MetadataToggle(props: { program: Program, index: MajorsIndex, setIndex: Function })
-{
+function MetadataToggle(props: { 
+	program: Program, 
+	index: MajorsIndex, 
+	setIndex: Function 
+}){
 	return (
 		<div className={Style.Column}>
 			<div className={Style.ToggleContainer}>
@@ -134,19 +121,40 @@ function MetadataToggle(props: { program: Program, index: MajorsIndex, setIndex:
 	);
 }
 
-function MetadataContent(props: { program: Program, index: MajorsIndex, setIndex: Function })
-{
-  return (
-    <div className={Style.MajorContainer}>
-      <MetadataTopshelf program={props.program}/>
-			<MetadataToggle program={props.program} index={props.index} setIndex={props.setIndex}/>
-			<MetadataBody program={props.program} index={props.index}/>
-    </div>
-  );
+function MetadataBody(props: { 
+	program: Program, 
+	index: MajorsIndex 
+}){
+	return(
+		// style={{ marginLeft: "80px" }}
+		<div>
+			{/* <MetadataStats concMetadata={degreeMetadata.concs[concIndex]}/> */}
+			<div className={Style.subsectionHeader}>
+				ABOUT
+			</div>
+			<div style={{ fontSize: "12px", marginBottom: "12px" }}>
+				{props.program.prog_degs[props.index.deg].deg_concs[props.index.conc].conc_desc}
+			</div>
+			<div className={Style.subsectionHeader}>
+				DUS
+			</div>
+			<div style={{ fontSize: "12px", marginBottom: "12px" }}>
+				{props.program.prog_data.prog_dus.dus_name}; {props.program.prog_data.prog_dus.dus_email}
+			</div>
+			<div style={{ display: "flex" }}>
+				<div className={Style.linkBox}><Link className={Style.link} href={props.program.prog_data.prog_catolog} target="_blank">MAJOR CATALOG</Link></div>
+				<div className={Style.linkBox}><Link className={Style.link} href={props.program.prog_data.prog_website} target="_blank">MAJOR WEBSITE</Link></div>
+			</div>
+		</div>
+	);
 }
 
-function MetadataScrollButton(props: { programs: Program[], index: MajorsIndex, setIndex: Function; dir: number }) 
-{
+function MetadataScrollButton(props: { 
+	programs: Program[], 
+	index: MajorsIndex, 
+	setIndex: Function; 
+	dir: number 
+}){
   return(
     <div className={Style.ScrollButton} onClick={() => props.setIndex({ conc: 0, deg: 0, prog: props.index.prog + props.dir  })}>
       <div style={{ display: "flex" }}>
@@ -163,36 +171,46 @@ function MetadataScrollButton(props: { programs: Program[], index: MajorsIndex, 
   );
 }
 
-function ProgramContent(props: { programs: Program[], index: MajorsIndex, setIndex: Function }){
-	return(
-		<div>
-			<MetadataScrollButton programs={props.programs} index={props.index} setIndex={props.setIndex} dir={1}/>
-      <MetadataContent program={props.programs[props.index.prog]} index={props.index} setIndex={props.setIndex}/>
-      <MetadataScrollButton programs={props.programs} index={props.index} setIndex={props.setIndex} dir={-1}/>
-		</div>
-	)
-}
-
-function ProgramList(props: { programs: Program[], setIndex: Function }){
+function ProgramList(props: { 
+	programs: Program[], 
+	setIndex: Function 
+}){
 	return(
 		<div>
 			{props.programs.map((program: Program, prog_index: number) => (
-				<div key={prog_index} className={Style.ProgramOption} onClick={() => props.setIndex({ conc: 0, deg: 0, prog: prog_index })}>
-					{program.prog_data.prog_name}  {program.prog_data.prog_abbr}
+				<div 
+					key={prog_index} 
+					className={Style.ProgramOption} 
+					onClick={() => props.setIndex({ conc: 0, deg: 0, prog: prog_index })}
+				>
+					{program.prog_data.prog_name} {program.prog_data.prog_abbr}
 				</div>
 			))}
 		</div>
 	)
 }
 
-function Metadata(props: { programs: Program[], index: MajorsIndex, setIndex: Function }) 
-{
+function Metadata(props: { 
+	index: MajorsIndex, 
+	setIndex: Function 
+}){
+	const { progList } = usePrograms();
+	const currProgram = progList[props.index.prog];
+
 	return(
     <div className={Style.MetadataContainer}>
       {props.index.conc == -1 ? (
-					<ProgramList programs={props.programs} setIndex={props.setIndex}/>
+					<ProgramList programs={progList} setIndex={props.setIndex}/>
 				) : (
-					<ProgramContent programs={props.programs} index={props.index} setIndex={props.setIndex}/>
+					<div>
+						<MetadataScrollButton programs={progList} index={props.index} setIndex={props.setIndex} dir={1}/>
+						<div className={Style.MajorContainer}>
+							<MetadataTopshelf program={currProgram} index={props.index}/>
+							<MetadataToggle program={currProgram} index={props.index} setIndex={props.setIndex}/>
+							<MetadataBody program={currProgram} index={props.index}/>
+						</div>
+						<MetadataScrollButton programs={progList} index={props.index} setIndex={props.setIndex} dir={-1}/>
+					</div>
 				)
 			}
     </div>

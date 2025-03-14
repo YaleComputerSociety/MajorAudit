@@ -1,6 +1,7 @@
 
 import "./globals.css";
-import { AuthProvider } from "./providers";
+import { AuthProvider } from "@/context/AuthProvider";
+import { ProgramProvider } from "@/context/ProgramProvider";
 
 export const metadata = {
   title: "MajorAudit"
@@ -12,7 +13,9 @@ export default function RootLayout({children}: {children: React.ReactNode})
     <html lang="en">
       <body>
 				<AuthProvider>
-					{children}
+					<ProgramProvider>
+						{children}
+					</ProgramProvider>
 				</AuthProvider>
 			</body>
     </html>

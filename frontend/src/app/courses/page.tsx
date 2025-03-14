@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Style from "./Courses.module.css";
 
-import { useAuth } from "../providers";
+import { useAuth } from "@/context/AuthProvider";
 import { StudentYear } from "@/types/type-user";
 import { BuildStudentYears } from "./CoursesUtils";
 

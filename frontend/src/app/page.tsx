@@ -2,7 +2,7 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "./providers";
+import { useAuth } from "@/context/AuthProvider";
 
 export default function MajorAudit()
 {

@@ -1,18 +1,22 @@
 
+	/*  */
+	/* min-height: 18px; */
+
 .Icon {
 	display: flex;
 	flex-direction: row;
-	
+
 	align-items: center;
-
-	border-radius: 15px;
-
-	width: max-content;
-	padding: 2px 4px;
-	min-height: 18px;
+	justify-content: center;
 
 	font-size: 14px;
 	font-weight: bold;
+
+	width: max-content;
+	height: max-content;
+
+	padding: 2px 4px;
+	border-radius: 15px;
 
 	background-color: #F5F5F5;
 	transition: filter 0.4s ease;
@@ -23,20 +27,16 @@
 	filter: brightness(95%);
 }
 
-.CourseIcon {
-  background-color: #F5F5F5;
-}
-
 .StudentCourseIcon {
   background-color: #E1E9F8;
 }
 
 .RemoveButton {
-	margin-right: 4px;
-  width: 14px;
-  height: 14px;
+	margin-right: 3px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  background-color: rgb(237, 237, 237);
+  background-color: rgb(255, 255, 255);
   display: flex;
   align-items: center;
   justify-content: center;

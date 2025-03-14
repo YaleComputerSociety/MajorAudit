@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import Style from "./Login.module.css";
 
-import { useAuth } from "../providers";
+import { useAuth } from "@/context/AuthProvider";
 import NavBar from "@/components/navbar/NavBar";
 
 function Login() 

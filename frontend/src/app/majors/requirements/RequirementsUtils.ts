@@ -10,50 +10,29 @@ function updateUserWithNewSubreq(
   subreqIndex: number,
   updatedSubreq: ConcentrationSubrequirement
 ): User {
-  const updatedUser = { ...prevUser };
-
-  // Directly access the correct structures using indices
-  const program = updatedUser.FYP.prog_list[majorsIndex.prog];
-  const degree = program.prog_degs[majorsIndex.deg];
-  const concentration = degree.deg_concs[majorsIndex.conc];
-  const requirement = concentration.conc_reqs[reqIndex];
-
-  // ✅ Modify only the affected subrequirement
-  const updatedSubreqs = [...requirement.subreqs_list];
-  updatedSubreqs[subreqIndex] = updatedSubreq;
-
-  // ✅ Modify only the affected requirement
-  const updatedConcReqs = [...concentration.conc_reqs];
-  updatedConcReqs[reqIndex] = { ...requirement, subreqs_list: updatedSubreqs };
-
-  // ✅ Modify only the affected concentration
-  const updatedConcentration = { ...concentration, conc_reqs: updatedConcReqs };
-
-  // ✅ Modify only the affected degree
-  const updatedDegree = {
-    ...degree,
-    deg_concs: degree.deg_concs.map((conc, idx) =>
-      idx === majorsIndex.conc ? updatedConcentration : conc
-    )
-  };
-
-  // ✅ Modify only the affected program
-  const updatedProgram = {
-    ...program,
-    prog_degs: program.prog_degs.map((deg, idx) =>
-      idx === majorsIndex.deg ? updatedDegree : deg
-    )
-  };
-
-  // ✅ Modify only the affected user object
   return {
-    ...updatedUser,
+    ...prevUser,
     FYP: {
-      ...updatedUser.FYP,
-      prog_list: updatedUser.FYP.prog_list.map((prog, idx) =>
-        idx === majorsIndex.prog ? updatedProgram : prog
-      )
-    }
+      ...prevUser.FYP,
+      decl_list: prevUser.FYP.decl_list.map((studentConc) => {
+        if(
+          studentConc.conc_majors_index.prog === majorsIndex.prog &&
+          studentConc.conc_majors_index.deg === majorsIndex.deg &&
+          studentConc.conc_majors_index.conc === majorsIndex.conc
+        ){
+          const updatedConcReqs = studentConc.user_conc.conc_reqs.map((req, idx) =>
+            idx === reqIndex
+              ? { ...req, subreqs_list: req.subreqs_list.map((subreq, sidx) =>
+                  sidx === subreqIndex ? updatedSubreq : subreq
+                ) }
+              : req
+          );
+
+          return { ...studentConc, user_conc: { ...studentConc.user_conc, conc_reqs: updatedConcReqs } };
+        }
+        return studentConc;
+      }),
+    },
   };
 }
 
@@ -63,46 +42,39 @@ export function addCourseInSubreq(
   reqIndex: number,
   subreqIndex: number,
   courseCode: string
-): boolean {
-  let success = false; // ✅ Track success state
-
+) {
   setUser((prevUser: User) => {
-    const program = prevUser.FYP.prog_list[majorsIndex.prog];
-    const degree = program.prog_degs[majorsIndex.deg];
-    const concentration = degree.deg_concs[majorsIndex.conc];
-    const requirement = concentration.conc_reqs[reqIndex];
-    const subreq = requirement.subreqs_list[subreqIndex];
-
-    // ✅ Find the StudentCourse that matches the course code
-    const matchingStudentCourse = prevUser.FYP.studentCourses.find((studentCourse) =>
-      studentCourse.course.codes.includes(courseCode)
+    const userConc = prevUser.FYP.decl_list.find(
+      (sc) => sc.conc_majors_index.prog === majorsIndex.prog &&
+              sc.conc_majors_index.deg === majorsIndex.deg &&
+              sc.conc_majors_index.conc === majorsIndex.conc
     );
 
-    if (!matchingStudentCourse) return prevUser; // 🚨 No update if course doesn't exist
+    if (!userConc) return prevUser; 
 
-    // ✅ Find the first null spot in courses_options
+    const requirement = userConc.user_conc.conc_reqs[reqIndex];
+    const subreq = requirement.subreqs_list[subreqIndex];
+
+    const matchingStudentCourse = prevUser.FYP.studentCourses.find((sc) =>
+      sc.course.codes.includes(courseCode)
+    );
+
+    if (!matchingStudentCourse) return prevUser; 
+
     const updatedCoursesOptions = [...subreq.courses_options];
     const firstNullIndex = updatedCoursesOptions.indexOf(null);
-    if (firstNullIndex === -1) return prevUser; // 🚨 No space available, no update
+    if (firstNullIndex === -1) return prevUser; 
 
-    updatedCoursesOptions[firstNullIndex] = matchingStudentCourse.course; // ✅ Replace null with new course
+    updatedCoursesOptions[firstNullIndex] = matchingStudentCourse.course;
 
-    // ✅ Add the StudentCourse to `student_courses_satisfying`
-    const updatedStudentCourses = [...subreq.student_courses_satisfying, matchingStudentCourse];
-
-    // ✅ Create the updated subrequirement
     const updatedSubreq = {
       ...subreq,
       courses_options: updatedCoursesOptions,
-      student_courses_satisfying: updatedStudentCourses
+      student_courses_satisfying: [...subreq.student_courses_satisfying, matchingStudentCourse],
     };
 
-    // ✅ Update state with new data
-    success = true; // ✅ Mark operation as successful
     return updateUserWithNewSubreq(prevUser, majorsIndex, reqIndex, subreqIndex, updatedSubreq);
   });
-
-  return success; // ✅ Now properly returns success/failure
 }
 
 export function removeCourseInSubreq(
@@ -114,25 +86,26 @@ export function removeCourseInSubreq(
   isStudentCourse?: boolean
 ) {
   setUser((prevUser: User) => {
-    const program = prevUser.FYP.prog_list[majorsIndex.prog];
-    const degree = program.prog_degs[majorsIndex.deg];
-    const concentration = degree.deg_concs[majorsIndex.conc];
-    const requirement = concentration.conc_reqs[reqIndex];
+    const userConc = prevUser.FYP.decl_list.find(
+      (sc) => sc.conc_majors_index.prog === majorsIndex.prog &&
+              sc.conc_majors_index.deg === majorsIndex.deg &&
+              sc.conc_majors_index.conc === majorsIndex.conc
+    );
+
+    if (!userConc) return prevUser; // 🚨 Safety check
+
+    const requirement = userConc.user_conc.conc_reqs[reqIndex];
     const subreq = requirement.subreqs_list[subreqIndex];
 
-    // ✅ Modify `courses_options` directly
-    const updatedCoursesOptions = [...subreq.courses_options];
-    const courseIndex = updatedCoursesOptions.indexOf(course);
-    if (courseIndex !== -1) {
-      updatedCoursesOptions[courseIndex] = null;
-    }
+    // ✅ Modify `courses_options`
+    const updatedCoursesOptions = subreq.courses_options.map((c) => (c === course ? null : c));
 
-    // ✅ Filter out StudentCourse if necessary
+    // ✅ Modify `student_courses_satisfying`
     const updatedStudentCourses = isStudentCourse
       ? subreq.student_courses_satisfying.filter((sc) => sc.course !== course)
       : subreq.student_courses_satisfying;
 
-    // ✅ Create the updated subrequirement
+    // ✅ Create updated subrequirement
     const updatedSubreq = {
       ...subreq,
       courses_options: updatedCoursesOptions,

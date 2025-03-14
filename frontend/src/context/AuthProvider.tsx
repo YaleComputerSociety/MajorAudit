@@ -12,7 +12,6 @@ export function AuthProvider({ children }: { children: React.ReactNode })
   const [auth, setAuth] = useState({ loggedIn: false });
   const [user, setUser] = useState<User>(Ryan);
 
-	// uh this isnt right
 	useEffect(() => {
 		setUser(Ryan);
   }, []);
@@ -24,6 +23,6 @@ export function AuthProvider({ children }: { children: React.ReactNode })
   );
 }
 
-export function useAuth() {
+export function useAuth(){
   return useContext(AuthContext);
 }

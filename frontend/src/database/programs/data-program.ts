@@ -5,7 +5,7 @@ import { CONC_ECON_BA_I } from "./concs/concs-econ";
 import { CONC_HIST_BA_GLOB, CONC_HIST_BA_SPEC } from "./concs/concs-hist";
 import { CONC_PLSC_BA_INTE, CONC_PLSC_BA_STAN } from "./concs/concs-plsc";
 
-export const PROG_CPSC: Program = {
+const PROG_CPSC: Program = {
 	prog_data: {
 		prog_name: "Computer Science",
 		prog_abbr: "CPSC",
@@ -20,7 +20,7 @@ export const PROG_CPSC: Program = {
 	]
 }
 
-export const PROG_ECON: Program = {
+const PROG_ECON: Program = {
 	prog_data: {
 		prog_name: "Economics",
 		prog_abbr: "ECON",
@@ -34,7 +34,7 @@ export const PROG_ECON: Program = {
 	]
 }
 
-export const PROG_PLSC: Program = {
+const PROG_PLSC: Program = {
 	prog_data: {
 		prog_name: "Political Science",
 		prog_abbr: "PLSC",
@@ -48,7 +48,7 @@ export const PROG_PLSC: Program = {
 	]
 }
 
-export const PROG_HIST: Program = {
+const PROG_HIST: Program = {
 	prog_data: {
 		prog_name: "History",
 		prog_abbr: "HIST",
@@ -64,3 +64,7 @@ export const PROG_HIST: Program = {
 		}
 	]
 }
+
+export const PROG_LIST: Program[] = [
+	PROG_CPSC, PROG_ECON, PROG_PLSC, PROG_HIST
+]

@@ -17,16 +17,17 @@
 }
 
 .ReqsList {
-	border: 1px solid white;
+	/* border-bottom: 1px solid grey; */
 	margin-left: 30px;
-/* 
-  height: 430px;
+
+  /* height: 750px;
   scrollbar-color: rgb(131, 131, 131) transparent;
   scrollbar-width: thin;
-  overflow-y: scroll;
-  padding-right: 7px;
-  overflow-x: hidden; 
-*/
+  overflow-y: scroll; */
+}
+
+.SubreqsList { 
+	margin-left: 30px;
 }
 
 .ReqHeader {

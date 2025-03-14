@@ -38,14 +38,13 @@ function MajorsCourseIcon(props: {
   onRemoveCourse: Function;
 }) {
   return (
-    <div className={`${Style.Icon} ${Style.CourseIcon}`}>
-      {/* ✅ Only show remove button in edit mode */}
+    <div className={Style.Icon}>
       {props.edit && (
         <RemoveButton onClick={() => props.onRemoveCourse(props.course, props.subreq, false)} />
       )}
-      <CourseSeasonIcon seasons={props.course.seasons || []} />
+      <CourseSeasonIcon seasons={props.course.seasons || []}/>
       {props.course.codes[0]}
-      <DistributionCircle distributions={props.course.dist} />
+      <DistributionCircle distributions={props.course.dist}/>
     </div>
   );
 }
@@ -114,11 +113,11 @@ function MajorsEmptyIcon(props: { edit: boolean, onAddCourse: Function })
   }
 
   return(
-    <div className={Style.IconContainer}> {/* ✅ Keeps relative positioning */}
+    <div className={Style.IconContainer}>
       {props.edit ? (
-        <div>
-          <div className={Style.EmptyIcon} onClick={() => setIsAdding(true)}>
-						+
+        <>
+          <div className={Style.EmptyIcon} style={{ background: "green" }} onClick={() => setIsAdding(true)}>
+						
 					</div>
 
           {isAdding && (
@@ -127,7 +126,7 @@ function MajorsEmptyIcon(props: { edit: boolean, onAddCourse: Function })
 							<div className={Style.ConfirmButton} onClick={handleAddCourse}>✔</div>
             </div>
           )}
-        </div>
+        </>
       ) : (
         <div className={Style.EmptyIcon}>
 
@@ -144,12 +143,10 @@ export function MajorsIcon(props: {
   onRemoveCourse: Function;
 	onAddCourse: Function;
 }) {
-  // If no course exists, render the "Add" icon
   if (!props.contentCourse) {
     return <MajorsEmptyIcon edit={props.edit} onAddCourse={props.onAddCourse}/>;
   }
 
-  // ✅ Determine if `contentCourse` is a StudentCourse (i.e., has a `course` field inside)
   const isStudentCourse = "course" in props.contentCourse;
 
   return isStudentCourse ? (
