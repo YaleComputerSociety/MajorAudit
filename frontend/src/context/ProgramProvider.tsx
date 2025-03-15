@@ -1,22 +1,21 @@
 
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
-import { Program } from "@/types/type-program";
+import { ProgramDict } from "@/types/type-program";
+import { PROG_DICT } from "@/database/programs/data-program";
 
-import { PROG_LIST } from "@/database/programs/data-program";
-
-const ProgramContext = createContext<{ progList: Program[] }>({ progList: [] });
+const ProgramContext = createContext<{ progDict: ProgramDict }>({ progDict: {} });
 
 export function ProgramProvider({ children }: { children: React.ReactNode }) {
   
-	const [progList, setProgList] = useState<Program[]>([]);
+  const [progDict, setProgDict] = useState<ProgramDict>({});
 
   useEffect(() => {
-		setProgList(PROG_LIST)
-	}, []); 
+    setProgDict(PROG_DICT);
+  }, []); 
 
-  return(
-    <ProgramContext.Provider value={{ progList }}>
+  return (
+    <ProgramContext.Provider value={{ progDict }}>
       {children}
     </ProgramContext.Provider>
   );
@@ -25,3 +24,4 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
 export function usePrograms() {
   return useContext(ProgramContext);
 }
+

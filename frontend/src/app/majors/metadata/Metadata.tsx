@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Style from "./Metadata.module.css";
 
 import Link from 'next/link';
-import { MajorsIndex, Program } from "@/types/type-program";
+import { MajorsIndex, Program, ProgramDict } from "@/types/type-program";
 import { usePrograms } from "@/context/ProgramProvider";
 import { useAuth } from "@/context/AuthProvider";
 
@@ -14,10 +14,10 @@ function MetadataTopshelf(props: {
 	index: MajorsIndex;
 }){
 	const { setUser } = useAuth();
-  const { progList } = usePrograms();
+  const { progDict } = usePrograms();
 
   function handlePinClick() {
-    toggleConcentrationPin(setUser, progList, props.index);
+    toggleConcentrationPin(setUser, progDict, props.index);
   }
 
   return(
@@ -150,20 +150,25 @@ function MetadataBody(props: {
 }
 
 function MetadataScrollButton(props: { 
-	programs: Program[], 
+	programs: ProgramDict, 
 	index: MajorsIndex, 
 	setIndex: Function; 
+	filteredProgKeys: string[];
 	dir: number 
 }){
-  return(
-    <div className={Style.ScrollButton} onClick={() => props.setIndex({ conc: 0, deg: 0, prog: props.index.prog + props.dir  })}>
+  const currentProgIndex = props.filteredProgKeys.indexOf(props.index.prog);
+  const nextProgIndex = (currentProgIndex + props.dir + props.filteredProgKeys.length) % props.filteredProgKeys.length;
+  const nextProg = props.filteredProgKeys[nextProgIndex];
+
+  return (
+    <div className={Style.ScrollButton} onClick={() => props.setIndex({ prog: nextProg, conc: 0, deg: 0 })}>
       <div style={{ display: "flex" }}>
         <div style={{ textAlign: "left", color: "gray" }}>
           <div style={{ fontSize: "18px", fontWeight: "bold" }}>
-            {props.programs[(props.index.prog + props.dir + props.programs.length) % props.programs.length].prog_data.prog_name}
+            {props.programs[nextProg].prog_data.prog_name}
           </div>
           <div style={{ fontSize: "10px" }}>
-            {props.programs[(props.index.prog + props.dir + props.programs.length) % props.programs.length].prog_data.prog_abbr}
+            {props.programs[nextProg].prog_data.prog_abbr}
           </div>
         </div>
       </div>
@@ -172,44 +177,59 @@ function MetadataScrollButton(props: {
 }
 
 function ProgramList(props: { 
-	programs: Program[], 
+	programs: ProgramDict, 
 	setIndex: Function 
 }){
-	return(
+	return (
 		<div>
-			{props.programs.map((program: Program, prog_index: number) => (
+			{Object.entries(props.programs).map(([progCode, program]) => (
 				<div 
-					key={prog_index} 
+					key={progCode} 
 					className={Style.ProgramOption} 
-					onClick={() => props.setIndex({ conc: 0, deg: 0, prog: prog_index })}
+					onClick={() => props.setIndex({ conc: 0, deg: 0, prog: progCode })}
 				>
-					{program.prog_data.prog_name} {program.prog_data.prog_abbr}
+					{program.prog_data.prog_name} ({program.prog_data.prog_abbr})
 				</div>
 			))}
 		</div>
-	)
+	);
 }
 
 function Metadata(props: { 
 	index: MajorsIndex, 
-	setIndex: Function 
+	setIndex: Function,
+	filteredProgKeys: string[],
 }){
-	const { progList } = usePrograms();
-	const currProgram = progList[props.index.prog];
+	const { progDict } = usePrograms();
+	const currProgram = progDict[props.index.prog];
+
+	if (!currProgram) return null;
 
 	return(
     <div className={Style.MetadataContainer}>
       {props.index.conc == -1 ? (
-					<ProgramList programs={progList} setIndex={props.setIndex}/>
+					<ProgramList programs={progDict} setIndex={props.setIndex}/>
 				) : (
 					<div>
-						<MetadataScrollButton programs={progList} index={props.index} setIndex={props.setIndex} dir={1}/>
+						<MetadataScrollButton 
+							programs={progDict} 
+							index={props.index} 
+							setIndex={props.setIndex} 
+							filteredProgKeys={props.filteredProgKeys} 
+							dir={1}
+						/>
 						<div className={Style.MajorContainer}>
 							<MetadataTopshelf program={currProgram} index={props.index}/>
 							<MetadataToggle program={currProgram} index={props.index} setIndex={props.setIndex}/>
 							<MetadataBody program={currProgram} index={props.index}/>
 						</div>
-						<MetadataScrollButton programs={progList} index={props.index} setIndex={props.setIndex} dir={-1}/>
+						<MetadataScrollButton 
+							programs={progDict} 
+							index={props.index} 
+							setIndex={props.setIndex} 
+							filteredProgKeys={props.filteredProgKeys} 
+							dir={-1}
+						/>
 					</div>
 				)
 			}

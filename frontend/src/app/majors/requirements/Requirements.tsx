@@ -169,19 +169,17 @@ function Requirements(props: {
 
 	const [edit, setEdit] = useState(false);
 	const { user } = useAuth();
-	const { progList } = usePrograms();
+	const { progDict } = usePrograms();
 
 	useEffect(() => {
 		setEdit(false);
 	}, [props.majorsIndex]);
 
-	const userConc = user.FYP.decl_list.find((sc: StudentConc) =>
-		sc.conc_majors_index.prog === props.majorsIndex?.prog &&
-		sc.conc_majors_index.deg === props.majorsIndex?.deg &&
-		sc.conc_majors_index.conc === props.majorsIndex?.conc
-	);
-
-	const conc = userConc ? userConc.user_conc : progList[props.majorsIndex.prog].prog_degs[props.majorsIndex.deg].deg_concs[props.majorsIndex.conc];
+	const userConc = getStudentConcentration(user, props.majorsIndex);
+	const program = progDict[props.majorsIndex.prog];
+	const conc = userConc 
+		? userConc.user_conc 
+		: program?.prog_degs[props.majorsIndex.deg].deg_concs[props.majorsIndex.conc];
 
 	return(
     <div className={Style.RequirementsContainer}>

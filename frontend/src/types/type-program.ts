@@ -72,7 +72,9 @@ export interface Program {
 }
 
 export interface MajorsIndex {
-	prog: number;
+	prog: string;
 	deg: number;
 	conc: number;
 }
+
+export type ProgramDict = Record<string, Program>;

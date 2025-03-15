@@ -1,10 +1,10 @@
 
 import { User, StudentConc } from "@/types/type-user";
-import { Program, MajorsIndex } from "@/types/type-program";
+import { ProgramDict, MajorsIndex } from "@/types/type-program";
 
 export function toggleConcentrationPin(
   setUser: Function,
-  progList: Program[],
+  progDict: ProgramDict,
   majorsIndex: MajorsIndex
 ) {
   setUser((prevUser: User) => {
@@ -15,9 +15,8 @@ export function toggleConcentrationPin(
         sc.conc_majors_index.conc === majorsIndex.conc
     );
 
-    // ✅ If already pinned, remove it (unpin)
-    if (existingConcIndex !== -1) {
-      return {
+    if(existingConcIndex !== -1){
+      return{
         ...prevUser,
         FYP: {
           ...prevUser.FYP,
@@ -26,22 +25,28 @@ export function toggleConcentrationPin(
       };
     }
 
-    // ✅ Otherwise, pin it
-    const newConc = progList[majorsIndex.prog].prog_degs[majorsIndex.deg].deg_concs[majorsIndex.conc];
+    const program = progDict[majorsIndex.prog];
+    if (!program) return prevUser; 
+
+    const degree = program.prog_degs[majorsIndex.deg];
+    if (!degree) return prevUser; 
+
+    const concentration = degree.deg_concs[majorsIndex.conc];
+    if (!concentration) return prevUser; 
 
     const newStudentConc: StudentConc = {
       conc_majors_index: majorsIndex,
-      user_status: 1, // Assume 1 means pinned
-      user_conc: { ...newConc }, 
-      user_conc_name: newConc.conc_name,
-			selected_subreqs: {},
+      user_status: 1, 
+      user_conc: { ...concentration }, 
+      user_conc_name: concentration.conc_name,
+      selected_subreqs: {}, 
     };
 
-    return {
+    return{
       ...prevUser,
       FYP: {
         ...prevUser.FYP,
-        decl_list: [...prevUser.FYP.decl_list, newStudentConc], // Append to `decl_list`
+        decl_list: [...prevUser.FYP.decl_list, newStudentConc], 
       },
     };
   });
