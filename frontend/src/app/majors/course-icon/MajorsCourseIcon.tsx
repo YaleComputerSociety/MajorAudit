@@ -2,16 +2,18 @@
 import { useState, useRef, useEffect } from "react";
 import Style from "./MajorsCourseIcon.module.css"
 
+import Image from "next/image";
+
 import { ConcentrationSubrequirement } from "@/types/type-program";
 import { StudentCourse, Course } from "@/types/type-user";
 
 import DistributionCircle from "@/components/distribution-circle/DistributionsCircle";
 
-
-function CourseSeasonIcon(props: { seasons: Array<string> }) {
+function SeasonComp(props: { seasons: string[] }) 
+{
   const seasonImageMap: { [key: string]: string } = {
-    "Fall":  "./fall.svg",
-    "Spring":  "./spring.svg",
+    "Fall":  "/fall.svg",
+    "Spring": "/spring.svg",
   };
 
   return (
@@ -19,10 +21,11 @@ function CourseSeasonIcon(props: { seasons: Array<string> }) {
       {props.seasons.map((szn, index) => (
         <div key={index} style={{ marginLeft: index > 0 ? "-7.5px" : 0 }}>
           {seasonImageMap[szn] && (
-            <img
-              style={{ width: "15px", height: "15px" }}
+            <Image
               src={seasonImageMap[szn]}
               alt={szn}
+              width={15}
+              height={15}
             />
           )}
         </div>
@@ -31,25 +34,27 @@ function CourseSeasonIcon(props: { seasons: Array<string> }) {
   );
 }
 
-function MajorsCourseIcon(props: { 
+function CourseIcon(props: { 
   edit: boolean; 
   course: Course; 
   subreq: ConcentrationSubrequirement; 
   onRemoveCourse: Function;
-}) {
+}){
   return (
     <div className={Style.Icon}>
       {props.edit && (
         <RemoveButton onClick={() => props.onRemoveCourse(props.course, props.subreq, false)} />
       )}
-      <CourseSeasonIcon seasons={props.course.seasons || []}/>
+      <SeasonComp seasons={props.course.seasons || []}/>
       {props.course.codes[0]}
-      <DistributionCircle distributions={props.course.dist}/>
+			<div style={{ marginLeft: "2px", marginTop: "5px" }}>
+				<DistributionCircle distributions={props.course.dist}/>
+			</div>
     </div>
   );
 }
 
-function MajorsStudentCourseIcon(props: { 
+function StudentCourseIcon(props: { 
   edit: boolean; 
   studentCourse: StudentCourse; 
   subreq: ConcentrationSubrequirement; 
@@ -74,22 +79,29 @@ function RemoveButton({ onClick }: { onClick: () => void }) {
   );
 }
 
-function MajorsEmptyIcon(props: { edit: boolean, onAddCourse: Function }) 
-{
+function EmptyIcon(props: { 
+  edit: boolean, 
+  onAddCourse: Function, 
+}){
   const [isAdding, setIsAdding] = useState(false);
   const [courseCode, setCourseCode] = useState("");
   const popupRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (isAdding) {
+      inputRef.current?.focus();
+    }
+  }, [isAdding]);
+
+  useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-        setIsAdding(false);
-				setCourseCode("");
+        deactivate();
       }
     }
 
-    if(isAdding){
+    if (isAdding) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
@@ -98,43 +110,50 @@ function MajorsEmptyIcon(props: { edit: boolean, onAddCourse: Function })
     };
   }, [isAdding]);
 
-  useEffect(() => {
-    if (isAdding) {
-      inputRef.current?.focus();
-    }
-  }, [isAdding]);
+  function activate() {
+    setIsAdding(true);
+  }
 
-	function handleAddCourse() {
-    const success = props.onAddCourse(courseCode);
-    if(success){
-      setIsAdding(false);
-      setCourseCode("");
+  function deactivate() {
+    setIsAdding(false);
+    setCourseCode("");
+  }
+
+  function handleAddCourse() {
+    const success = props.onAddCourse(courseCode.trim().toUpperCase());
+    if (success) {
+      deactivate();
     }
   }
 
-  return(
-    <div className={Style.IconContainer}>
-      {props.edit ? (
-        <>
-          <div className={Style.EmptyIcon} style={{ background: "grey" }} onClick={() => setIsAdding(true)}>
-						
-					</div>
+  if (!props.edit) {
+    return <div className={Style.Icon}/>;
+  }
 
-          {isAdding && (
-            <div ref={popupRef} className={Style.AddCoursePopup}>
-              <input ref={inputRef} type="text" value={courseCode} onChange={(e) => setCourseCode(e.target.value)}/>
-							<div className={Style.ConfirmButton} onClick={handleAddCourse}>✔</div>
-            </div>
-          )}
-        </>
+  return (
+    <div>
+      {!isAdding ? (
+        <div className={Style.AddButton} onClick={activate}>
+          +
+        </div>
       ) : (
-        <div className={Style.EmptyIcon}>
-
-				</div>
+        <div ref={popupRef} className={Style.AddCanvas}>
+          <div className={Style.RemoveButton} onClick={deactivate}/>
+          <input 
+            ref={inputRef} 
+            type="text" 
+            value={courseCode} 
+            onChange={(e) => setCourseCode(e.target.value)}
+            maxLength={9} 
+            className={Style.CodeSearch}
+          />
+          <div className={Style.RemoveButton} onClick={handleAddCourse}/>
+        </div>
       )}
     </div>
   );
 }
+
 
 export function MajorsIcon(props: { 
   edit: boolean; 
@@ -144,20 +163,20 @@ export function MajorsIcon(props: {
 	onAddCourse: Function;
 }) {
   if (!props.contentCourse) {
-    return <MajorsEmptyIcon edit={props.edit} onAddCourse={props.onAddCourse}/>;
+    return <EmptyIcon edit={props.edit} onAddCourse={props.onAddCourse}/>;
   }
 
   const isStudentCourse = "course" in props.contentCourse;
 
   return isStudentCourse ? (
-    <MajorsStudentCourseIcon 
+    <StudentCourseIcon 
       edit={props.edit} 
       studentCourse={props.contentCourse as StudentCourse} 
       subreq={props.subreq}
       onRemoveCourse={props.onRemoveCourse} 
     />
   ) : (
-    <MajorsCourseIcon 
+    <CourseIcon 
       edit={props.edit} 
       course={props.contentCourse as Course} 
       subreq={props.subreq}

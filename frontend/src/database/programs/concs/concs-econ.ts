@@ -18,8 +18,8 @@ const INTRO_MATH: ConcentrationSubrequirement = {
 const INTRO_MICRO: ConcentrationSubrequirement = {
 	subreq_name: "INTRO MICRO",
 	subreq_desc: "",
-	courses_required: 1,
-	courses_options: [ECON_108, ECON_110, ECON_115],
+	courses_required: 2,
+	courses_options: [ECON_108, ECON_110, ECON_115, null],
 	courses_elective_range: null,
 	courses_any_bool: false,
 	student_courses_satisfying: [SC_ECON_110],
