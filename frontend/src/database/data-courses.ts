@@ -4,7 +4,7 @@ import { Course, StudentCourse } from "@/types/type-user"
 // COURSES
 
 // HSAR PROGRAM
-export const HSAR_401: Course = { codes: ["HSAR 401"], title: "", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
+export const HSAR_401: Course = { codes: ["HSAR 401"], title: "Critical Approaches To Art History", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
 
 // PLSC PROGRAM
 export const PLSC_474: Course = { codes: ["PSLC 474"], title: "", credit: 1, dist: ["So"], seasons: ["Spring"]}
@@ -12,7 +12,7 @@ export const PLSC_490: Course = { codes: ["PSLC 490"], title: "", credit: 1, dis
 export const PLSC_493: Course = { codes: ["PSLC 493"], title: "", credit: 1, dist: ["So"], seasons: ["Fall", "Spring"]}
 
 // CPSC PROGRAM
-export const CPSC_201: Course = { codes: ["CPSC 201"], title: "", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
+export const CPSC_201: Course = { codes: ["CPSC 201"], title: "Introduction To Computer Science", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
 export const CPSC_202: Course = { codes: ["CPSC 202"], title: "", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
 export const MATH_244: Course = { codes: ["MATH 244"], title: "", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
 export const CPSC_223: Course = { codes: ["CPSC 223"], title: "", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
@@ -20,7 +20,7 @@ export const CPSC_323: Course = { codes: ["CPSC 323"], title: "", credit: 1, dis
 export const CPSC_365: Course = { codes: ["CPSC 365"], title: "", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
 export const CPSC_366: Course = { codes: ["CPSC 366"], title: "", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
 export const CPSC_381: Course = { codes: ["CPSC 381"], title: "", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
-export const CPSC_490: Course = { codes: ["CPSC 490"], title: "", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
+export const CPSC_490: Course = { codes: ["CPSC 490"], title: "Senior Project", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
 
 // ECON PROGRAM
 export const MATH_110: Course = { codes: ["MATH 110"], title: "", credit: 1, dist: ["QR"], seasons: ["Fall", "Spring"] }
@@ -48,7 +48,7 @@ export const ECON_136: Course = { codes: ["ECON 136"], title: "", credit: 1, dis
 
 // CPSC COURSES
 export const SC_CPSC_201: StudentCourse = { term: 202403, status: "DA", result: "GRADE_PASS", course: CPSC_201 }
-// export const SC_CPSC_202: StudentCourse = { term: 202403, status: "DA", result: "GRADE_PASS", course: CPSC_202 }
+export const SC_CPSC_202: StudentCourse = { term: 202403, status: "DA", result: "GRADE_PASS", course: CPSC_202 }
 export const SC_CPSC_223: StudentCourse = { term: 202501, status: "DA", result: "GRADE_PASS", course: CPSC_223 }
 export const SC_CPSC_323: StudentCourse = { term: 202503, status: "DA", result: "GRADE_PASS", course: CPSC_323 }
 export const SC_CPSC_381: StudentCourse = { term: 202503, status: "DA", result: "GRADE_PASS", course: CPSC_381 }

@@ -32,7 +32,7 @@ const CORE_DATA: ConcentrationSubrequirement = {
 	courses_options: [CPSC_223],
 	courses_elective_range: null,
 	courses_any_bool: true,
-	student_courses_satisfying: [SC_CPSC_223],
+	student_courses_satisfying: [],
 }
 
 const CORE_SYS: ConcentrationSubrequirement = {
@@ -42,7 +42,7 @@ const CORE_SYS: ConcentrationSubrequirement = {
 	courses_options: [CPSC_323],
 	courses_elective_range: null,
 	courses_any_bool: false,
-	student_courses_satisfying: [SC_CPSC_323],
+	student_courses_satisfying: [],
 }
 
 const CORE_ALGO: ConcentrationSubrequirement = {
@@ -69,20 +69,20 @@ const ELEC_MULT_BA: ConcentrationSubrequirement = {
 	subreq_name: "",
 	subreq_desc: "Intermediate or advanced CPSC courses, traditionally numbered 300+.",
 	courses_required: 3,
-	courses_options: [CPSC_381, null, null],
+	courses_options: [null, null, null],
 	courses_elective_range: { dept: "CPSC", min_code: 300, max_code: 999 },
 	courses_any_bool: false,
-	student_courses_satisfying: [SC_CPSC_381]
+	student_courses_satisfying: []
 }
 
 const ELEC_MULT_BS: ConcentrationSubrequirement = {
 	subreq_name: "",
 	subreq_desc: "Intermediate or advanced CPSC courses, traditionally numbered 300+.",
 	courses_required: 5,
-	courses_options: [CPSC_381, null, null, null, null],
+	courses_options: [null, null, null, null, null],
 	courses_elective_range: { dept: "CPSC", min_code: 300, max_code: 999 },
 	courses_any_bool: false,
-	student_courses_satisfying: [SC_CPSC_381]
+	student_courses_satisfying: []
 }
 
 const ELEC_SUB: ConcentrationSubrequirement = {

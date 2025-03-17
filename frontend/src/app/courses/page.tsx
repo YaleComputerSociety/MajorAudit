@@ -11,7 +11,7 @@ import NavBar from "@/components/navbar/NavBar";
 import YearBox from "./years/YearBox";
 
 function Courses(){
-	const { user, setUser } = useAuth();
+	const { user } = useAuth();
 
 	const [edit, setEdit] = useState(false);
   const toggleEdit = () => { setEdit(!edit); };
@@ -28,7 +28,13 @@ function Courses(){
 
 	useEffect(() => {
 		const newRenderedYears = studentYears.map((studentYear: StudentYear, index: number) => (
-			<YearBox key={index} edit={edit} columns={columns} studentYear={studentYear} setStudentYears={setStudentYears} user={user} setUser={setUser}/>
+			<YearBox 
+				key={index} 
+				edit={edit} 
+				columns={columns} 
+				studentYear={studentYear} 
+				setStudentYears={setStudentYears} 
+			/>
 		));
 		setRenderedYears(newRenderedYears);
   }, [edit, columns, studentYears, user]);
@@ -37,8 +43,8 @@ function Courses(){
     <div>
       <NavBar/>
       <div className={Style.CoursesPage}>
-        <button className={Style.EditButton} onClick={toggleEdit}></button>
-				<button className={Style.EditButton} onClick={toggleColumns} style={{ marginLeft: "40px" }}></button>
+        <button className={Style.EditButton} onClick={toggleEdit}/>
+				<button className={Style.EditButton} onClick={toggleColumns} style={{ marginLeft: "40px" }}/>
         <div className={Style.Column}>
           {renderedYears}
         </div>

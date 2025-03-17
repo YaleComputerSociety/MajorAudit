@@ -2,46 +2,29 @@
 import { useRef, useState, useEffect } from "react";
 import Style from "./AddCourseButton.module.css";
 
-import { User, StudentCourse } from "@/types/type-user";
-import { getCatalogCourse, getCatalogTerms } from "@/database/data-catalog";
+import { useAuth } from "@/context/AuthProvider";
+import { executeAddCourse } from "./AddCourseUtils";
+import { getCatalogTerms } from "@/database/data-catalog";
+import { usePrograms } from "@/context/ProgramProvider";
 
-interface AddCourseDisplay {
+export interface AddCourseDisplay {
 	active: boolean;
 	termDropVis: boolean;
 	resultDropVis: boolean;
 }
 
-function executeAddCourse(
-  props: { term: number; user: User; setUser: Function },
-	inputRef: React.RefObject<HTMLInputElement | null>,
-  selectedTerm: number,
-	selectedResult: string,
-  setAddDisplay: Function
-){
-  if(inputRef.current){
-    const targetCode = inputRef.current.value;
-    const targetCourse = getCatalogCourse(selectedTerm, targetCode);
-
-    if(targetCourse){
-      const status = selectedTerm === props.term ? "DA" : "MA";
-      const newCourse: StudentCourse = { course: targetCourse, status, term: props.term, result: selectedResult };
-
-      const updatedCourses = [...props.user.FYP.studentCourses, newCourse];
-
-			props.setUser({ ...props.user, FYP: { ...props.user.FYP, studentCourses: updatedCourses } });
-			setAddDisplay((prevState: AddCourseDisplay) => ({ ...prevState, active: false }));
-    }
-  }
-}
-
-function AddCourseButton(props: { term: number; user: User; setUser: Function }) {
-  
+function AddCourseButton(props: { 
+	term: number 
+}){
+	const { user, setUser } = useAuth();
+	const { progDict, setProgDict } = usePrograms();
+	
   const inputRef = useRef<HTMLInputElement>(null);
   const addRef = useRef<HTMLDivElement>(null);
 
   const [addDisplay, setAddDisplay] = useState<AddCourseDisplay>({ active: false, termDropVis: false, resultDropVis: false });
   const [selectedTerm, setSelectedTerm] = useState(props.term);
-  const [selectedResult, setSelectedResult] = useState("");
+  const [selectedResult, setSelectedResult] = useState("GRADE");
   const resultOptions = ["GRADE", "CR", "D/F"];
 
 	const catalogTerms = getCatalogTerms()
@@ -74,52 +57,85 @@ function AddCourseButton(props: { term: number; user: User; setUser: Function })
     }
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if(event.key === "Enter"){
-      executeAddCourse(props, inputRef, selectedTerm, selectedResult, setAddDisplay);
-    }
-  };
-
   return(
     <div ref={addRef}>
       {!addDisplay.active ? (
-        <div className={Style.AddButton} onClick={() => setAddDisplay((prevState) => ({...prevState, active: true}))}>
+        <div 
+					className={Style.CourseBox} 
+					onClick={() => setAddDisplay((prevState) => ({...prevState, active: true}))}
+				>
           +
         </div>
       ) : (
-        <div className={Style.AddCanvas}>
-          <div className={Style.Row} style={{ alignItems: "center" }}>
-            <div className={Style.RemoveButton} onClick={() => setAddDisplay((prevState) => ({...prevState, active: false}))}>
-            </div>
-            <div className={Style.TermBox} onClick={() => setAddDisplay((prevState) => ({...prevState, termDropVis: !prevState.termDropVis}))}>
-              {selectedTerm}
-              {addDisplay.termDropVis && (
-                <div className={Style.DropdownOptions}>
-                  {catalogTerms.map((term, index) => (
-                    <div key={index} onClick={() => setSelectedTerm(term)} className={term === selectedTerm ? Style.SelectedDropdownOption : ""}>
-                      {term}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <input ref={inputRef} type="text" placeholder="HIST 335" onKeyPress={handleKeyPress} maxLength={9} className={Style.CodeBox}>
-            </input>
-            <div className={Style.ResultBox} onClick={() => setAddDisplay((prevState) => ({...prevState, resultDropVis: !prevState.resultDropVis}))}>
-              {selectedResult || ""}
-              {addDisplay.resultDropVis && (
-                <div className={Style.DropdownOptions}>
-                  {resultOptions.map((result, index) => (
-                    <div key={index} onClick={() => setSelectedResult(result)} className={result === selectedResult ? Style.SelectedDropdownOption : ""}>
-                      {result}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className={Style.RemoveButton} onClick={() => executeAddCourse(props, inputRef, selectedTerm, selectedResult, setAddDisplay)}>
-            </div>
-          </div>
+        <div className={Style.CourseBox}>
+					<button 
+						className={Style.FuncButton} 
+						style={{ background: "#ffaaaa" }}
+						onClick={() => setAddDisplay((prevState) => ({...prevState, active: false}))}
+					/>
+					<div 
+						className={Style.DropBox} 
+						style={{ width: "80px" }}
+						onClick={() => setAddDisplay((prevState) => ({...prevState, termDropVis: !prevState.termDropVis}))}
+					>
+						{selectedTerm}
+						{addDisplay.termDropVis && (
+							<div className={Style.DropdownOptions}>
+								{catalogTerms.map((term, index) => (
+									<div 
+										key={index} 
+										className={term === selectedTerm ? Style.SelectedDropdownOption : ""}
+										onClick={() => setSelectedTerm(term)} 
+									>
+										{term}
+									</div>
+								))}
+							</div>
+						)}
+					</div>
+					<input 
+						ref={inputRef} 
+						type="text" 
+						placeholder="MATH 225" 
+						maxLength={9} 
+						className={Style.InputBox}
+						style={{ width: "100px" }}
+					/>
+					<div 
+						className={Style.DropBox} 
+						style={{ width: "60px" }}
+						onClick={() => setAddDisplay((prevState) => ({...prevState, resultDropVis: !prevState.resultDropVis}))}
+					>
+						{selectedResult || ""}
+						{addDisplay.resultDropVis && (
+							<div className={Style.DropdownOptions}>
+								{resultOptions.map((result, index) => (
+									<div 
+										key={index} 
+										className={result === selectedResult ? Style.SelectedDropdownOption : ""}
+										onClick={() => setSelectedResult(result)} 
+									>
+										{result}
+									</div>
+								))}
+							</div>
+						)}
+					</div>
+					<button 
+						className={Style.FuncButton} 
+						style={{ background: "#a4ffaf" }}
+						onClick={() => executeAddCourse(
+							props.term, 
+							user, 
+							setUser, 
+							progDict,
+							setProgDict,
+							inputRef, 
+							selectedTerm, 
+							selectedResult, 
+							setAddDisplay
+						)}
+					/>
         </div>
       )}
     </div>

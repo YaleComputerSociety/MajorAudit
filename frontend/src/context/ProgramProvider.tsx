@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { ProgramDict } from "@/types/type-program";
 import { PROG_DICT } from "@/database/programs/data-program";
 
-const ProgramContext = createContext<{ progDict: ProgramDict }>({ progDict: {} });
+const ProgramContext = createContext<any>(null);
 
 export function ProgramProvider({ children }: { children: React.ReactNode }) {
   
@@ -15,7 +15,7 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
   }, []); 
 
   return (
-    <ProgramContext.Provider value={{ progDict }}>
+    <ProgramContext.Provider value={{ progDict, setProgDict }}>
       {children}
     </ProgramContext.Provider>
   );

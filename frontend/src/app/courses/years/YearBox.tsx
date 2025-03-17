@@ -5,13 +5,22 @@ import { User, StudentYear, StudentSemester } from "@/types/type-user";
 
 import SemesterBox from "./semester/SemesterBox"
 import AddSemesterButton from "./add-semester/AddSemesterButton"
+import { useAuth } from "@/context/AuthProvider";
 
-function RenderSemesters(props: { edit: boolean; columns: boolean; studentYear: StudentYear, setStudentYears: Function, user: User, setUser: Function }) 
-{
+function RenderSemesters(props: { 
+	edit: boolean;
+	columns: boolean; 
+	studentYear: StudentYear, 
+	setStudentYears: Function, 
+}) {
   const newRenderedSemesters = props.studentYear.studentSemesters
     .filter((studentSemester: StudentSemester) => studentSemester.term !== 0)
     .map((studentSemester: StudentSemester) => (
-      <SemesterBox key={studentSemester.term} edit={props.edit} studentSemester={studentSemester} user={props.user} setUser={props.setUser}/>
+      <SemesterBox 
+				key={studentSemester.term} 
+				edit={props.edit} 
+				studentSemester={studentSemester} 
+			/>
     ));
 
   return( 
@@ -21,15 +30,25 @@ function RenderSemesters(props: { edit: boolean; columns: boolean; studentYear: 
   );
 }
 
-function YearBox(props: { edit: boolean, columns: boolean, studentYear: StudentYear, setStudentYears: Function, user: User, setUser: Function  })
-{
+function YearBox(props: { 
+	edit: boolean, 
+	columns: boolean, 
+	studentYear: StudentYear, 
+	setStudentYears: Function, 
+}){
+	const { user } = useAuth();
   const [renderedSemesters, setRenderedSemesters] = useState<React.ReactNode>(null);
 	
 	useEffect(() => {
     setRenderedSemesters(
-      <RenderSemesters edit={props.edit} columns={props.columns} studentYear={props.studentYear} setStudentYears={props.setStudentYears} user={props.user} setUser={props.setUser}/>
+      <RenderSemesters 
+				edit={props.edit} 
+				columns={props.columns} 
+				studentYear={props.studentYear} 
+				setStudentYears={props.setStudentYears} 
+			/>
     );
-  }, [props.edit, props.columns, props.studentYear, props.user]);
+  }, [props.edit, props.columns, props.studentYear, user]);
 
   return(
 		<div className={Style.Column}>
@@ -38,7 +57,12 @@ function YearBox(props: { edit: boolean, columns: boolean, studentYear: StudentY
 			</div>
 			<div className={props.columns ? Style.Column : Style.Row}>
 				{renderedSemesters}
-				{(props.edit && (props.studentYear.studentSemesters.length < 3)) && <AddSemesterButton studentYear={props.studentYear} setStudentYears={props.setStudentYears}/>}
+				{(props.edit && (props.studentYear.studentSemesters.length < 3)) && 
+					<AddSemesterButton 
+						studentYear={props.studentYear} 
+						setStudentYears={props.setStudentYears}
+					/>
+				}
 			</div>
 		</div>
   );

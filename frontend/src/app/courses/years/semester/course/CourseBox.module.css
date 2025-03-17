@@ -1,53 +1,26 @@
 
-.row {
+.Row {
 	display: flex;
 	flex-direction: row;
 }
 
-
-.RemoveButton {
+.Column {
 	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 16px; /* adjust size as needed */
-	height: 16px;
-	border-radius: 50%;
-	background-color: #ededed;
-	cursor: pointer;
-	margin-right: 5px;
-	/* optional border for better visibility */
-	/* border: 1px solid #C0C0C0; */
+	flex-direction: column;
 }
 
-.RemoveButton:hover {
-	background-color: #D3D3D3; /* slightly darker grey on hover */
-}
-
-.Checkmark {
-	justify-content: center;
-	text-align: center;
-
-	font-weight: 550;
-	margin-right: 2px;
-}
-
-.courseBox {
+.CourseBox {
 	display: flex;
 	flex-direction: row;
+
 	justify-content: space-between;
 	align-items: center;
 
 	width: 420px;
 	height: 36px;
 
+	padding: 0 10px;
 	border-radius: 16px;
-	margin-bottom: 5px;
-
-	padding-left: 10px;
-	padding-right: 10px;
-
-	background-color: #F5F5F5;
-	transition: filter 0.4s ease;
 }
 
 .CourseCode {
@@ -60,7 +33,14 @@
 	font-weight: 500;
 }
 
-.SeasonImage {
-	margin-top: 3px;
-	margin-right: 6px;
+.FuncButton {
+	border: none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
 }

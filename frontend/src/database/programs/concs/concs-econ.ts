@@ -22,7 +22,7 @@ const INTRO_MICRO: ConcentrationSubrequirement = {
 	courses_options: [ECON_108, ECON_110, ECON_115],
 	courses_elective_range: null,
 	courses_any_bool: false,
-	student_courses_satisfying: [SC_ECON_110],
+	student_courses_satisfying: [],
 }
 
 const INTRO_MACRO: ConcentrationSubrequirement = {
@@ -90,7 +90,7 @@ const ELEC_STAN: ConcentrationSubrequirement = {
 	subreq_desc: "Standard elective or DUS approved extra-department substitution.",
 	courses_required: 1,
 	courses_options: [null],
-	courses_elective_range: { dept: "CPSC", min_code: 123, max_code: 999 },
+	courses_elective_range: { dept: "ECON", min_code: 123, max_code: 999 },
 	courses_any_bool: false,
 	student_courses_satisfying: []
 }
