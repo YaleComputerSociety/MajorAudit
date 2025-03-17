@@ -89,14 +89,14 @@
 }
 
 .SubreqOption {
-	font-size: 10px;
+	cursor: pointer;
+	background-color: rgb(211, 211, 211);
+	color: white;
+	border: none;
+	border-radius: 6px;
+	margin: 0;
 	padding: 3px;
-
-  cursor: pointer;
-  border-radius: 6px;
-
-  background-color: rgb(211, 211, 211);
-  color: white;
+	font-size: 10px;
   transition: background-color 0.3s ease;
 }
 
@@ -128,7 +128,7 @@
 	justify-content: space-between;
 	margin-bottom: 10px;
 	font-size: 30px;
-	padding: 2px 8px;
+	/* padding: 2px 8px; */
 }
 
 .GoldBackground {
@@ -136,6 +136,11 @@
 	border-radius: 2px; */
 }
 
-.EditButton:hover {
-  cursor: pointer; /* Show pointer cursor on hover */
+.EditButton {
+  background-color: white;
+	margin: 0;
+	padding: 0;
+  border: none;
+	cursor: pointer;
+	font-size: 30px;
 }

@@ -78,55 +78,60 @@
   background-color: white;
 }
 
-.thumbtack {
-  font-size: 28px;
-  margin-right: 10px;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
 
-.thumbtack:hover {
-  opacity: 0.7; /* Slightly lighter on hover */
-}
-
-.thumbtack:active {
-  opacity: 0.5; /* Even lighter on click */
-}
 
 
 .ScrollButton {
   background-color: white;
+	margin: 0;
+	padding: 0;
   border: none;
-  cursor: pointer;
-  /* padding: 10px; */
-  display: inline-block;
+	cursor: pointer;
 }
+
+.PinButton {
+	cursor: pointer;
+  background-color: white;
+	border: none;
+	margin: 0;
+	padding: 0;
+  
+	
+	font-size: 30px;
+	margin-right: 6px;
+}
+
+
+
+/* margin-left: 80px; */
 
 .ToggleContainer {
   display: flex;
 	flex-direction: row;
-
-	/* margin-left: 80px; */
 	margin-bottom: 8px;
 }
 
 .ToggleOption {
-	font-size: 14px;
-	padding: 4px 10px;
-  cursor: pointer;
-  background-color: white;
-  color: black;
-  transition: background-color 0.3s, color 0.3s;
-  border-radius: 5px;
-
+	cursor: pointer;
+	background-color: white;
 	border: 1px solid rgb(196, 196, 196);
-	
+	border-radius: 5px;
+	color: black;
+	margin: 0;
+	padding: 4px 10px;
+	font-size: 14px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.ToggleOption.active {
+.ToggleOption.Active {
   background-color: #598ff4;
   color: white;
 }
+
+
+
+
+
 
 .ProgramOption {
 	color: gray;

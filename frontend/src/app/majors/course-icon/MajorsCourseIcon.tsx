@@ -73,9 +73,11 @@ function StudentCourseIcon(props: {
 
 function RemoveButton({ onClick }: { onClick: () => void }) {
   return (
-    <div className={Style.RemoveButton} onClick={onClick}>
-
-    </div>
+    <div 
+			className={Style.RemoveButton} 
+			style={{ background: "#ffaaaa" }}
+			onClick={onClick}
+		/>
   );
 }
 
@@ -133,12 +135,16 @@ function EmptyIcon(props: {
   return (
     <div>
       {!isAdding ? (
-        <div className={Style.AddButton} onClick={activate}>
+        <div className={Style.Icon} onClick={activate}>
           +
         </div>
       ) : (
-        <div ref={popupRef} className={Style.AddCanvas}>
-          <div className={Style.RemoveButton} onClick={deactivate}/>
+        <div ref={popupRef} className={Style.Icon}>
+          <button 
+						className={Style.RemoveButton}
+						style={{ background: "#ffaaaa" }}
+						onClick={deactivate}
+					/>
           <input 
             ref={inputRef} 
             type="text" 
@@ -147,7 +153,11 @@ function EmptyIcon(props: {
             maxLength={9} 
             className={Style.CodeSearch}
           />
-          <div className={Style.RemoveButton} onClick={handleAddCourse}/>
+          <button 
+						className={Style.RemoveButton}
+						style={{ background: "#a4ffaf" }}
+						onClick={handleAddCourse}
+					/>
         </div>
       )}
     </div>

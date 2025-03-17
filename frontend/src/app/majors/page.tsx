@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import Style from "./Majors.module.css";
 
 import { MajorsIndex } from "@/types/type-program"; 
+import { initializeMajorsIndex, updateMajorsIndex } from "./MajorsUtils";
 
 import NavBar from "@/components/navbar/NavBar";
 import Overhead from "./overhead/Overhead";
@@ -21,6 +22,7 @@ function Majors()
 	const progKeys = Object.keys(progDict);
 	const [filteredProgKeys, setFilteredProgKeys] = useState<string[]>(progKeys);
 	const [index, setIndex] = useState<MajorsIndex | null>(null);
+	const [listView, setListView] = useState<boolean>(false);
 
 	useEffect(() => {
     if(progKeys.length > 0){
@@ -31,13 +33,7 @@ function Majors()
   useEffect(() => {
 		if (typeof window !== "undefined" && filteredProgKeys.length > 0) {
 			const storedIndex = sessionStorage.getItem("majorsIndex");
-			let parsedIndex: MajorsIndex = storedIndex ? JSON.parse(storedIndex) : { conc: 0, deg: 0, prog: filteredProgKeys[0] };
-	
-			if (!filteredProgKeys.includes(parsedIndex.prog)) {
-				parsedIndex = { ...parsedIndex, prog: filteredProgKeys[0] };
-			}
-	
-			setIndex(parsedIndex);
+			setIndex(initializeMajorsIndex(storedIndex, filteredProgKeys)); 
 		}
 	}, [filteredProgKeys]);
 
@@ -48,23 +44,9 @@ function Majors()
   }, [index]);
 
   const updateIndex = (newIndex: Partial<MajorsIndex>) => {
-    setIndex((prev) => {
-      if (!prev) return { conc: 0, deg: 0, prog: filteredProgKeys[0] || "" };
-
-      return{
-        ...prev,
-        ...newIndex,
-        prog: newIndex.prog !== undefined
-          ? filteredProgKeys[
-              (filteredProgKeys.indexOf(newIndex.prog) + filteredProgKeys.length) % filteredProgKeys.length
-            ]
-          : prev.prog,
-        conc: newIndex.conc !== undefined
-          ? (newIndex.conc === -1 ? (prev.conc === -1 ? 0 : -1) : newIndex.conc)
-          : prev.conc,
-      };
-    });
-  };
+		setListView(false);
+		setIndex((prev) => updateMajorsIndex(prev, newIndex, filteredProgKeys));
+	};
 
   if (index === null || !filteredProgKeys.length) return null;
 
@@ -72,10 +54,14 @@ function Majors()
     <div>
       <NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/>
       <div className={Style.MajorsPage}>
-				<div className={Style.ListButton} onClick={() => updateIndex({ ...index, conc: -1 })}/>
-				<Metadata index={index} setIndex={updateIndex} filteredProgKeys={filteredProgKeys}/>
+				<div className={Style.ListButton} onClick={() => setListView((prev) => !prev)}/>
+				<Metadata 
+					listView={listView} 
+					index={index} setIndex={updateIndex} 
+					filteredProgKeys={filteredProgKeys}
+				/>
 				<div className={Style.Divider}/>
-				<Requirements majorsIndex={index.conc === -1 ? null : index}/>
+				<Requirements majorsIndex={listView ? null : index}/>
       </div>
     </div>
   );

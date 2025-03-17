@@ -24,9 +24,9 @@ function MetadataTopshelf(props: {
     <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
-					<div style={{ fontSize: "30px", marginRight: "6px", cursor: "pointer" }} onClick={handlePinClick}>
+					<button className={Style.PinButton} onClick={handlePinClick}>
 						📌
-					</div>
+					</button>
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>
 						{props.program.prog_data.prog_name}
 					</div>
@@ -89,35 +89,36 @@ function MetadataToggle(props: {
 	index: MajorsIndex, 
 	setIndex: Function 
 }){
-	return (
+	return(
 		<div className={Style.Column}>
 			<div className={Style.ToggleContainer}>
 				{props.program.prog_degs.map((deg, index) => (
-					<div 
-						key={index} 
-						className={`${Style.ToggleOption} ${props.index.deg === index ? Style.active : ""}`} 
+					<button 
+						key={index}
+						className={`${Style.ToggleOption} ${props.index.deg === index ? Style.Active : ""}`}
+						style={{ cursor: props.program.prog_degs.length > 1 ? "pointer" : "default" }}
 						onClick={() => props.setIndex({ prog: props.index.prog, deg: index, conc: props.index.conc })}
 					>
 						{deg.deg_type}
-					</div>
+					</button>
 				))}
 			</div>
 
 			{props.program.prog_degs[props.index.deg].deg_concs.length > 1 && (
 				<div className={Style.ToggleContainer}>
 					{props.program.prog_degs[props.index.deg].deg_concs.map((conc, index) => (
-						<div 
-							key={index} 
-							className={`${Style.ToggleOption} ${props.index.conc === index ? Style.active : ""}`} 
+						<button 
+							key={index}
+							className={`${Style.ToggleOption} ${props.index.conc === index ? Style.Active : ""}`}
+							style={{ cursor: props.program.prog_degs[props.index.deg].deg_concs.length > 1 ? "pointer" : "default" }}
 							onClick={() => props.setIndex({ prog: props.index.prog, deg: props.index.deg, conc: index })}
 						>
 							{conc.conc_name}
-						</div>
+						</button>
 					))}
 				</div>
 			)}
 		</div>
-		
 	);
 }
 
@@ -161,7 +162,7 @@ function MetadataScrollButton(props: {
   const nextProg = props.filteredProgKeys[nextProgIndex];
 
   return (
-    <div className={Style.ScrollButton} onClick={() => props.setIndex({ prog: nextProg, conc: 0, deg: 0 })}>
+    <button className={Style.ScrollButton} onClick={() => props.setIndex({ prog: nextProg, conc: 0, deg: 0 })}>
       <div style={{ display: "flex" }}>
         <div style={{ textAlign: "left", color: "gray" }}>
           <div style={{ fontSize: "18px", fontWeight: "bold" }}>
@@ -172,7 +173,7 @@ function MetadataScrollButton(props: {
           </div>
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 
@@ -196,6 +197,7 @@ function ProgramList(props: {
 }
 
 function Metadata(props: { 
+	listView: boolean,
 	index: MajorsIndex, 
 	setIndex: Function,
 	filteredProgKeys: string[],
@@ -207,7 +209,7 @@ function Metadata(props: {
 
 	return(
     <div className={Style.MetadataContainer}>
-      {props.index.conc == -1 ? (
+      {props.listView ? (
 					<ProgramList programs={progDict} setIndex={props.setIndex}/>
 				) : (
 					<div>

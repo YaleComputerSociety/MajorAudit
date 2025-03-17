@@ -29,7 +29,7 @@ const GLOB_CORE_AFRICA: ConcentrationSubrequirement = {
 	courses_required: 1,
 	courses_options: [null],
 	courses_elective_range: null,
-	courses_any_bool: false,
+	courses_any_bool: true,
 	student_courses_satisfying: [],
 }
 
@@ -39,7 +39,7 @@ const GLOB_CORE_ASIA: ConcentrationSubrequirement = {
 	courses_required: 1,
 	courses_options: [null],
 	courses_elective_range: null,
-	courses_any_bool: false,
+	courses_any_bool: true,
 	student_courses_satisfying: [],
 }
 
@@ -49,7 +49,7 @@ const GLOB_CORE_EURO: ConcentrationSubrequirement = {
 	courses_required: 1,
 	courses_options: [null],
 	courses_elective_range: null,
-	courses_any_bool: false,
+	courses_any_bool: true,
 	student_courses_satisfying: [],
 }
 
@@ -59,7 +59,7 @@ const GLOB_CORE_LA: ConcentrationSubrequirement = {
 	courses_required: 1,
 	courses_options: [null],
 	courses_elective_range: null,
-	courses_any_bool: false,
+	courses_any_bool: true,
 	student_courses_satisfying: [],
 }
 
@@ -69,7 +69,7 @@ const GLOB_CORE_ME: ConcentrationSubrequirement = {
 	courses_required: 1,
 	courses_options: [null],
 	courses_elective_range: null,
-	courses_any_bool: false,
+	courses_any_bool: true,
 	student_courses_satisfying: [],
 }
 
@@ -79,7 +79,7 @@ const GLOB_CORE_US: ConcentrationSubrequirement = {
 	courses_required: 1,
 	courses_options: [null],
 	courses_elective_range: null,
-	courses_any_bool: false,
+	courses_any_bool: true,
 	student_courses_satisfying: [],
 }
 
@@ -90,7 +90,7 @@ const HIST_GLOB_CORE: ConcentrationRequirement = {
 	courses_satisfied_count: 0,
 	subreqs_required_count: 5,
 	subreqs_satisfied_count: 0,
-	subreqs_list: [GLOB_CORE_AFRICA, GLOB_CORE_AFRICA, GLOB_CORE_EURO, GLOB_CORE_LA, GLOB_CORE_ME, GLOB_CORE_US]
+	subreqs_list: [GLOB_CORE_AFRICA, GLOB_CORE_ASIA, GLOB_CORE_EURO, GLOB_CORE_LA, GLOB_CORE_ME, GLOB_CORE_US]
 }
 
 // SPEC CORE
