@@ -164,7 +164,6 @@ function EmptyIcon(props: {
   );
 }
 
-
 export function MajorsIcon(props: { 
   edit: boolean; 
   contentCourse: Course | StudentCourse | null; 

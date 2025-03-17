@@ -59,7 +59,7 @@ export function addCourseInSubreq(
   reqIndex: number,
   subreqIndex: number,
   courseCode: string
-){
+) {
   setUser((prevUser: User) => {
     const userConc = getStudentConcentration(prevUser, majorsIndex);
     if (!userConc) return prevUser; 
@@ -73,16 +73,17 @@ export function addCourseInSubreq(
 
     if (!matchingStudentCourse) return prevUser; 
 
-    const updatedCoursesOptions = [...subreq.courses_options];
-    const firstNullIndex = updatedCoursesOptions.indexOf(null);
-    if (firstNullIndex === -1) return prevUser; 
-
-    updatedCoursesOptions[firstNullIndex] = matchingStudentCourse.course;
+    // ✅ Find first empty slot in subreq_options
+    const updatedSubreqOptions = subreq.subreq_options.map((opt) => {
+      if (opt.o === null && opt.s === null) {
+        return { ...opt, o: matchingStudentCourse.course, s: matchingStudentCourse };
+      }
+      return opt;
+    });
 
     return updateUserWithNewSubreq(prevUser, majorsIndex, reqIndex, subreqIndex, {
       ...subreq,
-      courses_options: updatedCoursesOptions,
-      student_courses_satisfying: [...subreq.student_courses_satisfying, matchingStudentCourse],
+      subreq_options: updatedSubreqOptions
     });
   });
 }
@@ -102,27 +103,31 @@ export function removeCourseInSubreq(
     const requirement = userConc.user_conc.conc_reqs[reqIndex];
     const subreq = requirement.subreqs_list[subreqIndex];
 
-    // ✅ Remove student course
+    // ✅ Remove student course from `student_courses_satisfying`
     const updatedStudentCourses = isStudentCourse
-      ? subreq.student_courses_satisfying.filter((sc) => sc.course !== course)
-      : subreq.student_courses_satisfying;
+      ? subreq.subreq_options.filter((opt) => opt.s?.course !== course).map(opt => opt.s)
+      : subreq.subreq_options.map(opt => opt.s);
 
-    // ✅ Remove the course & ensure nulls don't exceed `courses_required`
-    let updatedCoursesOptions = subreq.courses_options.map((c) => (c === course ? null : c));
-    const nullCount = updatedCoursesOptions.filter((c) => c === null).length;
-    
-    if (nullCount > subreq.courses_required) {
-      updatedCoursesOptions = updatedCoursesOptions.filter((c) => c !== null);
-      updatedCoursesOptions = [...updatedCoursesOptions, ...Array(subreq.courses_required).fill(null)];
+    // ✅ Remove the course from `subreq_options`
+    let updatedSubreqOptions = subreq.subreq_options.map(opt =>
+      opt.o === course ? { ...opt, o: null, s: null } : opt
+    );
+
+    // ✅ Ensure nulls don't exceed `subreq_courses_req_count`
+    const nullCount = updatedSubreqOptions.filter(opt => opt.o === null).length;
+    if (nullCount > subreq.subreq_courses_req_count) {
+      updatedSubreqOptions = updatedSubreqOptions
+        .filter(opt => opt.o !== null)
+        .concat(Array(subreq.subreq_courses_req_count).fill({ o: null, s: null }));
     }
 
     return updateUserWithNewSubreq(prevUser, majorsIndex, reqIndex, subreqIndex, {
       ...subreq,
-      courses_options: updatedCoursesOptions,
-      student_courses_satisfying: updatedStudentCourses,
+      subreq_options: updatedSubreqOptions,
     });
   });
 }
+
 
 export function toggleSubreqSelection(
   setUser: Function, 

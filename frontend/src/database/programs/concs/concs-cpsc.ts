@@ -5,62 +5,84 @@ import { CPSC_201, CPSC_202, MATH_244, CPSC_223, CPSC_323, CPSC_365, CPSC_366, C
 
 // CORE
 
-const CORE_INTRO: ConcentrationSubrequirement = {
+const CORE_1: ConcentrationSubrequirement = {
 	subreq_name: "INTRO",
 	subreq_desc: "",
-	courses_required: 1,
-	courses_options: [CPSC_201],
-	courses_elective_range: null,
-	courses_any_bool: true,
-	student_courses_satisfying: [],
+	subreq_flex: false,
+	subreq_courses_req_count: 1,
+	subreq_options: [
+		{
+			o: CPSC_201,
+			s: null,
+		}
+	]
 }
 
-const CORE_MATH: ConcentrationSubrequirement = {
+const CORE_2: ConcentrationSubrequirement = {
 	subreq_name: "DISCRETE MATH",
 	subreq_desc: "",
-	courses_required: 1,
-	courses_options: [CPSC_202, MATH_244],
-	courses_elective_range: null,
-	courses_any_bool: true,
-	student_courses_satisfying: [],
+	subreq_flex: false,
+	subreq_courses_req_count: 1,
+	subreq_options: [
+		{
+			o: CPSC_202,
+			s: null,
+		},
+		{
+			o: MATH_244,
+			s: null,
+		},
+	]
 }
 
-const CORE_DATA: ConcentrationSubrequirement = {
+const CORE_3: ConcentrationSubrequirement = {
 	subreq_name: "DATA STRUCTURES",
 	subreq_desc: "",
-	courses_required: 1,
-	courses_options: [CPSC_223],
-	courses_elective_range: null,
-	courses_any_bool: true,
-	student_courses_satisfying: [],
+	subreq_flex: false,
+	subreq_courses_req_count: 1,
+	subreq_options: [
+		{
+			o: CPSC_223,
+			s: null,
+		}
+	]
 }
 
-const CORE_SYS: ConcentrationSubrequirement = {
+const CORE_4: ConcentrationSubrequirement = {
 	subreq_name: "SYSTEMS",
 	subreq_desc: "",
-	courses_required: 1,
-	courses_options: [CPSC_323],
-	courses_elective_range: null,
-	courses_any_bool: false,
-	student_courses_satisfying: [],
+	subreq_flex: false,
+	subreq_courses_req_count: 1,
+	subreq_options: [
+		{
+			o: CPSC_323,
+			s: null,
+		}
+	]
 }
 
-const CORE_ALGO: ConcentrationSubrequirement = {
+const CORE_5: ConcentrationSubrequirement = {
 	subreq_name: "ALGORITHMS",
 	subreq_desc: "",
-	courses_required: 1,
-	courses_options: [CPSC_365, CPSC_366],
-	courses_elective_range: null,
-	courses_any_bool: false,
-	student_courses_satisfying: [],
+	subreq_flex: false,
+	subreq_courses_req_count: 1,
+	subreq_options: [
+		{
+			o: CPSC_365,
+			s: null,
+		},
+		{
+			o: CPSC_366,
+			s: null,
+		},
+	]
 }
 
 const CPSC_CORE: ConcentrationRequirement = {
 	req_name: "CORE",
 	req_desc: "",
 	courses_required_count: 5,
-	courses_satisfied_count: 2,
-	subreqs_list: [CORE_INTRO, CORE_MATH, CORE_DATA, CORE_SYS, CORE_ALGO]
+	subreqs_list: [CORE_1, CORE_2, CORE_3, CORE_4, CORE_5]
 }
 
 // ELECTIVE
@@ -68,38 +90,43 @@ const CPSC_CORE: ConcentrationRequirement = {
 const ELEC_MULT_BA: ConcentrationSubrequirement = {
 	subreq_name: "",
 	subreq_desc: "Intermediate or advanced CPSC courses, traditionally numbered 300+.",
-	courses_required: 3,
-	courses_options: [null, null, null],
-	courses_elective_range: { dept: "CPSC", min_code: 300, max_code: 999 },
-	courses_any_bool: false,
-	student_courses_satisfying: []
+	subreq_flex: false,
+	subreq_courses_req_count: 3,
+	subreq_options: [
+		{ o: null, s: null, n: { e: { dept: "CPSC", min: 300, max: 999 } } },
+		{ o: null, s: null, n: { e: { dept: "CPSC", min: 300, max: 999 } } },
+		{ o: null, s: null, n: { e: { dept: "CPSC", min: 300, max: 999 } } },
+	]
 }
 
 const ELEC_MULT_BS: ConcentrationSubrequirement = {
 	subreq_name: "",
 	subreq_desc: "Intermediate or advanced CPSC courses, traditionally numbered 300+.",
-	courses_required: 5,
-	courses_options: [null, null, null, null, null],
-	courses_elective_range: { dept: "CPSC", min_code: 300, max_code: 999 },
-	courses_any_bool: false,
-	student_courses_satisfying: []
+	subreq_flex: false,
+	subreq_courses_req_count: 5,
+	subreq_options: [
+		{ o: null, s: null, n: { e: { dept: "CPSC", min: 300, max: 999 } } },
+		{ o: null, s: null, n: { e: { dept: "CPSC", min: 300, max: 999 } } },
+		{ o: null, s: null, n: { e: { dept: "CPSC", min: 300, max: 999 } } },
+		{ o: null, s: null, n: { e: { dept: "CPSC", min: 300, max: 999 } } },
+		{ o: null, s: null, n: { e: { dept: "CPSC", min: 300, max: 999 } } },
+	]
 }
 
 const ELEC_SUB: ConcentrationSubrequirement = {
 	subreq_name: "",
 	subreq_desc: "Standard elective or DUS approved extra-department substitution.",
-	courses_required: 1,
-	courses_options: [null],
-	courses_elective_range: { dept: "CPSC", min_code: 300, max_code: 999 },
-	courses_any_bool: true,
-	student_courses_satisfying: []
+	subreq_flex: true,
+	subreq_courses_req_count: 1,
+	subreq_options: [
+		{ o: null, s: null, n: { e: { dept: "CPSC", min: 300, max: 999 }, a: true } },
+	]
 }
 
 const CPSC_BA_ELEC: ConcentrationRequirement = {
 	req_name: "ELECTIVE",
 	req_desc: "",
 	courses_required_count: 4,
-	courses_satisfied_count: 1,
 	subreqs_list: [ELEC_SUB, ELEC_MULT_BA]
 }
 
@@ -107,7 +134,6 @@ const CPSC_BS_ELEC: ConcentrationRequirement = {
 	req_name: "ELECTIVE",
 	req_desc: "",
 	courses_required_count: 6,
-	courses_satisfied_count: 1,
 	subreqs_list: [ELEC_SUB, ELEC_MULT_BS]
 }
 
@@ -116,18 +142,20 @@ const CPSC_BS_ELEC: ConcentrationRequirement = {
 const SEN_PROJ: ConcentrationSubrequirement = {
 	subreq_name: "SENIOR PROJECT",
 	subreq_desc: "",
-	courses_required: 1,
-	courses_options: [CPSC_490],
-	courses_elective_range: null,
-	courses_any_bool: false,
-	student_courses_satisfying: []
+	subreq_flex: false,
+	subreq_courses_req_count: 1,
+	subreq_options: [
+		{
+			o: CPSC_490,
+			s: null,
+		}
+	]
 }
 
 const CPSC_SENIOR: ConcentrationRequirement = {
 	req_name: "SENIOR",
 	req_desc: "",
 	courses_required_count: 1,
-	courses_satisfied_count: 0,
 	subreqs_list: [SEN_PROJ]
 }
 

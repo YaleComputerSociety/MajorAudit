@@ -3,26 +3,29 @@ import { Course, StudentCourse } from "./type-user";
 
 export interface ElectiveRange {
 	dept: string;
-	min_code: number;
-	max_code: number;
+	min: number;
+	max: number;
 }
 
-export type SubreqElectiveRange = ElectiveRange| null;
+interface OptionNullHelp {
+	e?: ElectiveRange;
+	f?: string[];
+	a?: boolean;
+}
+
+export interface SubreqCourseOption { 
+	o: Course | null;
+	s: StudentCourse | null;
+	n?: OptionNullHelp | null;
+}
 
 export interface ConcentrationSubrequirement {
 	subreq_name: string;
 	subreq_desc: string;
 
-	courses_required: number;
-	courses_options: (Course | null)[];
-	courses_elective_range: SubreqElectiveRange;
-	
-	courses_any_bool: boolean;
-	flags?: string[];
-
-	student_courses_satisfying: StudentCourse[];
-
-	// selected?: boolean;
+	subreq_flex: boolean;
+	subreq_courses_req_count: number;
+	subreq_options: SubreqCourseOption[]
 }
 
 export interface ConcentrationRequirement {
@@ -30,7 +33,6 @@ export interface ConcentrationRequirement {
 	req_desc: string;
 	
 	courses_required_count: number;
-	courses_satisfied_count: number;
 
 	subreqs_required_count?: number;
 	subreqs_satisfied_count?: number;
