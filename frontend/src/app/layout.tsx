@@ -12,11 +12,11 @@ export default function RootLayout({children}: {children: React.ReactNode})
   return(
     <html lang="en">
       <body>
-				<AuthProvider>
-					<ProgramProvider>
+				<ProgramProvider>
+					<AuthProvider>
 						{children}
-					</ProgramProvider>
-				</AuthProvider>
+					</AuthProvider>
+				</ProgramProvider>
 			</body>
     </html>
   )

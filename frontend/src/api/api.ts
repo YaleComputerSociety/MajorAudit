@@ -1,8 +1,10 @@
 
 import { Ryan } from "@/database/data-user";
+import { PROG_DICT } from "@/database/programs/data-program";
 import { NextRequest, NextResponse } from "next/server";
 
-export function login(req: NextRequest) {
+export function login(req: NextRequest) 
+{
   const user = Ryan;
 
   const response = NextResponse.json(user, { status: 200 });
@@ -17,3 +19,9 @@ export function login(req: NextRequest) {
 
   return response;
 }
+
+export function programs(req: NextRequest)
+{
+	return NextResponse.json(PROG_DICT, { status: 200 });;
+}
+

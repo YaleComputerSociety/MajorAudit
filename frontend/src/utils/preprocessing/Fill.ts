@@ -1,163 +1,10 @@
 
 import { StudentCourse } from "@/types/type-user";
-import { ConcentrationSubrequirement, DegreeConcentration, ProgramDict } from "@/types/type-program";
-
-/**
- * First Pass: Fills `s` in options where `o` is non-null for non-checkbox requirements.
- */
-function fillDirectMatches(
-  concentration: DegreeConcentration, 
-  studentCourses: StudentCourse[], 
-  usedCourses: Set<string>
-): DegreeConcentration {
-  return {
-    ...concentration,
-    conc_reqs: concentration.conc_reqs.map(req => {
-      if (req.checkbox) return req;
-
-      return {
-        ...req,
-        subreqs_list: req.subreqs_list.map(subreq => ({
-          ...subreq,
-          subreq_options: subreq.subreq_options.map(option => {
-            if (!option.o || option.s) return option; // Skip null `o` or already filled `s`
-
-            const matchingStudentCourse = studentCourses.find(sc => 
-              sc.course.codes.includes(option.o!.codes[0]) && !usedCourses.has(sc.course.codes[0])
-            );
-
-            if (matchingStudentCourse) {
-              usedCourses.add(matchingStudentCourse.course.codes[0]); // Track usage
-              return { ...option, s: matchingStudentCourse };
-            }
-
-            return option;
-          }),
-        })),
-      };
-    }),
-  };
-}
-
-/**
- * Second Pass: Fills `s` using elective ranges in non-checkbox requirements.
- * Iterates through non-flex subreqs first, then flex.
- */
-function fillElectiveRanges(
-  concentration: DegreeConcentration, 
-  studentCourses: StudentCourse[], 
-  usedCourses: Set<string>
-): DegreeConcentration {
-  return {
-    ...concentration,
-    conc_reqs: concentration.conc_reqs.map(req => {
-      if (req.checkbox) return req; // Skip checkbox reqs
-
-      // First Pass: Fill non-flex subreqs, skipping flex ones
-      let updatedSubreqs = req.subreqs_list.map(subreq => {
-        if (subreq.subreq_flex) return subreq; // Skip flex subreqs in first pass
-        return fillSubreqElectives(subreq, studentCourses, usedCourses);
-      });
-
-      // Second Pass: Fill flex subreqs, keeping previous updates
-      updatedSubreqs = updatedSubreqs.map(subreq => {
-        if (!subreq.subreq_flex) return subreq; // Skip non-flex subreqs in second pass
-        return fillSubreqElectives(subreq, studentCourses, usedCourses);
-      });
-
-      return { ...req, subreqs_list: updatedSubreqs };
-    }),
-  };
-}
-
-/**
- * Helper function to fill elective ranges in a subreq.
- */
-function fillSubreqElectives(
-  subreq: ConcentrationSubrequirement, 
-  studentCourses: StudentCourse[], 
-  usedCourses: Set<string>
-): ConcentrationSubrequirement {
-  return {
-    ...subreq,
-    subreq_options: subreq.subreq_options.map(option => {
-      if (option.o !== null || !option.n?.e || option.s) return option; // Skip already filled slots
-
-      const { dept, min, max } = option.n.e;
-      const matchingStudentCourse = studentCourses.find(sc => 
-        sc.course.codes.some(code =>
-          code.startsWith(dept) &&
-          parseInt(code.replace(dept, ""), 10) >= min &&
-          parseInt(code.replace(dept, ""), 10) <= max &&
-          !usedCourses.has(sc.course.codes[0]) // Ensure it's not used
-        )
-      );
-
-      if (matchingStudentCourse) {
-        usedCourses.add(matchingStudentCourse.course.codes[0]); // Track usage
-        return { ...option, s: matchingStudentCourse };
-      }
-
-      return option;
-    }),
-  };
-}
-
-/**
- * Third Pass: Fills `s` in checkbox requirements, allowing reuse but preventing duplicates within the req.
- */
-function fillCheckboxReqs(
-  concentration: DegreeConcentration, 
-  studentCourses: StudentCourse[]
-): DegreeConcentration {
-  return {
-    ...concentration,
-    conc_reqs: concentration.conc_reqs.map(req => {
-      if (!req.checkbox) return req; // Skip non-checkbox reqs
-
-      const usedWithinCheckboxReq = new Set<string>(); // Reset per checkbox req
-
-      return {
-        ...req,
-        subreqs_list: req.subreqs_list.map(subreq => ({
-          ...subreq,
-          subreq_options: subreq.subreq_options.map(option => {
-            if (option.s) return option; // If already filled, keep it
-
-            const matchingStudentCourse = studentCourses.find(sc => 
-              (!option.o || sc.course.codes.includes(option.o.codes[0])) && 
-              (!usedWithinCheckboxReq.has(sc.course.codes[0])) // Ensure unique within the req
-            );
-
-            if (matchingStudentCourse) {
-              usedWithinCheckboxReq.add(matchingStudentCourse.course.codes[0]); // Track within checkbox req
-              return { ...option, s: matchingStudentCourse };
-            }
-
-            return option;
-          }),
-        })),
-      };
-    }),
-  };
-}
-
-/**
- * Fills student courses for a given concentration by running the three passes.
- */
-function fillStudentCourses(
-  concentration: DegreeConcentration, 
-  studentCourses: StudentCourse[]
-): DegreeConcentration {
-  const usedCourses = new Set<string>(); // Tracks courses used in non-checkbox reqs
-
-  // Apply filling in three passes
-  let updatedConcentration = fillDirectMatches(concentration, studentCourses, usedCourses);
-  updatedConcentration = fillElectiveRanges(updatedConcentration, studentCourses, usedCourses);
-  updatedConcentration = fillCheckboxReqs(updatedConcentration, studentCourses);
-
-  return updatedConcentration;
-}
+import { 
+  DegreeConcentration, 
+  ProgramDict, 
+  ConcentrationRequirement
+} from "@/types/type-program";
 
 /**
  * Main function - updates entire `progDict` by filling student courses in each concentration.
@@ -166,15 +13,138 @@ export function fill(
   studentCourses: StudentCourse[], 
   progDict: ProgramDict, 
   setProgDict: Function
-) {
-  const updatedProgDict = { ...progDict };
+): void {
+  // Create a true deep copy to avoid mutations to the original
+  const updatedProgDict: ProgramDict = JSON.parse(JSON.stringify(progDict));
 
+  // Process each program
   Object.keys(updatedProgDict).forEach(progKey => {
-    updatedProgDict[progKey].prog_degs = updatedProgDict[progKey].prog_degs.map(deg => ({
-      ...deg,
-      deg_concs: deg.deg_concs.map(conc => fillStudentCourses(conc, studentCourses)),
-    }));
+    const program = updatedProgDict[progKey];
+    
+    program.prog_degs = program.prog_degs.map(deg => {
+      deg.deg_concs = deg.deg_concs.map(conc => {
+        return processConcentration(conc, studentCourses);
+      });
+      return deg;
+    });
   });
 
+  // Update state with the completely new object
   setProgDict(updatedProgDict);
+}
+
+/**
+ * Process a single concentration by handling all its requirements
+ */
+function processConcentration(
+  concentration: DegreeConcentration, 
+  studentCourses: StudentCourse[]
+): DegreeConcentration {
+  const usedCourses = new Set<string>();
+  const requiredCourses = new Set<string>(); // Track courses explicitly required by `o`
+
+  // Clone to avoid mutations
+  const processedConc = JSON.parse(JSON.stringify(concentration)) as DegreeConcentration;
+  
+  // ** Pass 1: Direct matches for `o` (Claim required courses) **
+  processedConc.conc_reqs = processedConc.conc_reqs.map(req => {
+    const updatedReq = processDirectMatches(req, studentCourses, usedCourses, requiredCourses);
+    return updatedReq;
+  });
+
+  // ** Pass 2: Non-Flex elective ranges (Only assign courses NOT in requiredCourses) **
+  processedConc.conc_reqs = processedConc.conc_reqs.map(req => {
+    return processElectiveRanges(req, studentCourses, usedCourses, requiredCourses, false);
+  });
+
+  // ** Pass 3: Flex elective ranges (Only assign courses NOT in requiredCourses) **
+  processedConc.conc_reqs = processedConc.conc_reqs.map(req => {
+    return processElectiveRanges(req, studentCourses, usedCourses, requiredCourses, true);
+  });
+
+  return processedConc;
+}
+
+/**
+ * **Pass 1: Fill `s` where `o` is non-null (Claim required courses first).**
+ */
+function processDirectMatches(
+  req: ConcentrationRequirement, 
+  studentCourses: StudentCourse[], 
+  usedCourses: Set<string>,
+  requiredCourses: Set<string>
+): ConcentrationRequirement {
+  return {
+    ...req,
+    subreqs_list: req.subreqs_list.map(subreq => ({
+      ...subreq,
+      subreq_options: subreq.subreq_options.map(option => {
+        if (!option.o || option.s) return option; // Skip null `o` or already filled `s`
+
+        const courseCode = option.o.codes[0];
+        const matchingStudentCourse = studentCourses.find(sc => 
+          sc.course.codes.includes(courseCode) && !usedCourses.has(courseCode)
+        );
+
+        // ✅ Ensure required courses are claimed FIRST before electives
+        if (matchingStudentCourse) {
+          usedCourses.add(courseCode); // Track as used
+          requiredCourses.add(courseCode); // Mark as REQUIRED
+          return { ...option, s: matchingStudentCourse };
+        }
+
+        return option;
+      }),
+    })),
+  };
+}
+
+/**
+ * **Pass 2 & 3: Fill elective ranges (Non-Flex first, then Flex).**
+ * - **Ensures required courses (`requiredCourses`) are NOT used for electives.**
+ */
+function processElectiveRanges(
+  req: ConcentrationRequirement, 
+  studentCourses: StudentCourse[], 
+  usedCourses: Set<string>,
+  requiredCourses: Set<string>, // 🔥 Courses reserved by direct matches
+  flex: boolean
+): ConcentrationRequirement {
+  return {
+    ...req,
+    subreqs_list: req.subreqs_list.map(subreq => {
+      if (subreq.subreq_flex !== flex) return subreq; // Skip subreqs that don't match the flex condition
+
+      return {
+        ...subreq,
+        subreq_options: subreq.subreq_options.map(option => {
+          if (option.o !== null || !option.n?.e || option.s) return option; // Skip non-null `o` or already filled `s`
+
+          const { dept, min, max } = option.n.e;
+
+          // ✅ Filter student courses:
+          // - Ensure the course is not in `usedCourses`
+          // - Ensure the course is not already **reserved by a required subreq**
+          const availableCourses = studentCourses.filter(sc => 
+            !usedCourses.has(sc.course.codes[0]) &&
+            !requiredCourses.has(sc.course.codes[0]) && // 🔥 PROTECT REQUIRED COURSES
+            sc.course.codes.some(code => {
+              if (!code.startsWith(dept)) return false;
+              const courseNum = parseInt(code.replace(dept, ""), 10);
+              return courseNum >= min && courseNum <= max;
+            })
+          );
+
+          const matchingStudentCourse = availableCourses.find(sc => true); // ✅ Find first valid course
+
+          if (matchingStudentCourse) {
+            usedCourses.add(matchingStudentCourse.course.codes[0]); // ✅ Mark as used
+            return { ...option, s: matchingStudentCourse };
+          }
+
+          return option;
+        }),
+      };
+    }),
+  };
 }

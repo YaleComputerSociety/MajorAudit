@@ -1,7 +1,7 @@
 
 import { Program, ProgramDict } from "@/types/type-program";
 import { CONC_CPSC_BA_I, CONC_CPSC_BS_I } from "./concs/concs-cpsc";
-// import { CONC_ECON_BA_I } from "./concs/concs-econ";
+import { CONC_ECON_BA_I } from "./concs/concs-econ";
 // import { CONC_HIST_BA_GLOB, CONC_HIST_BA_SPEC } from "./concs/concs-hist";
 // import { CONC_PLSC_BA_INTE, CONC_PLSC_BA_STAN } from "./concs/concs-plsc";
 
@@ -16,9 +16,10 @@ const PROG_CPSC: Program = {
 	},
 	prog_degs: [
 		{ deg_type: "B.A.", deg_concs: [CONC_CPSC_BA_I] },
-		{ deg_type: "B.S.", deg_concs: [CONC_CPSC_BS_I] }
+
 	]
 }
+// { deg_type: "B.S.", deg_concs: [CONC_CPSC_BS_I] }
 
 // const PROG_ECON: Program = {
 // 	prog_data: {

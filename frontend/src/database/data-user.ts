@@ -1,6 +1,6 @@
 
 import { User } from "./../types/type-user";
-import { SC_CPSC_201, SC_CPSC_202, SC_CPSC_223, SC_CPSC_323, SC_CPSC_381, SC_ECON_110 } from "./data-courses";
+import { SC_CPSC_201, SC_CPSC_223, SC_CPSC_323, SC_CPSC_381, SC_CPSC_490, SC_ECON_110 } from "./data-courses";
 // import { CONC_HIST_BA_GLOB } from "./programs/concs/concs-hist";
 
 export const Ryan: User = {
@@ -8,7 +8,7 @@ export const Ryan: User = {
 	netID: "rgg32",
 	onboard: false,
 	FYP: {
-		studentCourses: [SC_CPSC_201, SC_CPSC_223, SC_CPSC_323, SC_CPSC_381],
+		studentCourses: [SC_CPSC_201, SC_CPSC_223, SC_CPSC_323, SC_CPSC_381, SC_CPSC_490],
 		studentTermArrangement: {
 			first_year: [0, 202403, 202501],
 			sophomore: [0, 202503, 202601],
