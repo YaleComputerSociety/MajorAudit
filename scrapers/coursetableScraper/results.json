@@ -1,0 +1,535 @@
+[
+  {
+    "course_id": 250121861,
+    "title": "Social and Cultural Factors in Mental Health and Illness",
+    "description": "This course provides an introduction to mental health and illness with a focus on the complex interplay between risk and protective factors and social and cultural influences on mental health status. We examine the role of social and cultural factors in the etiology, course, and treatment of substance misuse; depressive, anxiety, and psychotic disorders; and some of the severe behavioral disorders of childhood. The social consequences of mental illness such as stigma, isolation, and barriers to care are explored, and their impact on access to care and recovery considered. The effectiveness of the current system of services and the role of public health and public health professionals in mental health promotion are discussed.",
+    "professors": [],
+    "codes": [
+      "PSYC 576"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 1,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250125120,
+    "title": "Research",
+    "description": "Individual research for Ph.D. degree candidates in the Department of Chemistry, under the direct supervision of one or more faculty members.",
+    "professors": [
+      "Tianyu Zhu"
+    ],
+    "codes": [
+      "CHEM 990"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 1,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250121135,
+    "title": "Junior Seminar",
+    "description": "Ongoing visual projects addressed in relation to historical and contemporary issues. Readings, slide presentations, critiques by School of Art faculty, and gallery and museum visits. Critiques address all four areas of study in the Art major.",
+    "professors": [
+      "Elle Perez"
+    ],
+    "codes": [
+      "ART 395"
+    ],
+    "flags": [],
+    "distributions": [
+      "Hu"
+    ],
+    "credits": 1,
+    "requirements": "Prerequisite: at least four courses in Art.",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250121016,
+    "title": "Topics: Events, Distributivity, Durational Modifiers",
+    "description": "This course bridges introductory courses (LING 263, LING 264) and advanced seminars in semantics. It explores selected topics in some detail, allowing students to appreciate the nuances of semantic argumentation while at the same time emphasizing the foundational issues involved.\u00a0The goal of this course is to allow students, within a structured format, to become comfortable engaging with open-ended problems and to gain confidence in proposing original solutions to such problems.\u00a0Topics vary across semesters.",
+    "professors": [
+      "Veneeta Dayal",
+      "Simon Charlow"
+    ],
+    "codes": [
+      "LING 291",
+      "LING 691"
+    ],
+    "flags": [
+      "YC LING Depth Semntcs/Pragmat",
+      "YC LING Elective",
+      "YC LING Intermediate Courses"
+    ],
+    "distributions": [
+      "So"
+    ],
+    "credits": 1,
+    "requirements": "Prerequisite: LING 263 / LING 663 or permission of Instructor",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250123229,
+    "title": "Yale Concert Band",
+    "description": "The Yale Concert Band, a group of 45-60 wind, brass, and percussion players, embraces the aesthetics of the traditional wind band and the contemporary experimental ensemble. Our repertoire consists of a panoply of wind band classics; premieres by and commissions of Yale students, faculty and established world-class composers; and the newest wind band literature that incorporates electro-acoustic sounds, folk/rock/hip hop music, soloists, and theatrical trappings. The Yale Concert Band regularly presents concerts to benefit causes and organizations, ranging from benefit concerts to support the work of New Haven\u2019s IRIS (Integrated Refugee and Immigrant Services (2017, 2018, 2019); to provide aid to the relief efforts after Hurricane Katrina (2005), floods in Myanmar (2007), tornadoes in the American midwest (2007), the earthquake in Haiti (2010), the tsunami in Japan (2011), and West African Ebola recovery efforts (2016).\u00a0 In 1959, the Yale Concert Band became the first university band to produce an international concert tour, and, since then, has appeared in concerts in Japan, South Africa, Swaziland, Mexico, Brazil, Bermuda, Russia, Finland, the Czech Republic, Austria, Ireland, England, France, Italy, Denmark, Germany, Holland, Belgium, Lithuania, Latvia, Estonia, Ghana, Haiti, Greece, Australia, and Spain. This course cannot be applied toward the 36-course-credit requirement for the Yale bachelor's degree.",
+    "professors": [
+      "Thomas Duffy"
+    ],
+    "codes": [
+      "MUSI 190"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 0,
+    "requirements": "By audition at the beginning of the academic year or by permission of instructor.",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250124916,
+    "title": "Exploring and Understanding White Collar Crime",
+    "description": "This course examines the many aspects of white collar crime; perjury, obstruction of justice, corporate crimes, Ponzi Schemes, insider trading, money laundering bribery and political corruption. The course explores how white collar crime, once virtually ignored by law enforcement has become a major focus of federal and state investigative agencies with massive resources allocated toward combatting it. The seminar examines the root causes of white collar crime as well as its pervasiveness in every day life.\u00a0 Specific cases of white collar defendants, both individuals and corporations that have profoundly impacted business, law, science, healthcare and other disciplines are examined.",
+    "professors": [
+      "Bradley Simon"
+    ],
+    "codes": [
+      "CSMY 220"
+    ],
+    "flags": [
+      "YC College Seminar"
+    ],
+    "distributions": [],
+    "credits": 1,
+    "requirements": "Students may enroll in no more than 1 RCS for credit in a given term.",
+    "season_code": "202501",
+    "colsem": true,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250126581,
+    "title": "EL IntMedHematology2WK",
+    "description": "",
+    "professors": [],
+    "codes": [
+      "MD 3090"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 0,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250126701,
+    "title": "Global Health Elective Ghana",
+    "description": "",
+    "professors": [],
+    "codes": [
+      "MD 301"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 0,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250120660,
+    "title": "Methods in Gender and Sexuality Studies",
+    "description": "This seminar explores\u00a0the dynamics of power and knowledge, the ethics of representation and accountability, and the nexus between disciplinarity and interdisciplinarity. It is designed for graduate students developing research projects that engage feminist, queer, postcolonial, and critical race methodologies, among others. The course adopts an epistemological approach that centers \"encounter\" across geopolitical scales and multiple disciplinary fronts in the humanities and social sciences. It posits that research methods, regardless of their origin, can adopt feminist, queer, decolonial/postcolonial, and critical race perspectives and potentially serve counter-disciplinary purposes. Although we cover a broad spectrum of methods\u2014ranging from ethnographic, historiographic/archival, and geographic, to literary, media, and textual analysis, cultural studies, and political theory\u2014our work does not unfold as a practicum. Instead of experimenting with a predefined \"toolkit,\" students critically engage book-length works that demonstrate counter-disciplinary methodologies, reflecting hermeneutically on how method and theory relate in these texts by drawing on Foucault's framework of \"the archaeology of knowledge.\"",
+    "professors": [
+      "Eda Pepi"
+    ],
+    "codes": [
+      "AMST 798",
+      "WGSS 800"
+    ],
+    "flags": [
+      "YC Ethnography Methods"
+    ],
+    "distributions": [],
+    "credits": 1,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250121028,
+    "title": "Special Investigations",
+    "description": "Directed research by arrangement with individual faculty members and approved by the DGS. Students are expected to propose and complete a term-long research project. The culmination of the project is a presentation that fulfills the departmental requirement for the research qualifying event.",
+    "professors": [
+      "Daisuke Nagai",
+      "Rona Ramos"
+    ],
+    "codes": [
+      "PHYS 990"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 1,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250121423,
+    "title": "Topics in Biomedical Informatics and Data Science",
+    "description": "The course focuses on providing an introduction to common unifying themes that serve as the foundation for different areas of biomedical informatics, including clinical, neuro-, and genome informatics. The course is designed for students with basic computer experience and course work who plan to build databases and computational tools for use in biomedical research. Emphasis is on understanding basic principles underlying informatics approaches to interoperation among biomedical databases and software tools, standardized biomedical vocabularies and ontologies, biomedical natural language processing, modeling of biological systems, high-performance computation in biomedicine, and other related topics.",
+    "professors": [
+      "Samah Jarad"
+    ],
+    "codes": [
+      "BIS 550",
+      "CB&B 750",
+      "HSCI 5500"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 0,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250121441,
+    "title": "Topics in Biomedical Informatics and Data Science",
+    "description": "The course focuses on providing an introduction to common unifying themes that serve as the foundation for different areas of biomedical informatics, including clinical, neuro-, and genome informatics. The course is designed for students with significant computer experience and course work who plan to build databases and computational tools for use in biomedical research. Emphasis is on understanding basic principles underlying informatics approaches to interoperation among biomedical databases and software tools, standardized biomedical vocabularies and ontologies, biomedical natural language processing, modeling of biological systems, high-performance computation in biomedicine, and other related topics.",
+    "professors": [
+      "Samah Jarad",
+      "Kei-Hoi Cheung"
+    ],
+    "codes": [
+      "BIS 543E"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 0,
+    "requirements": "Open only to students enrolled in the Executive Online M.P.H. Program. Not open to auditors.",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250122238,
+    "title": "Corporate Sustainability: Strategy and Management",
+    "description": "This survey course focuses on the policy and business logic for making environmental issues and sustainability a core focus of corporate strategy and management. Students are asked to analyze when and how sustainability leadership can translate into competitive advantage by helping to cut costs, reduce risk, drive growth, and promote brand identity and intangible value. The course seeks to provide students with an introduction to the range of sustainability issues and challenges that companies face in today\u2019s fast-changing marketplace. It introduces key corporate sustainability terms, concepts, tools, strategies, and frameworks based on the overarching theory that the traditional profit-maximizing mission of business (often called shareholder primacy) is giving way to a new vision of stakeholder responsibility that still seeks to provide good returns to the enterprise\u2019s owners but also acknowledges obligations to employees, suppliers, customers, communities, and society more broadly. The course combines lectures, case studies, and class discussions on management theory and tools, the legal and regulatory frameworks that shape the business-environment interface, and the evolving role of business in society. It explores how to deal with a world of diverse stakeholders, increasing transparency, and rising expectations related to corporate environmental, social, and governance (ESG) performance. Self-scheduled examination.",
+    "professors": [
+      "Daniel Esty"
+    ],
+    "codes": [
+      "ENV 807",
+      "MGT 688"
+    ],
+    "flags": [
+      "YC ENRG Energy & Environment",
+      "YSE MEM B&E Core",
+      "YSE MEM IEGC Add'l Electives",
+      "YSE MEM IEGC Primary Electives"
+    ],
+    "distributions": [],
+    "credits": 0,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250122406,
+    "title": "What was Latinx Literature",
+    "description": "With the arrival of \"Latinx,\" the last decade was defined as a moment of rupture and break with traditional notions of latinidad. Artists and activists asserted refusal and historical reckoning as the mode of doing politics and aesthetics. Now, pessimistic about Latinx as a signifier of a unified political project, the generational tides have shifted to \"Latine.\" This seminar asks what is \"Latinx literature\" and why are the methods of \"Latinx studies\" considered revolutionary or disruptive? What ideas were rooted in prior generations of feminist and queer collectives that sustained life when the arrival of a decolonial future seemed forever deferred and withheld from reach? We examine contemporary artists alongside historical antecedents to reevaluate what literary and social forms can help us challenge a racialized, heteronormative conception of citizenship. One possibility is that Gloria Anzald\u00faa\u2014rightly critiqued for her relation to mestizaje \u2014might be helpful in this moment of growing nationalism and hostility towards migrants to think about other ways of organizing life aside borders and the nation. We read across a long and varied arc of creative expression to consider forms that endure amidst colonial duress. For example: the serial, montage, anthology, performance collective, and inter-linked storytelling. Artists up for discussion may include Natalie Diaz, John Rechy, and Jes\u00fas Col\u00f3n. Students will engage these works alongside theorists like Jos\u00e9 Esteban Mu\u00f1oz and Juana Mar\u00eda Rodr\u00edguez. Previously ENGL 331.",
+    "professors": [
+      "Joseph Miranda"
+    ],
+    "codes": [
+      "ENGL 4831",
+      "ER&M 268"
+    ],
+    "flags": [
+      "YC ENGL 20th/21st Century",
+      "YC ENGL Senior Seminar"
+    ],
+    "distributions": [
+      "Hu",
+      "WR"
+    ],
+    "credits": 1,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250122770,
+    "title": "Machine Learning for Economic Analysis",
+    "description": "Machine learning algorithms and their applications to economic analysis, specifically causal inference, learning, and game theory. Curse of dimensionality, model selection, and choice of tuning parameters from a computational and econometric perspective.",
+    "professors": [
+      "Max Cytrynbaum"
+    ],
+    "codes": [
+      "ECON 566"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 1,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250122954,
+    "title": "Machine Learning for Economic Analysis",
+    "description": "Machine learning algorithms and their applications to economic analysis, specifically causal inference, learning, and game theory. Curse of dimensionality, model selection, and choice of tuning parameters from a computational and econometric perspective.",
+    "professors": [
+      "Max Cytrynbaum"
+    ],
+    "codes": [
+      "ECON 428"
+    ],
+    "flags": [],
+    "distributions": [
+      "So"
+    ],
+    "credits": 1,
+    "requirements": "Prerequisites: CPSC 100 or CPSC 112; and ECON 117 or ECON 136.",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250123384,
+    "title": "Secndry Instrmnt--: Secndry Instrmnt--PIANO",
+    "description": "2 credits per term. P/F. All students enrolled in secondary lessons can receive instruction in either voice or piano. In addition, YSM keyboard majors may take secondary organ or harpsichord, and YSM violinists may take secondary viola. Any other students who wish to take secondary lessons in any other instruments must petition the director of secondary lessons, Kyung Yu, by email (kyung.yu@yale.edu) no later than Aug. 30, 2021, for the fall term and Jan. 14, 2022, for the spring term. Students who are not conducting majors may take only one secondary instrument per term. YSM students who wish to take secondary lessons must register for the course and request a teacher using the online form for graduate students found at http://music.yale.edu/study/music-lessons; the availability of a secondary lessons teacher is not guaranteed until the form is received and a teacher assigned by the director of lessons. Secondary instruction in choral conducting and orchestral conducting is only available with permission of the instructor and requires as prerequisites MUS 565 for secondary instruction in choral conducting, and both MUS 529 and MUS 530 for secondary instruction in orchestral conducting. Students of the Yale Divinity School, School of Drama, and School of Art may also register as above for secondary lessons and will be charged $200 per term for these lessons. Questions may be emailed to the director, Kyung Yu (kyung.yu@yale.edu).",
+    "professors": [
+      "Kyung Yu"
+    ],
+    "codes": [
+      "MUS 541"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 0,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250123877,
+    "title": "The Senior Essay I",
+    "description": "Students wishing to undertake an independent senior essay in English must submit a proposal to the DUS in the previous term; deadlines and instructions are posted at https://english.yale.edu/undergraduate/courses/independent-study-courses. For one-term senior essays, the essay itself is due in the office of the director of undergraduate studies according to the following schedule: (1) end of the fourth week of classes: five to ten pages of writing and/or an annotated bibliography; (2) end of the ninth week of classes: a rough draft of the complete essay; (3) end of the last week of classes (fall term) or end of the next-to-last week of classes (spring term): the completed essay. Consult the director of undergraduate studies regarding the schedule for submission of the yearlong senior essay.",
+    "professors": [
+      "Marcel Elias",
+      "Stefanie Markovits"
+    ],
+    "codes": [
+      "ENGL 4100"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 1,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250124362,
+    "title": "Styles of Professional Prose: Writing about Legal Affairs",
+    "description": "A seminar and workshop in the conventions of good writing in a specific field. Each section focuses on one professional kind of writing and explores its distinctive features through a variety of written and oral assignments, in which students both analyze and practice writing in the field. Section topics, which change yearly, are listed at the beginning of each term on the English department website. This course may be repeated for credit in a section that treats a different genre or style of writing; may not be repeated for credit toward the major. ENGL 121 and ENGL 421 may not be taken for credit on the same topic.",
+    "professors": [
+      "Lincoln Caplan"
+    ],
+    "codes": [
+      "ENGL 1021"
+    ],
+    "flags": [],
+    "distributions": [
+      "WR"
+    ],
+    "credits": 1,
+    "requirements": "Prerequisite: ENGL 114, 115, 120, or another writing-intensive course at Yale.",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250124828,
+    "title": "Abolition in the Americas",
+    "description": "This seminar examines histories of slavery's abolition in the Americas. It situates the end of slavery in the United States within hemispheric and transatlantic contexts, touching upon processes of abolition\u00a0in Antigua, Brazil, Colombia, Cuba, the Dominican Republic, Haiti, Jamaica, and more. The course approaches abolition as a historiographical problem, considering debates about its definition, its causes and consequences, its primary agents, its periodization, and its relation to other historical processes. Questions include: How have historians defined abolition? How have they periodized it? How have scholars variously characterized the forms it took and who was responsible for it? How have they differently understood the social, cultural, economic, legal, and political conditions that gave rise to abolition? How have historians agreed and disagreed upon its effects and its aftermath? How have they framed the relation between freedom and formal emancipation? How have the communicated the stakes of their accounts of abolition? The organization of the course is topical and loosely chronological. Readings address the origins of abolition in the Atlantic world, the Haitian Revolution, processes of gradual emancipation, the historical significance of Black abolitionists, the activism of women and children, the formation and contributions of antislavery movements, the practice of moral suasion, the question of violence and antislavery militantism, antislavery discourses of rights and sexual morals, the circulation of racial and climate science in abolitionist circles, enslaved people\u2019s practices of fugitivity, self-purchase, and revolt, the relation between capitalism and abolitionism, the Civil War, and the so-called \"last abolition\" of slavery in Brazil.",
+    "professors": [
+      "Caleb Knapp"
+    ],
+    "codes": [
+      "HIST 124J"
+    ],
+    "flags": [
+      "YC HIST Cultural History",
+      "YC HIST Departmental Seminars",
+      "YC HIST Empires & Colonialism",
+      "YC HIST Ideas & Intellectuals",
+      "YC HIST Pltcs, Law & Govt",
+      "YC HIST Race Gender&Sexuality",
+      "YC HIST Soc Chng&Social Mvmnt",
+      "YC HIST United States",
+      "YC HIST War & Society",
+      "YC HSHM Colonial Know & Power",
+      "YC HSHM Gender, Reprod & Body"
+    ],
+    "distributions": [
+      "Hu",
+      "WR"
+    ],
+    "credits": 1,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250125902,
+    "title": "Clinical Practice II for Global Health Track",
+    "description": "This clinical application course for students in the global health track provides opportunities to develop advanced nursing skills with a range of global populations within the students\u2019 areas of specialization. While in clinical settings, students develop skills in assessment and management of acute and chronic conditions using evidence-based patient management strategies in accordance with the cultural beliefs and practices of populations of immigrants, refugees, American Indians, and Alaskan native and rural residents. These experiences may take place in YSN-approved U.S. or international settings. Additional experiences with local resettlement organizations such as Integrated Refugee and Immigrant Services (IRIS) and Connecticut Institute for Refugees and Immigrants (CIRI) are also available. These experiences may include developing and presenting education programs to groups of refugees, immigrants, or asylum seekers; creating training materials for the resettlement agencies; or serving as a cultural companion or health navigator for newly arrived families. Required of all students pursuing the global health track during the fall term of their second specialty year. Thirty hours of face-to-face interactions either in a health care setting or in an alternative setting, and one hour per week of clinical conference. Taken after NURS 6230.",
+    "professors": [
+      "Sandy Cayo"
+    ],
+    "codes": [
+      "NURS 6240"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 0,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250126137,
+    "title": "Independent Course Work",
+    "description": "Program to be determined with a faculty adviser of the student\u2019s choice and submitted, with the endorsement of the study area coordinators, to the Rules Committee for confirmation of the student\u2019s eligibility under the rules. (See the School\u2019s Academic Rules and Regulations.)",
+    "professors": [
+      "Brennan Buck"
+    ],
+    "codes": [
+      "ARCH 2299"
+    ],
+    "flags": [],
+    "distributions": [],
+    "credits": 0,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250120297,
+    "title": "American Political Institutions",
+    "description": "The origins and development of American political institutions, especially in relation to constitutional choice and the agency of persons seeking freedom, equality, and self-governing capabilities as a driver of constitutional change. Key concepts include: American federalism, compound republic, citizenship, social movements, racial justice, and nonviolence.",
+    "professors": [
+      "Michael Fotos"
+    ],
+    "codes": [
+      "PLSC 256",
+      "AFAM 177",
+      "EP&E 248"
+    ],
+    "flags": [
+      "YC EP&E Politics Core"
+    ],
+    "distributions": [
+      "So",
+      "WR"
+    ],
+    "credits": 1,
+    "requirements": "",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250120530,
+    "title": "Elementary Modern Standard Arabic II",
+    "description": "Continuation of ARBC 110.",
+    "professors": [
+      "Muhammad Aziz"
+    ],
+    "codes": [
+      "ARBC 120",
+      "ARBC 501"
+    ],
+    "flags": [],
+    "distributions": [
+      "L2"
+    ],
+    "credits": 1.5,
+    "requirements": "Prerequisite: ARBC 110 or\u00a0requisite score on a\u00a0placement test.",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  },
+  {
+    "course_id": 250121598,
+    "title": "Chinese for Current Affairs",
+    "description": "Advanced language course with a focus on speaking and writing in formal styles. Current affairs are used as a vehicle to help students learn advanced vocabulary, idiomatic expressions, complex sentence structures, news writing styles and formal stylistic register. Materials include texts and videos selected from news media worldwide to improve students\u2019 language proficiency for sophisticated communications on a wide range of topics.",
+    "professors": [
+      "Jingjing Ao"
+    ],
+    "codes": [
+      "CHNS 167"
+    ],
+    "flags": [],
+    "distributions": [
+      "L5"
+    ],
+    "credits": 1,
+    "requirements": "After CHNS 153, or 157, or 159,\u00a0 or equivalent.",
+    "season_code": "202501",
+    "colsem": false,
+    "fysem": false,
+    "sysem": false
+  }
+]

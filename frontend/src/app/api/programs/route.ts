@@ -1,7 +1,7 @@
 
-import { NextRequest } from "next/server";
-import { programs } from "@/api/api";
+import { NextResponse } from "next/server";
+import { PROG_DICT } from "@/database/programs/data-program";
 
-export async function GET(req: NextRequest) {
-	return programs(req);
+export async function GET() {
+	return NextResponse.json(PROG_DICT, { status: 200 });
 }

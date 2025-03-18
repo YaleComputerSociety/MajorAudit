@@ -43,8 +43,15 @@ function Courses(){
     <div>
       <NavBar/>
       <div className={Style.CoursesPage}>
-        <button className={Style.EditButton} onClick={toggleEdit}/>
-				<button className={Style.EditButton} onClick={toggleColumns} style={{ marginLeft: "40px" }}/>
+        <button 
+					className={Style.EditButton} 
+					onClick={toggleEdit}
+				/>
+				<button 
+					className={Style.EditButton} 
+					onClick={toggleColumns} 
+					style={{ marginLeft: "40px" }}
+				/>
         <div className={Style.Column}>
           {renderedYears}
         </div>

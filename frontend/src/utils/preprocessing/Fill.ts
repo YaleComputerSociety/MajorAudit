@@ -14,6 +14,9 @@ export function fill(
   progDict: ProgramDict, 
   setProgDict: Function
 ): void {
+	return;
+
+
   // Create a true deep copy to avoid mutations to the original
   const updatedProgDict: ProgramDict = JSON.parse(JSON.stringify(progDict));
 

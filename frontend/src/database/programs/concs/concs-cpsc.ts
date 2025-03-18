@@ -1,8 +1,6 @@
 
 import { ConcentrationSubrequirement, ConcentrationRequirement, DegreeConcentration } from "@/types/type-program";
 
-import { CPSC_201, CPSC_202, MATH_244, CPSC_223, CPSC_323, CPSC_365, CPSC_366, CPSC_381, CPSC_490, SC_CPSC_201, SC_CPSC_223, SC_CPSC_323, SC_CPSC_381 } from "../../data-courses";
-
 // CORE
 
 const CORE_1: ConcentrationSubrequirement = {
@@ -12,7 +10,7 @@ const CORE_1: ConcentrationSubrequirement = {
 	subreq_courses_req_count: 1,
 	subreq_options: [
 		{
-			o: CPSC_201,
+			o: null,
 			s: null,
 		}
 	]
@@ -25,11 +23,11 @@ const CORE_2: ConcentrationSubrequirement = {
 	subreq_courses_req_count: 1,
 	subreq_options: [
 		{
-			o: CPSC_202,
+			o: null,
 			s: null,
 		},
 		{
-			o: MATH_244,
+			o: null,
 			s: null,
 		},
 	]
@@ -42,7 +40,7 @@ const CORE_3: ConcentrationSubrequirement = {
 	subreq_courses_req_count: 1,
 	subreq_options: [
 		{
-			o: CPSC_223,
+			o: null,
 			s: null,
 		}
 	]
@@ -55,7 +53,7 @@ const CORE_4: ConcentrationSubrequirement = {
 	subreq_courses_req_count: 1,
 	subreq_options: [
 		{
-			o: CPSC_323,
+			o: null,
 			s: null,
 		}
 	]
@@ -68,11 +66,11 @@ const CORE_5: ConcentrationSubrequirement = {
 	subreq_courses_req_count: 1,
 	subreq_options: [
 		{
-			o: CPSC_365,
+			o: null,
 			s: null,
 		},
 		{
-			o: CPSC_366,
+			o: null,
 			s: null,
 		},
 	]
@@ -146,7 +144,7 @@ const SEN_PROJ: ConcentrationSubrequirement = {
 	subreq_courses_req_count: 1,
 	subreq_options: [
 		{
-			o: CPSC_490,
+			o: null,
 			s: null,
 		}
 	]

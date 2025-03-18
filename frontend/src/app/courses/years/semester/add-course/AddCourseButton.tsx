@@ -4,8 +4,6 @@ import Style from "./AddCourseButton.module.css";
 
 import { useAuth } from "@/context/AuthProvider";
 import { executeAddCourse } from "./AddCourseUtils";
-import { getCatalogTerms } from "@/database/data-catalog";
-import { usePrograms } from "@/context/ProgramProvider";
 
 export interface AddCourseDisplay {
 	active: boolean;
@@ -17,7 +15,6 @@ function AddCourseButton(props: {
 	term: number 
 }){
 	const { user, setUser } = useAuth();
-	const { progDict, setProgDict } = usePrograms();
 	
   const inputRef = useRef<HTMLInputElement>(null);
   const addRef = useRef<HTMLDivElement>(null);
@@ -27,7 +24,7 @@ function AddCourseButton(props: {
   const [selectedResult, setSelectedResult] = useState("GRADE");
   const resultOptions = ["GRADE", "CR", "D/F"];
 
-	const catalogTerms = getCatalogTerms()
+	const catalogTerms = [202501]
 
   useEffect(() => {
     if(addDisplay.active){
@@ -125,14 +122,12 @@ function AddCourseButton(props: {
 						className={Style.FuncButton} 
 						style={{ background: "#a4ffaf" }}
 						onClick={() => executeAddCourse(
+							inputRef,
+							selectedResult,
 							props.term, 
+							selectedTerm,
 							user, 
 							setUser, 
-							progDict,
-							setProgDict,
-							inputRef, 
-							selectedTerm, 
-							selectedResult, 
 							setAddDisplay
 						)}
 					/>

@@ -1,3 +1,4 @@
+
 import { User, StudentSemester, StudentYear } from "@/types/type-user";
 
 export function BuildStudentYears(user: User): StudentYear[] 
@@ -12,7 +13,7 @@ export function BuildStudentYears(user: User): StudentYear[]
   const buildSemesters = (terms: number[]): StudentSemester[] => {
     return terms.map(term => ({
       term,
-      studentCourses: studentCourses.filter(course => course.term === term),
+      studentCourses: studentCourses.filter(studentCourses => studentCourses.term === term),
     }));
   };
 

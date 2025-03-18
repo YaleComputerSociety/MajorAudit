@@ -7,11 +7,19 @@ export interface LanguagePlacement {
 }
 
 export interface Course {
-  codes: string[]; 		// ["FREN 403", "HUMS 409"]
-  title: string; 			// "Proust Interpretations: Reading <i>Remembrance of Things Past</i>"
-  credit: number; 		// 1
-  dist: string[]; 		// ["Hu"]
-  seasons: string[]; 	// ["Spring"]
+	id: string;
+  codes: string[]; 
+  title: string; 
+	description: string;
+	prereqs: string;
+	professors: string[];
+	distributions: string[];
+	seasons: string[];
+	flags: string[];
+	credits: number;
+	colsem: boolean;
+	fysem: boolean;
+	sysem: boolean;
 }
 
 export interface StudentCourse {

@@ -58,7 +58,7 @@ function CourseBox(props: {
 					</div>
 				</div>
 			</div>
-			<DistributionCircle distributions={props.studentCourse.course.dist}/>
+			<DistributionCircle distributions={props.studentCourse.course.distributions}/>
 		</div>
 	);
 }

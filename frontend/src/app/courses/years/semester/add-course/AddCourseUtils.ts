@@ -1,35 +1,47 @@
 
 import { User, StudentCourse } from "@/types/type-user";
-import { getCatalogCourse } from "@/database/data-catalog";
 import { AddCourseDisplay } from "./AddCourseButton";
-import { ProgramDict } from "@/types/type-program";
 
 export function executeAddCourse(
-  term: number,
+  inputRef: React.RefObject<HTMLInputElement | null>,
+	result: string,
+
+	toTerm: number,
+  fromTerm: number,
+
   user: User,
   setUser: Function, 
-	progDict: ProgramDict,
-	setProgDict: Function,
-  inputRef: React.RefObject<HTMLInputElement | null>,
-  selectedTerm: number,
-  selectedResult: string,
+
   setAddDisplay: Function
-){
-  if (!inputRef.current) return;
+) {
+	if (!inputRef.current) return;
 
-  const targetCode = inputRef.current.value.trim().toUpperCase();
-  const targetCourse = getCatalogCourse(selectedTerm, targetCode);
+  const code = inputRef.current.value.trim().toUpperCase();
+  const strFromTerm = fromTerm.toString(); // Assuming term corresponds to season_code
 
-  if (!targetCourse) return;
+  // Fetch course from API
+  fetch(`/api/courses/${strFromTerm}/${code}`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (!data || data.length === 0) return; // No course found
 
-  const status = selectedTerm === term ? "DA" : "MA";
-  const newCourse: StudentCourse = { course: targetCourse, status, term, result: selectedResult };
+      const newCourse = data[0];
+			
+			const status = fromTerm === toTerm ? "DA" : "MA";
+      const newStudentCourse: StudentCourse = {
+        course: newCourse,
+        status,
+        term: toTerm,
+        result: result,
+      };
+      const updatedCourses = [...user.FYP.studentCourses, newStudentCourse];
 
-  const updatedCourses = [...user.FYP.studentCourses, newCourse];
-
-  setUser({ ...user, FYP: { ...user.FYP, studentCourses: updatedCourses } });
-  setAddDisplay((prevState: AddCourseDisplay) => ({ ...prevState, active: false }));
+      setUser({ ...user, FYP: { ...user.FYP, studentCourses: updatedCourses } });
+      setAddDisplay((prevState: AddCourseDisplay) => ({ ...prevState, active: false }));
+    })
+    .catch((error) => console.error("Error fetching course:", error));
 }
+
 
 // export async function fetchAndCacheCourses(
 //   selectedTerm: number,
