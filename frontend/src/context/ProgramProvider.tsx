@@ -3,14 +3,14 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { ProgramDict } from "@/types/type-program";
 
-// Define context type
+// Define Context Type
 interface ProgramContextType {
-  // progDict: ProgramDict;
-  // setProgDict: (dict: ProgramDict) => void;
-  // baseProgDict: ProgramDict;
+  progDict: ProgramDict;
+  setProgDict: (dict: ProgramDict) => void;
+  baseProgDict: ProgramDict;
   isLoading: boolean;
-  // error: string | null;
-  // resetToBase: () => void;
+  error: string | null;
+  resetToBase: () => void;
 }
 
 const ProgramContext = createContext<ProgramContextType | null>(null);
@@ -21,40 +21,41 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
   const [progDict, setProgDict] = useState<ProgramDict>({});
   const [error, setError] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   const fetchPrograms = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       const response = await fetch('/api/programs');
-  //       if (!response.ok) throw new Error('Failed to fetch programs');
+  useEffect(() => {
+    async function fetchPrograms() {
+      setIsLoading(true);
+      try {
+        const response = await fetch('/api/programs');
+        if (!response.ok) throw new Error('Failed to fetch programs.');
         
-  //       const fetchedData = await response.json();
-  //       // Store as separate objects to prevent reference issues
-  //       setBaseProgDict(JSON.parse(JSON.stringify(fetchedData)));
-  //       setProgDict(JSON.parse(JSON.stringify(fetchedData)));
-  //     } catch (err) {
-  //       setError(err instanceof Error ? err.message : 'Unknown error');
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
+				const fetchedData = await response.json();
 
-  //   fetchPrograms();
-  // }, []);
+        // Store as separate objects to prevent reference issues.
+        setBaseProgDict(JSON.parse(JSON.stringify(fetchedData)));
+        setProgDict(JSON.parse(JSON.stringify(fetchedData)));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
-  // // Deep clone when resetting to base
-  // const resetToBase = useCallback(() => {
-  //   setProgDict(JSON.parse(JSON.stringify(baseProgDict)));
-  // }, [baseProgDict]);
+    fetchPrograms();
+  }, []);
+
+  // Deep clone when resetting to base.
+  const resetToBase = useCallback(() => {
+    setProgDict(JSON.parse(JSON.stringify(baseProgDict)));
+  }, [baseProgDict]);
 
   return (
     <ProgramContext.Provider value={{ 
-      // progDict, 
-      // setProgDict, 
-      // baseProgDict,
+      progDict, 
+      setProgDict, 
+      baseProgDict,
       isLoading,
-      // error,
-      // resetToBase
+      error,
+      resetToBase
     }}>
       {children}
     </ProgramContext.Provider>

@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import Style from "./Metadata.module.css";
 
 import Link from 'next/link';
-import { MajorsIndex, Program, ProgramDict } from "@/types/type-program";
+import { Program, ProgramDict } from "@/types/type-program";
+import { MajorsIndex } from "@/types/type-user";
 import { usePrograms } from "@/context/ProgramProvider";
 import { useAuth } from "@/context/AuthProvider";
 
@@ -24,22 +25,22 @@ function MetadataTopshelf(props: {
     <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
-					<button className={Style.PinButton} onClick={handlePinClick}>
+					{/* <button className={Style.PinButton} onClick={handlePinClick}>
 						📌
-					</button>
+					</button> */}
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>
-						{props.program.prog_data.prog_name}
+						{props.program.name}
 					</div>
           <img src="./little_guys.png" alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }} />
           <div className={Style.countBox} style={{ marginRight: "10px", marginTop: "4px" }}>
-						{props.program.prog_data.prog_stud_count}
+						{props.program.student_count}
 					</div>
           <div className={Style.pinkMajorBox} style={{ fontSize: "16px", marginTop: "2px" }}>
 						MAJOR
 					</div>
         </div>
         <div>
-					{props.program.prog_data.prog_abbr}
+					{props.program.abbreviation}
 				</div>
       </div>
     </div>
@@ -92,28 +93,28 @@ function MetadataToggle(props: {
 	return(
 		<div className={Style.Column}>
 			<div className={Style.ToggleContainer}>
-				{props.program.prog_degs.map((deg, index) => (
+				{props.program.degrees.map((deg, index) => (
 					<button 
 						key={index}
 						className={`${Style.ToggleOption} ${props.index.deg === index ? Style.Active : ""}`}
-						style={{ cursor: props.program.prog_degs.length > 1 ? "pointer" : "default" }}
+						style={{ cursor: props.program.degrees.length > 1 ? "pointer" : "default" }}
 						onClick={() => props.setIndex({ prog: props.index.prog, deg: index, conc: props.index.conc })}
 					>
-						{deg.deg_type}
+						{deg.type}
 					</button>
 				))}
 			</div>
 
-			{props.program.prog_degs[props.index.deg].deg_concs.length > 1 && (
+			{props.program.degrees[props.index.deg].concentrations.length > 1 && (
 				<div className={Style.ToggleContainer}>
-					{props.program.prog_degs[props.index.deg].deg_concs.map((conc, index) => (
+					{props.program.degrees[props.index.deg].concentrations.map((conc, index) => (
 						<button 
 							key={index}
 							className={`${Style.ToggleOption} ${props.index.conc === index ? Style.Active : ""}`}
-							style={{ cursor: props.program.prog_degs[props.index.deg].deg_concs.length > 1 ? "pointer" : "default" }}
+							style={{ cursor: props.program.degrees[props.index.deg].concentrations.length > 1 ? "pointer" : "default" }}
 							onClick={() => props.setIndex({ prog: props.index.prog, deg: props.index.deg, conc: index })}
 						>
-							{conc.conc_name}
+							{conc.name}
 						</button>
 					))}
 				</div>
@@ -134,17 +135,17 @@ function MetadataBody(props: {
 				ABOUT
 			</div>
 			<div style={{ fontSize: "12px", marginBottom: "12px" }}>
-				{props.program.prog_degs[props.index.deg].deg_concs[props.index.conc].conc_desc}
+				{props.program.degrees[props.index.deg].concentrations[props.index.conc].description}
 			</div>
 			<div className={Style.subsectionHeader}>
 				DUS
 			</div>
 			<div style={{ fontSize: "12px", marginBottom: "12px" }}>
-				{props.program.prog_data.prog_dus.dus_name}; {props.program.prog_data.prog_dus.dus_email}
+				{/* {props.program.prog_data.prog_dus.dus_name}; {props.program.prog_data.prog_dus.dus_email} */}
 			</div>
 			<div style={{ display: "flex" }}>
-				<div className={Style.linkBox}><Link className={Style.link} href={props.program.prog_data.prog_catolog} target="_blank">MAJOR CATALOG</Link></div>
-				<div className={Style.linkBox}><Link className={Style.link} href={props.program.prog_data.prog_website} target="_blank">MAJOR WEBSITE</Link></div>
+				<div className={Style.linkBox}><Link className={Style.link} href={props.program.catolog_link} target="_blank">MAJOR CATALOG</Link></div>
+				<div className={Style.linkBox}><Link className={Style.link} href={props.program.website_link} target="_blank">MAJOR WEBSITE</Link></div>
 			</div>
 		</div>
 	);
@@ -166,10 +167,10 @@ function MetadataScrollButton(props: {
       <div style={{ display: "flex" }}>
         <div style={{ textAlign: "left", color: "gray" }}>
           <div style={{ fontSize: "18px", fontWeight: "bold" }}>
-            {props.programs[nextProg].prog_data.prog_name}
+            {props.programs[nextProg].name}
           </div>
           <div style={{ fontSize: "10px" }}>
-            {props.programs[nextProg].prog_data.prog_abbr}
+            {props.programs[nextProg].abbreviation}
           </div>
         </div>
       </div>
@@ -189,7 +190,7 @@ function ProgramList(props: {
 					className={Style.ProgramOption} 
 					onClick={() => props.setIndex({ conc: 0, deg: 0, prog: progCode })}
 				>
-					{program.prog_data.prog_name} ({program.prog_data.prog_abbr})
+					{program.name} ({program.abbreviation})
 				</div>
 			))}
 		</div>

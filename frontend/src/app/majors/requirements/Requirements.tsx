@@ -7,15 +7,16 @@ import { useState, useEffect } from "react";
 import Style from "./Requirements.module.css";
 
 import { Course } from "@/types/type-user";
-import { ConcentrationSubrequirement, ConcentrationRequirement, MajorsIndex, SubreqCourseOption } from "@/types/type-program";
+import { Subrequirement, Requirement, Option } from "@/types/type-program";
+import { MajorsIndex } from "@/types/type-user";
 
 import { getStudentConcentration, removeCourseInSubreq, addCourseInSubreq, toggleSubreqSelection } from "./RequirementsUtils";
 import { MajorsIcon } from "../course-icon/MajorsCourseIcon";
 
 function RenderSubrequirementCourse(props: { 
 	edit?: boolean; 
-	option: SubreqCourseOption; 
-	subreq: ConcentrationSubrequirement; 
+	option: Option; 
+	subreq: Subrequirement; 
 	onRemoveCourse: Function, 
 	onAddCourse: Function 
 }){
@@ -23,7 +24,7 @@ function RenderSubrequirementCourse(props: {
     <div style={{ marginRight: "2px", marginBottom: "2px" }}>
       <MajorsIcon 
         edit={props.edit ?? false} 
-        contentCourse={props.option.s ?? props.option.o}  
+        contentCourse={props.option.satisfier ?? props.option.option}  
         subreq={props.subreq} 
         onRemoveCourse={props.onRemoveCourse} 
 				onAddCourse={props.onAddCourse} 
@@ -37,7 +38,7 @@ function RenderSubrequirement(props: {
 	majorsIndex: MajorsIndex, 
 	reqIndex: number, 
 	subreqIndex: number, 
-	subreq: ConcentrationSubrequirement 
+	subreq: Subrequirement 
 }){
 	const { setUser } = useAuth();
 
@@ -49,18 +50,18 @@ function RenderSubrequirement(props: {
     return addCourseInSubreq(setUser, props.majorsIndex, props.reqIndex, props.subreqIndex, courseCode);
   }
 
-	const satisfiedCount = props.subreq.subreq_options.filter(opt => opt.s !== null).length;
-	const filteredCourses = satisfiedCount >= props.subreq.subreq_courses_req_count
-		? props.subreq.subreq_options.filter(opt => opt.s !== null) 
-		: props.subreq.subreq_options; 
+	const satisfiedCount = props.subreq.options.filter(opt => opt.satisfier !== null).length;
+	const filteredCourses = satisfiedCount >= props.subreq.courses_required_count
+		? props.subreq.options.filter(opt => opt.satisfier !== null) 
+		: props.subreq.options; 
 
   return(
     <div className={Style.Column} style={{ marginBottom: "12px" }}>
       <div className={Style.SubHeader} style={{ marginBottom: "2px" }}>
-        {satisfiedCount}|{props.subreq.subreq_courses_req_count} {props.subreq.subreq_name}
+        {satisfiedCount}|{props.subreq.courses_required_count} {props.subreq.name}
       </div>
       <div className={Style.SubDesc}>
-				{props.subreq.subreq_desc}
+				{props.subreq.description}
 			</div>
       <div className={Style.Row} style={{ flexWrap: "wrap", marginLeft: "20px" }}>
         {filteredCourses.map((option, option_index) => (
@@ -68,7 +69,7 @@ function RenderSubrequirement(props: {
 						key={option_index}
 						option={option} 
 						subreq={props.subreq}
-						edit={props.subreq.subreq_flex ? props.edit : false}
+						edit={props.edit}
 						onRemoveCourse={handleRemoveCourse}
 						onAddCourse={handleAddCourse}
 					/>
@@ -82,15 +83,15 @@ function RenderRequirement(props: {
 	edit: boolean, 
 	majorsIndex: MajorsIndex, 
 	reqIndex: number, 
-	req: ConcentrationRequirement 
+	req: Requirement
 }){
 	const { user, setUser } = useAuth();
 	const userConc = getStudentConcentration(user, props.majorsIndex);
 	const selectedSubreqs = userConc?.selected_subreqs[props.reqIndex] ?? [];
 
 	const visibleSubreqs = selectedSubreqs.length > 0 
-    ? props.req.subreqs_list.filter((_, i) => selectedSubreqs.includes(i))
-    : props.req.subreqs_list;
+    ? props.req.subrequirements.filter((_, i) => selectedSubreqs.includes(i))
+    : props.req.subrequirements;
 
 	function handleToggleSubreq(subreqIndex: number) {
 		if(userConc && props.edit){
@@ -99,7 +100,7 @@ function RenderRequirement(props: {
 				props.majorsIndex, 
 				props.reqIndex, 
 				subreqIndex, 
-				props.req.subreqs_required_count ?? props.req.subreqs_list.length
+				props.req.subreqs_required_count ?? props.req.subrequirements.length
 			);
 		}
 	}
@@ -107,12 +108,12 @@ function RenderRequirement(props: {
 	let dynamicRequiredCount: number | string = props.req.courses_required_count;
 	if(props.req.courses_required_count === -1){
 		dynamicRequiredCount = selectedSubreqs.length > 0 
-			? selectedSubreqs.reduce((sum, idx) => sum + props.req.subreqs_list[idx].subreq_courses_req_count, 0)
+			? selectedSubreqs.reduce((sum, idx) => sum + props.req.subrequirements[idx].courses_required_count, 0)
 			: "~"; 
 	}
 
-	const dynamicSatisfiedCount = props.req.subreqs_list.reduce(
-		(sum, subreq) => sum + subreq.subreq_options.filter(option => option.s !== null).length,
+	const dynamicSatisfiedCount = props.req.subrequirements.reduce(
+		(sum, subreq) => sum + subreq.options.filter(option => option.satisfier !== null).length,
 		0
 	);
 
@@ -120,36 +121,36 @@ function RenderRequirement(props: {
     <div className={Style.Column}>
       <div className={Style.Row} style={{ marginBottom: "2px", justifyContent: "space-between" }}>
         <div className={Style.ReqHeader}>
-					{props.req.req_name}
+					{props.req.name}
 				</div>
 				<div className={Style.ReqHeader} style={{ marginRight: "20px" }}>
-					{props.req.checkbox !== undefined 
+					{props.req.checkbox 
             ? dynamicSatisfiedCount === dynamicRequiredCount ? "✅" : "❌" 
             : `${dynamicSatisfiedCount}|${dynamicRequiredCount}`
           }         
 				</div>
       </div>
 			<div className={Style.SubDesc}>
-					{props.req.req_desc}
+					{props.req.description}
 			</div>
 
-			{(props.req.subreqs_required_count !== undefined && props.req.subreqs_required_count < props.req.subreqs_list.length) && (
+			{(props.req.subreqs_required_count !== undefined && props.req.subreqs_required_count < props.req.subrequirements.length) && (
         <div className={Style.SubreqSelectionRow}>
-          {props.req.subreqs_list.map((subreq, i) => (
+          {props.req.subrequirements.map((subreq, i) => (
             <button 
               key={i} 
               className={`${Style.SubreqOption} ${selectedSubreqs.includes(i) ? Style.Selected : ""}`}
 							style={{ cursor: props.edit ? "pointer" : "default" }}
               onClick={() => handleToggleSubreq(i)}
             >
-              {subreq.subreq_name}
+              {subreq.name}
             </button>
           ))}
         </div>
       )}
 
 			<div className={Style.SubreqsList}>
-        {visibleSubreqs.map((subreq, subreqIndex) => (
+        {visibleSubreqs.map((subreq: Subrequirement, subreqIndex: number) => (
           <RenderSubrequirement 
 						key={subreqIndex} 
 						edit={props.edit} 
@@ -181,11 +182,13 @@ function Requirements(props: {
 		setEdit(false);
 	}, [props.majorsIndex]);
 
-	const userConc = getStudentConcentration(user, props.majorsIndex);
+	// const userConc = getStudentConcentration(user, props.majorsIndex);
 	const program = progDict[props.majorsIndex.prog];
-	const conc = userConc 
-		? userConc.user_conc 
-		: program?.prog_degs[props.majorsIndex.deg].deg_concs[props.majorsIndex.conc];
+	const conc = program?.degrees[props.majorsIndex.deg].concentrations[props.majorsIndex.conc];
+	
+	// const conc = userConc 
+	// 	? userConc.user_conc 
+	// 	: program?.prog_degs[props.majorsIndex.deg].deg_concs[props.majorsIndex.conc];
 
 	return(
     <div className={Style.RequirementsContainer}>
@@ -193,14 +196,14 @@ function Requirements(props: {
         <div>
 					Requirements
 				</div>
-				{userConc && 
+				{/* {userConc && 
 					<button className={Style.EditButton} onClick={() => setEdit(!edit)}>
 						⚙
 					</button>
-				}
+				} */}
       </div>
 			<div className={Style.ReqsList}>
-					{conc.conc_reqs.map((req: ConcentrationRequirement, reqIndex: number) => (
+					{conc.requirements.map((req: Requirement, reqIndex: number) => (
 						<RenderRequirement 
 							key={reqIndex} 
 							edit={edit} 

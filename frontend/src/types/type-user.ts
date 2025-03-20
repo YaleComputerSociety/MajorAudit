@@ -66,3 +66,9 @@ export interface User {
 	netID: string;
 	FYP: FYP;
 }
+
+export interface MajorsIndex {
+	prog: string;
+	deg: number;
+	conc: number;
+}

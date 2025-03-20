@@ -6,19 +6,18 @@ import { usePrograms } from "@/context/ProgramProvider";
 import { useState, useEffect } from "react";
 import Style from "./Majors.module.css";
 
-import { MajorsIndex } from "@/types/type-program"; 
+import { MajorsIndex } from "@/types/type-user";
 import { initializeMajorsIndex, updateMajorsIndex } from "./MajorsUtils";
 
 import NavBar from "@/components/navbar/NavBar";
 import Overhead from "./overhead/Overhead";
 import Metadata from "./metadata/Metadata";
 import Requirements from "./requirements/Requirements";
-import { fill } from "@/utils/preprocessing/Fill";
 
 function Majors()
 {
 	const { user } = useAuth();
-	const { progDict, setProgDict } = usePrograms();
+	const { progDict } = usePrograms();
 
 	const progKeys = Object.keys(progDict);
 	const [filteredProgKeys, setFilteredProgKeys] = useState<string[]>(progKeys);
@@ -53,10 +52,9 @@ function Majors()
 
 	return(
     <div>
-      {/* <NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/>
+			<NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/>
       <div className={Style.MajorsPage}>
 				<div className={Style.ListButton} onClick={() => setListView((prev) => !prev)}/>
-				<div className={Style.ListButton} style={{ marginTop: "200px" }} onClick={() => fill(user.FYP.studentCourses, progDict, setProgDict)}/>
 				<Metadata 
 					listView={listView} 
 					index={index} setIndex={updateIndex} 
@@ -64,7 +62,7 @@ function Majors()
 				/>
 				<div className={Style.Divider}/>
 				<Requirements majorsIndex={listView ? null : index}/>
-      </div> */}
+      </div>
     </div>
   );
 }

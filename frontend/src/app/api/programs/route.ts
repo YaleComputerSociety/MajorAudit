@@ -13,8 +13,6 @@ export async function GET() {
     
     // Create program dictionary
     const programDict = createProgramDict(transformedPrograms);
-
-		console.log(programDict);
     
     return NextResponse.json(programDict);
   } catch (error) {

@@ -4,7 +4,7 @@ import Style from "./MajorsCourseIcon.module.css"
 
 import Image from "next/image";
 
-import { ConcentrationSubrequirement } from "@/types/type-program";
+import { Subrequirement } from "@/types/type-program";
 import { StudentCourse, Course } from "@/types/type-user";
 
 import DistributionCircle from "@/components/distribution-circle/DistributionsCircle";
@@ -37,7 +37,7 @@ function SeasonComp(props: { seasons: string[] })
 function CourseIcon(props: { 
   edit: boolean; 
   course: Course; 
-  subreq: ConcentrationSubrequirement; 
+  subreq: Subrequirement; 
   onRemoveCourse: Function;
 }){
   return (
@@ -45,10 +45,10 @@ function CourseIcon(props: {
       {props.edit && (
         <RemoveButton onClick={() => props.onRemoveCourse(props.course, props.subreq, false)} />
       )}
-      <SeasonComp seasons={props.course.seasons || []}/>
+      {/* <SeasonComp seasons={props.course.seasons || []}/> */}
       {props.course.codes[0]}
 			<div style={{ marginLeft: "2px", marginTop: "5px" }}>
-				<DistributionCircle distributions={props.course.dist}/>
+				<DistributionCircle distributions={props.course.distributions}/>
 			</div>
     </div>
   );
@@ -57,7 +57,7 @@ function CourseIcon(props: {
 function StudentCourseIcon(props: { 
   edit: boolean; 
   studentCourse: StudentCourse; 
-  subreq: ConcentrationSubrequirement; 
+  subreq: Subrequirement; 
   onRemoveCourse: Function;
 }) {
   return (
@@ -167,7 +167,7 @@ function EmptyIcon(props: {
 export function MajorsIcon(props: { 
   edit: boolean; 
   contentCourse: Course | StudentCourse | null; 
-  subreq: ConcentrationSubrequirement; 
+  subreq: Subrequirement; 
   onRemoveCourse: Function;
 	onAddCourse: Function;
 }) {

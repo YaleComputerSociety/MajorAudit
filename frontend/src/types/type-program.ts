@@ -47,13 +47,4 @@ export interface Program {
 	degrees: Degree[];
 }
 
-// any null strings go to "", null numbers go to 0
-
-// string is program.abbreviation
 export type ProgramDict = Record<string, Program>;
-
-// export interface MajorsIndex {
-// 	prog: string;
-// 	deg: number;
-// 	conc: number;
-// }

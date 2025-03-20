@@ -60,7 +60,7 @@ export function transformRequirement(requirementData: any, index: number): Requi
     description: requirementData.description || "",
     courses_required_count: requirementData.courses_required_count || 0,
     subreqs_required_count: requirementData.subreqs_required_count || 0,
-    checkbox: requirementData.checkbox,
+    checkbox: requirementData.checkbox || false,
     subrequirements: subrequirements.map(
       (item: any, i: number) => transformSubrequirement(item.data, item.index || i)
     ),
