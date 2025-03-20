@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-import { Ryan } from "@/database/data-user";
+import { Ryan } from "@/database/mock/data-user";
 
 export async function GET() {
 	const user = Ryan;

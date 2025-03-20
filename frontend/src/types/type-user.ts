@@ -1,25 +1,20 @@
 
-import { DegreeConcentration, MajorsIndex, Program } from "./type-program";
-
-export interface LanguagePlacement {
-	language: string;
-	level: number;
-}
+// import { DegreeConcentration } from "./type-program";
 
 export interface Course {
 	id: string;
   codes: string[]; 
   title: string; 
 	description: string;
-	prereqs: string;
+	requirements: string;
 	professors: string[];
 	distributions: string[];
-	seasons: string[];
 	flags: string[];
 	credits: number;
-	colsem: boolean;
-	fysem: boolean;
-	sysem: boolean;
+	term: number;
+	is_colsem: boolean;
+	is_fysem: boolean;
+	is_sysem: boolean;
 }
 
 export interface StudentCourse {
@@ -46,24 +41,28 @@ export interface StudentTermArrangement {
 	senior: number[];
 }
 
+export interface MajorsIndex {
+	prog: string; 	// e.g. "CPSC"
+	deg: number; 
+	conc: number;
+}
 export interface StudentConc {
-	conc_majors_index: MajorsIndex;
-	user_status: number;
-	user_conc: DegreeConcentration;
-	user_conc_name: string;
+	name: string;
+	status: number;
+	// concentration: DegreeConcentration;
+	concentration_majors_index: MajorsIndex;
 	selected_subreqs: Record<number, number[]>;
 }
 
 export interface FYP {
-	languagePlacement: LanguagePlacement;
-	studentCourses: StudentCourse[];
-	studentTermArrangement: StudentTermArrangement;
 	decl_list: StudentConc[];
+	studentCourses: StudentCourse[];
+	languagePlacement: string;
+	studentTermArrangement: StudentTermArrangement;
 }
 
 export interface User {
 	name: string;
 	netID: string;
-	onboard: boolean;
 	FYP: FYP;
 }

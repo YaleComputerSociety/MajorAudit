@@ -53,7 +53,7 @@ function Majors()
 
 	return(
     <div>
-      <NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/>
+      {/* <NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/>
       <div className={Style.MajorsPage}>
 				<div className={Style.ListButton} onClick={() => setListView((prev) => !prev)}/>
 				<div className={Style.ListButton} style={{ marginTop: "200px" }} onClick={() => fill(user.FYP.studentCourses, progDict, setProgDict)}/>
@@ -64,7 +64,7 @@ function Majors()
 				/>
 				<div className={Style.Divider}/>
 				<Requirements majorsIndex={listView ? null : index}/>
-      </div>
+      </div> */}
     </div>
   );
 }
