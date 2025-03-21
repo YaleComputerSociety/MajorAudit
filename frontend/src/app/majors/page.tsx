@@ -1,12 +1,14 @@
 
 "use client";
-import { useState } from "react";
-import { useAuth } from "../providers";
+import { useAuth } from "@/context/AuthProvider";
+import { usePrograms } from "@/context/ProgramProvider";
 
-import { DegreeMetadata } from "@/types/type-program";
-import { ALL_PROGRAM_METADATAS } from "@/database/data-degree";
-
+import { useState, useEffect } from "react";
 import Style from "./Majors.module.css";
+
+import { MajorsIndex } from "@/types/type-user";
+import { initializeMajorsIndex, updateMajorsIndex } from "./MajorsUtils";
+
 import NavBar from "@/components/navbar/NavBar";
 import Overhead from "./overhead/Overhead";
 import Metadata from "./metadata/Metadata";
@@ -14,37 +16,52 @@ import Requirements from "./requirements/Requirements";
 
 function Majors()
 {
-	const { user, setUser } = useAuth();
+	const { user } = useAuth();
+	const { progDict } = usePrograms();
 
-  const [programIndex, setProgramIndex] = useState(0);
+	const progKeys = Object.keys(progDict);
+	const [filteredProgKeys, setFilteredProgKeys] = useState<string[]>(progKeys);
+	const [index, setIndex] = useState<MajorsIndex | null>(null);
+	const [listView, setListView] = useState<boolean>(false);
 
-	const allProgramMetadatas: DegreeMetadata[][] = ALL_PROGRAM_METADATAS;
+	useEffect(() => {
+    if(progKeys.length > 0){
+      setFilteredProgKeys(progKeys);
+    }
+  }, [progDict]);
+	
+  useEffect(() => {
+		if (typeof window !== "undefined" && filteredProgKeys.length > 0) {
+			const storedIndex = sessionStorage.getItem("majorsIndex");
+			setIndex(initializeMajorsIndex(storedIndex, filteredProgKeys)); 
+		}
+	}, [filteredProgKeys]);
 
-	const shiftProgramIndex = (dir: number) => {
-    setProgramIndex((programIndex + dir + allProgramMetadatas.length) % allProgramMetadatas.length);
-  };
+  useEffect(() => {
+    if(typeof window !== "undefined" && index !== null){
+      sessionStorage.setItem("majorsIndex", JSON.stringify(index));
+    }
+  }, [index]);
 
-  const peekProgram = (dir: number) => {
-    return allProgramMetadatas[(programIndex + dir + allProgramMetadatas.length) % allProgramMetadatas.length][0];
-  };
+  const updateIndex = (newIndex: Partial<MajorsIndex>) => {
+		setListView(false);
+		setIndex((prev) => updateMajorsIndex(prev, newIndex, filteredProgKeys));
+	};
 
-  return(
+  if (index === null || !filteredProgKeys.length) return null;
+
+	return(
     <div>
-      <NavBar utility={<Overhead user={user} setProgramIndex={setProgramIndex}/>}/>
+			<NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/>
       <div className={Style.MajorsPage}>
-        <Metadata
-					user={user} 
-					setUser={setUser}
-          programMetadatas={allProgramMetadatas[programIndex]}
-					programIndex={programIndex}
-					shiftProgramIndex={shiftProgramIndex}
-					peekProgram={peekProgram}
-        />
-        <Requirements
-					user={user}
-					setUser={setUser}
-          degreeConfiguration={user.FYP.degreeConfigurations[programIndex][0]}
-        />
+				<div className={Style.ListButton} onClick={() => setListView((prev) => !prev)}/>
+				<Metadata 
+					listView={listView} 
+					index={index} setIndex={updateIndex} 
+					filteredProgKeys={filteredProgKeys}
+				/>
+				<div className={Style.Divider}/>
+				<Requirements majorsIndex={listView ? null : index}/>
       </div>
     </div>
   );

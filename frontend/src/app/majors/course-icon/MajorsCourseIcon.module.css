@@ -1,0 +1,57 @@
+
+.Icon {
+	display: flex;
+	flex-direction: row;
+
+	align-items: center;
+	justify-content: center;
+
+	font-size: 14px;
+	font-weight: bold;
+
+	padding: 2px 4px;
+	border-radius: 15px;
+
+	width: max-content;
+	min-width: 14px;
+	height: 18px;
+
+	background-color: #F5F5F5;
+	transition: filter 0.3s ease;
+}
+
+.Icon:hover {
+	cursor: pointer;
+	filter: brightness(95%);
+}
+
+.StudentCourseIcon {
+  background-color: #E1E9F8;
+}
+
+.RemoveButton {
+	padding: 0;
+  border: none;
+	cursor: pointer;
+
+	margin-right: 2px;
+	margin-left: 2px;
+
+  width: 15px;
+  height: 15px;
+
+  border-radius: 50%;
+}
+
+.CodeSearch {
+	height: 14px;
+	width: 70px;
+
+	font-size: 12px; 
+	padding: 1px;
+
+  border: none;
+  outline: none;
+  background-color: white;
+  color: black;
+}

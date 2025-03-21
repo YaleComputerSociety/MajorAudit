@@ -2,20 +2,18 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "./providers";
+import { useAuth } from "@/context/AuthProvider";
 
-export default function MajorAudit() 
+export default function MajorAudit()
 {
   const router = useRouter();
-  const { auth } = useAuth(); 
+	const { auth } = useAuth();
 
   useEffect(() => {
-    if(!auth.loggedIn){
-      router.push("/login");
-    }else if(!auth.onboard){
-      router.push("/onboard");
-    }else{
-      router.push("/graduation");
+    if (auth.loggedIn) {
+      router.replace("/graduation");
+    } else {
+      router.replace("/login");
     }
   }, [auth, router]);
 

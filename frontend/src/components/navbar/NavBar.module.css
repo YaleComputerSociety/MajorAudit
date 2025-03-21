@@ -42,8 +42,23 @@
 }
 
 .Logo {
-	width: 150px;
-	height: auto;
 	margin-right: 10px;
 	margin-left: 20px;
+}
+
+.Circle {
+  width: 35px; 
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 50%;
+  border: 2px solid transparent; /* Default border is invisible */
+  
+  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.Circle:hover {
+  border-color: #cce5ff; /* Blue border appears on hover */
 }

@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Program {
+  id            Int     @id @default(autoincrement())
+  name          String
+	abbreviation  String
+	
+
+  student_count Int?
+  website_link  String?
+  catalog_link  String?
+
+	degrees       Degree[]
+  
+  @@map("programs")
+}
+
+model Degree {
+  id          Int             @id @default(autoincrement())
+  type        String          @db.Text
+  program_id  Int
+  note        String?         @db.Text
+  program     Program         @relation(fields: [program_id], references: [id])
+  concentrations Concentration[]
+  
+  @@map("degrees")
+}
+
+model Concentration {
+  id             Int            @id @default(autoincrement())
+  name           String?        @db.Text
+  note           String?        @db.Text
+  degree_id      Int
+  description    String?        @db.Text
+  degree         Degree         @relation(fields: [degree_id], references: [id])
+  concentration_requirements ConcentrationRequirement[]
+  
+  @@map("concentrations")
+}
+
+model ConcentrationRequirement {
+  id               Int          @id @default(autoincrement())
+  requirement_index Int
+  concentration_id Int
+  requirement_id   Int
+  concentration    Concentration @relation(fields: [concentration_id], references: [id])
+  requirement      Requirement   @relation(fields: [requirement_id], references: [id])
+  
+  @@map("concentration_requirements")
+}
+
+model Requirement {
+  id                       Int                       @id @default(autoincrement())
+  name                     String                    
+  description              String?
+  courses_required_count   Int?
+  subreqs_required_count    Int?
+  checkbox                 Boolean?
+  note                     String?
+  concentration_requirements ConcentrationRequirement[]
+  requirement_subrequirements RequirementSubrequirement[]
+  
+  @@map("requirements")
+}
+
+model Subrequirement {
+  id                        Int                       @id @default(autoincrement())
+  name                      String?
+  description               String?
+  courses_required_count    Int?
+  requirement_subrequirements RequirementSubrequirement[]
+  subrequirement_options    SubrequirementOption[]
+  
+  @@map("subrequirements")
+}
+
+model RequirementSubrequirement {
+  id                   Int            @id @default(autoincrement())
+  subrequirement_index Int?
+  description          String?
+  requirement_id       Int
+  subrequirement_id    Int
+  requirement          Requirement    @relation(fields: [requirement_id], references: [id])
+  subrequirement       Subrequirement @relation(fields: [subrequirement_id], references: [id])
+  
+  @@map("requirement_subrequirements")
+}
+
+model SubrequirementOption {
+  id                Int            @id @default(autoincrement())
+  option_index      Int?
+  note              String?        @db.Text
+  subrequirement_id Int
+  option_id         Int?
+  subrequirement    Subrequirement @relation(fields: [subrequirement_id], references: [id])
+  option            Option?        @relation(fields: [option_id], references: [id])
+  
+  @@map("subrequirement_options")
+}
+
+model Option {
+  id               Int                    @id @default(autoincrement())
+  option_course_id String?                @db.Text
+  elective_range   String?                @db.Text
+  is_any_okay      Boolean?
+  flags            String?                @db.Text
+  subrequirement_options SubrequirementOption[]
+  course           Course?                @relation(fields: [option_course_id], references: [id])
+  
+  @@map("options")
+}
+
+model Course {
+  id            String       @id @db.Text
+  title         String       @db.Text
+  description   String?      @db.Text
+  requirements  String?      @db.Text
+  professors    String?      @db.Text
+  distributions String?      @db.Text
+  flags         String?      @db.Text
+  credits       Float        @db.Real
+  term          String       @db.Text
+  is_colsem     Boolean?      @default(false)
+  is_fysem      Boolean?      @default(false)
+  is_sysem      Boolean?      @default(false)
+  codes         String[]      @db.Text
+  options       Option[]
+  
+  @@map("courses")
+}

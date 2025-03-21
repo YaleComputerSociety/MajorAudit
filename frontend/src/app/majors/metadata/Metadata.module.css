@@ -1,4 +1,22 @@
 
+.Column {
+	display: flex;
+	flex-direction: column;
+}
+
+.Row{
+	display: flex;
+	flex-direction: row;
+}
+
+.MetadataContainer{
+	/* border: 1px solid red; */
+	margin-top: 75px;
+
+	width: 550px;
+	height: 600px;
+}
+
 .countBox {
   display: inline-block; /* Display as inline block */
   width: max-content; /* Set width to maximum content size */
@@ -52,26 +70,73 @@
   margin-right: 10px;
 }
 
-.majorContainer {
-  padding: 20px 20px 20px 0;
+.MajorContainer {
+	/* border: 1px solid gray; */
+
   width: auto;
   height: 400px;
   background-color: white;
-  margin-right: 10px;
-  /* border: 1px solid black; */
 }
 
-.thumbtack {
-  font-size: 28px;
-  margin-right: 10px;
-  cursor: pointer;
-  transition: opacity 0.2s;
+
+
+
+.ScrollButton {
+  background-color: white;
+	margin: 0;
+	padding: 0;
+  border: none;
+	cursor: pointer;
 }
 
-.thumbtack:hover {
-  opacity: 0.7; /* Slightly lighter on hover */
+.PinButton {
+	cursor: pointer;
+  background-color: white;
+	border: none;
+	margin: 0;
+	padding: 0;
+  
+	
+	font-size: 30px;
+	margin-right: 6px;
 }
 
-.thumbtack:active {
-  opacity: 0.5; /* Even lighter on click */
+
+
+/* margin-left: 80px; */
+
+.ToggleContainer {
+  display: flex;
+	flex-direction: row;
+	margin-bottom: 8px;
+}
+
+.ToggleOption {
+	cursor: pointer;
+	background-color: white;
+	border: 1px solid rgb(196, 196, 196);
+	border-radius: 5px;
+	color: black;
+	margin: 0;
+	padding: 4px 10px;
+	font-size: 14px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.ToggleOption.Active {
+  background-color: #598ff4;
+  color: white;
+}
+
+
+
+
+
+
+.ProgramOption {
+	color: gray;
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 4px;
+	cursor: pointer;
 }

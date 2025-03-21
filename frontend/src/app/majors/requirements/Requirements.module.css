@@ -1,60 +1,146 @@
 
-.row{
+.Column {
+	display: flex;
+	flex-direction: column;
+}
+
+.Row{
 	display: flex;
 	flex-direction: row;
 }
 
-.reqsList {
-  height: 430px;
-  scrollbar-color: rgb(131, 131, 131) transparent;
-  scrollbar-width: thin;
-  overflow-y: scroll;
-  padding-right: 7px;
-  overflow-x: hidden;
+.RequirementsContainer {
+	/* border: 1px solid green; */
+	margin-top: 37px;
+	width: 600px;
+	height: 650px;
 }
 
-.subsectionHeader {
+.ReqsList {
+	/* border-bottom: 1px solid grey; */
+	margin-left: 30px;
+
+  /* height: 750px;
+  scrollbar-color: rgb(131, 131, 131) transparent;
+  scrollbar-width: thin;
+  overflow-y: scroll; */
+}
+
+.SubreqsList { 
+	margin-left: 30px;
+}
+
+.ReqHeader {
   color: grey;
   font-size: 18px;
   font-weight: 501;
 }
 
-.reqsContainer {
-  padding: 20px;
-  border-radius: 25px;
-  width: 490px;
-  height: 490px;
-  min-width: 390px;
-  background-color: white;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+.SubHeader {
+  color: grey;
+  font-size: 14px;
+  font-weight: 500;
 }
 
+.SubDesc {
+  color: grey;
+	font-style: italic;
+  font-size: 12px;
+  font-weight: 500;
+	margin-bottom: 4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.ToggleButton {
+	margin-top: 3px;
+
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #65a8f0;
+  font-size: 14px;
+}
 
 .ButtonRow {
   display: flex;
-  flex-direction: row;
+  gap: 6px;
+	margin-bottom: 2px;
 }
 
-.resetButton {
-  margin-right: 10px; /* Add margin to the right of the reset button */
-  opacity: 0; /* Make it invisible */
-  pointer-events: none; /* Make it unclickable */
+
+
+
+.SubreqSelectionRow {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
 }
 
-.editButton {
-  margin-right: 0; /* Remove margin for the last child */
+.SubreqOption {
+	cursor: pointer;
+	background-color: rgb(211, 211, 211);
+	color: white;
+	border: none;
+	border-radius: 6px;
+	margin: 0;
+	padding: 3px;
+	font-size: 10px;
+  transition: background-color 0.3s ease;
 }
 
-.resetButton.visible {
-  opacity: 1; /* Make it visible */
-  pointer-events: auto; /* Make it clickable */
+.SubreqOption.Selected {
+  background-color: rgb(100, 178, 238);
 }
 
-.resetButton:hover, .editButton:hover {
-  color: #666; /* Slightly lighter color on hover */
-  cursor: pointer; /* Show pointer cursor on hover */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.RequirementsContainerHeader {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	font-size: 30px;
+	/* padding: 2px 8px; */
 }
 
-.resetButton:active, .editButton:active {
-  color: #333; /* Darker color on click */
+.GoldBackground {
+  /* background-color: rgba(255, 215, 0, 0.3);
+	border-radius: 2px; */
+}
+
+.EditButton {
+  background-color: white;
+	margin: 0;
+	padding: 0;
+  border: none;
+	cursor: pointer;
+	font-size: 30px;
 }

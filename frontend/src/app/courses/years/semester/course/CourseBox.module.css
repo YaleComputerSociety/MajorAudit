@@ -1,0 +1,46 @@
+
+.Row {
+	display: flex;
+	flex-direction: row;
+}
+
+.Column {
+	display: flex;
+	flex-direction: column;
+}
+
+.CourseBox {
+	display: flex;
+	flex-direction: row;
+
+	justify-content: space-between;
+	align-items: center;
+
+	width: 420px;
+	height: 36px;
+
+	padding: 0 10px;
+	border-radius: 16px;
+}
+
+.CourseCode {
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.CourseTitle {
+	font-size: 8px;
+	font-weight: 500;
+}
+
+.FuncButton {
+	border: none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+}

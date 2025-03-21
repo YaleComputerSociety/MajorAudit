@@ -1,0 +1,139 @@
+
+.Row {
+	display: flex;
+	flex-direction: row;
+}
+
+/* */
+
+.AddButton {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	margin-bottom: 5px;
+	background-color: #F5F5F5;
+	cursor: pointer;
+}
+.AddButton:hover,
+.AddButton:active {
+	background-color: #E0E0E0;
+}
+
+.AddCanvas {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width: 200px;
+	height: 36px;
+	border-radius: 16px;
+	margin-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	background-color: #F5F5F5;
+	transition: filter 0.4s ease;
+}
+
+/* */
+
+.TermBox {
+	border: 1px solid #ccc;
+	padding: 0 8px;
+	background-color: white;
+	cursor: pointer;
+	border-radius: 4px;
+	font-size: 12px;
+	height: 22px;
+	width: 90px;
+	display: flex;
+	align-items: center;
+	box-sizing: border-box;
+	color: black;
+	position: relative;
+	transition: border-color 0.3s ease;
+}
+.TermBox:hover {
+	border-color: #aaa;
+}
+
+/* */
+
+.TermOptions {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  top: 100%;
+  left: 0;
+  margin-top: 5px;
+  z-index: 9999;
+  width: 90px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+.TermOptions div {
+  padding: 8px;
+  cursor: pointer;
+  color: black;
+  background-color: white;
+}
+
+.TermOptions div:hover {
+  background-color: #f0f0f0;
+}
+
+.SelectedTerm {
+  background-color: #93c7ff !important; /* Light blue background for the selected term */
+  color: black; /* Optional: change text color for selected term */
+}
+
+/* */
+
+.CodeBox {
+	background-color: white;
+	border: 1px solid #ccc;
+	height: 22px;
+	width: 90px;
+	padding-left: 8px;
+	margin-left: 10px;
+	outline: none;
+	font-size: 12px;
+	font-weight: 500;
+	border-radius: 4px;
+	box-sizing: border-box;
+	margin-right: 4px;
+
+	/* box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); */
+}
+.CodeBox:focus {
+	border-color: #aaa;
+	outline: none;
+}
+.CodeBox::placeholder {
+	color: grey;
+	font-style: italic;
+}
+
+/* */
+
+.RemoveButton {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background-color: white;
+	cursor: pointer;
+	margin-right: 5px;
+}
+.RemoveButton:hover {
+	background-color: #D3D3D3;
+}

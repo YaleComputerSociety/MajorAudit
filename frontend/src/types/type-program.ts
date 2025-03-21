@@ -1,71 +1,50 @@
 
-import { StudentCourse } from "./type-user";
+import { Course, StudentCourse } from "./type-user";
 
-interface DUS {
+export interface Option { 
+	option: Course | null;
+	satisfier: StudentCourse | null;
+	elective_range?: string; 
+	flags?: string[];
+	is_any_okay?: boolean;
+}
+
+export interface Subrequirement {
+	name: string; 
+	description: string;
+	index: number;
+	courses_required_count: number;
+	options: Option[]
+}
+
+export interface Requirement {
 	name: string;
-	address: string;
-	email: string;
+	description: string; 
+	index: number;
+	courses_required_count: number;
+	subreqs_required_count: number;
+	checkbox?: boolean;
+	subrequirements: Subrequirement[];
 }
 
-interface DegreeMetadataStats {
-	courses: number;
-	rating: number;
-	workload: number;
-	type: string;
-}
-
-export interface DegreeMetadata {
+export interface Concentration {
 	name: string;
-	abbr: string;
-	degreeType: string;
-	stats: DegreeMetadataStats;
-	students: number;
-	about: string;
-	dus: DUS;
-	catologLink: string;
-	wesbiteLink: string;
-}
-
-
-
-
-
-
-
-// \BEGIN{MAJOR MAGIC}
-
-interface DegreeRequirementsSubsection {
-	name?: string;
-	description?: string;
-	flexible: boolean;
-	courses: StudentCourse[];
-}
-
-interface DegreeRequirement {
-	name: string;
-	description?: string;
-	subsections: DegreeRequirementsSubsection[];
-}
-
-export interface DegreeConfiguration {
-	degreeRequirements: DegreeRequirement[];
+	description: string; 
+  requirements: Requirement[];
 }
 
 export interface Degree {
-	metadata: DegreeMetadata;
-	configuration: DegreeConfiguration;
+	type: string;
+	concentrations: Concentration[];
 }
 
-// \END{MAJOR MAGIC}
-
-
-
-
-
-
-
-export interface StudentDegree {
-	status: string; // DA | ADD | PIN
-	programIndex: number;
-	degreeIndex: number;
+export interface Program {
+	name: string;
+	abbreviation: string;
+	student_count: number; 
+	catolog_link: string; 
+	website_link: string; 
+	degrees: Degree[];
 }
+
+export type ProgramDict = Record<string, Program>;

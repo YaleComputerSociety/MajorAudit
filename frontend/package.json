@@ -1,5 +1,5 @@
 {
-  "name": "new-audit",
+  "name": "majoraudit",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "@supabase/supabase-js": "^2.49.1",
     "d3": "^7.9.0",
     "next": "15.1.6",
     "react": "^19.0.0",
@@ -22,6 +24,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
+    "prisma": "^6.5.0",
     "typescript": "^5"
   }
 }

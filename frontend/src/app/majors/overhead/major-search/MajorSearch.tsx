@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Style from "./MajorSearch.module.css";
 
 import { User } from "@/types/type-user";
-import { ALL_PROGRAM_METADATAS } from "@/database/data-degree";
+import { ALL_PROGRAM_METADATAS } from "@/database/programs/metas/meta-econ";
 
 function MajorSearchBar(props: { user: User; setProgramIndex: Function }) {
   const [searchTerm, setSearchTerm] = useState("");
