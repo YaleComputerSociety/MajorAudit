@@ -1,40 +1,14 @@
 
 "use client";
-import { useRouter } from "next/navigation";
 import Style from "./Login.module.css";
-
-import { useAuth } from "@/context/AuthProvider";
 import NavBar from "@/components/navbar/NavBar";
 
 function Login() 
 {
-  const router = useRouter();
-  const { setAuth, setUser } = useAuth();
-
-  const handleLogin = async () => {
-    try {
-      const response = await fetch("/api/login", { method: "GET" });
-
-      if (!response.ok) {
-        throw new Error("Login failed");
-      }
-
-      const data = await response.json();
-      setAuth({ loggedIn: true });
-      setUser(data);
-
-			if(!data.onboard){
-				router.push("/account");
-			}else{
-				router.push("/graduation");
-			}
-      
-    } catch (error) {
-      console.error("❌ Login error:", error);
-    }
+  const handleLogin = () => {
+    window.location.href = "/api/auth/cas/login";
   };
 	
-
   return (
     <div>
 			<NavBar loggedIn={false}/>

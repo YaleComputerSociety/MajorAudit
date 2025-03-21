@@ -1,4 +1,5 @@
 
+// middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 
 const protectedRoutes = ["/graduation", "/courses", "/majors"];
@@ -6,8 +7,8 @@ const protectedRoutes = ["/graduation", "/courses", "/majors"];
 export default function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
-  const sessionCookie = req.cookies.get("session")?.value;
-  const isLoggedIn = sessionCookie === "true";
+  const authCookie = req.cookies.get("sb-auth-token")?.value;
+	const isLoggedIn = !!authCookie;
 
   if (protectedRoutes.includes(path) && !isLoggedIn) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
@@ -17,11 +18,11 @@ export default function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/graduation", req.nextUrl));
   }
 
-	if (path === "/") {
-		return NextResponse.redirect(new URL(isLoggedIn ? "/graduation" : "/login", req.nextUrl));
-	}
+  if (path === "/") {
+    return NextResponse.redirect(new URL(isLoggedIn ? "/graduation" : "/login", req.nextUrl));
+  }
 
-	return NextResponse.next();
+  return NextResponse.next();
 }
 
 export const config = {
