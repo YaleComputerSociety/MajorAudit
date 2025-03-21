@@ -7,8 +7,8 @@ from supabase import create_client
 
 def fetch_process_and_upload(terms: list[int]):
 
-    supabase_url = "https://cqonuujfvpucligwwgtq.supabase.co"
-    supabase_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxb251dWpmdnB1Y2xpZ3d3Z3RxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczODUyMjg1MywiZXhwIjoyMDU0MDk4ODUzfQ.OtS4JpoFfW-T4YjksMW7SOeBZ1zSaf2EIBbevd09oaI"
+    supabase_url = ""
+    supabase_key = ""
     
     supabase = create_client(supabase_url, supabase_key)
     
