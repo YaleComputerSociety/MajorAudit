@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import Style from "./YearBox.module.css";
+import Style from "../YearBox.module.css";
 import { StudentYear, StudentSemester } from "@/types/type-user";
 
 import SemesterBox from "./semester/SemesterBox"
