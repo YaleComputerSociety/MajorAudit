@@ -32,7 +32,7 @@ function MetadataTopshelf(props: {
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>
 						{props.program.name}
 					</div>
-          <Image src="./little_guys.png" alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }}/>
+          <Image src="/little_guys.png" alt="" width={35} height={30} style={{ marginTop: "4px" }}/>
           <div className={Style.countBox} style={{ marginRight: "10px", marginTop: "4px" }}>
 						{props.program.student_count}
 					</div>

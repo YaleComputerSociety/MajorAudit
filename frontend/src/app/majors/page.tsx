@@ -14,55 +14,58 @@ import Overhead from "./overhead/Overhead";
 import Metadata from "./metadata/Metadata";
 import Requirements from "./requirements/Requirements";
 
-function Majors()
-{
-	// const { user } = useAuth();
-	const { progDict } = usePrograms();
+function Majors() {
+  // const { user } = useAuth();
+  const { progDict } = usePrograms();
 
-	const progKeys = Object.keys(progDict);
-	const [filteredProgKeys, setFilteredProgKeys] = useState<string[]>(progKeys);
-	const [index, setIndex] = useState<MajorsIndex | null>(null);
-	const [listView, setListView] = useState<boolean>(false);
+  const progKeys = Object.keys(progDict);
+  const [filteredProgKeys, setFilteredProgKeys] = useState<string[]>([]);
+  const [index, setIndex] = useState<MajorsIndex | null>(null);
+  const [listView, setListView] = useState<boolean>(false);
 
-	useEffect(() => {
-    if(progKeys.length > 0){
+  // Set filtered keys when progDict changes
+  useEffect(() => {
+    if (progKeys.length > 0) {
       setFilteredProgKeys(progKeys);
     }
-  }, [progDict, progKeys]);
-	
+  }, [progDict]);
+  
+  // Initialize index from session storage when filtered keys change
   useEffect(() => {
-		if (typeof window !== "undefined" && filteredProgKeys.length > 0) {
-			const storedIndex = sessionStorage.getItem("majorsIndex");
-			setIndex(initializeMajorsIndex(storedIndex, filteredProgKeys)); 
-		}
-	}, [filteredProgKeys]);
+    if (typeof window !== "undefined" && filteredProgKeys.length > 0) {
+      const storedIndex = sessionStorage.getItem("majorsIndex");
+      setIndex(initializeMajorsIndex(storedIndex, filteredProgKeys)); 
+    }
+  }, [filteredProgKeys]);
 
+  // Update session storage when index changes
   useEffect(() => {
-    if(typeof window !== "undefined" && index !== null){
+    if (typeof window !== "undefined" && index !== null) {
       sessionStorage.setItem("majorsIndex", JSON.stringify(index));
     }
   }, [index]);
 
   const updateIndex = (newIndex: Partial<MajorsIndex>) => {
-		setListView(false);
-		setIndex((prev) => updateMajorsIndex(prev, newIndex, filteredProgKeys));
-	};
+    setListView(false);
+    setIndex((prev) => updateMajorsIndex(prev, newIndex, filteredProgKeys));
+  };
 
   if (index === null || !filteredProgKeys.length) return null;
 
-	return(
+  return (
     <div>
-			{/* <NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/> */}
-			<NavBar utility={<Overhead/>}/>
+      {/* <NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/> */}
+      <NavBar utility={<Overhead />} />
       <div className={Style.MajorsPage}>
-				<div className={Style.ListButton} onClick={() => setListView((prev) => !prev)}/>
-				<Metadata 
-					listView={listView} 
-					index={index} setIndex={updateIndex} 
-					filteredProgKeys={filteredProgKeys}
-				/>
-				<div className={Style.Divider}/>
-				<Requirements majorsIndex={listView ? null : index}/>
+        <div className={Style.ListButton} onClick={() => setListView((prev) => !prev)} />
+        <Metadata 
+          listView={listView} 
+          index={index} 
+          setIndex={updateIndex} 
+          filteredProgKeys={filteredProgKeys}
+        />
+        <div className={Style.Divider} />
+        <Requirements majorsIndex={listView ? null : index} />
       </div>
     </div>
   );
