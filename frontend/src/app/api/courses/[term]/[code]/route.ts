@@ -5,9 +5,9 @@ import { supabaseAdmin } from "@/utils/supabase";
 // API Route: /api/courses/[season]/[code]
 export async function GET(
   request: Request,
-  { params }: { params: { term: number; code: string } }
+  { params }: { params: Promise<{ term: string; code: string }> }
 ) {
-  const { term, code } = params; // Extract URL parameters
+  const { term, code } = await params;
 
   try {
     // Query Supabase: match season_code & check if code exists in codes array

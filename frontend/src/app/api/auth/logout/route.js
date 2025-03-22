@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 
-export async function GET(request) {
+export async function GET() {
   const cookieStore = cookies();
   const accessToken = cookieStore.get('sb-access-token')?.value;
   const refreshToken = cookieStore.get('sb-refresh-token')?.value;

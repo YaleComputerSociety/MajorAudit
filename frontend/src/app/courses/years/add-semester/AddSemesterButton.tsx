@@ -5,9 +5,9 @@ import Style from "./AddSemesterButton.module.css";
 import { StudentSemester, StudentYear } from "@/types/type-user";
 
 function executeAddSemester(
-  props: { studentYear: StudentYear, setStudentYears: Function }, 
+  props: { studentYear: StudentYear, setStudentYears: React.Dispatch<React.SetStateAction<StudentYear[]>> }, 
   inputRef: React.RefObject<HTMLInputElement | null>, 
-  setDropVis: Function
+  setDropVis: (value: boolean | ((prevState: boolean) => boolean)) => void,
 ) {
   if (inputRef.current) {
     const newTermString = inputRef.current.value.trim();
@@ -22,8 +22,7 @@ function executeAddSemester(
     // Create a new semester object
     const newSemester: StudentSemester = {
       term: newTermNumber,
-      studentCourses: [],
-      active: true,
+      studentCourses: []
     };
 
     // Update studentYears with a new array reference
@@ -45,7 +44,10 @@ function executeAddSemester(
 
 
 
-function AddSemesterButton(props: { studentYear: StudentYear, setStudentYears: Function }) {
+function AddSemesterButton(props: { 
+	studentYear: StudentYear, 
+	setStudentYears: React.Dispatch<React.SetStateAction<StudentYear[]>> 
+}){
   const [dropVis, setDropVis] = useState(false);
   const buttonRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);

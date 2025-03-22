@@ -1,25 +1,26 @@
 
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import Style from "./Metadata.module.css";
 
 import Link from 'next/link';
 import { Program, ProgramDict } from "@/types/type-program";
 import { MajorsIndex } from "@/types/type-user";
 import { usePrograms } from "@/context/ProgramProvider";
-import { useAuth } from "@/context/AuthProvider";
+// import { useAuth } from "@/context/AuthProvider";
+import Image from "next/image";
 
-import { toggleConcentrationPin } from "./MetadataUtils";
+// import { toggleConcentrationPin } from "./MetadataUtils";
 
 function MetadataTopshelf(props: { 
 	program: Program;
 	index: MajorsIndex;
 }){
-	const { setUser } = useAuth();
-  const { progDict } = usePrograms();
+	// const { setUser } = useAuth();
+  // const { progDict } = usePrograms();
 
-  function handlePinClick() {
-    toggleConcentrationPin(setUser, progDict, props.index);
-  }
+  // function handlePinClick() {
+  //   toggleConcentrationPin(setUser, progDict, props.index);
+  // }
 
   return(
     <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
@@ -31,7 +32,7 @@ function MetadataTopshelf(props: {
           <div style={{ fontSize: "30px", fontWeight: "bold", marginRight: "12px" }}>
 						{props.program.name}
 					</div>
-          <img src="./little_guys.png" alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }} />
+          <Image src="./little_guys.png" alt="" style={{ width: "35px", height: "auto", marginTop: "4px" }}/>
           <div className={Style.countBox} style={{ marginRight: "10px", marginTop: "4px" }}>
 						{props.program.student_count}
 					</div>
@@ -88,7 +89,7 @@ function MetadataTopshelf(props: {
 function MetadataToggle(props: { 
 	program: Program, 
 	index: MajorsIndex, 
-	setIndex: Function 
+	setIndex: (newIndex: Partial<MajorsIndex>) => void
 }){
 	return(
 		<div className={Style.Column}>
@@ -154,8 +155,8 @@ function MetadataBody(props: {
 function MetadataScrollButton(props: { 
 	programs: ProgramDict, 
 	index: MajorsIndex, 
-	setIndex: Function; 
-	filteredProgKeys: string[];
+	setIndex: (newIndex: Partial<MajorsIndex>) => void,
+	filteredProgKeys: string[],
 	dir: number 
 }){
   const currentProgIndex = props.filteredProgKeys.indexOf(props.index.prog);
@@ -180,7 +181,7 @@ function MetadataScrollButton(props: {
 
 function ProgramList(props: { 
 	programs: ProgramDict, 
-	setIndex: Function 
+	setIndex: (newIndex: Partial<MajorsIndex>) => void 
 }){
 	return (
 		<div>
@@ -200,7 +201,7 @@ function ProgramList(props: {
 function Metadata(props: { 
 	listView: boolean,
 	index: MajorsIndex, 
-	setIndex: Function,
+	setIndex: (newIndex: Partial<MajorsIndex>) => void,
 	filteredProgKeys: string[],
 }){
 	const { progDict } = usePrograms();

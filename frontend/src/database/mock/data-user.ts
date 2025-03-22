@@ -1,10 +1,9 @@
 
-import { User } from "./../types/type-user";
+import { User } from "@/types/type-user"
 
 export const Ryan: User = {
 	name: "Ryan",
 	netID: "rgg32",
-	onboard: false,
 	FYP: {
 		studentCourses: [],
 		studentTermArrangement: {
@@ -13,7 +12,7 @@ export const Ryan: User = {
 			junior: [0, 202603, 202701],
 			senior: [0, 202703, 202801],
 		},
-		languagePlacement: { language: "Spanish", level: 5 },
+		languagePlacement: "",
 		decl_list: [],
 	}
 }

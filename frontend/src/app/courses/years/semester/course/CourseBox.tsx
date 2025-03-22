@@ -10,7 +10,7 @@ import DistributionCircle from "@/components/distribution-circle/DistributionsCi
 function RemoveButton(props: { 
 	studentCourse: StudentCourse; 
 	user: User; 
-	setUser: Function 
+	setUser: (user: User) => void 
 }){
   const removeStudentCourse = () => {
     const updatedStudentCourses = props.user.FYP.studentCourses.filter(

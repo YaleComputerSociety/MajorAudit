@@ -2,6 +2,7 @@
 "use client";
 import Style from "./Login.module.css";
 import NavBar from "@/components/navbar/NavBar";
+import Image from "next/image";
 
 function Login() 
 {
@@ -27,7 +28,7 @@ function Login()
             </div>
           </div>
         </div>
-        <img src="./guy.jpg" alt="Landing Page" width="450" />
+        <Image src="./guy.jpg" alt="Landing Page" width={450}/>
       </div>
     </div>
   );

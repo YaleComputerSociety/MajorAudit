@@ -1,5 +1,5 @@
 
-import { Program, ProgramDict } from "@/types/type-program";
+// import { Program, ProgramDict } from "@/types/type-program";
 // import { CONC_CPSC_BA_I, CONC_CPSC_BS_I } from "./concs/concs-cpsc";
 // import { CONC_ECON_BA_I } from "./concs/concs-econ";
 // // import { CONC_HIST_BA_GLOB, CONC_HIST_BA_SPEC } from "./concs/concs-hist";
@@ -66,9 +66,9 @@ import { Program, ProgramDict } from "@/types/type-program";
 // // 	]
 // // }
 
-export const PROG_DICT: ProgramDict = {
-	// "CPSC": PROG_CPSC,
-  // "ECON": PROG_ECON,
-  // "PLSC": PROG_PLSC,
-  // "HIST": PROG_HIST,
-};
+// export const PROG_DICT: ProgramDict = {
+// 	// "CPSC": PROG_CPSC,
+//   // "ECON": PROG_ECON,
+//   // "PLSC": PROG_PLSC,
+//   // "HIST": PROG_HIST,
+// };

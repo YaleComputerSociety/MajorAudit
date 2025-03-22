@@ -10,9 +10,9 @@ export function executeAddCourse(
   fromTerm: number,
 
   user: User,
-  setUser: Function, 
+  setUser: (user: User) => void, 
 
-  setAddDisplay: Function
+  setAddDisplay: React.Dispatch<React.SetStateAction<AddCourseDisplay>>
 ) {
 	if (!inputRef.current) return;
 

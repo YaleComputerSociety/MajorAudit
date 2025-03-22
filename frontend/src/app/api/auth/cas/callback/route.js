@@ -124,8 +124,8 @@ export async function GET(request)
         }
       }
       
-      // Sign in with email/password
-      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+      // Sign in with email/password data: signInData, 
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email: `${netID}@yale.edu`,
         password
       });

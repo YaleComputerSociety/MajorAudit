@@ -1,24 +1,24 @@
 
 "use client";
-import { useAuth } from "@/context/AuthProvider";
+// import { useAuth } from "@/context/AuthProvider";
 import { usePrograms } from "@/context/ProgramProvider";
 
 import { useState, useEffect } from "react";
 import Style from "./Requirements.module.css";
 
-import { Course } from "@/types/type-user";
+// import { Course } from "@/types/type-user";
 import { Subrequirement, Requirement, Option } from "@/types/type-program";
 import { MajorsIndex } from "@/types/type-user";
 
-import { getStudentConcentration, removeCourseInSubreq, addCourseInSubreq, toggleSubreqSelection } from "./RequirementsUtils";
+// import { getStudentConcentration, removeCourseInSubreq, addCourseInSubreq, toggleSubreqSelection } from "./RequirementsUtils";
 import { MajorsIcon } from "../course-icon/MajorsCourseIcon";
 
 function RenderSubrequirementCourse(props: { 
 	edit?: boolean; 
 	option: Option; 
 	subreq: Subrequirement; 
-	onRemoveCourse: Function, 
-	onAddCourse: Function 
+	// onRemoveCourse: void, 
+	// onAddCourse: void 
 }){
   return (
     <div style={{ marginRight: "2px", marginBottom: "2px" }}>
@@ -26,8 +26,8 @@ function RenderSubrequirementCourse(props: {
         edit={props.edit ?? false} 
         contentCourse={props.option.satisfier ?? props.option.option}  
         subreq={props.subreq} 
-        onRemoveCourse={props.onRemoveCourse} 
-				onAddCourse={props.onAddCourse} 
+        // onRemoveCourse={props.onRemoveCourse} 
+				// onAddCourse={props.onAddCourse} 
       />
     </div>
   );
@@ -40,15 +40,15 @@ function RenderSubrequirement(props: {
 	subreqIndex: number, 
 	subreq: Subrequirement 
 }){
-	const { setUser } = useAuth();
+	// const { setUser } = useAuth();
 
-	function handleRemoveCourse(course: Course | null, isStudentCourse: boolean = false){
-    removeCourseInSubreq(setUser, props.majorsIndex, props.reqIndex, props.subreqIndex, course, isStudentCourse);
-  }
+	// function handleRemoveCourse(course: Course | null, isStudentCourse: boolean = false){
+  //   // removeCourseInSubreq(setUser, props.majorsIndex, props.reqIndex, props.subreqIndex, course, isStudentCourse);
+  // }
 
-	function handleAddCourse(courseCode: string){
-    return addCourseInSubreq(setUser, props.majorsIndex, props.reqIndex, props.subreqIndex, courseCode);
-  }
+	// function handleAddCourse(courseCode: string){
+  //   // return addCourseInSubreq(setUser, props.majorsIndex, props.reqIndex, props.subreqIndex, courseCode);
+  // }
 
 	const satisfiedCount = props.subreq.options.filter(opt => opt.satisfier !== null).length;
 	const filteredCourses = satisfiedCount >= props.subreq.courses_required_count
@@ -70,8 +70,8 @@ function RenderSubrequirement(props: {
 						option={option} 
 						subreq={props.subreq}
 						edit={props.edit}
-						onRemoveCourse={handleRemoveCourse}
-						onAddCourse={handleAddCourse}
+						// onRemoveCourse={handleRemoveCourse}
+						// onAddCourse={handleAddCourse}
 					/>
         ))}
       </div>
@@ -85,25 +85,26 @@ function RenderRequirement(props: {
 	reqIndex: number, 
 	req: Requirement
 }){
-	const { user, setUser } = useAuth();
-	const userConc = getStudentConcentration(user, props.majorsIndex);
-	const selectedSubreqs = userConc?.selected_subreqs[props.reqIndex] ?? [];
+	// const { user, setUser } = useAuth();
+	// const userConc = getStudentConcentration(user, props.majorsIndex);
+	// const selectedSubreqs = userConc?.selected_subreqs[props.reqIndex] ?? [];
+	const selectedSubreqs: number[] = [];
 
 	const visibleSubreqs = selectedSubreqs.length > 0 
     ? props.req.subrequirements.filter((_, i) => selectedSubreqs.includes(i))
     : props.req.subrequirements;
 
-	function handleToggleSubreq(subreqIndex: number) {
-		if(userConc && props.edit){
-			toggleSubreqSelection(
-				setUser, 
-				props.majorsIndex, 
-				props.reqIndex, 
-				subreqIndex, 
-				props.req.subreqs_required_count ?? props.req.subrequirements.length
-			);
-		}
-	}
+	// function handleToggleSubreq(subreqIndex: number){
+	// 	// if(userConc && props.edit){
+	// 	// 	toggleSubreqSelection(
+	// 	// 		setUser, 
+	// 	// 		props.majorsIndex, 
+	// 	// 		props.reqIndex, 
+	// 	// 		subreqIndex, 
+	// 	// 		props.req.subreqs_required_count ?? props.req.subrequirements.length
+	// 	// 	);
+	// 	// }
+	// }
 
 	let dynamicRequiredCount: number | string = props.req.courses_required_count;
 	if(props.req.courses_required_count === -1){
@@ -141,7 +142,7 @@ function RenderRequirement(props: {
               key={i} 
               className={`${Style.SubreqOption} ${selectedSubreqs.includes(i) ? Style.Selected : ""}`}
 							style={{ cursor: props.edit ? "pointer" : "default" }}
-              onClick={() => handleToggleSubreq(i)}
+              // onClick={() => handleToggleSubreq(i)}
             >
               {subreq.name}
             </button>
@@ -168,19 +169,19 @@ function RenderRequirement(props: {
 function Requirements(props: { 
 	majorsIndex: MajorsIndex | null
 }){
-	if(props.majorsIndex == null){
-		return(
-			<div className={Style.RequirementsContainer}/>
-		)
-	}
-
 	const [edit, setEdit] = useState(false);
-	const { user } = useAuth();
+	// const { user } = useAuth();
 	const { progDict } = usePrograms();
 
 	useEffect(() => {
 		setEdit(false);
 	}, [props.majorsIndex]);
+
+	if(props.majorsIndex == null){
+		return(
+			<div className={Style.RequirementsContainer}/>
+		)
+	}
 
 	// const userConc = getStudentConcentration(user, props.majorsIndex);
 	const program = progDict[props.majorsIndex.prog];

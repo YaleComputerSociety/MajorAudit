@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import Style from "./YearBox.module.css";
-import { User, StudentYear, StudentSemester } from "@/types/type-user";
+import { StudentYear, StudentSemester } from "@/types/type-user";
 
 import SemesterBox from "./semester/SemesterBox"
 import AddSemesterButton from "./add-semester/AddSemesterButton"
@@ -11,7 +11,7 @@ function RenderSemesters(props: {
 	edit: boolean;
 	columns: boolean; 
 	studentYear: StudentYear, 
-	setStudentYears: Function, 
+	setStudentYears: React.Dispatch<React.SetStateAction<StudentYear[]>>, 
 }) {
   const newRenderedSemesters = props.studentYear.studentSemesters
     .filter((studentSemester: StudentSemester) => studentSemester.term !== 0)
@@ -34,7 +34,7 @@ function YearBox(props: {
 	edit: boolean, 
 	columns: boolean, 
 	studentYear: StudentYear, 
-	setStudentYears: Function, 
+	setStudentYears: React.Dispatch<React.SetStateAction<StudentYear[]>>, 
 }){
 	const { user } = useAuth();
   const [renderedSemesters, setRenderedSemesters] = useState<React.ReactNode>(null);
@@ -48,7 +48,7 @@ function YearBox(props: {
 				setStudentYears={props.setStudentYears} 
 			/>
     );
-  }, [props.edit, props.columns, props.studentYear, user]);
+  }, [props.edit, props.columns, props.studentYear, user, props.setStudentYears]);
 
   return(
 		<div className={Style.Column}>

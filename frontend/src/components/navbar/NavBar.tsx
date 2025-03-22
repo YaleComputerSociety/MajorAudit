@@ -29,9 +29,7 @@ function PageLinks()
       <Link href="/majors" className={pathname === "/majors" ? Style.activeLink : Style.dormantLink}>
         Majors
       </Link>
-			<Link href="/account">
-				<AccountButton/>
-      </Link>
+			<AccountButton/>
     </div>
   );
 }

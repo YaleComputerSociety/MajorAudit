@@ -11,10 +11,11 @@ export interface Course {
 	distributions: string[];
 	flags: string[];
 	credits: number;
-	term: number;
+	term: string;
 	is_colsem: boolean;
 	is_fysem: boolean;
 	is_sysem: boolean;
+	seasons: string[];
 }
 
 export interface StudentCourse {

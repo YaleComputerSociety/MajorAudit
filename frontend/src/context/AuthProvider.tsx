@@ -1,6 +1,6 @@
 
 "use client"; 
-import { createContext, useContext, useState, useEffect, useCallback } from "react"; 
+import { createContext, useContext, useState, useEffect } from "react"; 
 import { User } from "@/types/type-user"; 
 import { Ryan } from "@/database/mock/data-user"; 
 // import { usePrograms } from "@/context/ProgramProvider"; 
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode })
           // Map the database user to your User type
           const appUser: User = {
             ...Ryan, // Start with default structure
-            netid: userData.netid,
+            netID: userData.netid,
             name: userData.name,
           };
           

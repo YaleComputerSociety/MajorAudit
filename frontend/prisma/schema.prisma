@@ -125,15 +125,16 @@ model Course {
   title         String       @db.Text
   description   String?      @db.Text
   requirements  String?      @db.Text
-  professors    String?      @db.Text
-  distributions String?      @db.Text
-  flags         String?      @db.Text
+  professors    String[]     @db.Text
+  distributions String[]     @db.Text
+  flags         String[]     @db.Text
   credits       Float        @db.Real
   term          String       @db.Text
   is_colsem     Boolean?      @default(false)
   is_fysem      Boolean?      @default(false)
   is_sysem      Boolean?      @default(false)
   codes         String[]      @db.Text
+	seasons       String[]      @db.Text
   options       Option[]
   
   @@map("courses")

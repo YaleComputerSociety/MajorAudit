@@ -38,14 +38,14 @@ function CourseIcon(props: {
   edit: boolean; 
   course: Course; 
   subreq: Subrequirement; 
-  onRemoveCourse: Function;
+  // onRemoveCourse: Function;
 }){
   return (
     <div className={Style.Icon}>
-      {props.edit && (
+      {/* {props.edit && (
         <RemoveButton onClick={() => props.onRemoveCourse(props.course, props.subreq, false)} />
-      )}
-      {/* <SeasonComp seasons={props.course.seasons || []}/> */}
+      )} */}
+      <SeasonComp seasons={props.course.seasons || []}/>
       {props.course.codes[0]}
 			<div style={{ marginLeft: "2px", marginTop: "5px" }}>
 				<DistributionCircle distributions={props.course.distributions}/>
@@ -58,32 +58,32 @@ function StudentCourseIcon(props: {
   edit: boolean; 
   studentCourse: StudentCourse; 
   subreq: Subrequirement; 
-  onRemoveCourse: Function;
+  // onRemoveCourse: void;
 }) {
   return (
     <div className={`${Style.Icon} ${Style.StudentCourseIcon}`}>
       {/* ✅ Only show remove button in edit mode */}
-      {props.edit && (
+      {/* {props.edit && (
         <RemoveButton onClick={() => props.onRemoveCourse(props.studentCourse.course, props.subreq, true)} />
-      )}
+      )} */}
       ✓ {props.studentCourse.course.codes[0]}
     </div>
   );
 }
 
-function RemoveButton({ onClick }: { onClick: () => void }) {
-  return (
-    <div 
-			className={Style.RemoveButton} 
-			style={{ background: "#ffaaaa" }}
-			onClick={onClick}
-		/>
-  );
-}
+// function RemoveButton({ onClick }: { onClick: () => void }) {
+//   return (
+//     <div 
+// 			className={Style.RemoveButton} 
+// 			style={{ background: "#ffaaaa" }}
+// 			onClick={onClick}
+// 		/>
+//   );
+// }
 
 function EmptyIcon(props: { 
   edit: boolean, 
-  onAddCourse: Function, 
+  // onAddCourse: void, 
 }){
   const [isAdding, setIsAdding] = useState(false);
   const [courseCode, setCourseCode] = useState("");
@@ -122,10 +122,10 @@ function EmptyIcon(props: {
   }
 
   function handleAddCourse() {
-    const success = props.onAddCourse(courseCode.trim().toUpperCase());
-    if (success) {
-      deactivate();
-    }
+    // const success = props.onAddCourse(courseCode.trim().toUpperCase());
+    // if (success) {
+    //   deactivate();
+    // }
   }
 
   if (!props.edit) {
@@ -168,11 +168,12 @@ export function MajorsIcon(props: {
   edit: boolean; 
   contentCourse: Course | StudentCourse | null; 
   subreq: Subrequirement; 
-  onRemoveCourse: Function;
-	onAddCourse: Function;
+  // onRemoveCourse: void;
+	// onAddCourse: void;
 }) {
   if (!props.contentCourse) {
-    return <EmptyIcon edit={props.edit} onAddCourse={props.onAddCourse}/>;
+    // return <EmptyIcon edit={props.edit} onAddCourse={props.onAddCourse}/>;
+		return <EmptyIcon edit={props.edit}/>;
   }
 
   const isStudentCourse = "course" in props.contentCourse;
@@ -182,14 +183,14 @@ export function MajorsIcon(props: {
       edit={props.edit} 
       studentCourse={props.contentCourse as StudentCourse} 
       subreq={props.subreq}
-      onRemoveCourse={props.onRemoveCourse} 
+      // onRemoveCourse={props.onRemoveCourse} 
     />
   ) : (
     <CourseIcon 
       edit={props.edit} 
       course={props.contentCourse as Course} 
       subreq={props.subreq}
-      onRemoveCourse={props.onRemoveCourse} 
+      // onRemoveCourse={props.onRemoveCourse} 
     />
   );
 }

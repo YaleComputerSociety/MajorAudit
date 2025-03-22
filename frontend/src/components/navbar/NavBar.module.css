@@ -59,6 +59,6 @@
   transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
 }
 
-.Circle:hover {
-  border-color: #cce5ff; /* Blue border appears on hover */
-}
+/* .Circle:hover {
+  border-color: #cce5ff; 
+} */

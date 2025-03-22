@@ -1,6 +1,6 @@
 
 "use client";
-import { useAuth } from "@/context/AuthProvider";
+// import { useAuth } from "@/context/AuthProvider";
 import { usePrograms } from "@/context/ProgramProvider";
 
 import { useState, useEffect } from "react";
@@ -16,7 +16,7 @@ import Requirements from "./requirements/Requirements";
 
 function Majors()
 {
-	const { user } = useAuth();
+	// const { user } = useAuth();
 	const { progDict } = usePrograms();
 
 	const progKeys = Object.keys(progDict);
@@ -28,7 +28,7 @@ function Majors()
     if(progKeys.length > 0){
       setFilteredProgKeys(progKeys);
     }
-  }, [progDict]);
+  }, [progDict, progKeys]);
 	
   useEffect(() => {
 		if (typeof window !== "undefined" && filteredProgKeys.length > 0) {
@@ -52,7 +52,8 @@ function Majors()
 
 	return(
     <div>
-			<NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/>
+			{/* <NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/> */}
+			<NavBar utility={<Overhead/>}/>
       <div className={Style.MajorsPage}>
 				<div className={Style.ListButton} onClick={() => setListView((prev) => !prev)}/>
 				<Metadata 

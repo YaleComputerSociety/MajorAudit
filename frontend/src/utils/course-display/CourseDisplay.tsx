@@ -1,7 +1,7 @@
 
 import Style from "./CourseDisplay.module.css";
 import Image from "next/image";
-import { User, StudentCourse } from "@/types/type-user";
+import { StudentCourse } from "@/types/type-user";
 
 export function TransformTermNumber(term: number | string): string {
   const termStr = term.toString();

@@ -26,33 +26,35 @@ function AddCourseButton(props: {
 
 	const catalogTerms = [202501]
 
-  useEffect(() => {
-    if(addDisplay.active){
-      document.addEventListener("mousedown", handleClickOutside);
-      inputRef.current?.focus();
-    }
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if(addRef.current && !addRef.current.contains(event.target as Node)){
+				if(addDisplay.termDropVis || addDisplay.resultDropVis){
+					setAddDisplay((prevState) => ({...prevState, termDropVis: false, resultDropVis: false}));
+					setTimeout(() => {
+						if(inputRef.current){
+							inputRef.current.focus();
+						}
+					}, 0);
+				}else{
+					setAddDisplay((prevState) => ({...prevState, active: false}));
+				}
+			}
+		};
+	
+		if(addDisplay.active){
+			document.addEventListener("mousedown", handleClickOutside);
+			inputRef.current?.focus();
+		}
+	
+		return () => {
+			if(addDisplay.active){
+				document.removeEventListener("mousedown", handleClickOutside);
+			}
+		};
+	}, [addDisplay]);
 
-    return () => {
-      if(addDisplay.active){
-        document.removeEventListener("mousedown", handleClickOutside);
-      }
-    };
-  }, [addDisplay]);
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if(addRef.current && !addRef.current.contains(event.target as Node)){
-      if(addDisplay.termDropVis || addDisplay.resultDropVis){
-        setAddDisplay((prevState) => ({...prevState, termDropVis: false, resultDropVis: false}));
-        setTimeout(() => {
-          if(inputRef.current){
-            inputRef.current.focus();
-          }
-        }, 0);
-      }else{
-        setAddDisplay((prevState) => ({...prevState, active: false}));
-      }
-    }
-  };
+  
 
   return(
     <div ref={addRef}>

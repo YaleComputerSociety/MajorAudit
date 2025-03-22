@@ -2,8 +2,8 @@
 import React, {useState, useEffect} from "react";
 import Style from "./SemesterBox.module.css"
 
-import { StudentSemester, User } from "@/types/type-user";
-import { TransformTermNumber, IsTermActive } from "@/utils/course-display/CourseDisplay";
+import { StudentSemester } from "@/types/type-user";
+import { TransformTermNumber } from "@/utils/course-display/CourseDisplay";
 
 import CourseBox from "./course/CourseBox";
 import AddCourseButton from "./add-course/AddCourseButton";
