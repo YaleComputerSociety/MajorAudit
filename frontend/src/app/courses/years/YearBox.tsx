@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from "react";
-import Style from "./YearBox.module.css";
 import { StudentYear, StudentSemester } from "@/types/type-user";
 
 import SemesterBox from "./semester/SemesterBox"
@@ -24,7 +23,7 @@ function RenderSemesters(props: {
     ));
 
   return( 
-    <div className={props.columns ? Style.Column : Style.Row}>
+    <div style={{ display: 'flex', flexDirection: props.columns ? 'column' : 'row' }}>
       {newRenderedSemesters}
     </div>
   );
@@ -51,11 +50,11 @@ function YearBox(props: {
   }, [props.edit, props.columns, props.studentYear, user, props.setStudentYears]);
 
   return(
-		<div className={Style.Column}>
-			<div className={Style.Grade}>
+		<div style={{ display: 'flex', flexDirection: 'column' }}>
+			<div style={{ fontWeight: "600", fontSize: "25px", marginRight: "10px" }}>
 				{props.studentYear.grade}
 			</div>
-			<div className={props.columns ? Style.Column : Style.Row}>
+			<div style={{ display: 'flex', flexDirection: props.columns ? 'column' : 'row' }}>
 				{renderedSemesters}
 				{(props.edit && (props.studentYear.studentSemesters.length < 3)) && 
 					<AddSemesterButton 
