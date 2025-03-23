@@ -1,76 +1,66 @@
 
 "use client";
-// import { useAuth } from "@/context/AuthProvider";
 import { usePrograms } from "@/context/ProgramProvider";
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Style from "./Majors.module.css";
-
 import { MajorsIndex } from "@/types/type-user";
 import { initializeMajorsIndex, updateMajorsIndex } from "./MajorsUtils";
-
 import NavBar from "@/components/navbar/NavBar";
 import Overhead from "./overhead/Overhead";
 import Metadata from "./metadata/Metadata";
 import Requirements from "./requirements/Requirements";
 
 function Majors() {
-  // const { user } = useAuth();
   const { progDict, isLoading, error } = usePrograms();
-
-  const progKeys = Object.keys(progDict);
-  const [filteredProgKeys, setFilteredProgKeys] = useState<string[]>([]);
-  const [index, setIndex] = useState<MajorsIndex | null>(null);
   const [listView, setListView] = useState<boolean>(false);
+  const [index, setIndex] = useState<MajorsIndex | null>(null);
 
-  // Set filtered keys when progDict changes
-  useEffect(() => {
-    if (progKeys.length > 0) {
-      setFilteredProgKeys(progKeys);
-    }
+  // Memoize filtered keys to prevent unnecessary recalculations
+  const filteredProgKeys = useMemo(() => {
+    return Object.keys(progDict);
   }, [progDict]);
-  
-  // Initialize index from session storage when filtered keys change
-  useEffect(() => {
-    if (typeof window !== "undefined" && filteredProgKeys.length > 0) {
-      const storedIndex = sessionStorage.getItem("majorsIndex");
-      setIndex(initializeMajorsIndex(storedIndex, filteredProgKeys)); 
-    }
-  }, [filteredProgKeys]);
 
-  // Update session storage when index changes
-  useEffect(() => {
-    if (typeof window !== "undefined" && index !== null) {
-      sessionStorage.setItem("majorsIndex", JSON.stringify(index));
-    }
-  }, [index]);
-
-  const updateIndex = (newIndex: Partial<MajorsIndex>) => {
+  // Memoize the updateIndex function to prevent recreating on every render
+  const updateIndex = useCallback((newIndex: Partial<MajorsIndex>) => {
     setListView(false);
     setIndex((prev) => updateMajorsIndex(prev, newIndex, filteredProgKeys));
-  };
+  }, [filteredProgKeys]);
+
+  // Combine the session storage logic into a single effect with proper dependencies
+  useEffect(() => {
+    if (typeof window === "undefined" || filteredProgKeys.length === 0) return;
+    
+    // Only retrieve from session storage once when keys are available
+    if (index === null) {
+      const storedIndex = sessionStorage.getItem("majorsIndex");
+      setIndex(initializeMajorsIndex(storedIndex, filteredProgKeys));
+    } else {
+      // Only update session storage when index changes
+      sessionStorage.setItem("majorsIndex", JSON.stringify(index));
+    }
+  }, [filteredProgKeys, index]);
 
   // Display loading state while data is being fetched
   if (isLoading) {
     return(
-			<div>
-				<NavBar utility={<Overhead />}/>
-				<div className={Style.MajorsPage}>
-					<div>Loading programs data...</div>
-				</div>
-			</div>
+      <div>
+        <NavBar utility={<Overhead />}/>
+        <div className={Style.MajorsPage}>
+          <div>Loading programs data...</div>
+        </div>
+      </div>
     );
   }
 
   // Display error message if fetch failed
   if (error) {
     return (
-			<div>
-				<NavBar utility={<Overhead />}/>
-				<div className={Style.MajorsPage}>
-					<div>Error loading programs: {error}</div>
-				</div>
-			</div>
+      <div>
+        <NavBar utility={<Overhead />}/>
+        <div className={Style.MajorsPage}>
+          <div>Error loading programs: {error}</div>
+        </div>
+      </div>
     );
   }
 
@@ -79,7 +69,6 @@ function Majors() {
 
   return (
     <div>
-      {/* <NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/> */}
       <NavBar utility={<Overhead />}/>
       <div className={Style.MajorsPage}>
         <div className={Style.ListButton} onClick={() => setListView((prev) => !prev)} />

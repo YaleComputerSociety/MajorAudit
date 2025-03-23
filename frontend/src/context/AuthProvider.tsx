@@ -3,15 +3,12 @@
 import { createContext, useContext, useState, useEffect } from "react"; 
 import { User } from "@/types/type-user"; 
 import { Ryan } from "@/database/mock/data-user"; 
-// import { usePrograms } from "@/context/ProgramProvider"; 
-// import { fill } from "@/utils/preprocessing/Fill";
 import { createClient } from '@supabase/supabase-js';
 
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-);
+// Initialize Supabase client - consider moving this to a separate utility file
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Define context type 
 interface AuthContextType {
@@ -24,92 +21,103 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export function AuthProvider({ children }: { children: React.ReactNode })
-{
-  // const { setProgDict, baseProgDict } = usePrograms();
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [auth, setAuth] = useState({ loggedIn: false });
   const [user, setUser] = useState<User>(Ryan);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Create a stable reference to the combined reset and fill function
-  // const resetAndFill = useCallback(() => {
-  //   const studentCourses = user.FYP.studentCourses;
-    
-  //   if (studentCourses.length > 0) {
-  //     // Create a deep clone of baseProgDict
-  //     const freshCopy = JSON.parse(JSON.stringify(baseProgDict));
+  // Handle user data fetch after authentication
+  const fetchUserData = async (userId: string) => {
+    try {
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single();
       
-  //     // Pass the fresh copy to fill - the fill function will handle the state update
-  //     fill(studentCourses, freshCopy, setProgDict);
-  //   }
-  // }, [user.FYP.studentCourses, baseProgDict, setProgDict]);
-
-  // Check for existing Supabase session on load
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (error) throw error;
       
-      if (session) {
-        setAuth({ loggedIn: true });
+      if (userData) {
+        // Map the database user to your User type
+        const appUser: User = {
+          ...Ryan, // Start with default structure
+          netID: userData.netid || Ryan.netID,
+          name: userData.name || Ryan.name,
+        };
         
-        // Fetch user data from your database
-        const { data: userData, error } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-        
-        if (userData) {
-          // Map the database user to your User type
-          const appUser: User = {
-            ...Ryan, // Start with default structure
-            netID: userData.netid,
-            name: userData.name,
-          };
-          
-          setUser(appUser);
-        } else {
-          console.error('Error fetching user data:', error);
-        }
+        setUser(appUser);
       }
-    };
-    
-    checkSession();
-    
-    // Set up auth state listener
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session) {
-        setAuth({ loggedIn: true });
-        // You would fetch user data here as well, similar to above
-      } else if (event === 'SIGNED_OUT') {
-        setAuth({ loggedIn: false });
-        setUser(Ryan); // Reset to default user
-      }
-    });
-    
-    return () => {
-      if (authListener && authListener.subscription) {
-        authListener.subscription.unsubscribe();
-      }
-    };
-  }, []);
+    } catch (err) {
+      console.error('Error fetching user data:', err);
+      // Keep default user if fetch fails
+    }
+  };
 
   // Logout function
   const logout = async () => {
     await supabase.auth.signOut();
-    setAuth({ loggedIn: false });
-    setUser(Ryan);
+    // Auth state change listener will handle state updates
   };
 
-  // Update program data when courses change
-  // useEffect(() => {
-  //   if (user.FYP.studentCourses.length > 0) {
-  //     resetAndFill();
-  //   }
-  // }, [user.FYP.studentCourses, resetAndFill]);
+  // Single useEffect for auth state management
+  useEffect(() => {
+    let mounted = true;
+    
+    const initAuth = async () => {
+      try {
+        // Get initial session
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (mounted) {
+          if (session?.user) {
+            setAuth({ loggedIn: true });
+            await fetchUserData(session.user.id);
+          } else {
+            setAuth({ loggedIn: false });
+            setUser(Ryan);
+          }
+          setIsInitialized(true);
+        }
+      } catch (err) {
+        console.error('Auth initialization error:', err);
+        if (mounted) {
+          setAuth({ loggedIn: false });
+          setUser(Ryan);
+          setIsInitialized(true);
+        }
+      }
+    };
+
+    // Initialize auth state
+    initAuth();
+    
+    // Set up auth state listener - only fires on auth state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (!mounted) return;
+        
+        if (event === 'SIGNED_IN' && session) {
+          setAuth({ loggedIn: true });
+          await fetchUserData(session.user.id);
+        } else if (event === 'SIGNED_OUT') {
+          setAuth({ loggedIn: false });
+          setUser(Ryan);
+        }
+      }
+    );
+    
+    // Cleanup function
+    return () => {
+      mounted = false;
+      if (authListener?.subscription) {
+        authListener.subscription.unsubscribe();
+      }
+    };
+  }, []); // Empty dependency array - only run once on mount
 
   return (
     <AuthContext.Provider value={{ auth, setAuth, user, setUser, logout }}>
-      {children}
+      {isInitialized ? children : <div>Loading authentication...</div>}
     </AuthContext.Provider>
   );
 }
