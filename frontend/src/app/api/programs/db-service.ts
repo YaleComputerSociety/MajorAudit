@@ -230,14 +230,40 @@ function transformProgramsToFrontend(
     const options = Array.from(optionsMap.entries())
       .sort(([indexA], [indexB]) => indexA - indexB)
       .map(([_, option]) => option);
-
-    subrequirementMap.set(subreq.id, {
-      name: safeString(subreq.name),
-      description: safeString(subreq.description),
-      courses_required_count: safeNumber(subreq.courses_required_count),
-      options,
-      index: 0 // Will be overridden later
-    });
+      
+    // Handle case where there's only 1 option but courses_required_count > 1
+    const coursesRequired = safeNumber(subreq.courses_required_count);
+    if (options.length === 1 && coursesRequired > 1) {
+      // Duplicate the single option to match courses_required_count
+      const singleOption = options[0];
+      const duplicatedOptions = Array(coursesRequired).fill(0).map(() => {
+        // Create a deep copy of the option to ensure independent state
+        return {
+          ...singleOption,
+          option: singleOption.option ? { ...singleOption.option } : null,
+          satisfier: singleOption.satisfier ? { ...singleOption.satisfier } : null,
+          elective_range: singleOption.elective_range,
+          flags: singleOption.flags ? [...singleOption.flags] : undefined,
+          is_any_okay: singleOption.is_any_okay
+        };
+      });
+      
+      subrequirementMap.set(subreq.id, {
+        name: safeString(subreq.name),
+        description: safeString(subreq.description),
+        courses_required_count: coursesRequired,
+        options: duplicatedOptions,
+        index: 0 // Will be overridden later
+      });
+    } else {
+      subrequirementMap.set(subreq.id, {
+        name: safeString(subreq.name),
+        description: safeString(subreq.description),
+        courses_required_count: coursesRequired,
+        options,
+        index: 0 // Will be overridden later
+      });
+    }
   });
 
   // Group requirement subrequirements by requirement_id
