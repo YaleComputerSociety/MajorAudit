@@ -10,7 +10,7 @@ export default function NotFoundPage() {
 
   useEffect(() => {
     if (auth.loggedIn) {
-      router.replace("/graduation");
+      router.replace("/courses");
     } else {
       router.replace("/login");
     }

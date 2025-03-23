@@ -2,7 +2,7 @@
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 
-const protectedRoutes = ["/graduation", "/courses", "/majors"];
+const protectedRoutes = ["/courses", "/majors"];
 
 export default function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
@@ -15,11 +15,11 @@ export default function middleware(req: NextRequest) {
   }
 
   if (path === "/login" && isLoggedIn) {
-    return NextResponse.redirect(new URL("/graduation", req.nextUrl));
+    return NextResponse.redirect(new URL("/courses", req.nextUrl));
   }
 
   if (path === "/") {
-    return NextResponse.redirect(new URL(isLoggedIn ? "/graduation" : "/login", req.nextUrl));
+    return NextResponse.redirect(new URL(isLoggedIn ? "/courses" : "/login", req.nextUrl));
   }
 
   return NextResponse.next();

@@ -144,7 +144,7 @@ export async function GET(request)
       });
       
       // Redirect to destination
-      return NextResponse.redirect(new URL('/graduation', request.url));
+      return NextResponse.redirect(new URL('/courses', request.url));
     } else {
       console.error('CAS authentication failed');
       return NextResponse.redirect(new URL('/login?error=CAS+authentication+failed', request.url));

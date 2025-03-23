@@ -1,93 +1,37 @@
+
 // transformers.ts
 import { Option, Subrequirement, Requirement, Concentration, Degree, Program, ProgramDict } from "@/types/type-program";
 import { Course } from "@/types/type-user";
+import { Database } from "@/types/supabase";
 
-// Define interfaces matching Prisma schema
-interface CourseData {
-  id: string;
-  title: string;
-  description?: string | null;
-  requirements?: string | null;
-  professors: string[];
-  distributions: string[];
-  flags: string[];
-  credits: number;
-  term: string;
-  is_colsem?: boolean | null;
-  is_fysem?: boolean | null;
-  is_sysem?: boolean | null;
-  codes: string[];
-  seasons: string[];
+// Define a type for the raw Supabase program data with all its nested relationships
+type SupabaseProgram = Database['public']['Tables']['programs']['Row'] & {
+  degrees?: (Database['public']['Tables']['degrees']['Row'] & {
+    concentrations?: (Database['public']['Tables']['concentrations']['Row'] & {
+      concentration_requirements?: (Database['public']['Tables']['concentration_requirements']['Row'] & {
+        requirement?: Database['public']['Tables']['requirements']['Row'] & {
+          requirement_subrequirements?: (Database['public']['Tables']['requirement_subrequirements']['Row'] & {
+            subrequirement?: Database['public']['Tables']['subrequirements']['Row'] & {
+              subrequirement_options?: (Database['public']['Tables']['subrequirement_options']['Row'] & {
+                option?: (Database['public']['Tables']['options']['Row'] & {
+                  course?: Database['public']['Tables']['courses']['Row'] | null
+                }) | null
+              })[] | null
+            } | null
+          })[] | null
+        } | null
+      })[] | null
+    })[] | null
+  })[] | null
+};
+
+// Helper to handle potentially null/undefined arrays
+function safeArray<T>(arr: T[] | null | undefined): T[] {
+  return arr || [];
 }
 
-interface OptionData {
-  id: number;
-  option_course_id?: string | null;
-  elective_range?: string | null;
-  is_any_okay?: boolean | null;
-  flags?: string | null;
-  course?: CourseData | null;
-}
-
-interface SubrequirementData {
-  id: number;
-  name?: string | null;
-  description?: string | null;
-  courses_required_count?: number | null;
-  subrequirement_options: {
-    id: number;
-    option_index?: number | null;
-    note?: string | null;
-    option?: OptionData | null;
-  }[];
-}
-
-interface RequirementData {
-  id: number;
-  name: string;
-  description?: string | null;
-  courses_required_count?: number | null;
-  subreqs_required_count?: number | null;
-  checkbox?: boolean | null;
-  note?: string | null;
-  requirement_subrequirements: {
-    id: number;
-    subrequirement_index?: number | null;
-    description?: string | null;
-    subrequirement: SubrequirementData;
-  }[];
-}
-
-interface ConcentrationData {
-  id: number;
-  name?: string | null;
-  description?: string | null;
-  note?: string | null;
-  concentration_requirements: {
-    id: number;
-    requirement_index: number;
-    requirement: RequirementData;
-  }[];
-}
-
-interface DegreeData {
-  id: number;
-  type: string;
-  note?: string | null;
-  concentrations: ConcentrationData[];
-}
-
-interface ProgramData {
-  id: number;
-  name: string;
-  abbreviation: string;
-  student_count?: number | null;
-  website_link?: string | null;
-  catalog_link?: string | null;
-  degrees: DegreeData[];
-}
-
-export function transformCourse(courseData: CourseData | null | undefined): Course | null {
+// Transform functions for each entity type
+export function transformCourse(courseData: Database['public']['Tables']['courses']['Row'] | null | undefined): Course | null {
   if (!courseData) return null;
   
   return {
@@ -108,7 +52,19 @@ export function transformCourse(courseData: CourseData | null | undefined): Cour
   };
 }
 
-export function transformOption(optionData: { option?: OptionData | null; option_index?: number | null; note?: string | null }): Option {
+export function transformOption(optionData: {
+  option_id?: number | null;
+  option_index?: number | null;
+  note?: string | null;
+  option?: {
+    id: number;
+    option_course_id?: string | null;
+    elective_range?: string | null;
+    is_any_okay?: boolean | null;
+    flags?: string | null;
+    course?: Database['public']['Tables']['courses']['Row'] | null;
+  } | null;
+}): Option {
   const option = optionData.option;
   
   return {
@@ -121,9 +77,39 @@ export function transformOption(optionData: { option?: OptionData | null; option
   };
 }
 
-export function transformSubrequirement(subrequirementData: SubrequirementData, index: number): Subrequirement {
+export function transformSubrequirement(
+  subrequirementData: Database['public']['Tables']['subrequirements']['Row'] & {
+    subrequirement_options?: ({
+      id: number;
+      option_index?: number | null;
+      note?: string | null;
+      option_id?: number | null;
+      option?: {
+        id: number;
+        option_course_id?: string | null;
+        elective_range?: string | null;
+        is_any_okay?: boolean | null;
+        flags?: string | null;
+        course?: Database['public']['Tables']['courses']['Row'] | null;
+      } | null;
+    })[] | null;
+  } | null | undefined,
+  index: number
+): Subrequirement {
+  if (!subrequirementData) {
+    // Return default subrequirement if data is missing
+    return {
+      name: "",
+      description: "",
+      courses_required_count: 0,
+      options: [],
+      index: index
+    };
+  }
+  
   // Sort options by option_index if available
-  const sortedOptions = [...subrequirementData.subrequirement_options]
+  const options = safeArray(subrequirementData.subrequirement_options);
+  const sortedOptions = [...options]
     .sort((a, b) => (a.option_index || 0) - (b.option_index || 0));
   
   return {
@@ -135,15 +121,53 @@ export function transformSubrequirement(subrequirementData: SubrequirementData, 
   };
 }
 
-export function transformRequirement(requirementData: RequirementData, index: number): Requirement {
+export function transformRequirement(
+  requirementData: Database['public']['Tables']['requirements']['Row'] & {
+    requirement_subrequirements?: ({
+      id: number;
+      subrequirement_index?: number | null;
+      description?: string | null;
+      subrequirement_id: number;
+      subrequirement?: Database['public']['Tables']['subrequirements']['Row'] & {
+        subrequirement_options?: ({
+          id: number;
+          option_index?: number | null;
+          note?: string | null;
+          option_id?: number | null;
+          option?: {
+            id: number;
+            option_course_id?: string | null;
+            elective_range?: string | null;
+            is_any_okay?: boolean | null;
+            flags?: string | null;
+            course?: Database['public']['Tables']['courses']['Row'] | null;
+          } | null;
+        })[] | null;
+      } | null;
+    })[] | null;
+  } | null | undefined,
+  index: number
+): Requirement {
+  if (!requirementData) {
+    // Return default requirement if data is missing
+    return {
+      name: "",
+      description: "",
+      courses_required_count: 0,
+      subreqs_required_count: 0,
+      checkbox: false,
+      subrequirements: [],
+      index: index
+    };
+  }
+  
   // Get subrequirements with their indices
-  const subrequirements = requirementData.requirement_subrequirements.map(
-    (rs) => ({
+  const subrequirements = safeArray(requirementData.requirement_subrequirements)
+    .map(rs => ({
       data: rs.subrequirement,
       index: rs.subrequirement_index || 0,
       description: rs.description
-    })
-  );
+    }));
   
   // Sort by index if available
   subrequirements.sort((a, b) => a.index - b.index);
@@ -162,14 +186,55 @@ export function transformRequirement(requirementData: RequirementData, index: nu
   };
 }
 
-export function transformConcentration(concentrationData: ConcentrationData): Concentration {
+export function transformConcentration(
+  concentrationData: Database['public']['Tables']['concentrations']['Row'] & {
+    concentration_requirements?: ({
+      id: number;
+      requirement_index: number;
+      requirement_id: number;
+      requirement?: Database['public']['Tables']['requirements']['Row'] & {
+        requirement_subrequirements?: ({
+          id: number;
+          subrequirement_index?: number | null;
+          description?: string | null;
+          subrequirement_id: number;
+          subrequirement?: Database['public']['Tables']['subrequirements']['Row'] & {
+            subrequirement_options?: ({
+              id: number;
+              option_index?: number | null;
+              note?: string | null;
+              option_id?: number | null;
+              option?: {
+                id: number;
+                option_course_id?: string | null;
+                elective_range?: string | null;
+                is_any_okay?: boolean | null;
+                flags?: string | null;
+                course?: Database['public']['Tables']['courses']['Row'] | null;
+              } | null;
+            })[] | null;
+          } | null;
+        })[] | null;
+      } | null;
+    })[] | null;
+  } | null | undefined
+): Concentration {
+  if (!concentrationData) {
+    // Return default concentration if data is missing
+    return {
+      name: "",
+      description: "",
+      requirements: []
+    };
+  }
+  
   // Get requirements with their indices
-  const requirements = concentrationData.concentration_requirements.map(
-    (cr) => ({
+  const requirements = safeArray(concentrationData.concentration_requirements)
+    .filter(cr => cr.requirement != null) // Filter out nulls
+    .map(cr => ({
       data: cr.requirement,
       index: cr.requirement_index
-    })
-  );
+    }));
   
   // Sort by index if available
   requirements.sort((a, b) => a.index - b.index);
@@ -184,22 +249,64 @@ export function transformConcentration(concentrationData: ConcentrationData): Co
   };
 }
 
-export function transformDegree(degreeData: DegreeData): Degree {
+export function transformDegree(
+  degreeData: Database['public']['Tables']['degrees']['Row'] & {
+    concentrations?: (Database['public']['Tables']['concentrations']['Row'] & {
+      concentration_requirements?: ({
+        id: number;
+        requirement_index: number;
+        requirement_id: number;
+        requirement?: Database['public']['Tables']['requirements']['Row'] & {
+          requirement_subrequirements?: ({
+            id: number;
+            subrequirement_index?: number | null;
+            description?: string | null;
+            subrequirement_id: number;
+            subrequirement?: Database['public']['Tables']['subrequirements']['Row'] & {
+              subrequirement_options?: ({
+                id: number;
+                option_index?: number | null;
+                note?: string | null;
+                option_id?: number | null;
+                option?: {
+                  id: number;
+                  option_course_id?: string | null;
+                  elective_range?: string | null;
+                  is_any_okay?: boolean | null;
+                  flags?: string | null;
+                  course?: Database['public']['Tables']['courses']['Row'] | null;
+                } | null;
+              })[] | null;
+            } | null;
+          })[] | null;
+        } | null;
+      })[] | null;
+    })[] | null;
+  } | null | undefined
+): Degree {
+  if (!degreeData) {
+    // Return default degree if data is missing
+    return {
+      type: "",
+      concentrations: []
+    };
+  }
+  
   return {
     type: degreeData.type,
     // note: degreeData.note,
-    concentrations: degreeData.concentrations.map(transformConcentration)
+    concentrations: safeArray(degreeData.concentrations).map(transformConcentration)
   };
 }
 
-export function transformProgram(programData: ProgramData): Program {
+export function transformProgram(programData: SupabaseProgram): Program {
   return {
     name: programData.name,
     abbreviation: programData.abbreviation,
     student_count: programData.student_count || 0,
     website_link: programData.website_link || "",
     catolog_link: programData.catalog_link || "", 
-    degrees: programData.degrees.map(transformDegree)
+    degrees: safeArray(programData.degrees).map(transformDegree)
   };
 }
 

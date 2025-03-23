@@ -1,11 +1,17 @@
 
-import { PrismaClient } from '@prisma/client'
+// src/database/client.ts
+import { createClient } from '@supabase/supabase-js'
+import { Database } from '../types/supabase'
 
-// Prevent multiple instances during dev hot reloading
-const globalForPrisma = global as unknown as { prisma: PrismaClient }
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 
-export const prisma = globalForPrisma.prisma || new PrismaClient()
+// Create a singleton client
+const globalForSupabase = global as unknown as { supabase: ReturnType<typeof createClient<Database>> }
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+export const supabase = globalForSupabase.supabase || 
+  createClient<Database>(supabaseUrl, supabaseKey)
 
-export default prisma
+if (process.env.NODE_ENV !== 'production') globalForSupabase.supabase = supabase
+
+export default supabase

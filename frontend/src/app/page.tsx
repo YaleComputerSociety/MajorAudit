@@ -11,7 +11,7 @@ export default function MajorAudit()
 
   useEffect(() => {
     if (auth.loggedIn) {
-      router.replace("/graduation");
+      router.replace("/courses");
     } else {
       router.replace("/login");
     }

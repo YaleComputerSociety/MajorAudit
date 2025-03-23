@@ -20,9 +20,6 @@ function PageLinks()
 
   return(
     <div className={Style.Row} style={{ alignItems: "center" }}>
-      <Link href="/graduation" className={pathname === "/graduation" ? Style.activeLink : Style.dormantLink}>
-        Graduation
-      </Link>
       <Link href="/courses" className={pathname === "/courses" ? Style.activeLink : Style.dormantLink}>
         Courses
       </Link>
