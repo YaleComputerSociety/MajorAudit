@@ -1,6 +1,6 @@
 
 import supabase from '@/database/client'
-import { Database, Tables } from '@/types/supabase'
+import { Tables } from '@/types/supabase'
 
 export async function fetchProgramHierarchy() {
   // Fetch programs
