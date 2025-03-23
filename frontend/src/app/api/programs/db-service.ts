@@ -1,6 +1,6 @@
 
 import supabase from '@/database/client'
-import { Database } from '@/types/supabase'
+import { Database, Tables } from '@/types/supabase'
 
 export async function fetchProgramHierarchy() {
   // Fetch programs
@@ -22,7 +22,7 @@ export async function fetchProgramHierarchy() {
 
   // For each program, fetch the complete hierarchy
   const programsWithHierarchy = await Promise.all(
-    programs.map(async (program: Database['public']['Tables']['programs']['Row']) => {
+    programs.map(async (program: Tables<"programs">) => {
       // Fetch degrees for this program
       const { data: degrees, error: degreesError } = await supabase
         .from('degrees')
@@ -40,8 +40,8 @@ export async function fetchProgramHierarchy() {
       }
 
       // For each degree, fetch concentrations
-                const degreesWithConcentrations = await Promise.all(
-        degrees.map(async (degree: Database['public']['Tables']['degrees']['Row']) => {
+      const degreesWithConcentrations = await Promise.all(
+        degrees.map(async (degree: Tables<"degrees">) => {
           const { data: concentrations, error: concentrationsError } = await supabase
             .from('concentrations')
             .select(`
@@ -60,7 +60,7 @@ export async function fetchProgramHierarchy() {
 
           // For each concentration, fetch requirements
           const concentrationsWithRequirements = await Promise.all(
-            concentrations.map(async (concentration: Database['public']['Tables']['concentrations']['Row']) => {
+            concentrations.map(async (concentration: Tables<"concentrations">) => {
               // Fetch concentration_requirements join table
               const { data: concReqs, error: concReqsError } = await supabase
                 .from('concentration_requirements')
@@ -68,7 +68,8 @@ export async function fetchProgramHierarchy() {
                   id,
                   requirement_index,
                   concentration_id,
-                  requirement_id
+                  requirement_id,
+                  note
                 `)
                 .eq('concentration_id', concentration.id)
               
@@ -79,7 +80,7 @@ export async function fetchProgramHierarchy() {
 
               // For each concentration_requirement, fetch the actual requirement
               const concReqsWithDetails = await Promise.all(
-                concReqs.map(async (concReq: Database['public']['Tables']['concentration_requirements']['Row']) => {
+                concReqs.map(async (concReq: Tables<"concentration_requirements">) => {
                   const { data: requirement, error: requirementError } = await supabase
                     .from('requirements')
                     .select(`
@@ -105,7 +106,7 @@ export async function fetchProgramHierarchy() {
                     .select(`
                       id,
                       subrequirement_index,
-                      description,
+                      note,
                       requirement_id,
                       subrequirement_id
                     `)
@@ -124,14 +125,15 @@ export async function fetchProgramHierarchy() {
 
                   // For each requirement_subrequirement, fetch the actual subrequirement
                   const reqSubreqsWithDetails = await Promise.all(
-                    reqSubreqs.map(async (reqSubreq: Database['public']['Tables']['requirement_subrequirements']['Row']) => {
+                    reqSubreqs.map(async (reqSubreq: Tables<"requirement_subrequirements">) => {
                       const { data: subreq, error: subreqError } = await supabase
                         .from('subrequirements')
                         .select(`
                           id,
                           name,
                           description,
-                          courses_required_count
+                          courses_required_count,
+                          note
                         `)
                         .eq('id', reqSubreq.subrequirement_id)
                         .single()
@@ -166,7 +168,7 @@ export async function fetchProgramHierarchy() {
 
                       // For each subrequirement_option, fetch the option
                       const subreqOptionsWithDetails = await Promise.all(
-                        subreqOptions.map(async (subreqOption: Database['public']['Tables']['subrequirement_options']['Row']) => {
+                        subreqOptions.map(async (subreqOption: Tables<"subrequirement_options">) => {
                           if (!subreqOption.option_id) {
                             return { ...subreqOption, option: null }
                           }
@@ -178,7 +180,8 @@ export async function fetchProgramHierarchy() {
                               option_course_id,
                               elective_range,
                               is_any_okay,
-                              flags
+                              flags,
+                              note
                             `)
                             .eq('id', subreqOption.option_id)
                             .single()

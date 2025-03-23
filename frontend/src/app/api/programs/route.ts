@@ -4,6 +4,9 @@ import { NextResponse } from 'next/server';
 import { fetchProgramHierarchy } from './db-service';
 import { transformProgram, createProgramDict } from './transformers';
 
+/**
+ * GET handler for the programs API endpoint
+ */
 export async function GET() {
   try {
     // Fetch all program data with hierarchy

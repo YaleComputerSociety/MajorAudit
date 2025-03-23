@@ -16,7 +16,7 @@ import Requirements from "./requirements/Requirements";
 
 function Majors() {
   // const { user } = useAuth();
-  const { progDict } = usePrograms();
+  const { progDict, isLoading, error } = usePrograms();
 
   const progKeys = Object.keys(progDict);
   const [filteredProgKeys, setFilteredProgKeys] = useState<string[]>([]);
@@ -50,12 +50,37 @@ function Majors() {
     setIndex((prev) => updateMajorsIndex(prev, newIndex, filteredProgKeys));
   };
 
+  // Display loading state while data is being fetched
+  if (isLoading) {
+    return(
+			<div>
+				<NavBar utility={<Overhead />}/>
+				<div className={Style.MajorsPage}>
+					<div>Loading programs data...</div>
+				</div>
+			</div>
+    );
+  }
+
+  // Display error message if fetch failed
+  if (error) {
+    return (
+			<div>
+				<NavBar utility={<Overhead />}/>
+				<div className={Style.MajorsPage}>
+					<div>Error loading programs: {error}</div>
+				</div>
+			</div>
+    );
+  }
+
+  // Only render the component when data is available
   if (index === null || !filteredProgKeys.length) return null;
 
   return (
     <div>
       {/* <NavBar utility={<Overhead user={user} setIndex={updateIndex}/>}/> */}
-      <NavBar utility={<Overhead />} />
+      <NavBar utility={<Overhead />}/>
       <div className={Style.MajorsPage}>
         <div className={Style.ListButton} onClick={() => setListView((prev) => !prev)} />
         <Metadata 
