@@ -1,5 +1,5 @@
 
-// src/lib/transformers.ts
+// programs/transformers.ts
 import { Option, Subrequirement, Requirement, Concentration, Degree, Program, ProgramDict } from "@/types/type-program";
 import { Course } from "@/types/type-user";
 import { Tables, safeArray, safeBoolean, safeNumber, safeString } from "@/types/db-helpers";

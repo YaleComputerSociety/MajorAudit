@@ -28,7 +28,7 @@ function Login()
             </div>
           </div>
         </div>
-        <Image src="/guy.jpg" alt="Landing Page" width={450}/>
+        <Image src="/guy.jpg" alt="Landing Page" width={450} height={400} style={{ opacity: 0.60 }}/>
       </div>
     </div>
   );

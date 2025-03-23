@@ -1,5 +1,5 @@
 
-// import { DegreeConcentration } from "./type-program";
+// types/type-user.ts
 
 export interface Course {
 	id: string;

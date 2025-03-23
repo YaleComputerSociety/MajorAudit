@@ -1,4 +1,6 @@
 
+// types/type-program
+
 import { Course, StudentCourse } from "./type-user";
 
 export interface Option { 
