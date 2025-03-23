@@ -229,7 +229,7 @@ function transformProgramsToFrontend(
     // Sort options by index
     const options = Array.from(optionsMap.entries())
       .sort(([indexA], [indexB]) => indexA - indexB)
-      .map(([_, option]) => option);
+      .map(([, option]) => option);
       
     // Handle case where there's only 1 option but courses_required_count > 1
     const coursesRequired = safeNumber(subreq.courses_required_count);
@@ -294,7 +294,7 @@ function transformProgramsToFrontend(
     // Sort subrequirements by index
     const subrequirements = Array.from(subreqsMap.entries())
       .sort(([indexA], [indexB]) => indexA - indexB)
-      .map(([_, subreq]) => subreq);
+      .map(([, subreq]) => subreq);
 
     requirementMap.set(req.id, {
       name: req.name,
@@ -335,7 +335,7 @@ function transformProgramsToFrontend(
     // Sort requirements by index
     const requirements = Array.from(reqsMap.entries())
       .sort(([indexA], [indexB]) => indexA - indexB)
-      .map(([_, req]) => req);
+      .map(([, req]) => req);
 
     concentrationMap.set(conc.id, {
       name: safeString(conc.name),
@@ -449,6 +449,7 @@ function transformProgramsWithConcentrations(
   degreesData: Tables<"degrees">[],
   concentrationsData: Tables<"concentrations">[]
 ): Program[] {
+	void [programsData, degreesData, concentrationsData];
   // Implementation similar to transformProgramsWithDegrees but including concentrations
   // ...
   return [] as Program[]; // Placeholder
@@ -461,6 +462,7 @@ function transformProgramsWithRequirements(
   concReqsData: Tables<"concentration_requirements">[],
   requirementsData: Tables<"requirements">[]
 ): Program[] {
+	void [programsData, degreesData, concentrationsData, concReqsData, requirementsData];
   // Implementation including requirements
   // ...
   return [] as Program[]; // Placeholder
@@ -476,6 +478,8 @@ function transformProgramsWithSubrequirements(
   subrequirementsData: Tables<"subrequirements">[],
   subreqOptionsData?: Tables<"subrequirement_options">[]
 ): Program[] {
+	void [programsData, degreesData, concentrationsData, concReqsData, 
+		requirementsData, reqSubreqsData, subrequirementsData, subreqOptionsData];
   // Implementation including subrequirements
   // ...
   return [] as Program[]; // Placeholder
