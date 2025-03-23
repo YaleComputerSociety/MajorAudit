@@ -1,29 +1,25 @@
 
 // route.ts
 import { NextResponse } from 'next/server';
-import { fetchProgramHierarchy } from './db-service';
-import { transformProgram, createProgramDict } from './transformers';
+import { fetchProgramsDirectToFrontend } from './db-service';
 
-/**
- * GET handler for the programs API endpoint
- */
 export async function GET() {
   try {
-    // Fetch all program data with hierarchy
-    const enrichedPrograms = await fetchProgramHierarchy();
+    // Fetch and transform all program data in one step
+    const transformedPrograms = await fetchProgramsDirectToFrontend();
     
-    if (!enrichedPrograms || enrichedPrograms.length === 0) {
+    if (!transformedPrograms || transformedPrograms.length === 0) {
       return NextResponse.json(
         { error: 'No program data found' },
         { status: 404 }
       );
     }
     
-    // Transform to frontend types
-    const transformedPrograms = enrichedPrograms.map(program => transformProgram(program));
-    
     // Create program dictionary
-    const programDict = createProgramDict(transformedPrograms);
+    const programDict: Record<string, typeof transformedPrograms[0]> = {};
+    transformedPrograms.forEach(program => {
+      programDict[program.abbreviation] = program;
+    });
     
     return NextResponse.json(programDict);
   } catch (error) {
