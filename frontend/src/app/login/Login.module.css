@@ -1,12 +1,24 @@
-.centerDiv {
-	min-height: 100vh;
+
+.LoginPage {
+	/* border: 1px solid blue; */
+  position: absolute;
+	top: 75px; 
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+	width: 100%;
+	height: calc(100vh - 75px);
+}
+
+.Content {
+	margin-bottom: 150px;
 	text-align: center;
-	max-width: 1000px;
 	margin-left: auto;
 	margin-right: auto;
 	justify-content: center;
 	align-items: center;
-	padding: 1rem;
 	display: flex;
 	flex-wrap: wrap;
 }

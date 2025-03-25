@@ -1,6 +1,14 @@
 
 // types/type-user.ts
 
+// export interface SmallCourse { 
+// 	id: string;
+// 	codes: string[];
+// 	term: string;
+// 	seasons: string[];
+// 	distributions: string[];
+// }
+
 export interface Course {
 	id: string;
   codes: string[]; 

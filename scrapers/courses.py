@@ -7,8 +7,8 @@ from supabase import create_client
 
 def fetch_process_and_upload(terms: list[int]):
     load_dotenv()
-    supabase_url = os.getenv("SUPABASE_URL")
-    supabase_key = os.getenv("SUPABASE_KEY")
+    supabase_url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+    supabase_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
     
     supabase = create_client(supabase_url, supabase_key)
     
@@ -17,8 +17,6 @@ def fetch_process_and_upload(terms: list[int]):
     
     # Track courses by title to catch courses with different IDs but same content
     courses_by_title = {}
-    
-    # First, process all course data and track seasonal offerings
     
     # First, process all course data and track seasonal offerings
     all_processed_courses = {}
@@ -40,23 +38,17 @@ def fetch_process_and_upload(terms: list[int]):
         print(f"Processing course data for term {term_str}...")
         
         for course in courses_data:
-            # Filter for CPSC courses below 400
-            is_cpsc_course = False
-            course_number = None
+            # Filter for ECON courses only (any level)
+            is_econ_course = False
             
             if "listings" in course and course["listings"]:
                 for listing in course["listings"]:
                     code = listing.get("course_code", "")
-                    if code.startswith("CPSC "):
-                        try:
-                            course_number = int(code.split(" ")[1].split(".")[0])
-                            if course_number < 400:
-                                is_cpsc_course = True
-                                break
-                        except (ValueError, IndexError):
-                            continue
+                    if code.startswith("ECON "):
+                        is_econ_course = True
+                        break
             
-            if not is_cpsc_course:
+            if not is_econ_course:
                 continue
             
             # Check if section is a letter (not a number)
@@ -86,8 +78,6 @@ def fetch_process_and_upload(terms: list[int]):
             # Store the most recent version of each course
             all_processed_courses[course_id] = processed_course
     
-    # Merge seasons information
-    
     # Merge seasons information across course IDs with the same title
     for title, data in courses_by_title.items():
         all_seasons = data["seasons"]
@@ -101,11 +91,11 @@ def fetch_process_and_upload(terms: list[int]):
         course["seasons"] = sorted(list(course_seasons[course_id]))
         final_courses.append(course)
     
-    print(f"\nFound {len(final_courses)} CPSC courses below 400 level")
+    print(f"\nFound {len(final_courses)} ECON courses")
     print(f"Courses with both Fall and Spring: {sum(1 for c in final_courses if 'Fall' in c['seasons'] and 'Spring' in c['seasons'])}")
     
     # Save locally (backup)
-    file_name = "results_cpsc_courses.json"
+    file_name = "results_econ_courses.json"
     with open(file_name, "w", encoding="utf-8") as file:
         json.dump(final_courses, file, indent=2)
     print(f"✓ Saved {len(final_courses)} courses to {file_name}")
@@ -186,7 +176,7 @@ if __name__ == "__main__":
     try:
         print("Course Data to Supabase Uploader")
         print("--------------------------------")
-        terms = [202103, 202201, 202301, 202303, 202401, 202403, 202501]
+        terms = [202403, 202501]
         fetch_process_and_upload(terms)
     except KeyboardInterrupt:
         print("\nProcess cancelled by user")

@@ -11,16 +11,16 @@ function Login()
   };
 	
   return (
-    <div>
+    <div className={Style.LoginPage}>
 			<NavBar loggedIn={false}/>
-      <div className={Style.centerDiv}>
+      <div className={Style.Content}>
         <div style={{ width: "450px" }}>
           <h1>Plan Your Major @ Yale</h1>
           <ul className={Style.featureListStyle}>
             <li className={Style.featureItemStyle}>Explore 80+ Majors</li>
             <li className={Style.featureItemStyle}>Check Distributional Requirements</li>
             <li className={Style.featureItemStyle}>Plan Four-Year Plan</li>
-            <li className={Style.featureItemStyle}>Cool Guy</li>
+            <li className={Style.featureItemStyle}>This Guy</li>
           </ul>
           <div className={Style.loginButtons}>
             <div onClick={handleLogin} className={Style.btn}>
@@ -28,7 +28,7 @@ function Login()
             </div>
           </div>
         </div>
-        <Image src="/guy.jpg" alt="Landing Page" width={450} height={400} style={{ opacity: 0.60 }}/>
+        <Image src="/guy.jpg" alt="Landing Page" width={450} height={400} style={{ opacity: 0.05 }}/>
       </div>
     </div>
   );

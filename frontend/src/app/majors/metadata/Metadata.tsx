@@ -136,7 +136,7 @@ function MetadataBody(props: {
 				ABOUT
 			</div>
 			<div style={{ fontSize: "12px", marginBottom: "12px" }}>
-				{/* {props.program.degrees[props.index.deg].concentrations[props.index.conc].description} */}
+				{props.program.degrees[props.index.deg].concentrations[props.index.conc].description}
 			</div>
 			<div className={Style.subsectionHeader}>
 				DUS
