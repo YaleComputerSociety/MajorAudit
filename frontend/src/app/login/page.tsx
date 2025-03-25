@@ -7,7 +7,7 @@ import Image from "next/image";
 function Login() 
 {
   const handleLogin = () => {
-    window.location.href = "/api/auth/cas/login";
+    // window.location.href = "/api/auth/cas/login";
   };
 	
   return (
@@ -20,11 +20,11 @@ function Login()
             <li className={Style.featureItemStyle}>Explore 80+ Majors</li>
             <li className={Style.featureItemStyle}>Check Distributional Requirements</li>
             <li className={Style.featureItemStyle}>Plan Four-Year Plan</li>
-            <li className={Style.featureItemStyle}>This Guy</li>
+            <li className={Style.featureItemStyle}>March Madness</li>
           </ul>
           <div className={Style.loginButtons}>
             <div onClick={handleLogin} className={Style.btn}>
-              Login w/ CAS
+              Beta Release 04/07
             </div>
           </div>
         </div>
