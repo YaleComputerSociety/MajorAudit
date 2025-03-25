@@ -6,7 +6,6 @@ import { StudentSemester } from "@/types/type-user";
 import { TransformTermNumber } from "@/utils/course-display/CourseDisplay";
 
 import CourseBox from "./course/CourseBox";
-import AddCourseButton from "./add-course/AddCourseButton";
 import { useAuth } from "@/context/AuthProvider";
 
 function RenderCourses(props: { 
@@ -51,7 +50,6 @@ function SemesterBox(props: {
       </div>
 			<div>
 				{renderedCourses}
-				{props.edit && <AddCourseButton term={props.studentSemester.term}/>}
 			</div>
     </div>
   );

@@ -4,20 +4,25 @@ import React, { useState, useEffect } from "react";
 import Style from "./Courses.module.css";
 
 import { useAuth } from "@/context/AuthProvider";
+import { ModalProvider } from "./add/context/ModalContext";
+import ModalManager from "./add/ModalManager";
+
 import { StudentYear } from "@/types/type-user";
 import { BuildStudentYears } from "./CoursesUtils";
 
 import NavBar from "@/components/navbar/NavBar";
 import YearBox from "./years/YearBox";
+import AddButton from "./add/button/AddButton";
 
-function Courses(){
+function Courses()
+{
 	const { user } = useAuth();
 
 	const [edit, setEdit] = useState(false);
-  const toggleEdit = () => { setEdit(!edit); };
+  // const toggleEdit = () => { setEdit(!edit); };
 
-	const [columns, setColumns] = useState(true); 
-	const toggleColumns = () => { setColumns(!columns); }
+	const [columns, setColumns] = useState(false); 
+	// const toggleColumns = () => { setColumns(!columns); }
 
 	const [studentYears, setStudentYears] = useState<StudentYear[]>(() => BuildStudentYears(user));
 	const [renderedYears, setRenderedYears] = useState<React.ReactNode[]>([]);
@@ -43,15 +48,10 @@ function Courses(){
     <div>
       <NavBar/>
       <div className={Style.CoursesPage}>
-        <button 
-					className={Style.EditButton} 
-					onClick={toggleEdit}
-				/>
-				<button 
-					className={Style.EditButton} 
-					onClick={toggleColumns} 
-					style={{ marginLeft: "40px" }}
-				/>
+				<ModalProvider>
+        	<AddButton/>
+					<ModalManager/>
+				</ModalProvider>
         <div className={Style.Column}>
           {renderedYears}
         </div>
