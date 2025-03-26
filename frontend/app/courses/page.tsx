@@ -3,14 +3,14 @@
 import React, { useState, useEffect } from "react";
 import Style from "./Courses.module.css";
 
-import { useAuth } from "@/context/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
 import { ModalProvider } from "./add/context/ModalContext";
 import ModalManager from "./add/ModalManager";
 
 import { StudentYear } from "@/types/type-user";
 import { BuildStudentYears } from "./CoursesUtils";
 
-import NavBar from "@/components/navbar/NavBar";
+import NavBar from "../../components/navbar/NavBar";
 import YearBox from "./years/YearBox";
 import AddButton from "./add/button/AddButton";
 

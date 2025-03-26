@@ -7,7 +7,7 @@ import Image from "next/image";
 import { Subrequirement } from "@/types/type-program";
 import { StudentCourse, Course } from "@/types/type-user";
 
-import DistributionCircle from "@/components/distribution-circle/DistributionsCircle";
+import DistributionCircle from "../../../components/distribution-circle/DistributionsCircle";
 
 function SeasonComp(props: { seasons: string[] }) 
 {

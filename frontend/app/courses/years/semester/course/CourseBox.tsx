@@ -2,10 +2,10 @@
 import Style from "./CourseBox.module.css";
 import { User, StudentCourse } from "@/types/type-user";
 
-import { useAuth } from "@/context/AuthProvider";
+import { useAuth } from "../../../../../context/AuthProvider";
 
 import { RenderMark, SeasonIcon, GetCourseColor, IsTermActive } from "../../../../../utils/course-display/CourseDisplay";
-import DistributionCircle from "@/components/distribution-circle/DistributionsCircle";
+import DistributionCircle from "../../../../../components/distribution-circle/DistributionsCircle";
 
 function RemoveButton(props: { 
 	studentCourse: StudentCourse; 

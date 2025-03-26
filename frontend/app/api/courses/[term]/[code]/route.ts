@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/utils/supabase";
+import { supabaseAdmin } from "../../../../../utils/supabase";
 
 // API Route: /api/courses/[season]/[code]
 export async function GET(

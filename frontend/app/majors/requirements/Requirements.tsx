@@ -1,7 +1,7 @@
 
 "use client";
 // import { useAuth } from "@/context/AuthProvider";
-import { usePrograms } from "@/context/ProgramProvider";
+import { usePrograms } from "../../../context/ProgramProvider";
 
 import { useState, useEffect } from "react";
 import Style from "./Requirements.module.css";

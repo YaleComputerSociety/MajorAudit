@@ -1,7 +1,7 @@
 
 import "./globals.css";
-import { AuthProvider } from "@/context/AuthProvider";
-import { ProgramProvider } from "@/context/ProgramProvider";
+import { AuthProvider } from "../context/AuthProvider";
+import { ProgramProvider } from "../context/ProgramProvider";
 
 export const metadata = {
   title: "MajorAudit"

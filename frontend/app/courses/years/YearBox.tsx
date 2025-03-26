@@ -4,7 +4,7 @@ import { StudentYear, StudentSemester } from "@/types/type-user";
 
 import SemesterBox from "./semester/SemesterBox"
 import AddSemesterButton from "./add-semester/AddSemesterButton"
-import { useAuth } from "@/context/AuthProvider";
+import { useAuth } from "../../../context/AuthProvider";
 
 function RenderSemesters(props: { 
 	edit: boolean;

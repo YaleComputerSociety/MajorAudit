@@ -1,7 +1,7 @@
 
 "use client";
 import Style from "./Login.module.css";
-import NavBar from "@/components/navbar/NavBar";
+import NavBar from "../../components/navbar/NavBar";
 import Image from "next/image";
 
 function Login() 

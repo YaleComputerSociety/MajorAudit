@@ -5,7 +5,7 @@ import Style from "./Metadata.module.css";
 import Link from 'next/link';
 import { Program, ProgramDict } from "@/types/type-program";
 import { MajorsIndex } from "@/types/type-user";
-import { usePrograms } from "@/context/ProgramProvider";
+import { usePrograms } from "../../../context/ProgramProvider";
 // import { useAuth } from "@/context/AuthProvider";
 import Image from "next/image";
 

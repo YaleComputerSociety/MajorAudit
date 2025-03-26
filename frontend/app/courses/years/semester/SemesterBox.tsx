@@ -3,10 +3,10 @@ import React, {useState, useEffect} from "react";
 import Style from "./SemesterBox.module.css"
 
 import { StudentSemester } from "@/types/type-user";
-import { TransformTermNumber } from "@/utils/course-display/CourseDisplay";
+import { TransformTermNumber } from "../../../../utils/course-display/CourseDisplay";
 
 import CourseBox from "./course/CourseBox";
-import { useAuth } from "@/context/AuthProvider";
+import { useAuth } from "../../../../context/AuthProvider";
 
 function RenderCourses(props: { 
 	edit: boolean, 
