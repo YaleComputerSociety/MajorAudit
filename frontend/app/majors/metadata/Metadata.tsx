@@ -142,7 +142,7 @@ function MetadataBody(props: {
 				DUS
 			</div>
 			<div style={{ fontSize: "12px", marginBottom: "12px" }}>
-				{/* {props.program.prog_data.prog_dus.dus_name}; {props.program.prog_data.prog_dus.dus_email} */}
+				{props.program.dus}
 			</div>
 			<div style={{ display: "flex" }}>
 				<div className={Style.linkBox}><Link className={Style.link} href={props.program.catolog_link} target="_blank">MAJOR CATALOG</Link></div>

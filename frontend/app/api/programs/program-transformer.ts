@@ -56,7 +56,10 @@ export function createOptionMap(
       satisfier: null,
       elective_range: option.elective_range || undefined,
       flags: option.flags || undefined,
-      is_any_okay: safeBoolean(option.is_any_okay)
+      is_any_okay: safeBoolean(option.is_any_okay),
+			is_CR_okay: safeBoolean(option.is_CR_okay),
+			is_colsem_okay: safeBoolean(option.is_colsem_okay),
+			is_fysem_okay: safeBoolean(option.is_fysem_okay)
     });
   });
   return optionMap;
@@ -337,6 +340,7 @@ export function transformPrograms(
       name: prog.name,
       abbreviation: prog.abbreviation,
       student_count: safeNumber(prog.student_count),
+			dus: safeString(prog.dus),
       website_link: safeString(prog.website_link),
       catolog_link: safeString(prog.catalog_link),
       degrees

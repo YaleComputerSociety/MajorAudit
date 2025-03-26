@@ -9,6 +9,9 @@ export interface Option {
 	elective_range?: string; 
 	flags?: string[];
 	is_any_okay?: boolean;
+	is_CR_okay?: boolean;
+	is_colsem_okay?: boolean;
+	is_fysem_okay?: boolean;
 }
 
 export interface Subrequirement {
@@ -44,6 +47,7 @@ export interface Program {
 	name: string;
 	abbreviation: string;
 	student_count: number; 
+	dus: string;
 	catolog_link: string; 
 	website_link: string; 
 	degrees: Degree[];
