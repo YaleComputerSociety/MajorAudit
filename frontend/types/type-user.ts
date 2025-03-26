@@ -22,7 +22,6 @@ export interface Course {
 	term: string;
 	is_colsem: boolean;
 	is_fysem: boolean;
-	is_sysem: boolean;
 	seasons: string[];
 }
 
