@@ -1,10 +1,11 @@
+
 // callback/route.js
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import axios from 'axios';
 import { XMLParser } from 'fast-xml-parser';
 import crypto from 'crypto';
+import { getAdminClient } from '@/database/client';
 
 export const dynamic = 'force-dynamic'; // Ensure the route is always dynamic
 
@@ -34,10 +35,7 @@ export async function GET(request)
       const netID = authSuccess['cas:user'];
       
       // Create admin client for user management
-      const adminClient = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.SUPABASE_SERVICE_ROLE_KEY
-      );
+      const adminClient = getAdminClient();
       
       // Check if user exists in users table by net_id
       const { data: existingUser, error: userError } = await adminClient
