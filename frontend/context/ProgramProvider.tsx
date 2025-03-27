@@ -2,6 +2,7 @@
 "use client";
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { ProgramDict } from "@/types/type-program";
+import { useAuth } from "./AuthProvider";
 
 // Define Context Type
 interface ProgramContextType {
@@ -28,6 +29,8 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const [dbReady, setDbReady] = useState(false);
   const [db, setDb] = useState<IDBDatabase | null>(null);
+
+	const { auth } = useAuth();
 
   // Initialize IndexedDB
   useEffect(() => {
@@ -99,7 +102,9 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
 
   // Fetch data from API and update cache
   const fetchFromAPI = useCallback(async (): Promise<ProgramDict> => {
-    const response = await fetch('/api/programs');
+		const response = await fetch('/api/programs', {
+			credentials: 'include' // Ensures cookies are sent with the request
+		});
     if (!response.ok) throw new Error('Failed to fetch programs.');
     const fetchedData = await response.json();
     
@@ -134,9 +139,8 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
 
   // Load programs - either from IndexedDB or API
   useEffect(() => {
-    async function loadPrograms() {
-      if (!dbReady) return;
-      
+		async function loadPrograms() {
+			if (!dbReady || !auth.loggedIn) return;
       setIsLoading(true);
       
       try {
@@ -169,7 +173,7 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
     }
 
     loadPrograms();
-  }, [dbReady, db, getFromIndexedDB, fetchFromAPI]);
+  }, [dbReady, db, getFromIndexedDB, fetchFromAPI, auth.loggedIn]);
 
   // Update IndexedDB when progDict changes
   useEffect(() => {

@@ -1,6 +1,7 @@
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
 const protectedRoutes = ["/courses", "/majors"];
 
@@ -8,26 +9,68 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
   const path = req.nextUrl.pathname;
   
-  // Create a Supabase client specifically for middleware
-  const supabase = createMiddlewareClient({ req, res });
-  
-  // This checks the actual Supabase session status
-  const { data: { session } } = await supabase.auth.getSession();
-  const isLoggedIn = !!session;
+  try {
+    // Create a Supabase client for the middleware
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get: (name) => {
+            return req.cookies.get(name)?.value;
+          },
+          set: (name, value, options) => {
+            // Convert cookie options to NextResponse compatible options
+            res.cookies.set({
+              name,
+              value,
+              ...options
+            });
+          },
+          remove: (name, options) => {
+            res.cookies.set({
+              name,
+              value: '',
+              ...options,
+              maxAge: 0
+            });
+          },
+        },
+      }
+    );
+    
+    // This checks the actual Supabase session status
+    const { data: { session } } = await supabase.auth.getSession();
+    const isLoggedIn = !!session;
+    
+    // Log auth status in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[Middleware] Path: ${path}, Auth: ${isLoggedIn ? 'Authenticated' : 'Not authenticated'}`);
+    }
 
-  if (protectedRoutes.includes(path) && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", req.nextUrl));
+    if (protectedRoutes.includes(path) && !isLoggedIn) {
+      return NextResponse.redirect(new URL("/login", req.nextUrl));
+    }
+
+    if (path === "/login" && isLoggedIn) {
+      return NextResponse.redirect(new URL("/courses", req.nextUrl));
+    }
+
+    if (path === "/") {
+      return NextResponse.redirect(new URL(isLoggedIn ? "/courses" : "/login", req.nextUrl));
+    }
+    
+    return res;
+  } catch (error) {
+    console.error('Middleware error:', error);
+    
+    // On error, still enforce protected routes but allow other navigation
+    if (protectedRoutes.includes(path)) {
+      return NextResponse.redirect(new URL("/login", req.nextUrl));
+    }
+    
+    return res;
   }
-
-  if (path === "/login" && isLoggedIn) {
-    return NextResponse.redirect(new URL("/courses", req.nextUrl));
-  }
-
-  if (path === "/") {
-    return NextResponse.redirect(new URL(isLoggedIn ? "/courses" : "/login", req.nextUrl));
-  }
-
-  return res;
 }
 
 export const config = {

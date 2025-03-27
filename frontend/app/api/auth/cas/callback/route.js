@@ -1,9 +1,7 @@
 // callback/route.js
 
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { createServerClient } from '@supabase/ssr';
 import axios from 'axios';
 import { XMLParser } from 'fast-xml-parser';
 import crypto from 'crypto';
@@ -54,12 +52,9 @@ export async function GET(request)
       }
       
       // Generate a secure random password
-      const generatePassword = () => {
-        return crypto.randomBytes(16).toString('hex');
-      };
+      const password = crypto.randomBytes(16).toString('hex');
       
       let userId;
-      let password = generatePassword();
       
       if (existingUser) {
         // User exists, check if auth user exists with same ID
@@ -127,43 +122,12 @@ export async function GET(request)
         }
       }
       
-      // Create a response object
-      const response = NextResponse.redirect(new URL('/courses', request.url));
+      // Simple approach: redirect to a client-side auth page with email and password
+      const redirectUrl = new URL('/auth-handler', url.origin);
+      redirectUrl.searchParams.set('email', `${netID}@yale.edu`);
+      redirectUrl.searchParams.set('password', password);
       
-      // Create a server client that handles cookies properly
-      const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        {
-          cookies: {
-            get: (name) => {
-              return cookies().get(name)?.value;
-            },
-            set: (name, value, options) => {
-              cookies().set(name, value, options);
-              response.cookies.set(name, value, options);
-            },
-            remove: (name, options) => {
-              cookies().delete(name, options);
-              response.cookies.set(name, '', { ...options, maxAge: 0 });
-            },
-          },
-        }
-      );
-      
-      // Sign in with email/password - this will set cookies through the server client
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: `${netID}@yale.edu`,
-        password
-      });
-      
-      if (signInError) {
-        console.error('Error signing in:', signInError);
-        return NextResponse.redirect(new URL('/login?error=Sign+in+failed', request.url));
-      }
-      
-      // Return the response with cookies set
-      return response;
+      return NextResponse.redirect(redirectUrl);
     } else {
       console.error('CAS authentication failed');
       return NextResponse.redirect(new URL('/login?error=CAS+authentication+failed', request.url));
