@@ -1,3 +1,4 @@
+
 "use client"; 
 import { createContext, useContext, useState, useEffect } from "react"; 
 import { AuthChangeEvent, Session, SupabaseClient } from '@supabase/supabase-js';
@@ -14,13 +15,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// Utility for consistent, targeted logging
-const debugLog = (area: string, message: string, data?: any) => {
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[Auth:${area}] ${message}`, data ? data : '');
-  }
-};
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [auth, setAuth] = useState({ loggedIn: false, userId: null as string | null });
   const [isInitialized, setIsInitialized] = useState(false);
@@ -36,7 +30,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       );
       
       setSupabase(client);
-      debugLog('Init', 'Browser client initialized');
     }
   }, []);
 
@@ -46,22 +39,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     setIsLoading(true);
     try {
-      debugLog('Session', 'Refreshing session...');
       const { data, error } = await supabase.auth.getSession();
       
       if (error) {
-        debugLog('Error', 'Session refresh error', error);
         setAuth({ loggedIn: false, userId: null });
       } else if (data.session) {
         const userId = data.session.user.id;
-        debugLog('Session', `User authenticated: ${userId.substring(0, 8)}...`);
         setAuth({ loggedIn: true, userId });
       } else {
-        debugLog('Session', 'No active session found');
         setAuth({ loggedIn: false, userId: null });
       }
     } catch (err) {
-      debugLog('Error', 'Unexpected error during refresh', err);
       setAuth({ loggedIn: false, userId: null });
     } finally {
       setIsLoading(false);
@@ -74,14 +62,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     setIsLoading(true);
     try {
-      debugLog('Auth', 'Signing out user');
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        debugLog('Error', 'Logout error', error);
-      }
+      await supabase.auth.signOut();
       setAuth({ loggedIn: false, userId: null });
     } catch (err) {
-      debugLog('Error', 'Unexpected logout error', err);
+      // Silent fail
     } finally {
       setIsLoading(false);
     }
@@ -92,25 +76,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!supabase) return;
     
     let mounted = true;
-    debugLog('Init', 'Starting auth initialization');
     
     const initAuth = async () => {
       try {
         const { data, error } = await supabase.auth.getSession();
         
         if (error) {
-          debugLog('Error', 'Session fetch error', error);
           if (mounted) {
             setAuth({ loggedIn: false, userId: null });
           }
         } else if (data.session?.user) {
           const userId = data.session.user.id;
-          debugLog('Auth', `User authenticated: ${userId.substring(0, 8)}...`);
           if (mounted) {
             setAuth({ loggedIn: true, userId });
           }
         } else {
-          debugLog('Auth', 'No active session');
           if (mounted) {
             setAuth({ loggedIn: false, userId: null });
           }
@@ -121,7 +101,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setIsLoading(false);
         }
       } catch (err) {
-        debugLog('Error', 'Auth initialization error', err);
         if (mounted) {
           setAuth({ loggedIn: false, userId: null });
           setIsInitialized(true);
@@ -138,9 +117,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       (event: AuthChangeEvent, session: Session | null) => {
         if (!mounted) return;
         
-        const userId = session?.user?.id;
-        debugLog('Event', `Auth state changed: ${event}${userId ? ` | ${userId.substring(0, 8)}...` : ''}`);
-        
         if (event === 'SIGNED_IN' && session) {
           setAuth({ loggedIn: true, userId: session.user.id });
           setIsLoading(false);
@@ -156,7 +132,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     // Cleanup function
     return () => {
-      debugLog('Cleanup', 'Unmounting auth provider');
       mounted = false;
       if (authListener?.subscription) {
         authListener.subscription.unsubscribe();
@@ -169,7 +144,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (isInitialized && !auth.loggedIn && supabase) {
       // Double-check session after a short delay
       const timer = setTimeout(() => {
-        debugLog('Check', 'Running secondary session check');
         refreshSession();
       }, 1000);
       
@@ -187,7 +161,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const possibleAuthRoutes = ['/courses']; // Add other post-auth redirect pages
       
       if (possibleAuthRoutes.includes(currentPath) && !auth.loggedIn) {
-        debugLog('Navigation', `Detected auth route: ${currentPath}`);
         refreshSession();
       }
     };
