@@ -40,7 +40,7 @@ function RenderSubrequirement(props: {
 	subreqIndex: number, 
 	subreq: Subrequirement 
 }){
-	// const { setUser } = useAuth();
+	// const { setUser } = useUser();
 
 	// function handleRemoveCourse(course: Course | null, isStudentCourse: boolean = false){
   //   // removeCourseInSubreq(setUser, props.majorsIndex, props.reqIndex, props.subreqIndex, course, isStudentCourse);
@@ -85,7 +85,7 @@ function RenderRequirement(props: {
 	reqIndex: number, 
 	req: Requirement
 }){
-	// const { user, setUser } = useAuth();
+	// const { user, setUser } = useUser();
 	// const userConc = getStudentConcentration(user, props.majorsIndex);
 	// const selectedSubreqs = userConc?.selected_subreqs[props.reqIndex] ?? [];
 	const selectedSubreqs: number[] = [];
@@ -170,7 +170,7 @@ function Requirements(props: {
 	majorsIndex: MajorsIndex | null
 }){
 	const [edit, setEdit] = useState(false);
-	// const { user } = useAuth();
+	// const { user } = useUser();
 	const { progDict } = usePrograms();
 
 	useEffect(() => {

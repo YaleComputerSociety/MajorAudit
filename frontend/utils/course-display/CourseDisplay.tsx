@@ -30,7 +30,7 @@ export function TransformTermNumber(term: number | string): string {
   return `${season} ${year}`;
 }
 
-export function IsTermActive(term: number): boolean {
+export function IsTermActive(term: string): boolean {
   const currentYearMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
 
   const termStr = String(term);
@@ -49,7 +49,7 @@ export function IsTermActive(term: number): boolean {
   return currentYearMonth < seasonCutoff[season];
 }
 
-export function GetCourseColor(term: number): string {
+export function GetCourseColor(term: string): string {
   return IsTermActive(term) ? "#F5F5F5" : "#E1E9F8";
 }
 

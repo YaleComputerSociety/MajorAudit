@@ -1,6 +1,7 @@
 
 import "./globals.css";
 import { AuthProvider } from "../context/AuthProvider";
+import { UserProvider } from "@/context/UserProvider";
 import { ProgramProvider } from "../context/ProgramProvider";
 
 export const metadata = {
@@ -12,11 +13,13 @@ export default function RootLayout({children}: {children: React.ReactNode})
   return(
     <html lang="en">
       <body>
-				<ProgramProvider>
-					<AuthProvider>
+				<AuthProvider>
+					<UserProvider>
+						<ProgramProvider>
 							{children}
-					</AuthProvider>
-				</ProgramProvider>
+						</ProgramProvider>
+					</UserProvider>
+				</AuthProvider>
 			</body>
     </html>
   )

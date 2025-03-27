@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { Program, ProgramDict } from "@/types/type-program";
 import { MajorsIndex } from "@/types/type-user";
 import { usePrograms } from "../../../context/ProgramProvider";
-// import { useAuth } from "@/context/AuthProvider";
 import Image from "next/image";
 
 // import { toggleConcentrationPin } from "./MetadataUtils";
@@ -15,7 +14,7 @@ function MetadataTopshelf(props: {
 	program: Program;
 	index: MajorsIndex;
 }){
-	// const { setUser } = useAuth();
+	// const { setUser } = useUser();
   // const { progDict } = usePrograms();
 
   // function handlePinClick() {

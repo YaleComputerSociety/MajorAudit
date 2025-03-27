@@ -2,7 +2,7 @@
 import Style from "./CourseBox.module.css";
 import { User, StudentCourse } from "@/types/type-user";
 
-import { useAuth } from "../../../../../context/AuthProvider";
+import { useUser } from "@/context/UserProvider";
 
 import { RenderMark, SeasonIcon, GetCourseColor, IsTermActive } from "../../../../../utils/course-display/CourseDisplay";
 import DistributionCircle from "../../../../../components/distribution-circle/DistributionsCircle";
@@ -34,7 +34,7 @@ function CourseBox(props: {
 	edit: boolean, 
 	studentCourse: StudentCourse, 
 }){
-	const { user, setUser } = useAuth();
+	const { user, setUser } = useUser();
 
 	return(
 		<div 

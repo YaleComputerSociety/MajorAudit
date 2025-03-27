@@ -1,10 +1,10 @@
 
 import { useState, useEffect } from "react";
-import { StudentYear, StudentSemester } from "@/types/type-user";
+import { StudentYear, StudentSemester } from "../CoursesTyping";
 
 import SemesterBox from "./semester/SemesterBox"
-import AddSemesterButton from "./add-semester/AddSemesterButton"
-import { useAuth } from "../../../context/AuthProvider";
+// import AddSemesterButton from "./add-semester/AddSemesterButton"
+import { useUser } from "@/context/UserProvider";
 
 function RenderSemesters(props: { 
 	edit: boolean;
@@ -13,7 +13,7 @@ function RenderSemesters(props: {
 	setStudentYears: React.Dispatch<React.SetStateAction<StudentYear[]>>, 
 }) {
   const newRenderedSemesters = props.studentYear.studentSemesters
-    .filter((studentSemester: StudentSemester) => studentSemester.term !== 0)
+    .filter((studentSemester: StudentSemester) => studentSemester.term !== "0")
     .map((studentSemester: StudentSemester) => (
       <SemesterBox 
 				key={studentSemester.term} 
@@ -35,7 +35,7 @@ function YearBox(props: {
 	studentYear: StudentYear, 
 	setStudentYears: React.Dispatch<React.SetStateAction<StudentYear[]>>, 
 }){
-	const { user } = useAuth();
+	const { user } = useUser();
   const [renderedSemesters, setRenderedSemesters] = useState<React.ReactNode>(null);
 	
 	useEffect(() => {
@@ -56,12 +56,12 @@ function YearBox(props: {
 			</div>
 			<div style={{ display: 'flex', flexDirection: props.columns ? 'column' : 'row' }}>
 				{renderedSemesters}
-				{(props.edit && (props.studentYear.studentSemesters.length < 3)) && 
+				{/* {(props.edit && (props.studentYear.studentSemesters.length < 3)) && 
 					<AddSemesterButton 
 						studentYear={props.studentYear} 
 						setStudentYears={props.setStudentYears}
 					/>
-				}
+				} */}
 			</div>
 		</div>
   );

@@ -1,49 +1,49 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import BaseModal from '../base-modal/BaseModal';
 
 // import styles from './CreateCourseModal.module.css';
 
-interface Module {
-  title: string;
-  description: string;
-}
+// interface Module {
+//   title: string;
+//   description: string;
+// }
 
 const CreateCourseModal: React.FC = () => {
-  const [courseData, setCourseData] = useState({
-    title: '',
-    description: '',
-  });
-  const [modules, setModules] = useState<Module[]>([{ title: '', description: '' }]);
+  // const [courseData, setCourseData] = useState({
+  //   title: '',
+  //   description: '',
+  // });
+  // const [modules, setModules] = useState<Module[]>([{ title: '', description: '' }]);
 
-  const handleCourseChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setCourseData(prev => ({ ...prev, [name]: value }));
-  };
+  // const handleCourseChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //   const { name, value } = e.target;
+  //   setCourseData(prev => ({ ...prev, [name]: value }));
+  // };
 
-  const handleModuleChange = (index: number, field: keyof Module, value: string) => {
-    const updatedModules = [...modules];
-    updatedModules[index][field] = value;
-    setModules(updatedModules);
-  };
+  // const handleModuleChange = (index: number, field: keyof Module, value: string) => {
+  //   const updatedModules = [...modules];
+  //   updatedModules[index][field] = value;
+  //   setModules(updatedModules);
+  // };
 
-  const addModule = () => {
-    setModules([...modules, { title: '', description: '' }]);
-  };
+  // const addModule = () => {
+  //   setModules([...modules, { title: '', description: '' }]);
+  // };
 
-  const removeModule = (index: number) => {
-    if (modules.length > 1) {
-      const updatedModules = modules.filter((_, i) => i !== index);
-      setModules(updatedModules);
-    }
-  };
+  // const removeModule = (index: number) => {
+  //   if (modules.length > 1) {
+  //     const updatedModules = modules.filter((_, i) => i !== index);
+  //     setModules(updatedModules);
+  //   }
+  // };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Logic to create course with modules
-    console.log('Creating course:', { ...courseData, modules });
-    // You would typically call an API here
-  };
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   // Logic to create course with modules
+  //   console.log('Creating course:', { ...courseData, modules });
+  //   // You would typically call an API here
+  // };
 
   return (
     <BaseModal title="Create New Course">

@@ -1,4 +1,6 @@
 
+// login/page.tsx
+
 "use client";
 import Style from "./Login.module.css";
 import NavBar from "../../components/navbar/NavBar";
@@ -28,7 +30,7 @@ function Login()
             </div>
           </div>
         </div>
-        <Image src="/guy.jpg" alt="Landing Page" width={450} height={400} style={{ opacity: 0.05 }}/>
+        <Image src="/guy.jpg" alt="Landing Page" priority width={450} height={400} style={{ opacity: 0.05 }}/>
       </div>
     </div>
   );

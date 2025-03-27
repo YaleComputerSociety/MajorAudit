@@ -1,62 +1,42 @@
 
 "use client"; 
 import { createContext, useContext, useState, useEffect } from "react"; 
-import { User } from "@/types/type-user"; 
-import { Ryan } from "@/database/mock/data-user"; 
+
 import { createClient } from '@supabase/supabase-js';
 
-// Initialize Supabase client - consider moving this to a separate utility file
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Initialize the client with appropriate config
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,  // Using non-null assertion
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
+);
 
 // Define context type 
 interface AuthContextType {
-  auth: { loggedIn: boolean };
-  setAuth: (auth: { loggedIn: boolean }) => void;
-  user: User;
-  setUser: (user: User) => void;
+  auth: { loggedIn: boolean; userId: string | null };
+  setAuth: (auth: { loggedIn: boolean; userId: string | null }) => void;
   logout: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [auth, setAuth] = useState({ loggedIn: false });
-  const [user, setUser] = useState<User>(Ryan);
+  const [auth, setAuth] = useState({ loggedIn: false, userId: null as string | null });
   const [isInitialized, setIsInitialized] = useState(false);
-
-  // Handle user data fetch after authentication
-  const fetchUserData = async (userId: string) => {
-    try {
-      const { data: userData, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', userId)
-        .single();
-      
-      if (error) throw error;
-      
-      if (userData) {
-        // Map the database user to your User type
-        const appUser: User = {
-          ...Ryan, // Start with default structure
-          netID: userData.netid || Ryan.netID,
-          name: userData.name || Ryan.name,
-        };
-        
-        setUser(appUser);
-      }
-    } catch (err) {
-      console.error('Error fetching user data:', err);
-      // Keep default user if fetch fails
-    }
-  };
+  const [isLoading, setIsLoading] = useState(true);
 
   // Logout function
   const logout = async () => {
+    setIsLoading(true);
     await supabase.auth.signOut();
     // Auth state change listener will handle state updates
+    setIsLoading(false);
   };
 
   // Single useEffect for auth state management
@@ -70,20 +50,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         if (mounted) {
           if (session?.user) {
-            setAuth({ loggedIn: true });
-            await fetchUserData(session.user.id);
+            setAuth({ loggedIn: true, userId: session.user.id });
           } else {
-            setAuth({ loggedIn: false });
-            setUser(Ryan);
+            setAuth({ loggedIn: false, userId: null });
           }
           setIsInitialized(true);
+          setIsLoading(false);
         }
       } catch (err) {
         console.error('Auth initialization error:', err);
         if (mounted) {
-          setAuth({ loggedIn: false });
-          setUser(Ryan);
+          setAuth({ loggedIn: false, userId: null });
           setIsInitialized(true);
+          setIsLoading(false);
         }
       }
     };
@@ -97,11 +76,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (!mounted) return;
         
         if (event === 'SIGNED_IN' && session) {
-          setAuth({ loggedIn: true });
-          await fetchUserData(session.user.id);
+          setAuth({ loggedIn: true, userId: session.user.id });
+          setIsLoading(false);
         } else if (event === 'SIGNED_OUT') {
-          setAuth({ loggedIn: false });
-          setUser(Ryan);
+          setAuth({ loggedIn: false, userId: null });
+          setIsLoading(false);
         }
       }
     );
@@ -116,7 +95,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []); // Empty dependency array - only run once on mount
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth, user, setUser, logout }}>
+    <AuthContext.Provider value={{ 
+      auth, 
+      setAuth, 
+      logout, 
+      isLoading
+    }}>
       {isInitialized ? children : <div>Loading authentication...</div>}
     </AuthContext.Provider>
   );

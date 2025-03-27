@@ -2,11 +2,11 @@
 import React, {useState, useEffect} from "react";
 import Style from "./SemesterBox.module.css"
 
-import { StudentSemester } from "@/types/type-user";
+import { StudentSemester } from "../../CoursesTyping";
 import { TransformTermNumber } from "../../../../utils/course-display/CourseDisplay";
 
+import { useUser } from "@/context/UserProvider";
 import CourseBox from "./course/CourseBox";
-import { useAuth } from "../../../../context/AuthProvider";
 
 function RenderCourses(props: { 
 	edit: boolean, 
@@ -31,7 +31,7 @@ function SemesterBox(props: {
 	edit: boolean, 
 	studentSemester: StudentSemester, 
 }){
-  const { user } = useAuth();
+  const { user } = useUser();
 	const [renderedCourses, setRenderedCourses] = useState<React.ReactNode>(null);
 
  	useEffect(() => {

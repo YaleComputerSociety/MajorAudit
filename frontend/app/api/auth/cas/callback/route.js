@@ -1,11 +1,14 @@
+// callback/route.js
 
-// callback/route.js - using password auth after CAS
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { createServerClient } from '@supabase/ssr';
 import axios from 'axios';
 import { XMLParser } from 'fast-xml-parser';
-import { cookies } from 'next/headers';
 import crypto from 'crypto';
+
+export const dynamic = 'force-dynamic'; // Ensure the route is always dynamic
 
 export async function GET(request) 
 {
@@ -32,14 +35,14 @@ export async function GET(request)
       const authSuccess = result['cas:serviceResponse']['cas:authenticationSuccess'];
       const netID = authSuccess['cas:user'];
       
-      // Create Supabase client with service role key
-      const supabase = createClient(
+      // Create admin client for user management
+      const adminClient = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL,
         process.env.SUPABASE_SERVICE_ROLE_KEY
       );
       
       // Check if user exists in users table by net_id
-      const { data: existingUser, error: userError } = await supabase
+      const { data: existingUser, error: userError } = await adminClient
         .from('users')
         .select('id, net_id')
         .eq('net_id', netID)
@@ -60,11 +63,11 @@ export async function GET(request)
       
       if (existingUser) {
         // User exists, check if auth user exists with same ID
-        const { data: authData } = await supabase.auth.admin.getUserById(existingUser.id);
+        const { data: authData } = await adminClient.auth.admin.getUserById(existingUser.id);
         
         if (authData?.user) {
           // Auth user exists, update password
-          const { error: updateError } = await supabase.auth.admin.updateUserById(
+          const { error: updateError } = await adminClient.auth.admin.updateUserById(
             existingUser.id,
             { password }
           );
@@ -77,7 +80,7 @@ export async function GET(request)
           userId = existingUser.id;
         } else {
           // Auth user doesn't exist, create new auth user with specified ID
-          const { data: newAuthUser, error: createAuthError } = await supabase.auth.admin.createUser({
+          const { data: newAuthUser, error: createAuthError } = await adminClient.auth.admin.createUser({
             email: `${netID}@yale.edu`,
             password,
             email_confirm: true,
@@ -95,7 +98,7 @@ export async function GET(request)
         }
       } else {
         // User doesn't exist, create new auth user
-        const { data: newAuthUser, error: createAuthError } = await supabase.auth.admin.createUser({
+        const { data: newAuthUser, error: createAuthError } = await adminClient.auth.admin.createUser({
             email: `${netID}@yale.edu`,
             password,
             email_confirm: true,
@@ -111,7 +114,7 @@ export async function GET(request)
         userId = newAuthUser.user.id;
         
         // Create user record
-        const { error: insertError } = await supabase
+        const { error: insertError } = await adminClient
           .from('users')
           .insert({
             id: userId,
@@ -124,7 +127,31 @@ export async function GET(request)
         }
       }
       
-      // Sign in with email/password data: signInData, 
+      // Create a response object
+      const response = NextResponse.redirect(new URL('/courses', request.url));
+      
+      // Create a server client that handles cookies properly
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        {
+          cookies: {
+            get: (name) => {
+              return cookies().get(name)?.value;
+            },
+            set: (name, value, options) => {
+              cookies().set(name, value, options);
+              response.cookies.set(name, value, options);
+            },
+            remove: (name, options) => {
+              cookies().delete(name, options);
+              response.cookies.set(name, '', { ...options, maxAge: 0 });
+            },
+          },
+        }
+      );
+      
+      // Sign in with email/password - this will set cookies through the server client
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: `${netID}@yale.edu`,
         password
@@ -135,16 +162,8 @@ export async function GET(request)
         return NextResponse.redirect(new URL('/login?error=Sign+in+failed', request.url));
       }
       
-      // Set the auth cookie 
-      const cookieStore = await cookies();
-      cookieStore.set('sb-auth-token', 'true', {
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24 * 7 // 1 week
-      });
-      
-      // Redirect to destination
-      return NextResponse.redirect(new URL('/courses', request.url));
+      // Return the response with cookies set
+      return response;
     } else {
       console.error('CAS authentication failed');
       return NextResponse.redirect(new URL('/login?error=CAS+authentication+failed', request.url));
