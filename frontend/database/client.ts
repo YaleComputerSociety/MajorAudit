@@ -1,7 +1,7 @@
 
 // database/client.ts
 import { createClient } from '@supabase/supabase-js'
-import { Database } from '@/types/supabase_new'
+import { Database } from '@/types/supabase_newer'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 if (!supabaseUrl) {

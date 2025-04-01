@@ -1,9 +1,9 @@
 
 // transforms/program-transformer.ts
 
-import { Tables } from '@/types/supabase_new';
+import { Tables } from '@/types/supabase_newer';
 import { Program, Degree, Concentration, Requirement, Subrequirement, Option } from '@/types/type-program';
-import { Course } from '@/types/type-user';
+import { AbstractCourse } from '@/types/type-user';
 import { safeArray, safeBoolean, safeNumber, safeString } from '@/types/db-helpers';
 
 // Type for map keys
@@ -12,32 +12,46 @@ type EntityId = number | string;
 /**
  * Transforms DB course data to frontend Course type
  */
-export function transformCourse(course: Tables<"courses">): Course {
+export function transformCourse(
+  course: Tables<"courses">, 
+  courseCodes: Tables<"course_codes">[]
+): AbstractCourse {
   return {
     id: course.id,
     title: course.title,
     description: safeString(course.description),
     requirements: safeString(course.requirements),
-    professors: safeArray(course.professors),
     distributions: safeArray(course.distributions),
-    flags: safeArray(course.flags),
-    credits: course.credits,
-    term: course.term,
+    credits: safeNumber(course.credits),
     is_colsem: safeBoolean(course.is_colsem),
     is_fysem: safeBoolean(course.is_fysem),
-    codes: safeArray(course.codes),
-    seasons: safeArray(course.seasons)
+    codes: courseCodes.map(code => code.code)
   };
 }
 
 /**
  * Create course map for efficient lookups
  */
-export function createCourseMap(coursesData: Tables<"courses">[]): Map<string, Course> {
-  const courseMap = new Map<string, Course>();
-  coursesData.forEach(course => {
-    courseMap.set(course.id, transformCourse(course));
+export function createCourseMap(
+  coursesData: Tables<"courses">[], 
+  courseCodesData: Tables<"course_codes">[]
+): Map<number, AbstractCourse> {
+  const courseMap = new Map<number, AbstractCourse>();
+  
+  // Group course codes by course_id for efficient lookup
+  const codesByCourseId = new Map<number, Tables<"course_codes">[]>();
+  courseCodesData.forEach(code => {
+    if (!codesByCourseId.has(code.course_id)) {
+      codesByCourseId.set(code.course_id, []);
+    }
+    codesByCourseId.get(code.course_id)?.push(code);
   });
+  
+  coursesData.forEach(course => {
+    const courseCodes = codesByCourseId.get(course.id) || [];
+    courseMap.set(course.id, transformCourse(course, courseCodes));
+  });
+  
   return courseMap;
 }
 
@@ -46,22 +60,25 @@ export function createCourseMap(coursesData: Tables<"courses">[]): Map<string, C
  */
 export function createOptionMap(
   optionsData: Tables<"options">[], 
-  courseMap: Map<string, Course>
+  courseMap: Map<number, AbstractCourse>
 ): Map<EntityId, Option> {
   const optionMap = new Map<EntityId, Option>();
+  
   optionsData.forEach(option => {
-    const course = option.option_course_id ? courseMap.get(option.option_course_id) || null : null;
+    const course = option.course_id ? courseMap.get(option.course_id) || null : null;
+    
     optionMap.set(option.id, {
       option: course,
       satisfier: null,
       elective_range: option.elective_range || undefined,
       flags: option.flags || undefined,
       is_any_okay: safeBoolean(option.is_any_okay),
-			is_CR_okay: safeBoolean(option.is_CR_okay),
-			is_colsem_okay: safeBoolean(option.is_colsem_okay),
-			is_fysem_okay: safeBoolean(option.is_fysem_okay)
+      is_CR_okay: safeBoolean(option.is_CR_okay),
+      is_colsem_okay: safeBoolean(option.is_colsem_okay),
+      is_fysem_okay: safeBoolean(option.is_fysem_okay)
     });
   });
+  
   return optionMap;
 }
 

@@ -1,10 +1,10 @@
 
 // types/type-program
 
-import { Course, StudentCourse } from "./type-user";
+import { AbstractCourse, StudentCourse } from "./type-user";
 
 export interface Option { 
-	option: Course | null;
+	option: AbstractCourse | null;
 	satisfier: StudentCourse | null;
 	elective_range?: string; 
 	flags?: string[];

@@ -62,11 +62,12 @@ def filter_course_sections(courses):
             continue
         non_cancelled_courses.append(course)
     
-    # Group non-cancelled courses by same_course_id
+    # Group non-cancelled courses by universal_course_id (mapped from same_course_id in API)
     courses_by_same_id = defaultdict(list)
     for course in non_cancelled_courses:
-        same_course_id = course.get('same_course_id')
-        courses_by_same_id[same_course_id].append(course)
+        # Use same_course_id from API but refer to it as universal_course_id in our code
+        universal_course_id = course.get('same_course_id')
+        courses_by_same_id[universal_course_id].append(course)
     
     # Define section priority order (for selecting the canonical section)
     # Numbers first, then letters
@@ -231,9 +232,12 @@ def transform_courses(courses, term):
     db_course_offerings = []
     
     for course in courses:
+        # Map same_course_id from API to universal_course_id in our database
+        universal_course_id = course.get('same_course_id')
+        
         # Extract core course data
         course_data = {
-            'same_course_id': course.get('same_course_id'),
+            'universal_course_id': universal_course_id,
             'title': course.get('title'),
             'description': course.get('description'),
             'requirements': course.get('requirements'),
@@ -269,11 +273,11 @@ def transform_courses(courses, term):
                 'code': code,
                 'first_term_used': term,
                 'last_term_used': term,
-                'same_course_id': course.get('same_course_id')  # For linking
+                'universal_course_id': universal_course_id  # For linking
             })
         
         db_course_offerings.append({
-            'same_course_id': course.get('same_course_id'),  # For linking
+            'universal_course_id': universal_course_id,  # For linking
             **offering_data
         })
     
@@ -286,13 +290,13 @@ def upsert_courses(courses):
     try:
         logger.info(f"Upserting {len(courses)} courses")
         for course in courses:
-            same_course_id = course.get('same_course_id')
-            if not same_course_id:
-                logger.warning("Skipping course with no same_course_id")
+            universal_course_id = course.get('universal_course_id')
+            if not universal_course_id:
+                logger.warning("Skipping course with no universal_course_id")
                 continue
                 
             # Check if course already exists
-            result = supabase.table('courses').select('id').eq('same_course_id', same_course_id).execute()
+            result = supabase.table('courses').select('id').eq('universal_course_id', universal_course_id).execute()
             existing_records = result.data
             
             if existing_records:
@@ -300,13 +304,13 @@ def upsert_courses(courses):
                 course_id = existing_records[0]['id']
                 result = supabase.table('courses').update(course).eq('id', course_id).execute()
                 if result.data:
-                    inserted_ids[same_course_id] = course_id
+                    inserted_ids[universal_course_id] = course_id
             else:
                 # Insert new course
                 result = supabase.table('courses').insert(course).execute()
                 if result.data:
                     course_id = result.data[0]['id']
-                    inserted_ids[same_course_id] = course_id
+                    inserted_ids[universal_course_id] = course_id
         
         logger.info(f"Successfully upserted {len(inserted_ids)} courses")
         return inserted_ids
@@ -319,11 +323,11 @@ def upsert_course_codes(course_codes, course_id_map):
     try:
         logger.info(f"Upserting {len(course_codes)} course codes")
         for code_data in course_codes:
-            same_course_id = code_data.pop('same_course_id')
-            course_id = course_id_map.get(same_course_id)
+            universal_course_id = code_data.pop('universal_course_id')
+            course_id = course_id_map.get(universal_course_id)
             
             if not course_id:
-                logger.warning(f"No course ID found for same_course_id {same_course_id}")
+                logger.warning(f"No course ID found for universal_course_id {universal_course_id}")
                 continue
             
             code_data['course_id'] = course_id
@@ -363,11 +367,11 @@ def upsert_course_offerings(offerings, course_id_map):
         logger.info(f"Upserting {len(offerings)} course offerings")
         for offering in offerings:
             offering_copy = offering.copy()  # Make a copy to avoid modifying the original
-            same_course_id = offering_copy.pop('same_course_id')
-            course_id = course_id_map.get(same_course_id)
+            universal_course_id = offering_copy.pop('universal_course_id')
+            course_id = course_id_map.get(universal_course_id)
             
             if not course_id:
-                logger.warning(f"No course ID found for same_course_id {same_course_id}")
+                logger.warning(f"No course ID found for universal_course_id {universal_course_id}")
                 continue
             
             offering_copy['course_id'] = course_id

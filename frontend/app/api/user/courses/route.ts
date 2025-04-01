@@ -1,188 +1,143 @@
-
 // app/api/user/courses/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import supabase from '@/database/client';
 
-/**
- * GET /api/user/courses
- * Retrieves the current user's course selections
- */
-export async function GET(){
+import { NextResponse } from 'next/server'
+import { transformToStudentCourse } from '../user-transformers'
+import { Tables } from '@/types/supabase_newer'
+
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+
+export async function GET() {
   try {
-    // Get the user session from cookies
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    const cookieStore = await cookies();
     
-    if (sessionError || !session) {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get: (name) => cookieStore.get(name)?.value,
+        },
+      }
+    );
+    
+    const { data: { user: authUser }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError) {
+      return NextResponse.json(
+        { error: 'Authentication error: ' + userError.message },
+        { status: 401 }
+      );
+    }
+    
+    if (!authUser) {
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
       );
     }
     
-    const userId = session.user.id;
+    const userId = authUser.id;
     
-    // First get the user's FYP ID
-    const { data: fypData, error: fypError } = await supabase
+    const { data: allFypData, error: fypError } = await supabase
       .from('fyp')
       .select('id')
-      .eq('user_id', userId)
-      .single();
+      .eq('user_id', userId);
     
     if (fypError) {
-      if (fypError.code === 'PGRST116') { // Not found
-        return NextResponse.json({ courses: [] });
-      }
       return NextResponse.json(
-        { error: 'Failed to fetch FYP data' },
+        { error: `FYP fetch error: ${fypError.message}` }, 
         { status: 500 }
       );
     }
     
-    // Get student courses
-    const { data: coursesData, error: coursesError } = await supabase
+    if (!allFypData || allFypData.length === 0) {
+      return NextResponse.json({ studentCourses: [] });
+    }
+    
+    // If multiple FYP records exist, use the first one
+    const fypId = allFypData[0].id;
+    
+    // Fetch all student courses with course offerings and courses in a single query
+    const { data: studentCoursesWithRelations, error: relationsError } = await supabase
       .from('student_courses')
       .select(`
-        id,
-        term,
-        status,
-        result,
-        course_id,
-        courses:course_id (
-          id,
-          title,
-          credits,
-          codes,
-          term,
-          distributions,
-          flags,
-          professors,
-          requirements,
-          description
+        *,
+        course_offering:course_offerings(
+          *,
+          course:courses(*)
         )
       `)
-      .eq('fyp_id', fypData.id);
+      .eq('fyp_id', fypId);
     
-    if (coursesError) {
+    if (relationsError) {
       return NextResponse.json(
-        { error: 'Failed to fetch student courses' },
+        { error: relationsError.message }, 
         { status: 500 }
       );
     }
-
-    // Transform the data into the expected format
-    const studentCourses = coursesData ? coursesData.map(sc => ({
-      id: sc.id,
-      term: sc.term,
-      status: sc.status,
-      result: sc.result,
-      course: sc.courses
-    })) : [];
     
-    return NextResponse.json({ courses: studentCourses });
-  } catch (error) {
-    console.error('Error fetching courses:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch course data' },
-      { status: 500 }
-    );
-  }
-}
-
-/**
- * POST /api/user/courses
- * Adds a new course to the user's plan
- */
-export async function POST(request: NextRequest) {
-  try {
-    // Get the user session from cookies
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-    
-    if (sessionError || !session) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
+    // Handle the case where no student courses are found
+    if (!studentCoursesWithRelations || studentCoursesWithRelations.length === 0) {
+      return NextResponse.json({ studentCourses: [] });
     }
     
-    const userId = session.user.id;
-    const requestData = await request.json();
+    // Extract all unique course IDs to fetch their codes in a single query
+    const courseIds = studentCoursesWithRelations
+      .filter(sc => sc.course_offering?.course?.id)
+      .map(sc => sc.course_offering!.course!.id);
     
-    // Validate required fields
-    if (!requestData.courseId || !requestData.term) {
-      return NextResponse.json(
-        { error: 'Course ID and term are required' },
-        { status: 400 }
-      );
+    // Get all course codes in one batch if we have course IDs
+    let allCourseCodes: Tables<'course_codes'>[] = [];
+    if (courseIds.length > 0) {
+      const { data: courseCodes, error: codesError } = await supabase
+        .from('course_codes')
+        .select('*')
+        .in('course_id', courseIds);
+      
+      if (!codesError && courseCodes) {
+        allCourseCodes = courseCodes;
+      }
     }
     
-    // First get the user's FYP ID (or create one if it doesn't exist)
-    let fypId: number;
-    const { data: fypData, error: fypError } = await supabase
-      .from('fyp')
-      .select('id')
-      .eq('user_id', userId)
-      .single();
+    // Create a lookup map for efficient code access
+    const codesByCourseId: Record<number, Tables<'course_codes'>[]> = {};
+    allCourseCodes.forEach(code => {
+      if (!codesByCourseId[code.course_id]) {
+        codesByCourseId[code.course_id] = [];
+      }
+      codesByCourseId[code.course_id].push(code);
+    });
     
-    if (fypError) {
-      if (fypError.code === 'PGRST116') { // Not found
-        // Create a new FYP record
-        const { data: newFYP, error: createError } = await supabase
-          .from('fyp')
-          .insert({
-            user_id: userId,
-            language_placement: '',
-            term_arrangement: ''
-          })
-          .select('id')
-          .single();
-        
-        if (createError || !newFYP) {
-          return NextResponse.json(
-            { error: 'Failed to create FYP record' },
-            { status: 500 }
-          );
+    // Transform the data
+    try {
+      const studentCourses = studentCoursesWithRelations.map(sc => {
+        if (!sc.course_offering_id || !sc.course_offering || !sc.course_offering.course) {
+          return transformToStudentCourse(sc, null, null, []);
         }
         
-        fypId = newFYP.id;
-      } else {
-        // Other error
-        return NextResponse.json(
-          { error: 'Failed to fetch or create FYP record' },
-          { status: 500 }
+        const courseId = sc.course_offering.course.id;
+        const courseCodes = codesByCourseId[courseId] || [];
+        
+        // Type assertion to handle nested data from the join
+        return transformToStudentCourse(
+          sc,
+          sc.course_offering as Tables<'course_offerings'>,
+          sc.course_offering.course as Tables<'courses'>,
+          courseCodes
         );
-      }
-    } else {
-      fypId = fypData.id;
-    }
-    
-    // Add the course to student_courses
-    const { data: newCourse, error: courseError } = await supabase
-      .from('student_courses')
-      .insert({
-        fyp_id: fypId,
-        course_id: requestData.courseId,
-        term: requestData.term,
-        status: requestData.status || 'planned',
-        result: requestData.result || 'NA'
-      })
-      .select('id')
-      .single();
-    
-    if (courseError || !newCourse) {
+      });
+      
+      return NextResponse.json({ studentCourses });
+    } catch (transformError) {
       return NextResponse.json(
-        { error: 'Failed to add course to plan' },
+        { error: 'Error transforming student courses: ' + (transformError instanceof Error ? transformError.message : String(transformError)) }, 
         { status: 500 }
       );
     }
-    
-    return NextResponse.json({
-      message: 'Course added successfully',
-      courseId: newCourse.id
-    });
   } catch (error) {
-    console.error('Error adding course:', error);
     return NextResponse.json(
-      { error: 'Failed to add course' },
+      { error: 'Internal server error: ' + (error instanceof Error ? error.message : String(error)) }, 
       { status: 500 }
     );
   }

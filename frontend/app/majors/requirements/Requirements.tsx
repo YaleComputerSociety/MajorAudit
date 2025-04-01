@@ -11,7 +11,7 @@ import { Subrequirement, Requirement, Option } from "@/types/type-program";
 import { MajorsIndex } from "@/types/type-user";
 
 // import { getStudentConcentration, removeCourseInSubreq, addCourseInSubreq, toggleSubreqSelection } from "./RequirementsUtils";
-import { MajorsIcon } from "../course-icon/MajorsCourseIcon";
+import { MajorsIcon } from "./course-icon/MajorsCourseIcon";
 
 function RenderSubrequirementCourse(props: { 
 	edit?: boolean; 

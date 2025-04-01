@@ -2,7 +2,6 @@
 // database/program-repository.ts
 
 import supabase from '@/database/client';
-// import { Tables } from '@/types/supabase';
 
 export const ProgramRepository = {
   /**
@@ -49,7 +48,7 @@ export const ProgramRepository = {
   /**
    * Fetch courses for the program hierarchy
    */
-  async fetchCoursesForOptions(courseIds: string[]) {
+  async fetchCoursesForOptions(courseIds: number[]) {
     if (!courseIds.length) return [];
     
     const { data, error } = await supabase
@@ -59,6 +58,25 @@ export const ProgramRepository = {
     
     if (error) {
       console.error('Error fetching courses:', error);
+      return [];
+    }
+    
+    return data || [];
+  },
+
+  /**
+   * Fetch course codes for the given course IDs
+   */
+  async fetchCourseCodes(courseIds: number[]) {
+    if (!courseIds.length) return [];
+    
+    const { data, error } = await supabase
+      .from('course_codes')
+      .select('*')
+      .in('course_id', courseIds);
+    
+    if (error) {
+      console.error('Error fetching course codes:', error);
       return [];
     }
     

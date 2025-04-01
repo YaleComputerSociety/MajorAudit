@@ -36,14 +36,16 @@ export async function fetchProgramsDirectToFrontend() {
   
   // Step 2: Collect course IDs and fetch courses
   const courseIds = options
-    .filter(o => o.option_course_id)
-    .map(o => o.option_course_id)
-    .filter((id): id is string => id !== null);
+    .filter(o => o.course_id)
+    .map(o => o.course_id)
+    .filter((id): id is number => id !== null);
   
+  // Fetch both courses and their associated codes
   const coursesData = await ProgramRepository.fetchCoursesForOptions(courseIds);
+  const courseCodesData = await ProgramRepository.fetchCourseCodes(courseIds);
   
   // Step 3: Transform data using transformer functions
-  const courseMap = createCourseMap(coursesData);
+  const courseMap = createCourseMap(coursesData, courseCodesData);
   const optionMap = createOptionMap(options, courseMap);
   const subreqOptionsMap = createSubreqOptionsMap(subrequirementOptions, optionMap);
   const subrequirementMap = createSubrequirementMap(subrequirements, subreqOptionsMap);

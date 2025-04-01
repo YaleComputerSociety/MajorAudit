@@ -80,51 +80,103 @@ export type Database = {
           },
         ]
       }
-      courses: {
+      course_codes: {
         Row: {
-          codes: string[] | null
-          credits: number
-          description: string | null
-          distributions: string[] | null
-          flags: string[] | null
-          id: string
-          is_colsem: boolean | null
-          is_fysem: boolean | null
-          professors: string[] | null
-          requirements: string | null
-          seasons: string[] | null
-          term: string
-          title: string
+          code: string
+          course_id: number
+          first_term_used: string
+          id: number
+          last_term_used: string
         }
         Insert: {
-          codes?: string[] | null
-          credits: number
-          description?: string | null
-          distributions?: string[] | null
-          flags?: string[] | null
-          id: string
-          is_colsem?: boolean | null
-          is_fysem?: boolean | null
-          professors?: string[] | null
-          requirements?: string | null
-          seasons?: string[] | null
-          term: string
-          title: string
+          code: string
+          course_id: number
+          first_term_used: string
+          id?: number
+          last_term_used: string
         }
         Update: {
-          codes?: string[] | null
-          credits?: number
+          code?: string
+          course_id?: number
+          first_term_used?: string
+          id?: number
+          last_term_used?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_codes_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      course_offerings: {
+        Row: {
+          course_id: number
+          flags: string[] | null
+          id: number
+          professors: string[] | null
+          term: string
+        }
+        Insert: {
+          course_id: number
+          flags?: string[] | null
+          id?: number
+          professors?: string[] | null
+          term: string
+        }
+        Update: {
+          course_id?: number
+          flags?: string[] | null
+          id?: number
+          professors?: string[] | null
+          term?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_offerings_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courses: {
+        Row: {
+          credits: number | null
+          description: string | null
+          distributions: string[] | null
+          id: number
+          is_colsem: boolean | null
+          is_fysem: boolean | null
+          requirements: string | null
+          title: string
+          universal_course_id: string | null
+        }
+        Insert: {
+          credits?: number | null
           description?: string | null
           distributions?: string[] | null
-          flags?: string[] | null
-          id?: string
+          id?: number
           is_colsem?: boolean | null
           is_fysem?: boolean | null
-          professors?: string[] | null
           requirements?: string | null
-          seasons?: string[] | null
-          term?: string
+          title: string
+          universal_course_id?: string | null
+        }
+        Update: {
+          credits?: number | null
+          description?: string | null
+          distributions?: string[] | null
+          id?: number
+          is_colsem?: boolean | null
+          is_fysem?: boolean | null
+          requirements?: string | null
           title?: string
+          universal_course_id?: string | null
         }
         Relationships: []
       }
@@ -191,6 +243,7 @@ export type Database = {
       }
       options: {
         Row: {
+          course_id: number | null
           elective_range: string | null
           flags: string[] | null
           id: number
@@ -199,9 +252,9 @@ export type Database = {
           is_CR_okay: boolean | null
           is_fysem_okay: boolean | null
           note: string | null
-          option_course_id: string | null
         }
         Insert: {
+          course_id?: number | null
           elective_range?: string | null
           flags?: string[] | null
           id?: number
@@ -210,9 +263,9 @@ export type Database = {
           is_CR_okay?: boolean | null
           is_fysem_okay?: boolean | null
           note?: string | null
-          option_course_id?: string | null
         }
         Update: {
+          course_id?: number | null
           elective_range?: string | null
           flags?: string[] | null
           id?: number
@@ -221,12 +274,11 @@ export type Database = {
           is_CR_okay?: boolean | null
           is_fysem_okay?: boolean | null
           note?: string | null
-          option_course_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "subreq_course_options_option_course_id_fkey"
-            columns: ["option_course_id"]
+            foreignKeyName: "options_course_id_fkey"
+            columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
             referencedColumns: ["id"]
@@ -334,7 +386,7 @@ export type Database = {
       }
       student_courses: {
         Row: {
-          course_id: string | null
+          course_offering_id: number | null
           fyp_id: number | null
           id: number
           result: string
@@ -342,7 +394,7 @@ export type Database = {
           term: string
         }
         Insert: {
-          course_id?: string | null
+          course_offering_id?: number | null
           fyp_id?: number | null
           id?: number
           result: string
@@ -350,7 +402,7 @@ export type Database = {
           term: string
         }
         Update: {
-          course_id?: string | null
+          course_offering_id?: number | null
           fyp_id?: number | null
           id?: number
           result?: string
@@ -359,10 +411,10 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "student_courses_course_id_fkey"
-            columns: ["course_id"]
+            foreignKeyName: "student_courses_course_offering_id_fkey"
+            columns: ["course_offering_id"]
             isOneToOne: false
-            referencedRelation: "courses"
+            referencedRelation: "course_offerings"
             referencedColumns: ["id"]
           },
           {

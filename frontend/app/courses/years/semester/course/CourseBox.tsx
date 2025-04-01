@@ -14,7 +14,7 @@ function RemoveButton(props: {
 }){
   const removeStudentCourse = () => {
     const updatedStudentCourses = props.user.FYP.studentCourses.filter(
-      (course) => course.course.title !== props.studentCourse.course.title
+      (course) => course.courseOffering.abstractCourse.title !== props.studentCourse.courseOffering.abstractCourse.title
     );
 
     const updatedUser = { ...props.user, FYP: { ...props.user.FYP, studentCourses: updatedStudentCourses } };
@@ -51,14 +51,14 @@ function CourseBox(props: {
 				<SeasonIcon studentCourse={props.studentCourse}/>
 				<div className={Style.Column}>
 					<div className={Style.CourseCode}>
-						{props.studentCourse.course.codes[0]}
+						{props.studentCourse.courseOffering.abstractCourse.codes[0]}
 					</div>
 					<div className={Style.CourseTitle}>
-						{props.studentCourse.course.title}
+						{props.studentCourse.courseOffering.abstractCourse.title}
 					</div>
 				</div>
 			</div>
-			<DistributionCircle distributions={props.studentCourse.course.distributions}/>
+			<DistributionCircle distributions={props.studentCourse.courseOffering.abstractCourse.distributions}/>
 		</div>
 	);
 }

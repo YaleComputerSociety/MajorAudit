@@ -1,27 +1,71 @@
-
 // app/api/user/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import supabase from '@/database/client';
-import { fetchUserProfile, updateUserProfile } from './user-service';
+import { NextResponse } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { transformToUser, transformToFYP } from './user-transformers';
 
-/**
- * GET /api/user
- * Retrieves the current authenticated user's profile
- */
-export async function GET(){
+export async function GET() {
   try {
-    // Get the user session from cookies
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    // Create a server client using the newer SSR package
+    const cookieStore = await cookies();
     
-    if (sessionError || !session) {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get: (name) => cookieStore.get(name)?.value,
+        },
+      }
+    );
+    
+    // Get the authenticated user (more secure than just getting the session)
+    const { data: { user: authUser }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError) {
+      return NextResponse.json(
+        { error: 'Authentication error: ' + userError.message },
+        { status: 401 }
+      );
+    }
+    
+    if (!authUser) {
+      // If no authenticated user, check if this is development mode
+      if (process.env.NODE_ENV === 'development' && process.env.MOCK_USER_DATA === 'true') {
+        return NextResponse.json({
+          user: {
+            name: 'Test User',
+            netID: 'test123',
+            FYP: {
+              languagePlacement: 'English',
+              studentTermArrangement: 'Fall-Spring',
+              studentCourses: []
+            }
+          }
+        });
+      }
+      
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
       );
     }
     
-    const userId = session.user.id;
-    const userData = await fetchUserProfile(userId);
+    const userId = authUser.id;
+    
+    // Fetch the user data from your database
+    const { data: userData, error: userDataError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', userId)
+      .single();
+    
+    if (userDataError) {
+      return NextResponse.json(
+        { error: userDataError.message },
+        { status: 404 }
+      );
+    }
     
     if (!userData) {
       return NextResponse.json(
@@ -30,66 +74,28 @@ export async function GET(){
       );
     }
     
-    return NextResponse.json({ user: userData });
+    // Fetch FYP
+    const { data: fypData, error: fypError } = await supabase
+      .from('fyp')
+      .select('*')
+      .eq('user_id', userId)
+      .single();
+    
+    if (fypError && fypError.code !== 'PGRST116') { // PGRST116 is "no rows returned" which is ok
+      // FYP might not exist yet for this user, so just return the user
+      return NextResponse.json({
+        user: transformToUser(userData, null)
+      });
+    }
+    
+    // Return the user with empty FYP structure if no FYP data
+    const fyp = fypData ? transformToFYP(fypData, []) : null;
+    const user = transformToUser(userData, fyp);
+    
+    return NextResponse.json({ user });
   } catch (error) {
-    console.error('Error fetching user:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch user data' },
-      { status: 500 }
-    );
-  }
-}
-
-/**
- * PUT /api/user
- * Updates the current authenticated user's profile
- */
-export async function PUT(request: NextRequest) {
-  try {
-    // Get the user session from cookies
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-    
-    if (sessionError || !session) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
-    }
-    
-    const userId = session.user.id;
-    const requestData = await request.json();
-    
-    // Validate required fields
-    if (!requestData.name && !requestData.netID) {
-      return NextResponse.json(
-        { error: 'No data provided for update' },
-        { status: 400 }
-      );
-    }
-    
-    const result = await updateUserProfile(userId, {
-      name: requestData.name,
-      netID: requestData.netID
-    });
-    
-    if (!result.success) {
-      return NextResponse.json(
-        { error: 'Failed to update user profile' },
-        { status: 500 }
-      );
-    }
-    
-    // Fetch the updated user data
-    const updatedUser = await fetchUserProfile(userId);
-    
-    return NextResponse.json({ 
-      message: 'User profile updated successfully',
-      user: updatedUser
-    });
-  } catch (error) {
-    console.error('Error updating user:', error);
-    return NextResponse.json(
-      { error: 'Failed to update user data' },
+      { error: 'Internal server error: ' + (error instanceof Error ? error.message : String(error)) },
       { status: 500 }
     );
   }

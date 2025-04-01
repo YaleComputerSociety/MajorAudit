@@ -5,9 +5,9 @@ import Style from "./MajorsCourseIcon.module.css"
 import Image from "next/image";
 
 import { Subrequirement } from "@/types/type-program";
-import { StudentCourse, Course } from "@/types/type-user";
+import { StudentCourse, AbstractCourse } from "@/types/type-user";
 
-import DistributionCircle from "../../../components/distribution-circle/DistributionsCircle";
+import DistributionCircle from "../../../../components/distribution-circle/DistributionsCircle";
 
 function SeasonComp(props: { seasons: string[] }) 
 {
@@ -36,7 +36,7 @@ function SeasonComp(props: { seasons: string[] })
 
 function CourseIcon(props: { 
   edit: boolean; 
-  course: Course; 
+  course: AbstractCourse; 
   subreq: Subrequirement; 
   // onRemoveCourse: Function;
 }){
@@ -45,7 +45,7 @@ function CourseIcon(props: {
       {/* {props.edit && (
         <RemoveButton onClick={() => props.onRemoveCourse(props.course, props.subreq, false)} />
       )} */}
-      <SeasonComp seasons={props.course.seasons || []}/>
+      <SeasonComp seasons={[]}/>
       {props.course.codes[0]}
 			<div style={{ marginLeft: "2px", marginTop: "5px" }}>
 				<DistributionCircle distributions={props.course.distributions}/>
@@ -66,7 +66,7 @@ function StudentCourseIcon(props: {
       {/* {props.edit && (
         <RemoveButton onClick={() => props.onRemoveCourse(props.studentCourse.course, props.subreq, true)} />
       )} */}
-      ✓ {props.studentCourse.course.codes[0]}
+      ✓ {props.studentCourse.courseOffering.codes[0]}
     </div>
   );
 }
@@ -166,7 +166,7 @@ function EmptyIcon(props: {
 
 export function MajorsIcon(props: { 
   edit: boolean; 
-  contentCourse: Course | StudentCourse | null; 
+  contentCourse: AbstractCourse | StudentCourse | null; 
   subreq: Subrequirement; 
   // onRemoveCourse: void;
 	// onAddCourse: void;
@@ -188,7 +188,7 @@ export function MajorsIcon(props: {
   ) : (
     <CourseIcon 
       edit={props.edit} 
-      course={props.contentCourse as Course} 
+      course={props.contentCourse as AbstractCourse} 
       subreq={props.subreq}
       // onRemoveCourse={props.onRemoveCourse} 
     />
