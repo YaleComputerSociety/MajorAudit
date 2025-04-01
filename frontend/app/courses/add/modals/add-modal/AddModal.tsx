@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import BaseModal from '../base-modal/BaseModal';
 import styles from './AddModal.module.css';
 import { useModal } from '../../context/ModalContext';
-import { useStudentCourses } from '@/hooks/useStudentCourses';
+import { useUser } from '@/context/UserProvider';
 
 const AddCourseModal: React.FC = () => {
   const { closeModal } = useModal();
-  const { addCourse, isLoading } = useStudentCourses();
+  const { addCourse, isLoading } = useUser();
 
   const termOptions = ["202501"];
   
@@ -67,7 +67,7 @@ const AddCourseModal: React.FC = () => {
         setValidationError(result.message);
       }
     } catch (error) {
-			void error;
+      void error;
       setValidationError('Failed to add course. Please try again.');
     }
   };

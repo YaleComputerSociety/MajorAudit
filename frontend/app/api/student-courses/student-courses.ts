@@ -18,27 +18,40 @@ interface AddStudentCourseParams {
 export async function validateCourseExists(code: string, term: string) {
   
   // First get the course_id from course_codes table
-  const { data: courseCode, error: codeError } = await supabase
+  const { data: courseCodeData, error: codeError } = await supabase
     .from('course_codes')
-    .select('course_id')
-    .eq('code', code.toUpperCase()) // Ensure consistent casing
-    .single();
+    .select('course_id, code')
+    .eq('code', code.toUpperCase()); // Ensure consistent casing
+    // Removed .single() to handle multiple results
   
-  if (codeError || !courseCode) {
-    console.error('Course code not found:', codeError);
+  if (codeError || !courseCodeData || courseCodeData.length === 0) {
+    console.error('Course code not found:', code, codeError);
     return null;
   }
+  
+  // If multiple course_ids found, log them for debugging
+  if (courseCodeData.length > 1) {
+    console.log(`Found ${courseCodeData.length} entries for code ${code}:`, courseCodeData);
+  }
+  
+  // Use the first matching course_id
+  const courseId = courseCodeData[0].course_id;
   
   // Then find a course offering with that course_id for the given term
   const { data: courseOffering, error: offeringError } = await supabase
     .from('course_offerings')
     .select('id, course_id, term, professors, flags')
-    .eq('course_id', courseCode.course_id)
+    .eq('course_id', courseId)
     .eq('term', term)
-    .single();
+    .maybeSingle(); // Use maybeSingle() instead of single() to handle 0 or 1 result
   
-  if (offeringError || !courseOffering) {
-    console.error('Course offering not found:', offeringError);
+  if (offeringError) {
+    console.error('Error finding course offering:', offeringError);
+    return null;
+  }
+  
+  if (!courseOffering) {
+    console.log(`No offering found for course ${code} (ID: ${courseId}) in term ${term}`);
     return null;
   }
   
