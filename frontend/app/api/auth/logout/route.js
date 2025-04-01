@@ -1,7 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { getAdminClient } from '@/database/client';
+import { getSupabaseAdminServerClient } from '@/database/server';
 
 export async function GET() 
 {
@@ -11,7 +11,7 @@ export async function GET()
   
   if(accessToken && refreshToken){
     try{
-      const supabaseAdmin = getAdminClient();
+      const supabaseAdmin = await getSupabaseAdminServerClient();
       await supabaseAdmin.auth.admin.signOut({
         scope: 'global'
       });

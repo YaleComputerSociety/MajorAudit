@@ -1,15 +1,13 @@
 
 // database/program-repository.ts
 
-import supabase from '@/database/client';
+import { getSupabaseServerClient } from '@/database/server';
 
 export const ProgramRepository = {
-  /**
-   * Fetch complete program hierarchy with joins
-   */
+
   async fetchProgramHierarchy() {
-    // Get programs with degrees
-    const { data: programs, error: programsError } = await supabase
+    const supabaseServerClient = await getSupabaseServerClient();
+    const { data: programs, error: programsError } = await supabaseServerClient
       .from('programs')
       .select(`
         *,
@@ -51,7 +49,8 @@ export const ProgramRepository = {
   async fetchCoursesForOptions(courseIds: number[]) {
     if (!courseIds.length) return [];
     
-    const { data, error } = await supabase
+		const supabaseServerClient = await getSupabaseServerClient();
+    const { data, error } = await supabaseServerClient
       .from('courses')
       .select('*')
       .in('id', courseIds);
@@ -70,7 +69,8 @@ export const ProgramRepository = {
   async fetchCourseCodes(courseIds: number[]) {
     if (!courseIds.length) return [];
     
-    const { data, error } = await supabase
+		const supabaseServerClient = await getSupabaseServerClient();
+    const { data, error } = await supabaseServerClient
       .from('course_codes')
       .select('*')
       .in('course_id', courseIds);

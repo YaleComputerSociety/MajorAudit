@@ -20,7 +20,7 @@ export async function GET()
     }
 
     const userId = authUser.id;
-    const studentCourses = await getStudentCourses(userId);
+    const studentCourses = await getStudentCourses(userId, supabaseServerClient);
     
     return NextResponse.json({ data: studentCourses });
   } catch (error) {
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest)
       );
     }
 
-    const courseOffering = await validateCourseExists(code, term_from);
+    const courseOffering = await validateCourseExists(code, term_from, supabaseServerClient);
     if (!courseOffering) {
       return NextResponse.json(
         { error: 'Course not found for the specified term' }, 
@@ -71,7 +71,8 @@ export async function POST(req: NextRequest)
       courseOfferingId: courseOffering.id,
       term: term_to,
       status,
-      result
+      result,
+      supabaseClient: supabaseServerClient
     });
 
     return NextResponse.json({ 
@@ -115,7 +116,7 @@ export async function DELETE(req: NextRequest) {
     }
     
     // Delete the student course
-    await removeStudentCourse(userId, parseInt(studentCourseId));
+    await removeStudentCourse(userId, parseInt(studentCourseId), supabaseServerClient);
     
     return NextResponse.json({
       success: true,

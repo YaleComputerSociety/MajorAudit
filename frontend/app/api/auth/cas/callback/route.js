@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { XMLParser } from 'fast-xml-parser';
 import crypto from 'crypto';
-import { getAdminClient } from '@/database/client';
+import { getSupabaseAdminServerClient } from '@/database/server';
 
 export const dynamic = 'force-dynamic'; // Ensure the route is always dynamic
 
@@ -35,7 +35,7 @@ export async function GET(request)
       const netID = authSuccess['cas:user'];
       
       // Create admin client for user management
-      const adminClient = getAdminClient();
+      const adminClient = await getSupabaseAdminServerClient();
       
       // Check if user exists in users table by net_id
       const { data: existingUser, error: userError } = await adminClient

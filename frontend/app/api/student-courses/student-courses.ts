@@ -1,7 +1,11 @@
 
 // frontend/app/api/student-courses/student-courses.ts
 
-import supabase from '@/database/client';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { Database } from '@/types/supabase_newer';
+
+// Generic type for any Supabase client (server or client-side)
+type GenericSupabaseClient = SupabaseClient<Database>;
 
 // Interface for student course addition parameters
 interface AddStudentCourseParams {
@@ -10,38 +14,40 @@ interface AddStudentCourseParams {
   term: string;
   status: string;
   result: string;
+  supabaseClient: GenericSupabaseClient;
 }
 
 /* Validates if a course offering exists for the given code and term */
-export async function validateCourseExists(code: string, term: string) {
+export async function validateCourseExists(
+  code: string, 
+  term: string, 
+  supabaseClient: GenericSupabaseClient
+) {
   
   // First get the course_id from course_codes table
-  const { data: courseCodeData, error: codeError } = await supabase
+  const { data: courseCodeData, error: codeError } = await supabaseClient
     .from('course_codes')
     .select('course_id, code')
-    .eq('code', code.toUpperCase()); // Ensure consistent casing
-    // Removed .single() to handle multiple results
+    .eq('code', code.toUpperCase()); 
   
   if (codeError || !courseCodeData || courseCodeData.length === 0) {
     console.error('Course code not found:', code, codeError);
     return null;
   }
   
-  // If multiple course_ids found, log them for debugging
   if (courseCodeData.length > 1) {
     console.log(`Found ${courseCodeData.length} entries for code ${code}:`, courseCodeData);
   }
   
-  // Use the first matching course_id
   const courseId = courseCodeData[0].course_id;
   
   // Then find a course offering with that course_id for the given term
-  const { data: courseOffering, error: offeringError } = await supabase
+  const { data: courseOffering, error: offeringError } = await supabaseClient
     .from('course_offerings')
     .select('id, course_id, term, professors, flags')
     .eq('course_id', courseId)
     .eq('term', term)
-    .maybeSingle(); // Use maybeSingle() instead of single() to handle 0 or 1 result
+    .maybeSingle(); 
   
   if (offeringError) {
     console.error('Error finding course offering:', offeringError);
@@ -57,9 +63,12 @@ export async function validateCourseExists(code: string, term: string) {
 }
 
 /* Gets the FYP ID for a user */
-async function getUserFypId(userId: string) {
+async function getUserFypId(
+  userId: string, 
+  supabaseClient: GenericSupabaseClient
+) {
   
-  const { data: fyp, error } = await supabase
+  const { data: fyp, error } = await supabaseClient
     .from('fyp')
     .select('id')
     .eq('user_id', userId)
@@ -74,13 +83,13 @@ async function getUserFypId(userId: string) {
 
 /* Adds a new student course */
 export async function addStudentCourse(params: AddStudentCourseParams) {
-  const { userId, courseOfferingId, term, status, result } = params;
+  const { userId, courseOfferingId, term, status, result, supabaseClient } = params;
   
   // Get the user's FYP ID
-  const fypId = await getUserFypId(userId);
+  const fypId = await getUserFypId(userId, supabaseClient);
   
   // Create the student course record
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('student_courses')
     .insert({
       fyp_id: fypId,
@@ -100,11 +109,14 @@ export async function addStudentCourse(params: AddStudentCourseParams) {
 }
 
 /* Gets all student courses for a user */
-export async function getStudentCourses(userId: string) {
-  const fypId = await getUserFypId(userId);
+export async function getStudentCourses(
+  userId: string, 
+  supabaseClient: GenericSupabaseClient
+) {
+  const fypId = await getUserFypId(userId, supabaseClient);
   
   // Get all student courses with related course offering data
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('student_courses')
     .select(`
       id, 
@@ -175,7 +187,7 @@ export async function getStudentCourses(userId: string) {
         .map(item => item.course_offering!.course!.id)
     )];
     
-    const { data: codesData, error: codesError } = await supabase
+    const { data: codesData, error: codesError } = await supabaseClient
       .from('course_codes')
       .select('code, course_id')
       .in('course_id', courseIds);
@@ -208,12 +220,16 @@ export async function getStudentCourses(userId: string) {
 }
 
 /* Removes a student course by ID */
-export async function removeStudentCourse(userId: string, studentCourseId: number) {
+export async function removeStudentCourse(
+  userId: string, 
+  studentCourseId: number,
+  supabaseClient: GenericSupabaseClient
+) {
   // First verify the student course belongs to this user's FYP
-  const fypId = await getUserFypId(userId);
+  const fypId = await getUserFypId(userId, supabaseClient);
   
   // Check if the course belongs to the user's FYP
-  const { data: courseToDelete, error: verifyError } = await supabase
+  const { data: courseToDelete, error: verifyError } = await supabaseClient
     .from('student_courses')
     .select('id')
     .eq('id', studentCourseId)
@@ -229,7 +245,7 @@ export async function removeStudentCourse(userId: string, studentCourseId: numbe
   }
   
   // Delete the student course
-  const { error: deleteError } = await supabase
+  const { error: deleteError } = await supabaseClient
     .from('student_courses')
     .delete()
     .eq('id', studentCourseId)

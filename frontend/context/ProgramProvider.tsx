@@ -1,4 +1,6 @@
 
+// frontend/context/ProgramProvider.tsx
+
 "use client";
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { ProgramDict } from "@/types/type-program";
@@ -15,11 +17,6 @@ interface ProgramContextType {
   refreshFromAPI: () => Promise<void>;
 }
 
-const DB_NAME = "programsDB";
-const STORE_NAME = "programs";
-const DB_VERSION = 1;
-const KEY = "programDict";
-
 const ProgramContext = createContext<ProgramContextType | null>(null);
 
 export function ProgramProvider({ children }: { children: React.ReactNode }) {
@@ -27,98 +24,16 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
   const [baseProgDict, setBaseProgDict] = useState<ProgramDict>({});
   const [progDict, setProgDict] = useState<ProgramDict>({});
   const [error, setError] = useState<string | null>(null);
-  const [dbReady, setDbReady] = useState(false);
-  const [db, setDb] = useState<IDBDatabase | null>(null);
+  const { auth } = useAuth();
 
-	const { auth } = useAuth();
-
-  // Initialize IndexedDB
-  useEffect(() => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
-
-    request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME);
-      }
-    };
-
-    request.onsuccess = (event) => {
-      const database = (event.target as IDBOpenDBRequest).result;
-      setDb(database);
-      setDbReady(true);
-    };
-
-    request.onerror = (event) => {
-      console.error("IndexedDB error:", (event.target as IDBOpenDBRequest).error);
-      setError("Failed to initialize database");
-      setDbReady(true); // Still set ready so we can fall back to API
-    };
-
-    return () => {
-      if (db) {
-        db.close();
-      }
-    };
-  }, []);
-
-  // Save to IndexedDB
-  const saveToIndexedDB = useCallback(
-    (data: ProgramDict) => {
-      if (!db) return Promise.reject("Database not initialized");
-
-      return new Promise<void>((resolve, reject) => {
-        const transaction = db.transaction([STORE_NAME], "readwrite");
-        const store = transaction.objectStore(STORE_NAME);
-        
-        // Store data with timestamp
-        const dataWithMeta = {
-          data: data,
-          timestamp: Date.now()
-        };
-        
-        const request = store.put(dataWithMeta, KEY);
-
-        request.onsuccess = () => resolve();
-        request.onerror = () => reject("Error saving to IndexedDB");
-      });
-    },
-    [db]
-  );
-
-  // Get from IndexedDB
-  const getFromIndexedDB = useCallback((): Promise<{ data: ProgramDict, timestamp: number } | null> => {
-    if (!db) return Promise.reject("Database not initialized");
-
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction([STORE_NAME], "readonly");
-      const store = transaction.objectStore(STORE_NAME);
-      const request = store.get(KEY);
-
-      request.onsuccess = () => resolve(request.result || null);
-      request.onerror = () => reject("Error retrieving from IndexedDB");
-    });
-  }, [db]);
-
-  // Fetch data from API and update cache
+  // Fetch data from API
   const fetchFromAPI = useCallback(async (): Promise<ProgramDict> => {
-		const response = await fetch('/api/programs', {
-			credentials: 'include' // Ensures cookies are sent with the request
-		});
+    const response = await fetch('/api/programs', {
+      credentials: 'include' // Ensures cookies are sent with the request
+    });
     if (!response.ok) throw new Error('Failed to fetch programs.');
-    const fetchedData = await response.json();
-    
-    // Store in IndexedDB for future use
-    if (db) {
-      try {
-        await saveToIndexedDB(fetchedData);
-      } catch (err) {
-        console.warn("Failed to save to IndexedDB", err);
-      }
-    }
-    
-    return fetchedData;
-  }, [db, saveToIndexedDB]);
+    return await response.json();
+  }, []);
 
   // Public method to force refresh from API
   const refreshFromAPI = useCallback(async () => {
@@ -137,30 +52,15 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
     }
   }, [fetchFromAPI]);
 
-  // Load programs - either from IndexedDB or API
+  // Load programs from API when component mounts or user logs in
   useEffect(() => {
-		async function loadPrograms() {
-			if (!dbReady || !auth.loggedIn) return;
+    async function loadPrograms() {
+      if (!auth.loggedIn) return;
+      
       setIsLoading(true);
+      setError(null);
       
       try {
-        // Try to get from IndexedDB first
-        if (db) {
-          try {
-            const cachedResult = await getFromIndexedDB();
-            if (cachedResult && cachedResult.data && Object.keys(cachedResult.data).length > 0) {
-              setBaseProgDict(JSON.parse(JSON.stringify(cachedResult.data)));
-              setProgDict(JSON.parse(JSON.stringify(cachedResult.data)));
-              setIsLoading(false);
-              return;
-            }
-          } catch (err) {
-            console.warn("Failed to retrieve from IndexedDB, falling back to API", err);
-            // Continue to API fetch if IndexedDB retrieval fails
-          }
-        }
-
-        // If we get here, either no cached data or IndexedDB failed
         const fetchedData = await fetchFromAPI();
         
         setBaseProgDict(JSON.parse(JSON.stringify(fetchedData)));
@@ -173,18 +73,9 @@ export function ProgramProvider({ children }: { children: React.ReactNode }) {
     }
 
     loadPrograms();
-  }, [dbReady, db, getFromIndexedDB, fetchFromAPI, auth.loggedIn]);
+  }, [auth.loggedIn, fetchFromAPI]);
 
-  // Update IndexedDB when progDict changes
-  useEffect(() => {
-    if (!isLoading && db && Object.keys(progDict).length > 0) {
-      saveToIndexedDB(progDict).catch(err => {
-        console.error("Failed to update IndexedDB with new program data:", err);
-      });
-    }
-  }, [progDict, isLoading, db, saveToIndexedDB]);
-
-  // Deep clone when resetting to base.
+  // Deep clone when resetting to base
   const resetToBase = useCallback(() => {
     setProgDict(JSON.parse(JSON.stringify(baseProgDict)));
   }, [baseProgDict]);

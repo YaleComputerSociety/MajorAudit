@@ -1,8 +1,11 @@
 
+// frontend/app/api/programs/route.ts
+
 import { NextResponse } from 'next/server';
 import { fetchProgramsDirectToFrontend } from './director';
 
-export async function GET() {
+export async function GET() 
+{
   try {
     const transformedPrograms = await fetchProgramsDirectToFrontend();
     

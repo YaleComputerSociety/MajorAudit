@@ -1,7 +1,6 @@
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 
 const protectedRoutes = ["/courses", "/majors"];
 
@@ -20,7 +19,6 @@ export async function middleware(req: NextRequest) {
             return req.cookies.get(name)?.value;
           },
           set: (name, value, options) => {
-            // Convert cookie options to NextResponse compatible options
             res.cookies.set({
               name,
               value,
@@ -39,11 +37,9 @@ export async function middleware(req: NextRequest) {
       }
     );
     
-    // This checks the actual Supabase session status
     const { data: { session } } = await supabase.auth.getSession();
     const isLoggedIn = !!session;
     
-    // Log auth status in development
     if (process.env.NODE_ENV === 'development') {
       console.log(`[Middleware] Path: ${path}, Auth: ${isLoggedIn ? 'Authenticated' : 'Not authenticated'}`);
     }
@@ -64,7 +60,6 @@ export async function middleware(req: NextRequest) {
   } catch (error) {
     console.error('Middleware error:', error);
     
-    // On error, still enforce protected routes but allow other navigation
     if (protectedRoutes.includes(path)) {
       return NextResponse.redirect(new URL("/login", req.nextUrl));
     }
