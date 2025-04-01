@@ -9,8 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^6.5.0",
-    "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.1",
     "axios": "^1.8.4",
@@ -29,7 +27,6 @@
     "@types/react-dom": "^19.0.4",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
-    "prisma": "^6.5.0",
     "typescript": "^5"
   }
 }

@@ -1,5 +1,7 @@
-"use client";
 
+// frontend/app/auth-handler/page.js
+
+"use client";
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
@@ -24,16 +26,11 @@ export default function AuthHandler() {
         }
         
         setStatus('Authenticating...');
-        
-        // Create a client-side Supabase client
         const supabase = createBrowserClient(
           process.env.NEXT_PUBLIC_SUPABASE_URL,
           process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
         );
         
-        // Sign in with the email and password from the URL
-        // This is secure enough for this flow since it's a one-time redirect
-        // and the password is a randomly generated token
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password
@@ -46,7 +43,6 @@ export default function AuthHandler() {
           return;
         }
         
-        // Verify the session was created
         await refreshSession();
         
         setStatus('Authentication successful! Redirecting...');
@@ -62,11 +58,8 @@ export default function AuthHandler() {
   }, []);
   
   return (
-    <div className="flex h-screen w-full items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-xl font-semibold mb-4">{status}</h1>
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-      </div>
+    <div>
+      {status}
     </div>
   );
 }

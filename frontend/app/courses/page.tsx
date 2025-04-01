@@ -16,7 +16,7 @@ import AddButton from "./add/button/AddButton";
 
 function Courses()
 {
-	const { user, refreshUserData } = useUser();
+	const { user } = useUser();
 
 	const [edit, setEdit] = useState(false);
 	void [setEdit];
