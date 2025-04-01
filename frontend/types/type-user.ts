@@ -22,6 +22,7 @@ export interface CourseOffering {
 }
 
 export interface StudentCourse {
+	id: number;
   status: string; 										// "DA" || "MA"
   result: string;											// "A-C" || "CR" || "D/F/W"
   term: string;

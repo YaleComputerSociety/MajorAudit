@@ -3,7 +3,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/database/server';
-import { validateCourseExists, addStudentCourse, getStudentCourses } from './student-courses';
+import { validateCourseExists, addStudentCourse, getStudentCourses, removeStudentCourse } from './student-courses';
 
 export async function GET() 
 {
@@ -32,7 +32,8 @@ export async function GET()
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest) 
+{
   try {
     const supabaseServerClient = await getSupabaseServerClient();
 
@@ -81,6 +82,59 @@ export async function POST(req: NextRequest) {
     console.error('Error adding student course:', error);
     return NextResponse.json(
       { error: 'Failed to add student course' }, 
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const supabaseServerClient = await getSupabaseServerClient();
+    
+    // Authenticate the user
+    const { data: { user: authUser }, error: userError } = await supabaseServerClient.auth.getUser();
+    
+    if (userError || !authUser) {
+      return NextResponse.json(
+        { error: 'Authentication error: ' + (userError?.message || 'User not found') },
+        { status: 401 }
+      );
+    }
+    
+    const userId = authUser.id;
+    
+    // Get the studentCourseId from the URL
+    const url = new URL(req.url);
+    const studentCourseId = url.searchParams.get('id');
+    
+    if (!studentCourseId) {
+      return NextResponse.json(
+        { error: 'Course ID is required' },
+        { status: 400 }
+      );
+    }
+    
+    // Delete the student course
+    await removeStudentCourse(userId, parseInt(studentCourseId));
+    
+    return NextResponse.json({
+      success: true,
+      message: 'Course removed successfully'
+    });
+  } catch (error) {
+    console.error('Error removing student course:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to remove student course';
+    
+    // Handle specific error cases with appropriate status codes
+    if (errorMessage.includes('not found') || errorMessage.includes('permission')) {
+      return NextResponse.json(
+        { error: errorMessage },
+        { status: 404 }
+      );
+    }
+    
+    return NextResponse.json(
+      { error: errorMessage },
       { status: 500 }
     );
   }

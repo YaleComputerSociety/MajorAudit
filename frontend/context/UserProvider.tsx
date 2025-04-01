@@ -27,6 +27,10 @@ interface UserContextType {
     course?: StudentCourse;
     message: string;
   }>;
+	removeCourse: (courseId: number) => Promise<{
+    success: boolean;
+    message: string;
+  }>;
 }
 
 const UserContext = createContext<UserContextType | null>(null);

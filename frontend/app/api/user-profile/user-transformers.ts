@@ -50,6 +50,7 @@ export function transformToStudentCourse(
   courseCodes: Tables<'course_codes'>[]
 ): StudentCourse {
   return {
+		id: studentCourse.id,
     status: studentCourse.status,
     result: studentCourse.result,
     term: studentCourse.term,

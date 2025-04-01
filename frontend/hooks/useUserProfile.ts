@@ -24,6 +24,10 @@ interface UseUserProfileReturn {
     course?: StudentCourse;
     message: string;
   }>;
+	removeCourse: (courseId: number) => Promise<{
+		success: boolean;
+		message: string;
+	}>;
   validateCourse: (code: string, termFrom: string) => Promise<boolean>;
 }
 
@@ -152,6 +156,45 @@ export function useUserProfile(): UseUserProfileReturn {
       setIsLoading(false);
     }
   }, [fetchUserData, error]);
+
+	const removeCourse = useCallback(async (courseId: number) => {
+		// Reset error state and set loading state
+		if (error) setError(null);
+		setIsLoading(true);
+		
+		try {
+			const response = await fetch(`/api/student-courses?id=${courseId}`, {
+				method: 'DELETE',
+			});
+			
+			const data = await response.json();
+			
+			if (!response.ok) {
+				throw new Error(data.error || 'Failed to remove course');
+			}
+			
+			// Wait a brief moment to ensure backend processing is complete
+			await new Promise(resolve => setTimeout(resolve, 100));
+			
+			// Explicitly fetch fresh data after removing a course
+			await fetchUserData();
+			
+			return {
+				success: true,
+				message: data.message || 'Course removed successfully'
+			};
+		} catch (err) {
+			const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+			setError(errorMessage);
+			console.error('Error removing course:', errorMessage);
+			return {
+				success: false,
+				message: errorMessage
+			};
+		} finally {
+			setIsLoading(false);
+		}
+	}, [fetchUserData, error]);
   
   // Course validation
   const validateCourse = useCallback(async (code: string, termFrom: string): Promise<boolean> => {
@@ -201,6 +244,7 @@ export function useUserProfile(): UseUserProfileReturn {
     error,
     refreshUserData,
     addCourse,
+		removeCourse,
     validateCourse
   };
 }

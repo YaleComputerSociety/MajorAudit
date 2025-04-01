@@ -12,9 +12,7 @@ interface AddStudentCourseParams {
   result: string;
 }
 
-/**
- * Validates if a course offering exists for the given code and term
- */
+/* Validates if a course offering exists for the given code and term */
 export async function validateCourseExists(code: string, term: string) {
   
   // First get the course_id from course_codes table
@@ -58,9 +56,7 @@ export async function validateCourseExists(code: string, term: string) {
   return courseOffering;
 }
 
-/**
- * Gets the FYP ID for a user
- */
+/* Gets the FYP ID for a user */
 async function getUserFypId(userId: string) {
   
   const { data: fyp, error } = await supabase
@@ -76,9 +72,7 @@ async function getUserFypId(userId: string) {
   return fyp.id;
 }
 
-/**
- * Adds a new student course
- */
+/* Adds a new student course */
 export async function addStudentCourse(params: AddStudentCourseParams) {
   const { userId, courseOfferingId, term, status, result } = params;
   
@@ -105,40 +99,7 @@ export async function addStudentCourse(params: AddStudentCourseParams) {
   return data;
 }
 
-/**
- * Removes a student course
- */
-// export async function removeStudentCourse(studentCourseId: number, userId: string) {
-  
-//   // First verify this course belongs to the user's FYP for security
-//   const fypId = await getUserFypId(userId);
-  
-//   const { error: verifyError, count } = await supabase
-//     .from('student_courses')
-//     .select('*', { count: 'exact', head: true })
-//     .eq('id', studentCourseId)
-//     .eq('fyp_id', fypId);
-  
-//   if (verifyError || count === 0) {
-//     throw new Error('Unauthorized or course not found');
-//   }
-  
-//   // Now delete the course
-//   const { error } = await supabase
-//     .from('student_courses')
-//     .delete()
-//     .eq('id', studentCourseId);
-  
-//   if (error) {
-//     throw new Error(`Failed to remove student course: ${error.message}`);
-//   }
-  
-//   return true;
-// }
-
-/**
- * Gets all student courses for a user
- */
+/* Gets all student courses for a user */
 export async function getStudentCourses(userId: string) {
   const fypId = await getUserFypId(userId);
   
@@ -244,4 +205,39 @@ export async function getStudentCourses(userId: string) {
   }
   
   return transformedData;
+}
+
+/* Removes a student course by ID */
+export async function removeStudentCourse(userId: string, studentCourseId: number) {
+  // First verify the student course belongs to this user's FYP
+  const fypId = await getUserFypId(userId);
+  
+  // Check if the course belongs to the user's FYP
+  const { data: courseToDelete, error: verifyError } = await supabase
+    .from('student_courses')
+    .select('id')
+    .eq('id', studentCourseId)
+    .eq('fyp_id', fypId)
+    .maybeSingle();
+  
+  if (verifyError) {
+    throw new Error(`Error verifying course ownership: ${verifyError.message}`);
+  }
+  
+  if (!courseToDelete) {
+    throw new Error('Course not found or you do not have permission to delete it');
+  }
+  
+  // Delete the student course
+  const { error: deleteError } = await supabase
+    .from('student_courses')
+    .delete()
+    .eq('id', studentCourseId)
+    .eq('fyp_id', fypId); // Double check again for additional security
+  
+  if (deleteError) {
+    throw new Error(`Failed to delete student course: ${deleteError.message}`);
+  }
+  
+  return { success: true, message: 'Course removed successfully' };
 }
