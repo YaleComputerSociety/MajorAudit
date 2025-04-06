@@ -5,7 +5,10 @@ import { UserProvider } from "@/context/UserProvider";
 import { ProgramProvider } from "../context/ProgramProvider";
 
 export const metadata = {
-  title: "MajorAudit"
+  title: "MajorAudit",
+	icons: {
+    icon: '/favicon.png',
+  },
 }
 
 export default function RootLayout({children}: {children: React.ReactNode})

@@ -30,7 +30,7 @@ function Login()
             </div>
           </div>
         </div>
-        <Image src="/guy.jpg" alt="Landing Page" priority width={450} height={400} style={{ opacity: 0.05 }}/>
+        <Image src="/ma.png" alt="Landing Page" priority width={450} height={400}/>
       </div>
     </div>
   );

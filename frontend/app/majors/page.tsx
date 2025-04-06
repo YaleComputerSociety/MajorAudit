@@ -11,16 +11,11 @@ import Metadata from "./metadata/Metadata";
 import Requirements from "./requirements/Requirements";
 
 function Majors() {
-  const { progDict, isLoading, error, refreshFromAPI } = usePrograms();
+  const { progDict, isLoading, error } = usePrograms();
   const [listView, setListView] = useState<boolean>(false);
   const [index, setIndex] = useState<MajorsIndex | null>(null);
 
-	const handleRefresh = async () => {
-    await refreshFromAPI();
-    // Data is now fresh
-  };
-
-  // Memoize filtered keys to prevent unnecessary recalculations
+	// Memoize filtered keys to prevent unnecessary recalculations
   const filteredProgKeys = useMemo(() => {
     return Object.keys(progDict);
   }, [progDict]);
@@ -76,8 +71,10 @@ function Majors() {
     <div>
       <NavBar utility={<Overhead />}/>
       <div className={Style.MajorsPage}>
-        <div className={Style.ListButton} onClick={() => setListView((prev) => !prev)}/>
-				<div className={Style.ListButton} style={{ marginTop: "40px" }} onClick={handleRefresh}/>
+        <div 
+					className={Style.ListButton} 
+					onClick={() => setListView((prev) => !prev)}
+				/>
         <Metadata 
           listView={listView} 
           index={index} 

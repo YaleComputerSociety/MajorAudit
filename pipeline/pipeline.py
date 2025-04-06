@@ -1,5 +1,6 @@
 """
-Modified pipeline that filters courses with specific subject codes.
+Modified pipeline that filters courses with specific subject codes,
+using robust filtering logic and cross-term consistency checks.
 """
 import requests
 import json
@@ -11,12 +12,6 @@ from supabase import create_client
 SUPABASE_URL = ""
 SUPABASE_KEY = ""
 API_BASE_URL = "https://api.coursetable.com/api/catalog/public"
-
-# Target term
-TARGET_TERM = "202501"
-
-# Filter for specific subject codes
-TARGET_SUBJECTS = ["CPSC", "ECON", "MATH"]
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -44,74 +39,55 @@ def fetch_courses_from_api(term, limit=None):
         logger.error(f"API error for term {term}: {e}")
         return []
 
+def normalize_title(title):
+    """Normalize a course title by removing common variations"""
+    return title.strip().lower()
+
 def filter_course_sections(courses):
     """
-    Filter a list of course objects to:
-    1. Keep only one section per unique course
-    2. Remove any courses marked as CANCELLED
+    Filter a list of course objects to keep ONLY section "1" courses.
+    All other sections are removed regardless of how many sections a course has.
     """
     if not courses:
         return []
     
     # First, filter out cancelled courses
-    non_cancelled_courses = []
-    for course in courses:
-        # Check if the course has been cancelled
-        extra_info = course.get('extra_info', '')
-        if isinstance(extra_info, str) and 'CANCELLED' in extra_info.upper():
-            continue
-        non_cancelled_courses.append(course)
+    active_courses = [course for course in courses if course.get('extra_info') != "CANCELLED"]
+    logger.info(f"Filtered out {len(courses) - len(active_courses)} cancelled courses")
     
-    # Group non-cancelled courses by universal_course_id (mapped from same_course_id in API)
-    courses_by_same_id = defaultdict(list)
-    for course in non_cancelled_courses:
-        # Use same_course_id from API but refer to it as universal_course_id in our code
-        universal_course_id = course.get('same_course_id')
-        courses_by_same_id[universal_course_id].append(course)
+    # Keep only section "1" courses
+    section_1_courses = [course for course in active_courses if course.get('section') == "1"]
     
-    # Define section priority order (for selecting the canonical section)
-    # Numbers first, then letters
-    section_priority = {
-        "1": 1, "2": 2, "3": 3, "4": 4, "5": 5,
-        "0": 10,  # Lower priority for section "0"
-        "A": 100, "B": 101, "C": 102, "D": 103, "E": 104,
-        "F": 105, "G": 106, "H": 107, "I": 108, "J": 109
-    }
+    logger.info(f"Filtered from {len(active_courses)} active courses to {len(section_1_courses)} section '1' courses")
+    logger.info(f"Removed {len(active_courses) - len(section_1_courses)} non-section '1' courses")
     
-    # Set a high default priority for any section not explicitly listed
-    default_priority = 1000
+    return section_1_courses
+
+def filter_by_subjects(courses, subjects):
+    """
+    Filter courses to keep only those with listings containing specified subjects
     
-    # Keep only the canonical section for each course
+    Args:
+        courses (list): List of course objects
+        subjects (list): List of subject codes to filter by
+        
+    Returns:
+        list: Courses that have at least one listing with a target subject
+    """
+    # If no subjects specified, return all courses
+    if not subjects:
+        return courses
+    
     filtered_courses = []
     
-    for same_id, course_list in courses_by_same_id.items():
-        if len(course_list) == 1:
-            # Only one section, keep it
-            filtered_courses.append(course_list[0])
-            continue
+    for course in courses:
+        listings = course.get('listings', [])
         
-        # Multiple sections, select the canonical one
-        # 1. Try to find section "1" first
-        section_1_course = None
-        for course in course_list:
-            if course.get('section') == "1":
-                section_1_course = course
-                break
-        
-        if section_1_course:
-            filtered_courses.append(section_1_course)
-            continue
-            
-        # 2. If no section "1", use our priority order
-        sorted_courses = sorted(
-            course_list,
-            key=lambda c: section_priority.get(c.get('section', ''), default_priority)
-        )
-        
-        # Take the highest priority section
-        chosen_course = sorted_courses[0]
-        filtered_courses.append(chosen_course)
+        # Check if any listing has a subject in our list
+        if any(listing.get('subject', '') in subjects for listing in listings):
+            filtered_courses.append(course)
     
+    logger.info(f"Filtered from {len(courses)} courses to {len(filtered_courses)} courses with subjects {subjects}")
     return filtered_courses
 
 def extract_distributions(course):
@@ -123,35 +99,6 @@ def extract_distributions(course):
 def extract_course_codes(listings):
     """Extract course codes from listings array"""
     return [f"{listing.get('subject')} {listing.get('number')}" for listing in listings if listing.get('subject') and listing.get('number')]
-
-def filter_target_subjects(courses):
-    """
-    Filter courses to keep only those with listings containing target subjects
-    
-    Args:
-        courses (list): List of course objects
-        
-    Returns:
-        list: Courses that have at least one listing with a target subject
-    """
-    filtered_courses = []
-    
-    for course in courses:
-        listings = course.get('listings', [])
-        
-        # Check if any listing has a subject in our target list
-        has_target_subject = False
-        for listing in listings:
-            subject = listing.get('subject', '')
-            if subject in TARGET_SUBJECTS:
-                has_target_subject = True
-                break
-        
-        if has_target_subject:
-            filtered_courses.append(course)
-    
-    logger.info(f"Filtered from {len(courses)} courses to {len(filtered_courses)} courses with target subjects {TARGET_SUBJECTS}")
-    return filtered_courses
 
 def extract_professor_names(professors_data):
     """Extract just the professor names from the complex professor data structure."""
@@ -250,19 +197,15 @@ def transform_courses(courses, term):
         # Extract course codes
         codes = extract_course_codes(course.get('listings', []))
         
-        # Extract professor names from the complex structure
-        raw_professors = course.get('course_professors', [])
-        professor_names = extract_professor_names(raw_professors)
+        # Extract professor names and flag texts
+        professor_names = extract_professor_names(course.get('course_professors', []))
+        flag_texts = extract_flag_text(course.get('course_flags', []))
         
-        # Extract flag text from the complex structure
-        raw_flags = course.get('course_flags', [])
-        flag_texts = extract_flag_text(raw_flags)
-        
-        # Extract offering data with simplified professor names and flags
+        # Extract offering data
         offering_data = {
             'term': term,
-            'professors': professor_names,  # Now just a list of names
-            'flags': flag_texts,            # Now just a list of flag texts
+            'professors': professor_names,
+            'flags': flag_texts,
         }
         
         db_courses.append(course_data)
@@ -394,53 +337,203 @@ def upsert_course_offerings(offerings, course_id_map):
         logger.info(f"Successfully upserted course offerings")
     except Exception as e:
         logger.error(f"Error upserting course offerings: {e}")
-        # Print more details about the error
         logger.error(f"Error details: {str(e)}")
         raise
 
-def process_target_term():
-    """Process the target term with subject filtering"""
-    # Extract
-    raw_courses = fetch_courses_from_api(TARGET_TERM)
-    if not raw_courses:
-        logger.warning(f"No courses found for term {TARGET_TERM}")
-        return
+def compare_across_terms(term_data):
+    """
+    Compare courses across terms to find those with the same title AND same code
+    but different same_course_id values.
     
-    logger.info(f"Retrieved {len(raw_courses)} courses for term {TARGET_TERM}")
+    Args:
+        term_data (dict): Dictionary mapping terms to filtered course lists
+        
+    Returns:
+        tuple: (dict of filtered courses by term, list of inconsistencies found and removed)
+    """
+    # Combine all courses from all terms, grouped by title AND code
+    courses_by_title_and_code = defaultdict(list)
     
-    # Filter for target subjects first
-    subject_filtered_courses = filter_target_subjects(raw_courses)
+    for term, courses in term_data.items():
+        for course in courses:
+            title = normalize_title(course.get('title', ''))
+            if not title:
+                continue
+                
+            # For each course code, create a separate entry
+            listings = course.get('listings', [])
+            for listing in listings:
+                subject = listing.get('subject')
+                number = listing.get('number')
+                if subject and number:
+                    code = f"{subject} {number}"
+                    key = (title, code)  # Tuple of (title, code)
+                    courses_by_title_and_code[key].append({
+                        'term': term,
+                        'course': course
+                    })
     
-    # Filter sections
-    filtered_courses = filter_course_sections(subject_filtered_courses)
+    # Find courses with the same title AND code but different same_course_id across terms
+    cross_term_inconsistencies = []
+    filtered_term_data = {term: [] for term in term_data.keys()}
     
-    # Transform
-    courses, course_codes, offerings = transform_courses(filtered_courses, TARGET_TERM)
+    for (title, code), instances in courses_by_title_and_code.items():
+        # Skip entries that appear in only one term
+        terms = set(instance['term'] for instance in instances)
+        if len(terms) <= 1:
+            # No inconsistency possible with just one term
+            for instance in instances:
+                filtered_term_data[instance['term']].append(instance['course'])
+            continue
+        
+        # Create a set of same_ids for this title and code
+        same_ids = set(instance['course'].get('same_course_id') for instance in instances)
+        
+        # If there's more than one same_id for this title and code
+        if len(same_ids) > 1:
+            # This is an inconsistency - record it and don't include these courses
+            cross_term_inconsistencies.append({
+                'title': title,
+                'code': code,
+                'terms': list(terms),
+                'same_ids': list(same_ids),
+                'courses': [instance['course'] for instance in instances]
+            })
+        else:
+            # Consistent same_course_id across terms - keep these courses
+            for instance in instances:
+                filtered_term_data[instance['term']].append(instance['course'])
     
-    # Log code distribution
-    code_prefixes = {}
-    for code_data in course_codes:
-        code = code_data['code']
-        prefix = code.split()[0]  # Get the subject part
-        code_prefixes[prefix] = code_prefixes.get(prefix, 0) + 1
-    
-    logger.info(f"Code distribution: {code_prefixes}")
-    
-    # Load
-    try:
-        # Insert/update in the correct order to maintain referential integrity
-        course_id_map = upsert_courses(courses)
-        upsert_course_codes(course_codes, course_id_map)
-        upsert_course_offerings(offerings, course_id_map)
-        logger.info(f"Successfully processed {len(filtered_courses)} courses for term {TARGET_TERM}")
-    except Exception as e:
-        logger.error(f"Error processing term {TARGET_TERM}: {e}")
+    return filtered_term_data, cross_term_inconsistencies
 
-def main():
-    """Main function to process course data with filtering"""
-    logger.info(f"Starting processing for term {TARGET_TERM} with subject filters: {TARGET_SUBJECTS}")
-    process_target_term()
+def process_terms(target_terms, target_subjects):
+    """Process all target terms with cross-term consistency checks"""
+    # First, fetch and filter courses for each term
+    term_data = {}
+    total_original = 0
+    total_after_section_filter = 0
+    
+    for term in target_terms:
+        # Extract
+        raw_courses = fetch_courses_from_api(term)
+        if not raw_courses:
+            logger.warning(f"No courses found for term {term}")
+            continue
+        
+        total_original += len(raw_courses)
+        logger.info(f"Retrieved {len(raw_courses)} courses for term {term}")
+        
+        # Apply subject filtering if specified
+        if target_subjects:
+            raw_courses = filter_by_subjects(raw_courses, target_subjects)
+            logger.info(f"After subject filtering: {len(raw_courses)} courses")
+        
+        # Filter out cancelled courses and select canonical sections
+        filtered_courses = filter_course_sections(raw_courses)
+        total_after_section_filter += len(filtered_courses)
+        
+        # Store the filtered courses for this term
+        term_data[term] = filtered_courses
+    
+    # Check for cross-term inconsistencies ONLY if multiple terms
+    cross_term_inconsistencies = []
+    if len(target_terms) > 1:
+        logger.info("Multiple terms detected - performing cross-term consistency check")
+        filtered_term_data, cross_term_inconsistencies = compare_across_terms(term_data)
+        
+        # Log cross-term inconsistency statistics
+        removed_course_count = sum(len(inconsistency['courses']) for inconsistency in cross_term_inconsistencies)
+        logger.info(f"Found {len(cross_term_inconsistencies)} title/code combinations with inconsistent same_course_id across terms")
+        logger.info(f"Removed {removed_course_count} courses due to cross-term inconsistencies")
+    else:
+        logger.info("Single term detected - skipping cross-term consistency check")
+        filtered_term_data = term_data
+    
+    # Process each term's filtered data
+    for term, courses in filtered_term_data.items():
+        # Transform
+        db_courses, db_course_codes, db_offerings = transform_courses(courses, term)
+        
+        # Log code distribution
+        code_prefixes = {}
+        for code_data in db_course_codes:
+            code = code_data['code']
+            prefix = code.split()[0]  # Get the subject part
+            code_prefixes[prefix] = code_prefixes.get(prefix, 0) + 1
+        
+        logger.info(f"Term {term} - Code distribution: {code_prefixes}")
+        
+        # Load
+        try:
+            # Insert/update in the correct order to maintain referential integrity
+            course_id_map = upsert_courses(db_courses)
+            upsert_course_codes(db_course_codes, course_id_map)
+            upsert_course_offerings(db_offerings, course_id_map)
+            logger.info(f"Successfully processed {len(courses)} courses for term {term}")
+        except Exception as e:
+            logger.error(f"Error processing term {term}: {e}")
+    
+    # Print overall summary
+    logger.info(f"=== OVERALL SUMMARY ===")
+    logger.info(f"Total original courses: {total_original}")
+    if target_subjects:
+        logger.info(f"Subject filter applied: {target_subjects}")
+    logger.info(f"Total courses after section filtering: {total_after_section_filter}")
+    
+    total_after_consistency = sum(len(courses) for courses in filtered_term_data.values())
+    logger.info(f"Total courses after cross-term consistency checks: {total_after_consistency}")
+    
+    if len(target_terms) > 1:
+        removed_course_count = sum(len(inconsistency['courses']) for inconsistency in cross_term_inconsistencies)
+        logger.info(f"Courses removed by cross-term checks: {removed_course_count}")
+    
+    return filtered_term_data, cross_term_inconsistencies
+
+def main(target_terms=None, target_subjects=None):
+    """
+    Main function to process course data with filtering
+    
+    Args:
+        target_terms (list): List of terms to process (e.g. ["202403", "202501"])
+        target_subjects (list): List of subjects to include (e.g. ["CPSC", "ECON", "MATH"])
+    """
+    # Validate inputs and set defaults if needed
+    if not target_terms:
+        target_terms = ["202501"]
+    
+    if target_subjects is None:
+        target_subjects = []
+    
+    logger.info(f"Starting processing for terms {target_terms}")
+    if target_subjects:
+        logger.info(f"Subject filters: {target_subjects}")
+    
+    filtered_term_data, cross_term_inconsistencies = process_terms(
+        target_terms, target_subjects
+    )
+    
+    # Save inconsistencies to file for analysis if needed
+    if cross_term_inconsistencies:
+        output_filename = "cross_term_inconsistencies.json"
+        with open(output_filename, 'w') as f:
+            json.dump({
+                'inconsistencies': cross_term_inconsistencies,
+                'count': len(cross_term_inconsistencies)
+            }, f, indent=2)
+        logger.info(f"Cross-term inconsistencies written to {output_filename}")
+    
     logger.info(f"Completed processing")
-
+    
 if __name__ == "__main__":
-    main()
+    # Example usage:
+    # To process all courses from all subjects:
+    # main(target_terms=["202501"])
+    
+    # To process only CPSC courses:
+    # main(target_terms=["202501"], target_subjects=["CPSC"])
+    
+    # To process only ECON and MATH courses:
+    # main(target_terms=["202403", "202501"], target_subjects=["ECON", "MATH"])
+    
+    # Current execution:
+    main(target_terms=["202403", "202501"], target_subjects=["CPSC"])
