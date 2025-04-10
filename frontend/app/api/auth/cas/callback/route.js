@@ -1,11 +1,12 @@
 
-// callback/route.js
+// frontend/app/api/auth/cas/callback/route.js
 
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { XMLParser } from 'fast-xml-parser';
 import crypto from 'crypto';
 import { getSupabaseAdminServerClient } from '@/database/server';
+import { fetchYaliesInfoByNetId } from './yalies';
 
 export const dynamic = 'force-dynamic'; // Ensure the route is always dynamic
 
@@ -105,13 +106,25 @@ export async function GET(request)
         }
         
         userId = newAuthUser.user.id;
+        const yaliesInfo = await fetchYaliesInfoByNetId(netID);
+        
+        let name = '';
+        if (yaliesInfo){
+          name = yaliesInfo.first_name;
+          
+          // Add major if available
+          if (yaliesInfo.major) {
+            name += ` - ${yaliesInfo.major}`;
+          }
+        }
         
         // Create user record
         const { error: insertError } = await adminClient
           .from('users')
           .insert({
             id: userId,
-            net_id: netID
+            net_id: netID,
+            name: name || null
           });
         
         if (insertError) {
