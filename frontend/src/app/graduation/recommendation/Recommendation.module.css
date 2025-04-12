@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+.RecommendationContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+  }
+
+ .RecommendationList {
+    padding-top: 20px;
+ }
+
+ .title_text {
+   font-family: 'Open Sans';
+   font-weight: 550;
+ }
+
+ .text {
+   font-family: 'Open Sans';
+   font-weight: 650;
+   color: #727272;
+ }

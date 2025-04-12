@@ -1,0 +1,20 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+.containerDistributions {
+  /*background-color: #f8f9fa;*/
+  padding-top: 20px;
+  /*border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);*/
+}
+
+.title_text {
+  font-family: 'Open Sans';
+  font-weight: 550;
+}
+
+.text {
+  font-family: 'Open Sans';
+  font-weight: 650;
+  color: #727272;
+}

@@ -4,7 +4,7 @@ import styles from "./CourseIcon.module.css";
 import "react-tooltip/dist/react-tooltip.css";
 import { StudentCourse } from "@/types/type-user";
 
-import fall from "./fall.svg";
+import fall from "../../../public/fall.svg";
 import DistributionCircle from "../distribution-circle/DistributionsCircle";
 
 // import { useModal } from "../../../hooks/modalContext";
