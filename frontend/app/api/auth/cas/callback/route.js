@@ -173,7 +173,6 @@ export async function GET(request)
     // Generate a secure random password
     const password = crypto.randomBytes(16).toString('hex');
     
-    let userId;
     let error;
     
     if (existingUser) {
