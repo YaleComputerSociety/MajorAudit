@@ -1,11 +1,9 @@
-
-// components/fypSelector/FYPSelector.tsx
+// overhead/fypSelector/FYPSelector.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import Style from './FYPSelector.module.css';
 import { useUser } from '@/context/UserProvider';
+import styles from './FYPSelector.module.css';
 
-function FYPSelector() 
-{
+function FYPSelector() {
   const { user, selectFYP } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -43,36 +41,30 @@ function FYPSelector()
       return "Select an FYP";
     }
     
-    // You might need to adjust this depending on how you want to display the FYP
-    // For example, if you have a name property, you could use that instead
     return `FYP ${user.FYPindex + 1}`;
   };
 
   return (
-    <div className={Style.fypSelectorContainer} ref={dropdownRef}>
-      <div 
-        className={Style.fypSelector} 
+    <div className={styles.container} ref={dropdownRef}>
+      <button 
+        className={styles.box}
         onClick={toggleDropdown}
       >
-        <span>{getCurrentFYPName()}</span>
-        <span className={Style.arrow}>▼</span>
-      </div>
-      
+        {getCurrentFYPName()} ▼
+      </button>
+
       {isOpen && (
-        <div className={Style.dropdown}>
+        <div className={styles.dropdown}>
           {!user.FYPs || user.FYPs.length === 0 ? (
-            <div className={Style.dropdownItem}>
-              <span className={Style.noFyp}>What??? No FYPs found</span>
-            </div>
+            <div className={styles.option}>No FYPs available</div>
           ) : (
             user.FYPs.map((fyp, index) => (
-              <div 
-                key={fyp.id} 
-                className={`${Style.dropdownItem} ${index === user.FYPindex ? Style.active : ''}`}
+              <div
+                key={fyp.id}
+                className={`${styles.option} ${user.FYPindex === index ? styles.selected : ""}`}
                 onClick={() => handleFYPSelect(index)}
               >
-                {/* Display FYP name or identifier */}
-                <span>FYP {index + 1}</span>
+                FYP {index + 1}
               </div>
             ))
           )}
@@ -80,6 +72,6 @@ function FYPSelector()
       )}
     </div>
   );
-};
+}
 
 export default FYPSelector;

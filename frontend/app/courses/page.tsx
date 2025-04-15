@@ -14,7 +14,7 @@ import NavBar from "../../components/navbar/NavBar";
 import YearBox from "./years/YearBox";
 import AddButton from "./add/button/AddButton";
 
-import FYPSelector from "./overhead/FYPselector";
+import Overhead from "./overhead/Overhead";
 
 function Courses()
 {
@@ -60,7 +60,7 @@ function Courses()
 
   return(
     <div>
-      <NavBar utility={<FYPSelector/>}/>
+      <NavBar utility={<Overhead/>}/>
       <div className={Style.CoursesPage}>
 				<ModalProvider>
         	<AddButton/>
