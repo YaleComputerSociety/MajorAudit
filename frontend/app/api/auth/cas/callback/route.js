@@ -81,8 +81,9 @@ async function handleExistingUser(adminClient, existingUser, netID, password, em
   }
 }
 
-/**
+/*
  * Creates a new user in the authentication system and database
+ * and creates three default FYP records for them
  */
 async function createNewUser(adminClient, netID, password, yaliesInfo) 
 {
@@ -119,8 +120,54 @@ async function createNewUser(adminClient, netID, password, yaliesInfo)
       net_id: netID,
       name: name || null
     });
+
+  if (insertError) {
+    return { userId, error: insertError };
+  }
+
+	// Generate term_arrangement based on graduation year
+  let termArrangement = null;
   
-  return { userId, error: insertError };
+  if (yaliesInfo && yaliesInfo.year) {
+    const gradYear = parseInt(yaliesInfo.year);
+    
+    // Calculate academic terms for each year (fall and spring)
+    // Format: YYYYMM where MM is 01 for spring, 03 for fall
+    const seniorFall = `${gradYear - 1}03`;
+    const seniorSpring = `${gradYear}01`;
+    const juniorFall = `${gradYear - 2}03`;
+    const juniorSpring = `${gradYear - 1}01`;
+    const sophomoreFall = `${gradYear - 3}03`;
+    const sophomoreSpring = `${gradYear - 2}01`;
+    const firstYearFall = `${gradYear - 4}03`;
+    const firstYearSpring = `${gradYear - 3}01`;
+    
+    // Create term arrangement object
+    const arrangement = {
+      first_year: ["0", firstYearFall, firstYearSpring],
+      sophomore: ["0", sophomoreFall, sophomoreSpring],
+      junior: ["0", juniorFall, juniorSpring],
+      senior: ["0", seniorFall, seniorSpring]
+    };
+    
+    // Convert to JSON string
+    termArrangement = JSON.stringify(arrangement);
+  }
+  
+  // Create three default FYPs for the user
+  const fypNames = ["#1", "#2", "#3"];
+  const fypInserts = fypNames.map(name => ({
+    user_id: userId,
+    name,
+    language_placement: null,
+    term_arrangement: termArrangement
+  }));
+  
+  const { error: fypError } = await adminClient
+    .from('fyp')
+    .insert(fypInserts);
+  
+  return { userId, error: fypError };
 }
 
 /**
@@ -173,6 +220,8 @@ export async function GET(request)
     // Generate a secure random password
     const password = crypto.randomBytes(16).toString('hex');
     
+    // Declare userId variable before using it
+    let userId;
     let error;
     
     if (existingUser) {
