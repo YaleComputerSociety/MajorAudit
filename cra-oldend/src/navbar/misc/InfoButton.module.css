@@ -1,9 +1,0 @@
-.infoButton {
-    display: flex; 
-    margin-left: 3px;
-    margin-top: 0px;
-}
-
-.infoButton:hover {
-    cursor: pointer;
-}
