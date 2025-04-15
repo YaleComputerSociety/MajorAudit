@@ -81,6 +81,7 @@ export function transformToFYP(
   studentCourses: StudentCourse[]
 ): FYP {
   return {
+    id: fyp.id,
     studentCourses,
     languagePlacement: fyp.language_placement || '',
     studentTermArrangement: fyp.term_arrangement || '',
@@ -89,15 +90,12 @@ export function transformToFYP(
 
 export function transformToUser(
   user: Tables<'users'>,
-  fyp: FYP | null
+  fyps: FYP[]
 ): User {
   return {
     name: user.name || '',
     netID: user.net_id,
-    FYP: fyp || {
-      studentCourses: [],
-      languagePlacement: '',
-      studentTermArrangement: '',
-    }
+    FYPindex: fyps.length > 0 ? 0 : -1, 
+    FYPs: fyps 
   }
 }

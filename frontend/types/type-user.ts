@@ -30,6 +30,7 @@ export interface StudentCourse {
 }
 
 export interface FYP {
+	id: number;
 	studentCourses: StudentCourse[];
 	languagePlacement: string;
 	studentTermArrangement: string;
@@ -38,7 +39,8 @@ export interface FYP {
 export interface User {
 	name: string;
 	netID: string;
-	FYP: FYP;
+	FYPindex: number;
+	FYPs: FYP[];
 }
 
 export interface MajorsIndex {

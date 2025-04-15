@@ -1,17 +1,15 @@
 // frontend/hooks/useUserProfile.ts
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { User, StudentCourse } from '@/types/type-user';
+import { User, StudentCourse, FYP } from '@/types/type-user';
 import { useAuth } from '@/context/AuthProvider';
 
+// Updated empty user to match new interface
 const emptyUser: User = {
   name: '',
   netID: '',
-  FYP: {
-    studentCourses: [],
-    languagePlacement: '',
-    studentTermArrangement: ''
-  }
+  FYPindex: -1,
+  FYPs: []
 };
 
 interface UseUserProfileReturn {
@@ -19,15 +17,19 @@ interface UseUserProfileReturn {
   isLoading: boolean;
   error: string | null;
   refreshUserData: () => Promise<User | null>;
+  // New function to select a specific FYP
+  selectFYP: (index: number) => void;
+  // Convenience getter for the current FYP
+  currentFYP: FYP | null;
   addCourse: (termFrom: string, code: string, result: string, termTo: string) => Promise<{
     success: boolean;
     course?: StudentCourse;
     message: string;
   }>;
-	removeCourse: (courseId: number) => Promise<{
-		success: boolean;
-		message: string;
-	}>;
+  removeCourse: (courseId: number) => Promise<{
+    success: boolean;
+    message: string;
+  }>;
   validateCourse: (code: string, termFrom: string) => Promise<boolean>;
 }
 
@@ -102,6 +104,30 @@ export function useUserProfile(): UseUserProfileReturn {
     return null;
   }, [fetchUserData, loggedIn]);
   
+  // Helper function to get current FYP based on FYPindex
+  const getCurrentFYP = useCallback((): FYP | null => {
+    if (user.FYPs.length === 0 || user.FYPindex < 0 || user.FYPindex >= user.FYPs.length) {
+      return null;
+    }
+    return user.FYPs[user.FYPindex];
+  }, [user]);
+  
+  // New function to select a specific FYP by index
+  const selectFYP = useCallback((index: number) => {
+    if (index >= 0 && index < user.FYPs.length && index !== user.FYPindex) {
+      setUser(prevUser => ({
+        ...prevUser,
+        FYPindex: index
+      }));
+      
+      // Also update the ref
+      userDataRef.current = {
+        ...userDataRef.current,
+        FYPindex: index
+      };
+    }
+  }, [user]);
+  
   // Add course with improved refresh handling
   const addCourse = useCallback(async (
     termFrom: string,
@@ -113,6 +139,15 @@ export function useUserProfile(): UseUserProfileReturn {
     if (error) setError(null);
     setIsLoading(true);
     
+    // Get the current FYP ID
+    const currentFYP = getCurrentFYP();
+    if (!currentFYP) {
+      return {
+        success: false,
+        message: 'No active FYP found'
+      };
+    }
+    
     try {
       const response = await fetch('/api/student-courses', {
         method: 'POST',
@@ -123,7 +158,8 @@ export function useUserProfile(): UseUserProfileReturn {
           term_from: termFrom,
           code,
           result,
-          term_to: termTo
+          term_to: termTo,
+          fyp_id: currentFYP.id // Include the FYP ID in the request
         }),
       });
       
@@ -155,51 +191,68 @@ export function useUserProfile(): UseUserProfileReturn {
     } finally {
       setIsLoading(false);
     }
-  }, [fetchUserData, error]);
+  }, [fetchUserData, error, getCurrentFYP]);
 
-	const removeCourse = useCallback(async (courseId: number) => {
-		// Reset error state and set loading state
-		if (error) setError(null);
-		setIsLoading(true);
-		
-		try {
-			const response = await fetch(`/api/student-courses?id=${courseId}`, {
-				method: 'DELETE',
-			});
-			
-			const data = await response.json();
-			
-			if (!response.ok) {
-				throw new Error(data.error || 'Failed to remove course');
-			}
-			
-			// Wait a brief moment to ensure backend processing is complete
-			await new Promise(resolve => setTimeout(resolve, 100));
-			
-			// Explicitly fetch fresh data after removing a course
-			await fetchUserData();
-			
-			return {
-				success: true,
-				message: data.message || 'Course removed successfully'
-			};
-		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-			setError(errorMessage);
-			console.error('Error removing course:', errorMessage);
-			return {
-				success: false,
-				message: errorMessage
-			};
-		} finally {
-			setIsLoading(false);
-		}
-	}, [fetchUserData, error]);
+  const removeCourse = useCallback(async (courseId: number) => {
+    // Reset error state and set loading state
+    if (error) setError(null);
+    setIsLoading(true);
+    
+    // Get the current FYP ID
+    const currentFYP = getCurrentFYP();
+    if (!currentFYP) {
+      return {
+        success: false,
+        message: 'No active FYP found'
+      };
+    }
+    
+    try {
+      const response = await fetch(`/api/student-courses?id=${courseId}&fyp_id=${currentFYP.id}`, {
+        method: 'DELETE',
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to remove course');
+      }
+      
+      // Wait a brief moment to ensure backend processing is complete
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Explicitly fetch fresh data after removing a course
+      await fetchUserData();
+      
+      return {
+        success: true,
+        message: data.message || 'Course removed successfully'
+      };
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
+      console.error('Error removing course:', errorMessage);
+      return {
+        success: false,
+        message: errorMessage
+      };
+    } finally {
+      setIsLoading(false);
+    }
+  }, [fetchUserData, error, getCurrentFYP]);
   
   // Course validation
   const validateCourse = useCallback(async (code: string, termFrom: string): Promise<boolean> => {
     try {
-      const response = await fetch(`/api/student-courses/validate?code=${encodeURIComponent(code)}&term=${encodeURIComponent(termFrom)}`);
+      // Get the current FYP ID
+      const currentFYP = getCurrentFYP();
+      if (!currentFYP) {
+        return false;
+      }
+      
+      const response = await fetch(
+        `/api/student-courses/validate?code=${encodeURIComponent(code)}&term=${encodeURIComponent(termFrom)}&fyp_id=${currentFYP.id}`
+      );
       
       if (!response.ok) {
         const errorData = await response.json();
@@ -215,7 +268,7 @@ export function useUserProfile(): UseUserProfileReturn {
       setError(errorMessage);
       return false;
     }
-  }, [error]);
+  }, [error, getCurrentFYP]);
   
   // Initial data fetch on mount or auth change
   useEffect(() => {
@@ -238,13 +291,18 @@ export function useUserProfile(): UseUserProfileReturn {
     };
   }, [loggedIn, fetchUserData]);
   
+  // Compute the current FYP for convenience
+  const currentFYP = getCurrentFYP();
+  
   return {
     user,
     isLoading,
     error,
     refreshUserData,
+    selectFYP,
+    currentFYP,
     addCourse,
-		removeCourse,
+    removeCourse,
     validateCourse
   };
 }
