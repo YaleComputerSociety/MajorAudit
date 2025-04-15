@@ -9,6 +9,7 @@ import { StudentSemester } from "@/types/type-user";
 import NavBar from "@/components/navbar/NavBar";
 import GraduationDistribution from "./graduation-distribution/GraduationDistribution";
 import Recommendation from "./recommendation/Recommendation";
+import DegreeOverview from "./graduation-distribution/DegreeOverview";
 
 function Graduation()
 {
@@ -26,11 +27,12 @@ return (
   <div>
     <NavBar/>
     <div className={Style.GraduationPage}>
-      <div className={Style.row}>
         <div className={Style.column} style={{ marginRight: "60px" }}>
           {/* <Recommendations/> */}
           <Recommendation user={user} currYear={currYear}/>
+          <div className={Style.row}>
           <GraduationDistribution currYear={currYear} alterCurrYear={alterCurrYear}/>
+          <DegreeOverview/>
         </div>
       </div>
     </div>

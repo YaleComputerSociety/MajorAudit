@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+.reqsContainer {
+    width: 300px;
+    aspect-ratio: 6 / 6.5; /* width : height = 300 : 350 */
+    border-radius: 12px; /* smooth corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); /* soft shadow */
+    background-color: white; /* optional, but helps shadow stand out */
+    padding: 1rem; /* optional, adds space inside the container */
+    padding-left: 20px;
+}
+
+.column
+{
+    display:flex;
+    flex-direction: column;
+}
+
+.row
+{
+    display:flex;
+    flex-direction: row;
+}
+
+.title_text {
+    font-family: 'Open Sans';
+    font-weight: 550;
+  }
+ 
+  .text {
+    font-family: 'Open Sans';
+    font-weight:600;
+    color: #727272;
+  }
+
+/* major, distributions, total */
+  .header {
+    display: flex;
+    flex-direction: row;
+    gap: 66%;
+  }
