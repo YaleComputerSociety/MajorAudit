@@ -1,38 +1,14 @@
-
 // login/page.tsx
 
 "use client";
-import { useState, useEffect } from "react";
 import Style from "./Login.module.css";
 import NavBar from "../../components/navbar/NavBar";
 import Image from "next/image";
 
 function Login() 
 {
-	const [releaseDate, setReleaseDate] = useState("");
-  
-  useEffect(() => {
-    const getFutureDate = () => {
-      const today = new Date();
-      const futureDate = new Date(today);
-      futureDate.setDate(today.getDate() + 2);
-      
-      const month = futureDate.getMonth() + 1; 
-      const day = futureDate.getDate();
-      return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
-    };
-    
-    setReleaseDate(getFutureDate());
-    
-    const interval = setInterval(() => {
-      setReleaseDate(getFutureDate());
-    }, 86400000); 
-    
-    return () => clearInterval(interval);
-  }, []);
-
   const handleLogin = () => {
-    // window.location.href = "/api/auth/cas/login";
+    window.location.href = "/api/auth/cas/login";
   };
 	
   return (
@@ -49,7 +25,7 @@ function Login()
           </ul>
           <div className={Style.loginButtons}>
             <div onClick={handleLogin} className={Style.btn}>
-							Beta Release {releaseDate}
+							Beta Coming Soon
             </div>
           </div>
         </div>

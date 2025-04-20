@@ -14,12 +14,14 @@ import NavBar from "../../components/navbar/NavBar";
 import YearBox from "./years/YearBox";
 import AddButton from "./add/button/AddButton";
 
+import Overhead from "./overhead/Overhead";
+
 function Courses()
 {
 	const { user } = useUser();
 
 	const [edit, setEdit] = useState(false);
-  const toggleEdit = () => { setEdit(!edit); };
+  // const toggleEdit = () => { setEdit(!edit); };
 
 	const [columns, setColumns] = useState(false); 
 	void [setColumns];
@@ -45,15 +47,26 @@ function Courses()
 		setRenderedYears(newRenderedYears);
   }, [edit, columns, studentYears, user]);
 
+	if(user.FYPindex == -1){
+		return(
+			<div>
+				<NavBar/>
+				<div className={Style.CoursesPage}>
+					"Bro, how do you not have an FYP?"
+				</div>
+			</div>
+		)
+	}
+
   return(
     <div>
-      <NavBar/>
+      <NavBar utility={<Overhead/>}/>
       <div className={Style.CoursesPage}>
 				<ModalProvider>
         	<AddButton/>
 					<ModalManager/>
 				</ModalProvider>
-				<button className={Style.ListButton} style={{ marginTop: "50px" }} onClick={toggleEdit} />
+				{/* <button className={Style.ListButton} style={{ marginTop: "50px" }} onClick={toggleEdit} /> */}
         <div className={Style.Column}>
           {renderedYears}
         </div>

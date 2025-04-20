@@ -4,14 +4,29 @@ import { StudentYear, StudentSemester } from "./CoursesTyping";
 
 export function BuildStudentYears(user: User): StudentYear[] 
 {
-  const { studentCourses } = user.FYP;
+	if (user.FYPindex === -1 || !user.FYPs || user.FYPs.length === 0) {
+    return [];
+  }
+  
+  const currentFYP = user.FYPs[user.FYPindex];
+  const { studentCourses } = currentFYP;
+  
+  // Parse the studentTermArrangement from the FYP
+  let studentTermArrangement;
+  
+  try {
+    // If it's already an object, use it directly
+    if (typeof currentFYP.studentTermArrangement === 'object') {
+      studentTermArrangement = currentFYP.studentTermArrangement;
+    } 
+    // If it's a JSON string, parse it
+    else if (typeof currentFYP.studentTermArrangement === 'string') {
+      studentTermArrangement = JSON.parse(currentFYP.studentTermArrangement);
+    } 
+  } catch (error) {
+    console.error("Error parsing studentTermArrangement:", error);
+  }
 
-	const studentTermArrangement = {
-		first_year: ["0", "202403", "202501"],
-		sophomore: ["0", "202503", "202601"],
-		junior: ["0", "202603", "202701"],
-		senior: ["0", "202703", "202801"]
-	}
 
   const firstYearTerms = studentTermArrangement.first_year;
   const sophomoreTerms = studentTermArrangement.sophomore;

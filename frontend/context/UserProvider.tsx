@@ -2,18 +2,20 @@
 
 "use client";
 import { createContext, useContext } from "react";
-import { User, StudentCourse } from "@/types/type-user";
+import { User, StudentCourse, FYP } from "@/types/type-user";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
-// Clean, focused context type definition
 interface UserContextType {
-  // Core user data
   user: User;
   isLoading: boolean;
   error: string | null;
   
   // Core operations
-  refreshUserData: (includeCourses?: boolean) => Promise<User | null>;
+  refreshUserData: () => Promise<User | null>;
+  
+  // FYP-specific operations
+  selectFYP: (index: number) => void;
+  currentFYP: FYP | null;
   
   // Course-specific operations
   validateCourse: (code: string, termFrom: string) => Promise<boolean>;
@@ -27,7 +29,7 @@ interface UserContextType {
     course?: StudentCourse;
     message: string;
   }>;
-	removeCourse: (courseId: number) => Promise<{
+  removeCourse: (courseId: number) => Promise<{
     success: boolean;
     message: string;
   }>;
@@ -35,8 +37,8 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | null>(null);
 
-export function UserProvider({ children }: { children: React.ReactNode }) {
-  // Use our optimized hook that handles all user data management
+export function UserProvider({ children }: { children: React.ReactNode }) 
+{
   const userProfile = useUserProfile();
   
   return (

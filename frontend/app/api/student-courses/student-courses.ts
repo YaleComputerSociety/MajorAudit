@@ -1,4 +1,3 @@
-
 // frontend/app/api/student-courses/student-courses.ts
 
 import { SupabaseClient } from '@supabase/supabase-js';
@@ -9,7 +8,7 @@ type GenericSupabaseClient = SupabaseClient<Database>;
 
 // Interface for student course addition parameters
 interface AddStudentCourseParams {
-  userId: string;
+  fypId: number;  // Changed from userId to directly use fypId
   courseOfferingId: number;
   term: string;
   status: string;
@@ -62,31 +61,33 @@ export async function validateCourseExists(
   return courseOffering;
 }
 
-/* Gets the FYP ID for a user */
-async function getUserFypId(
-  userId: string, 
+/* Verify FYP belongs to user */
+export async function verifyFypBelongsToUser(
+  userId: string,
+  fypId: number,
   supabaseClient: GenericSupabaseClient
 ) {
-  
-  const { data: fyp, error } = await supabaseClient
+  const { data, error } = await supabaseClient
     .from('fyp')
     .select('id')
+    .eq('id', fypId)
     .eq('user_id', userId)
-    .single();
-  
-  if (error || !fyp) {
-    throw new Error(`Failed to get FYP for user: ${error?.message || 'FYP not found'}`);
+    .maybeSingle();
+    
+  if (error) {
+    throw new Error(`Error verifying FYP ownership: ${error.message}`);
   }
   
-  return fyp.id;
+  if (!data) {
+    throw new Error('FYP not found or you do not have permission to access it');
+  }
+  
+  return true;
 }
 
 /* Adds a new student course */
 export async function addStudentCourse(params: AddStudentCourseParams) {
-  const { userId, courseOfferingId, term, status, result, supabaseClient } = params;
-  
-  // Get the user's FYP ID
-  const fypId = await getUserFypId(userId, supabaseClient);
+  const { fypId, courseOfferingId, term, status, result, supabaseClient } = params;
   
   // Create the student course record
   const { data, error } = await supabaseClient
@@ -108,13 +109,11 @@ export async function addStudentCourse(params: AddStudentCourseParams) {
   return data;
 }
 
-/* Gets all student courses for a user */
+/* Gets all student courses for a specific FYP */
 export async function getStudentCourses(
-  userId: string, 
+  fypId: number, 
   supabaseClient: GenericSupabaseClient
 ) {
-  const fypId = await getUserFypId(userId, supabaseClient);
-  
   // Get all student courses with related course offering data
   const { data, error } = await supabaseClient
     .from('student_courses')
@@ -221,14 +220,11 @@ export async function getStudentCourses(
 
 /* Removes a student course by ID */
 export async function removeStudentCourse(
-  userId: string, 
+  fypId: number,
   studentCourseId: number,
   supabaseClient: GenericSupabaseClient
 ) {
-  // First verify the student course belongs to this user's FYP
-  const fypId = await getUserFypId(userId, supabaseClient);
-  
-  // Check if the course belongs to the user's FYP
+  // Check if the course belongs to the specified FYP
   const { data: courseToDelete, error: verifyError } = await supabaseClient
     .from('student_courses')
     .select('id')

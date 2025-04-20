@@ -1,3 +1,5 @@
+// frontend/app/api.user-profile/route.ts
+
 import { NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/database/server';
 import { 
@@ -21,22 +23,7 @@ export async function GET()
       );
     }
     
-    if (!authUser) {
-      // Mock user for development if needed
-      if (process.env.NODE_ENV === 'development' && process.env.MOCK_USER_DATA === 'true') {
-        return NextResponse.json({
-          user: {
-            name: 'Test User',
-            netID: 'test123',
-            FYP: {
-              languagePlacement: 'English',
-              studentTermArrangement: 'Fall-Spring',
-              studentCourses: []
-            }
-          }
-        });
-      }
-      
+    if (!authUser) {      
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
@@ -45,8 +32,8 @@ export async function GET()
     
     const userId = authUser.id;
     
-    // Fetch user and FYP data in parallel
-    const [userResponse, fypResponse] = await Promise.all([
+    // Fetch user and all FYPs in parallel
+    const [userResponse, fypsResponse] = await Promise.all([
       supabase.from('users').select('*').eq('id', userId).single(),
       supabase.from('fyp').select('*').eq('user_id', userId)
     ]);
@@ -67,12 +54,11 @@ export async function GET()
     }
     
     const userData = userResponse.data;
-    const fypData = fypResponse.error ? null : fypResponse.data?.[0];
+    const fypsData = fypsResponse.error ? [] : fypsResponse.data || [];
     
-    // Early return if no FYP
-    if (!fypData) {
-      const fyp = fypData ? transformToFYP(fypData, []) : null;
-      const user = transformToUser(userData, fyp);
+    // Early return if no FYPs
+    if (fypsData.length === 0) {
+      const user = transformToUser(userData, []);
       
       return NextResponse.json({ 
         user 
@@ -83,11 +69,11 @@ export async function GET()
       });
     }
     
-    // Always fetch student courses with relations
-    const fypId = fypData.id;
+    // Get all FYP IDs to fetch related courses
+    const fypIds = fypsData.map(fyp => fyp.id);
     
-    // Fetch all student courses with relations in a single query
-    const { data: studentCoursesWithRelations, error: relationsError } = await supabase
+    // Fetch all student courses for all FYPs in a single query
+    const { data: allStudentCoursesWithRelations, error: relationsError } = await supabase
       .from('student_courses')
       .select(`
         *,
@@ -96,12 +82,12 @@ export async function GET()
           course:courses(*)
         )
       `)
-      .eq('fyp_id', fypId);
+      .in('fyp_id', fypIds);
     
     if (relationsError) {
       // Return user with empty courses on error
-      const fyp = transformToFYP(fypData, []);
-      const user = transformToUser(userData, fyp);
+      const transformedFyps = fypsData.map(fypData => transformToFYP(fypData, []));
+      const user = transformToUser(userData, transformedFyps);
       
       return NextResponse.json({ 
         user,
@@ -114,9 +100,9 @@ export async function GET()
     }
     
     // If no student courses found
-    if (!studentCoursesWithRelations || studentCoursesWithRelations.length === 0) {
-      const fyp = transformToFYP(fypData, []);
-      const user = transformToUser(userData, fyp);
+    if (!allStudentCoursesWithRelations || allStudentCoursesWithRelations.length === 0) {
+      const transformedFyps = fypsData.map(fypData => transformToFYP(fypData, []));
+      const user = transformToUser(userData, transformedFyps);
       
       return NextResponse.json({ 
         user 
@@ -128,7 +114,7 @@ export async function GET()
     }
     
     // Extract course IDs for fetching codes
-    const courseIds = studentCoursesWithRelations
+    const courseIds = allStudentCoursesWithRelations
       .filter(sc => sc.course_offering?.course?.id)
       .map(sc => sc.course_offering!.course!.id);
     
@@ -154,27 +140,42 @@ export async function GET()
       codesByCourseId[code.course_id].push(code);
     });
     
-    // Transform the courses data
+    // Group student courses by FYP ID
+    const studentCoursesByFypId: Record<number, any[]> = {};
+    allStudentCoursesWithRelations.forEach(sc => {
+      if (!studentCoursesByFypId[sc.fyp_id]) {
+        studentCoursesByFypId[sc.fyp_id] = [];
+      }
+      studentCoursesByFypId[sc.fyp_id].push(sc);
+    });
+    
+    // Transform each FYP with its associated courses
     try {
-      const studentCourses = studentCoursesWithRelations.map(sc => {
-        if (!sc.course_offering_id || !sc.course_offering || !sc.course_offering.course) {
-          return transformToStudentCourse(sc, null, null, []);
-        }
+      const transformedFyps = fypsData.map(fypData => {
+        const fypId = fypData.id;
+        const courses = studentCoursesByFypId[fypId] || [];
         
-        const courseId = sc.course_offering.course.id;
-        const courseCodes = codesByCourseId[courseId] || [];
+        const studentCourses = courses.map(sc => {
+          if (!sc.course_offering_id || !sc.course_offering || !sc.course_offering.course) {
+            return transformToStudentCourse(sc, null, null, []);
+          }
+          
+          const courseId = sc.course_offering.course.id;
+          const courseCodes = codesByCourseId[courseId] || [];
+          
+          return transformToStudentCourse(
+            sc,
+            sc.course_offering as Tables<'course_offerings'>,
+            sc.course_offering.course as Tables<'courses'>,
+            courseCodes
+          );
+        });
         
-        return transformToStudentCourse(
-          sc,
-          sc.course_offering as Tables<'course_offerings'>,
-          sc.course_offering.course as Tables<'courses'>,
-          courseCodes
-        );
+        return transformToFYP(fypData, studentCourses);
       });
       
-      // Build complete user with FYP and courses
-      const fyp = transformToFYP(fypData, studentCourses);
-      const user = transformToUser(userData, fyp);
+      // Build user with all FYPs
+      const user = transformToUser(userData, transformedFyps);
       
       return NextResponse.json({ 
         user 
