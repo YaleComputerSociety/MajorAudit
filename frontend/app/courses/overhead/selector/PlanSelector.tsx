@@ -1,9 +1,10 @@
+
 // overhead/fypSelector/FYPSelector.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useUser } from '@/context/UserProvider';
-import styles from './FYPSelector.module.css';
+import styles from './PlanSelector.module.css';
 
-function FYPSelector() {
+function PlanSelector() {
   const { user, selectFYP } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -74,4 +75,4 @@ function FYPSelector() {
   );
 }
 
-export default FYPSelector;
+export default PlanSelector;

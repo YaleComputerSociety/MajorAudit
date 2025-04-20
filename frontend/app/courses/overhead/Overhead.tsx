@@ -1,12 +1,12 @@
 
 import Style from "./Overhead.module.css";
-import FYPSelector from "./fypSelector/FYPselector";
+import PlanSelector from "./selector/PlanSelector";
 
 function Overhead() 
 {
   return (
 		<div className={Style.Row}>
-			<FYPSelector/>
+			<PlanSelector/>
 		</div>
   );
 }

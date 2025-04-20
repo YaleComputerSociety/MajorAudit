@@ -9,7 +9,7 @@ import { fetchYaliesInfoByNetId } from './yalies';
 
 export const dynamic = 'force-dynamic'; // Ensure the route is always dynamic
 
-/**
+/*
  * Validates a CAS ticket against Yale's CAS server
  */
 async function validateCasTicket(ticket, serviceUrl) 
@@ -47,7 +47,7 @@ async function checkExistingUser(adminClient, netID)
   return { existingUser, error: userError };
 }
 
-/**
+/*
  * Handles existing user authentication
  */
 async function handleExistingUser(adminClient, existingUser, netID, password, email) 

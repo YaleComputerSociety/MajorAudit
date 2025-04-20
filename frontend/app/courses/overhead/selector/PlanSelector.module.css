@@ -1,15 +1,15 @@
 /* overhead/fypSelector/FYPSelector.module.css */
 
 .container {
-  /* position: relative;
-  display: inline-block; */
+  position: relative;
+  display: inline-block;
 }
 
 .box {
   padding: 2px 2px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  width: 10px;
+  width: 100px;
   background-color: #fff;
   cursor: pointer;
   font-size: 14px;
@@ -28,7 +28,7 @@
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
-  width: 10px;
+  width: 100px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 6px;
