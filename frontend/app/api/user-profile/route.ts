@@ -197,3 +197,38 @@ export async function GET()
     );
   }
 }
+
+export async function PATCH(req: Request) {
+  try {
+    const { fyp_index } = await req.json();
+    if (typeof fyp_index !== 'number') {
+      return NextResponse.json({ error: 'Invalid fyp_index' }, { status: 400 });
+    }
+
+    const supabase = await getSupabaseServerClient();
+    const { data: { user: authUser }, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !authUser) {
+      return NextResponse.json(
+        { error: 'Authentication error: ' + (userError?.message || 'No user') },
+        { status: 401 }
+      );
+    }
+
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ fyp_index })
+      .eq('id', authUser.id);
+
+    if (updateError) {
+      return NextResponse.json({ error: updateError.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: 'FYP index updated' });
+  } catch (err) {
+    return NextResponse.json(
+      { error: 'Failed to update FYP index: ' + (err instanceof Error ? err.message : String(err)) },
+      { status: 500 }
+    );
+  }
+}

@@ -21,7 +21,7 @@ function Courses()
 	const { user } = useUser();
 
 	const [edit, setEdit] = useState(false);
-  // const toggleEdit = () => { setEdit(!edit); };
+  const toggleEdit = () => { setEdit(!edit); };
 
 	const [columns, setColumns] = useState(false); 
 	void [setColumns];
@@ -66,7 +66,7 @@ function Courses()
         	<AddButton/>
 					<ModalManager/>
 				</ModalProvider>
-				{/* <button className={Style.ListButton} style={{ marginTop: "50px" }} onClick={toggleEdit} /> */}
+				<button className={Style.ListButton} style={{ marginLeft: "200px" }} onClick={toggleEdit} />
         <div className={Style.Column}>
           {renderedYears}
         </div>
