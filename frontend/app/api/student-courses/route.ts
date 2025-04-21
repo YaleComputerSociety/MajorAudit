@@ -36,6 +36,7 @@ export async function GET(req: NextRequest)
       );
     }
     
+
     const studentCourses = await getStudentCourses(parseInt(fypId), supabaseServerClient);
     
     return NextResponse.json({ data: studentCourses });
@@ -81,6 +82,9 @@ export async function POST(req: NextRequest)
         { status: 400 }
       );
     }
+    
+    // Verify FYP belongs to user
+    await verifyFypBelongsToUser(userId, fyp_id, supabaseServerClient);
 
     const courseOffering = await validateCourseExists(code, term_from, supabaseServerClient);
     if (!courseOffering) {
@@ -151,6 +155,9 @@ export async function DELETE(req: NextRequest) {
         { status: 400 }
       );
     }
+    
+    // Verify FYP belongs to user
+    await verifyFypBelongsToUser(userId, parseInt(fypId), supabaseServerClient);
     
     // Delete the student course
     await removeStudentCourse(parseInt(fypId), parseInt(studentCourseId), supabaseServerClient);

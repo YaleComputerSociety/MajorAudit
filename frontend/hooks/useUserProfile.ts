@@ -113,6 +113,7 @@ export function useUserProfile(): UseUserProfileReturn {
   }, [user]);
   
   // New function to select a specific FYP by index
+
   const selectFYP = useCallback(async (index: number) => {
 		if (index >= 0 && index < user.FYPs.length && index !== user.FYPindex) {
 			const updatedUser = {

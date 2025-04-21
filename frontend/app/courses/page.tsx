@@ -21,7 +21,7 @@ function Courses()
 	const { user } = useUser();
 
 	const [edit, setEdit] = useState(false);
-  const toggleEdit = () => { setEdit(!edit); };
+  // const toggleEdit = () => { setEdit(!edit); };
 
 	const [columns, setColumns] = useState(false); 
 	void [setColumns];
