@@ -1,80 +1,144 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import BaseModal from '../base-modal/BaseModal';
-// import styles from './UploadCoursesModal.module.css';
+import { useUser } from '@/context/UserProvider';
+import styles from './UploadModal.module.css';
+
+// Util: Parse raw input into course objects
+// Util: Parse raw input into course objects
+function parseBatchCourses(raw: string) {
+  const termMapping: Record<string, string> = {
+    'Fall 2022': '202203',
+    'Spring 2023': '202301',
+    'Fall 2023': '202303',
+    'Spring 2024': '202401',
+    'Fall 2024': '202403',
+    'Spring 2025': '202501',
+    'Fall 2025': '202503'
+  };
+
+  const lines = raw.split('\n').map(line => line.trim());
+  const courses = [];
+
+  let currentTerm: string | null = null;
+
+  for (const line of lines) {
+    if (termMapping[line]) {
+      currentTerm = termMapping[line];
+    } 
+    // Updated regex to support departments like "E&EB"
+    else if (line && /^[A-Z&-]{2,7} ?\d{3,5}/.test(line)) {
+      const [code, , grade] = line.split(/\t+/);
+
+      if (currentTerm && code && grade) {
+        const cleanCode = code.replace(/\s+/g, ' ').trim();
+        const cleanGrade = grade.trim();
+
+        // Include IP but skip W
+        if (cleanGrade !== 'W') {
+          courses.push({
+            term_from: currentTerm,
+            code: cleanCode,
+            result: cleanGrade,
+            term_to: currentTerm
+          });
+        }
+      }
+    }
+  }
+
+  return courses;
+}
+
 
 const UploadCoursesModal: React.FC = () => {
-  // const [file, setFile] = useState<File | null>(null);
-  // const [isUploading, setIsUploading] = useState(false);
+  const { addCourse } = useUser();
+  const [input, setInput] = useState('');
+  const [results, setResults] = useState<{
+    code: string;
+    success: boolean;
+    message: string;
+  }[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
-  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files && e.target.files[0]) {
-  //     setFile(e.target.files[0]);
-  //   }
-  // };
+  const handleUpload = async () => {
+    setLoading(true);
+    const parsed = parseBatchCourses(input);
+    const uploadResults: typeof results = [];
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (!file) return;
+    for (const course of parsed) {
+      try {
+        const res = await addCourse(course.term_from, course.code, course.result, course.term_to);
+        uploadResults.push({
+          code: course.code,
+          success: res.success,
+          message: res.message
+        });
+      } catch (err) {
+        uploadResults.push({
+          code: course.code,
+          success: false,
+          message: 'Unexpected error'
+        });
+      }
+    }
 
-  //   setIsUploading(true);
-    
-  //   // File upload logic would go here
-  //   // For demonstration, simulating an upload delay
-  //   console.log('Uploading file:', file.name);
-    
-  //   // Simulate API call
-  //   try {
-  //     await new Promise(resolve => setTimeout(resolve, 1500));
-  //     console.log('Upload successful');
-  //     // Handle success
-  //   } catch (error) {
-  //     console.error('Upload failed:', error);
-  //     // Handle error
-  //   } finally {
-  //     setIsUploading(false);
-  //   }
-  // };
+    setResults(uploadResults);
+    setShowResults(true);
+    setLoading(false);
+
+    const allSuccessful = uploadResults.every(r => r.success);
+    if (allSuccessful) {
+      setTimeout(() => {
+        setInput('');
+        setShowResults(false);
+        setResults([]);
+        const closeButton = document.querySelector('[data-close-modal]') as HTMLElement;
+        closeButton?.click();
+      }, 500);
+    }
+  };
 
   return (
     <BaseModal title="Upload Courses">
-			<div>
-				
-			</div>
-      {/* <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.uploadArea}>
-          <input
-            type="file"
-            id="courseFile"
-            accept=".csv,.xlsx,.xls"
-            onChange={handleFileChange}
-            className={styles.fileInput}
+      <div className={styles.form}>
+        <div className={styles.formGroup}>
+          <label htmlFor="courseInput">Paste your course history</label>
+          <textarea
+            id="courseInput"
+            rows={10}
+            placeholder="e.g.\nFall 2022\nCPSC 201\tIntro to CS\tA-\t1"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className={styles.formInput}
+            disabled={loading}
           />
-          <label htmlFor="courseFile" className={styles.fileLabel}>
-            {file ? file.name : 'Choose CSV or Excel file'}
-          </label>
-          <p className={styles.helpText}>
-            Supported formats: .csv, .xlsx, .xls
-          </p>
         </div>
-        
-        {file && (
-          <div className={styles.fileInfo}>
-            <p>Selected file: {file.name}</p>
-            <p>Size: {(file.size / 1024).toFixed(2)} KB</p>
-          </div>
-        )}
-        
+
         <div className={styles.formActions}>
-          <button 
-            type="submit" 
-            className={styles.submitButton} 
-            disabled={!file || isUploading}
+          <button
+            type="button"
+            className={styles.submitButton}
+            onClick={handleUpload}
+            disabled={loading || !input.trim()}
           >
-            {isUploading ? 'Uploading...' : 'Upload Courses'}
+            {loading ? 'Uploading...' : 'Upload'}
           </button>
         </div>
-      </form> */}
+
+				{showResults && results.some(r => !r.success) && (
+  <div className={styles.formGroup}>
+    <label>Upload Errors</label>
+    <ul style={{ fontSize: '14px', marginTop: '4px' }}>
+      {results.filter(r => !r.success).map((r, idx) => (
+        <li key={idx} style={{ color: 'red' }}>
+          ❌ {r.code} — {r.message}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+      </div>
     </BaseModal>
   );
 };

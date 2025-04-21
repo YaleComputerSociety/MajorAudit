@@ -61,7 +61,8 @@ def process_terms(target_terms):
     logger.info(f"Total processing completed in {end_time - start_time:.2f} seconds")
 
 def main():
-    target_terms = ["202503", "202501", "202403", "202401", "202303", "202301", "202203"]
+    # target_terms = ["202503", "202501", "202403", "202401", "202303", "202301", "202203"]
+    target_terms = ["202203"]
     process_terms(target_terms)
     
 if __name__ == "__main__":

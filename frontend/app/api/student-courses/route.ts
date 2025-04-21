@@ -7,7 +7,6 @@ import {
   addStudentCourse, 
   getStudentCourses, 
   removeStudentCourse,
-  verifyFypBelongsToUser
 } from './student-courses';
 
 export async function GET(req: NextRequest) 
@@ -36,9 +35,6 @@ export async function GET(req: NextRequest)
         { status: 400 }
       );
     }
-    
-    // Verify FYP belongs to user
-    await verifyFypBelongsToUser(userId, parseInt(fypId), supabaseServerClient);
     
     const studentCourses = await getStudentCourses(parseInt(fypId), supabaseServerClient);
     
@@ -85,9 +81,6 @@ export async function POST(req: NextRequest)
         { status: 400 }
       );
     }
-    
-    // Verify FYP belongs to user
-    await verifyFypBelongsToUser(userId, fyp_id, supabaseServerClient);
 
     const courseOffering = await validateCourseExists(code, term_from, supabaseServerClient);
     if (!courseOffering) {
@@ -158,9 +151,6 @@ export async function DELETE(req: NextRequest) {
         { status: 400 }
       );
     }
-    
-    // Verify FYP belongs to user
-    await verifyFypBelongsToUser(userId, parseInt(fypId), supabaseServerClient);
     
     // Delete the student course
     await removeStudentCourse(parseInt(fypId), parseInt(studentCourseId), supabaseServerClient);
