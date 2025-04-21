@@ -7,7 +7,6 @@ import {
   addStudentCourse, 
   getStudentCourses, 
   removeStudentCourse,
-  verifyFypBelongsToUser
 } from './student-courses';
 
 export async function GET(req: NextRequest) 
@@ -37,9 +36,7 @@ export async function GET(req: NextRequest)
       );
     }
     
-    // Verify FYP belongs to user
-    await verifyFypBelongsToUser(userId, parseInt(fypId), supabaseServerClient);
-    
+
     const studentCourses = await getStudentCourses(parseInt(fypId), supabaseServerClient);
     
     return NextResponse.json({ data: studentCourses });

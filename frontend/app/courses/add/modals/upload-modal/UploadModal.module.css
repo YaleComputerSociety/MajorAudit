@@ -1,0 +1,74 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formGroup label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.formGroup input,
+.formGroup select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+  width: 100%;
+  box-sizing: border-box;
+  appearance: auto;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: #61ADFE;
+  box-shadow: 0 0 0 2px rgba(97, 173, 254, 0.2);
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.submitButton {
+  padding: 8px 16px;
+  background-color: #61ADFE;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+  background-color: #4A99EB;
+}
+
+.cancelButton {
+  padding: 8px 16px;
+  background-color: transparent;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: background-color 0.2s;
+}
+
+.cancelButton:hover {
+  background-color: #f5f5f5;
+}

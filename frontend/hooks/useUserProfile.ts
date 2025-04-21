@@ -113,20 +113,31 @@ export function useUserProfile(): UseUserProfileReturn {
   }, [user]);
   
   // New function to select a specific FYP by index
-  const selectFYP = useCallback((index: number) => {
-    if (index >= 0 && index < user.FYPs.length && index !== user.FYPindex) {
-      setUser(prevUser => ({
-        ...prevUser,
-        FYPindex: index
-      }));
-      
-      // Also update the ref
-      userDataRef.current = {
-        ...userDataRef.current,
-        FYPindex: index
-      };
-    }
-  }, [user]);
+
+  const selectFYP = useCallback(async (index: number) => {
+		if (index >= 0 && index < user.FYPs.length && index !== user.FYPindex) {
+			const updatedUser = {
+				...user,
+				FYPindex: index
+			};
+	
+			setUser(updatedUser);
+			userDataRef.current = updatedUser;
+	
+			// Persist to backend
+			try {
+				await fetch('/api/user-profile', {
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ fyp_index: index })
+				});
+			} catch (err) {
+				console.error('Failed to persist FYP index:', err);
+			}
+		}
+	}, [user]);
   
   // Add course with improved refresh handling
   const addCourse = useCallback(async (

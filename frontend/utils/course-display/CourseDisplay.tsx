@@ -31,6 +31,7 @@ export function TransformTermNumber(term: number | string): string {
 }
 
 export function IsTermActive(term: string): boolean {
+	return true;
   const currentYearMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
 
   const termStr = String(term);

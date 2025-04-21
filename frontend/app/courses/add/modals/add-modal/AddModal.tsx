@@ -8,7 +8,7 @@ const AddCourseModal: React.FC = () => {
   const { closeModal } = useModal();
   const { addCourse, isLoading } = useUser();
 
-  const termOptions = ["202501"];
+  const termOptions = ["202503", "202501", "202403", "202401", "202303", "202301", "202203"];
   
   const resultOptions = ['A-C', 'CR', 'D/F/W'];
   
