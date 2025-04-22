@@ -2,7 +2,7 @@
 
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Database, Tables } from '@/types/supabase_newer';
-import { StudentCourse } from '@/types/type-user';
+import { StudentCourse } from '@/types/user';
 
 type GenericSupabaseClient = SupabaseClient<Database>;
 

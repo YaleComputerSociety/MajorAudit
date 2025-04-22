@@ -1,4 +1,4 @@
-import { FYP } from "@/types/type-user";
+import { FYP } from "@/types/user";
 import { StudentYear, StudentSemester } from "./CoursesTyping";
 
 interface StudentTermArrangement {

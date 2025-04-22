@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext } from "react";
-import { User, StudentCourse, FYP } from "@/types/type-user";
+import { User, StudentCourse, FYP } from "@/types/user";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface UserContextType {

@@ -1,5 +1,5 @@
 
-import { MajorsIndex } from "@/types/type-user";
+import { MajorsIndex } from "@/types/user";
 
 export function initializeMajorsIndex(
   storedIndex: string | null,

@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.1",
-    "@supabase/supabase-js": "^2.49.1",
+    "@supabase/supabase-js": "^2.49.4",
     "axios": "^1.8.4",
     "d3": "^7.9.0",
     "fast-xml-parser": "^5.0.9",

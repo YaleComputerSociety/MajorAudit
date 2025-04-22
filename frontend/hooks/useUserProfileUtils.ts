@@ -1,6 +1,6 @@
 // frontend/hooks/useUserProfileUtils.ts (no fetches)
 
-import { User, FYP } from '@/types/type-user';
+import { User, FYP } from '@/types/user';
 
 export const emptyUser: User = {
   name: '',

@@ -3,7 +3,7 @@
 import { usePrograms } from "../../context/ProgramProvider";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Style from "./Majors.module.css";
-import { MajorsIndex } from "@/types/type-user";
+import { MajorsIndex } from "@/types/user";
 import { initializeMajorsIndex, updateMajorsIndex } from "./MajorsUtils";
 import NavBar from "../../components/navbar/NavBar";
 import Overhead from "./overhead/Overhead";

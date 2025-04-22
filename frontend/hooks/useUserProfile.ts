@@ -5,7 +5,7 @@ import {
   useCallback,
   useEffect,
 } from 'react';
-import { User, StudentCourse, FYP, CourseEntry } from '@/types/type-user';
+import { User, StudentCourse, FYP, CourseEntry } from '@/types/user';
 import { useAuth } from '@/context/AuthProvider';
 import {
   fetchUserData,

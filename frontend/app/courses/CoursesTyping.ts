@@ -1,5 +1,5 @@
 
-import { StudentCourse } from "@/types/type-user";
+import { StudentCourse } from "@/types/user";
 
 export interface StudentSemester {
 	term: string;

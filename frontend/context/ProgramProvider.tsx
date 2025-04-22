@@ -3,7 +3,7 @@
 
 "use client";
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { ProgramDict } from "@/types/type-program";
+import { ProgramDict } from "@/types/program";
 import { useAuth } from "./AuthProvider";
 
 // Define Context Type

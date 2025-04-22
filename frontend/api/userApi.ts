@@ -1,6 +1,6 @@
 // UPDATED: frontend/api/userAPI.ts
 
-import { FYP, StudentCourse, User } from '@/types/type-user';
+import { FYP, StudentCourse, User } from '@/types/user';
 
 export async function fetchUserData(): Promise<User> {
   const url = `/api/user-profile?t=${Date.now()}`;

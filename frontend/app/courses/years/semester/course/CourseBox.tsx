@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Style from "./CourseBox.module.css";
 
-import { StudentCourse } from "@/types/type-user";
+import { StudentCourse } from "@/types/user";
 import { RenderMark, SeasonIcon, GetCourseColor, IsTermActive } from "../../../../../utils/course-display/CourseDisplay";
 import DistributionCircle from "../../../../../components/distribution-circle/DistributionsCircle";
 import { useUser } from "@/context/UserProvider";
