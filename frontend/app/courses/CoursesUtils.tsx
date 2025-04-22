@@ -1,51 +1,44 @@
-
-import { User } from "@/types/type-user";
+import { FYP } from "@/types/type-user";
 import { StudentYear, StudentSemester } from "./CoursesTyping";
 
-export function BuildStudentYears(user: User): StudentYear[] 
-{
-	if (user.FYPindex === -1 || !user.FYPs || user.FYPs.length === 0) {
-    return [];
-  }
-  
-  const currentFYP = user.FYPs[user.FYPindex];
-  const { studentCourses } = currentFYP;
-  
-  // Parse the studentTermArrangement from the FYP
-  let studentTermArrangement;
-  
+interface StudentTermArrangement {
+  first_year?: string[];
+  sophomore?: string[];
+  junior?: string[];
+  senior?: string[];
+}
+
+export function BuildStudentYears(fyp: FYP): StudentYear[] {
+  const { studentCourses } = fyp;
+
+  let studentTermArrangement: StudentTermArrangement = {};
+
   try {
-    // If it's already an object, use it directly
-    if (typeof currentFYP.studentTermArrangement === 'object') {
-      studentTermArrangement = currentFYP.studentTermArrangement;
-    } 
-    // If it's a JSON string, parse it
-    else if (typeof currentFYP.studentTermArrangement === 'string') {
-      studentTermArrangement = JSON.parse(currentFYP.studentTermArrangement);
-    } 
+    if (typeof fyp.studentTermArrangement === "object") {
+      studentTermArrangement = fyp.studentTermArrangement as StudentTermArrangement;
+    } else if (typeof fyp.studentTermArrangement === "string") {
+      studentTermArrangement = JSON.parse(fyp.studentTermArrangement) as StudentTermArrangement;
+    }
   } catch (error) {
     console.error("Error parsing studentTermArrangement:", error);
   }
 
-
-  const firstYearTerms = studentTermArrangement.first_year;
-  const sophomoreTerms = studentTermArrangement.sophomore;
-  const juniorTerms = studentTermArrangement.junior;
-  const seniorTerms = studentTermArrangement.senior;
+  const firstYearTerms = studentTermArrangement?.first_year ?? [];
+  const sophomoreTerms = studentTermArrangement?.sophomore ?? [];
+  const juniorTerms = studentTermArrangement?.junior ?? [];
+  const seniorTerms = studentTermArrangement?.senior ?? [];
 
   const buildSemesters = (terms: string[]): StudentSemester[] => {
-    return terms.map(term => ({
+    return terms.map((term) => ({
       term,
-      studentCourses: studentCourses.filter(studentCourses => studentCourses.term === term),
+      studentCourses: studentCourses.filter((sc) => sc.term === term),
     }));
   };
 
-  const studentYears: StudentYear[] = [
+  return [
     { grade: "First-Year", studentSemesters: buildSemesters(firstYearTerms) },
     { grade: "Sophomore", studentSemesters: buildSemesters(sophomoreTerms) },
     { grade: "Junior", studentSemesters: buildSemesters(juniorTerms) },
     { grade: "Senior", studentSemesters: buildSemesters(seniorTerms) },
   ];
-
-  return studentYears;
 }

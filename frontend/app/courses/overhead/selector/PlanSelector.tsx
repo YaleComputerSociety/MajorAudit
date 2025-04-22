@@ -1,11 +1,10 @@
-
-// overhead/fypSelector/FYPSelector.tsx
+"use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { useUser } from '@/context/UserProvider';
 import styles from './PlanSelector.module.css';
 
 function PlanSelector() {
-  const { user, selectFYP } = useUser();
+  const { currentFYP, availableFYPs, setCurrentFYPIndex } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -14,11 +13,10 @@ function PlanSelector() {
   };
 
   const handleFYPSelect = (index: number) => {
-    selectFYP(index);
+    setCurrentFYPIndex(index);
     setIsOpen(false);
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -32,37 +30,29 @@ function PlanSelector() {
     };
   }, []);
 
-  // Get current FYP name or placeholder
+  const selectedIndex = availableFYPs.findIndex(fyp => fyp.id === currentFYP?.id);
+
   const getCurrentFYPName = () => {
-    if (!user.FYPs || user.FYPs.length === 0) {
-      return "No FYPs Available";
-    }
-    
-    if (user.FYPindex < 0 || user.FYPindex >= user.FYPs.length) {
-      return "Select an FYP";
-    }
-    
-    return `FYP ${user.FYPindex + 1}`;
+    if (availableFYPs.length === 0) return "No FYPs Available";
+    if (selectedIndex === -1) return "Select an FYP";
+    return `FYP ${selectedIndex + 1}`;
   };
 
   return (
     <div className={styles.container} ref={dropdownRef}>
-      <button 
-        className={styles.box}
-        onClick={toggleDropdown}
-      >
+      <button className={styles.box} onClick={toggleDropdown}>
         {getCurrentFYPName()} ▼
       </button>
 
       {isOpen && (
         <div className={styles.dropdown}>
-          {!user.FYPs || user.FYPs.length === 0 ? (
+          {availableFYPs.length === 0 ? (
             <div className={styles.option}>No FYPs available</div>
           ) : (
-            user.FYPs.map((fyp, index) => (
+            availableFYPs.map((fyp, index) => (
               <div
                 key={fyp.id}
-                className={`${styles.option} ${user.FYPindex === index ? styles.selected : ""}`}
+                className={`${styles.option} ${selectedIndex === index ? styles.selected : ""}`}
                 onClick={() => handleFYPSelect(index)}
               >
                 FYP {index + 1}
