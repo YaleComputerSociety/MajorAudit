@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import React, { useState } from "react";
 import Style from "./CourseBox.module.css";
 
 import { StudentCourse } from "@/types/type-user";
@@ -8,24 +7,20 @@ import DistributionCircle from "../../../../../components/distribution-circle/Di
 import { useUser } from "@/context/UserProvider";
 
 function RemoveButton({ studentCourse }: { studentCourse: StudentCourse }) {
-  const { removeCourse } = useUser();
+  const { removeCourses } = useUser();
   const [isRemoving, setIsRemoving] = useState(false);
 
   const handleRemoveStudentCourse = async () => {
-    // Confirm with the user before removing
-    if (!window.confirm(`Are you sure you want to remove ${studentCourse.courseOffering.abstractCourse.codes[0]}?`)) {
-      return;
-    }
+    const code = studentCourse.courseOffering.abstractCourse.codes[0];
+    if (!window.confirm(`Are you sure you want to remove ${code}?`)) return;
 
     setIsRemoving(true);
     try {
-      const result = await removeCourse(studentCourse.id);
-      
-      if (result.success) {
-        // The user data will be automatically refreshed by the hook
-        // You could add a toast notification here if you have a toast system
-      } else {
-        alert(`Failed to remove course: ${result.message}`);
+      const result = await removeCourses([studentCourse.id]);
+
+      if (!result.success) {
+        const errMsg = result.errors.find(e => e.id === studentCourse.id)?.message || 'Unknown error';
+        alert(`Failed to remove course: ${errMsg}`);
       }
     } catch (error) {
       console.error("Error removing course:", error);
@@ -51,33 +46,34 @@ function RemoveButton({ studentCourse }: { studentCourse: StudentCourse }) {
   );
 }
 
-function CourseBox(props: {
-  edit: boolean, 
-  studentCourse: StudentCourse, 
-}){
-  return(
+function CourseBox({
+  edit,
+  studentCourse
+}: {
+  edit: boolean;
+  studentCourse: StudentCourse;
+}) {
+  return (
     <div 
       className={Style.CourseBox}  
-      style={{ background: GetCourseColor(props.studentCourse.term) }}
+      style={{ background: GetCourseColor(studentCourse.term) }}
     > 
-      <div 
-        className={Style.Row} 
-      >
-        {(props.edit && IsTermActive(props.studentCourse.term)) && 
-          <RemoveButton studentCourse={props.studentCourse}/>
-        }
-        <RenderMark status={props.studentCourse.status}/>
-        <SeasonIcon studentCourse={props.studentCourse}/>
+      <div className={Style.Row}>
+        {edit && IsTermActive(studentCourse.term) && (
+          <RemoveButton studentCourse={studentCourse} />
+        )}
+        <RenderMark status={studentCourse.status}/>
+        <SeasonIcon studentCourse={studentCourse}/>
         <div className={Style.Column}>
           <div className={Style.CourseCode}>
-            {props.studentCourse.courseOffering.abstractCourse.codes[0]}
+            {studentCourse.courseOffering.abstractCourse.codes[0]}
           </div>
           <div className={Style.CourseTitle}>
-            {props.studentCourse.courseOffering.abstractCourse.title}
+            {studentCourse.courseOffering.abstractCourse.title}
           </div>
         </div>
       </div>
-      <DistributionCircle distributions={props.studentCourse.courseOffering.abstractCourse.distributions}/>
+      <DistributionCircle distributions={studentCourse.courseOffering.abstractCourse.distributions}/>
     </div>
   );
 }

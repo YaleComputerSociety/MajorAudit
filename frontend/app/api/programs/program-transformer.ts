@@ -18,6 +18,7 @@ export function transformCourse(
 ): AbstractCourse {
   return {
     id: course.id,
+		universal_course_id: course.universal_course_id,
     title: course.title,
     description: safeString(course.description),
     requirements: safeString(course.requirements),

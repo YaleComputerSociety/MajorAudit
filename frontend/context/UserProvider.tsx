@@ -8,28 +8,31 @@ interface UserContextType {
   isLoading: boolean;
   error: string | null;
 
-  // Core operations
   refreshUserData: () => Promise<User | null>;
 
-  // FYP state (exposed cleanly)
   currentFYP: FYP | null;
   availableFYPs: FYP[];
   setCurrentFYPIndex: (index: number) => void;
 
-  // Course ops
-  addCourse: (
-    termFrom: string,
-    code: string,
-    result: string,
-    termTo: string
+  addCourses: (
+    entries: {
+      term_from: string;
+      code: string;
+      result: string;
+      term_to: string;
+    }[]
   ) => Promise<{
     success: boolean;
-    course?: StudentCourse;
-    message: string;
+    courses: StudentCourse[];
+    errors: { entry: any; message: string }[];
   }>;
-  removeCourse: (courseId: number) => Promise<{
+
+  removeCourses: (
+    courseIds: number[]
+  ) => Promise<{
     success: boolean;
-    message: string;
+    removed: number[];
+    errors: { id: number; message: string }[];
   }>;
 }
 
@@ -37,7 +40,6 @@ const UserContext = createContext<UserContextType | null>(null);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const userProfile = useUserProfile();
-
   return (
     <UserContext.Provider value={userProfile}>
       {children}

@@ -6,26 +6,24 @@ import { useUser } from '@/context/UserProvider';
 
 const AddCourseModal: React.FC = () => {
   const { closeModal } = useModal();
-  const { addCourse, isLoading } = useUser();
+  const { addCourses, isLoading } = useUser();
 
   const termOptions = ["202503", "202501", "202403", "202401", "202303", "202301", "202203"];
-  
   const resultOptions = ['A-C', 'CR', 'D/F/W'];
-  
+
   const [courseData, setCourseData] = useState({
     term_from: "", 
     code: "",
     result: "", 
     term_to: "" 
   });
-  
+
   const [validationError, setValidationError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setCourseData(prev => ({ ...prev, [name]: value }));
-    
-    // Clear validation errors when user makes changes
+
     if (validationError) {
       setValidationError('');
     }
@@ -33,24 +31,16 @@ const AddCourseModal: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Basic form validation
+
     if (!courseData.term_from || !courseData.code || !courseData.result || !courseData.term_to) {
       setValidationError('All fields are required');
       return;
     }
-    
+
     try {
-      // Add the course using our hook
-      const result = await addCourse(
-        courseData.term_from,
-        courseData.code,
-        courseData.result,
-        courseData.term_to
-      );
-      
-      if (result.success) {
-        // Reset form and close modal
+      const response = await addCourses([courseData]);
+
+      if (response.success && response.courses.length > 0) {
         setCourseData({
           term_from: "",
           code: "",
@@ -58,17 +48,11 @@ const AddCourseModal: React.FC = () => {
           term_to: ""
         });
         closeModal();
-        
-        // You could show success feedback in another way if needed
-        // For example, setting a success message in a parent component
-        // or using the app's existing notification system
       } else {
-        // Show error from API
-        setValidationError(result.message);
+        setValidationError(response.errors[0]?.message || 'Failed to add course');
       }
-    } catch (error) {
-      void error;
-      setValidationError('Failed to add course. Please try again.');
+    } catch {
+      setValidationError('Unexpected error occurred while adding course.');
     }
   };
 
@@ -107,7 +91,7 @@ const AddCourseModal: React.FC = () => {
             ))}
           </select>
         </div>
-        
+
         <div className={styles.formGroup}>
           <label htmlFor="code">Course Code</label>
           <input
@@ -122,7 +106,7 @@ const AddCourseModal: React.FC = () => {
             disabled={isLoading}
           />
         </div>
-        
+
         <div className={styles.formGroup}>
           <label htmlFor="result">Result</label>
           <select
@@ -140,7 +124,7 @@ const AddCourseModal: React.FC = () => {
             ))}
           </select>
         </div>
-        
+
         <div className={styles.formGroup}>
           <label htmlFor="term_to">Term To</label>
           <select
@@ -158,7 +142,7 @@ const AddCourseModal: React.FC = () => {
             ))}
           </select>
         </div>
-        
+
         <div className={styles.formActions}>
           <button 
             type="submit" 

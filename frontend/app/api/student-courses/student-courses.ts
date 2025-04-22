@@ -1,14 +1,13 @@
-// frontend/app/api/student-courses/student-courses.ts
+// UPDATED: frontend/app/api/student-courses/student-courses.ts
 
 import { SupabaseClient } from '@supabase/supabase-js';
-import { Database } from '@/types/supabase_newer';
+import { Database, Tables } from '@/types/supabase_newer';
+import { StudentCourse } from '@/types/type-user';
 
-// Generic type for any Supabase client (server or client-side)
 type GenericSupabaseClient = SupabaseClient<Database>;
 
-// Interface for student course addition parameters
 interface AddStudentCourseParams {
-  fypId: number;  // Changed from userId to directly use fypId
+  fypId: number;
   courseOfferingId: number;
   term: string;
   status: string;
@@ -16,80 +15,57 @@ interface AddStudentCourseParams {
   supabaseClient: GenericSupabaseClient;
 }
 
-/* Validates if a course offering exists for the given code and term */
+interface BulkCourseEntry {
+  code: string;
+  term_from: string;
+  term_to: string;
+  result: string;
+}
+
 export async function validateCourseExists(
-  code: string, 
-  term: string, 
+  code: string,
+  term: string,
   supabaseClient: GenericSupabaseClient
-) {
-  
-  // First get the course_id from course_codes table
-  const { data: courseCodeData, error: codeError } = await supabaseClient
+): Promise<{
+  courseOffering: Tables<'course_offerings'> | null,
+  course: Tables<'courses'> | null,
+  courseCodes: Tables<'course_codes'>[]
+}> {
+  const { data: courseCodeRows } = await supabaseClient
     .from('course_codes')
-    .select('course_id, code')
-    .eq('code', code.toUpperCase()); 
-  
-  if (codeError || !courseCodeData || courseCodeData.length === 0) {
-    console.error('Course code not found:', code, codeError);
-    return null;
+    .select('course_id')
+    .eq('code', code.toUpperCase());
+
+  if (!courseCodeRows || courseCodeRows.length === 0) {
+    return { courseOffering: null, course: null, courseCodes: [] };
   }
-  
-  if (courseCodeData.length > 1) {
-    console.log(`Found ${courseCodeData.length} entries for code ${code}:`, courseCodeData);
-  }
-  
-  const courseId = courseCodeData[0].course_id;
-  
-  // Then find a course offering with that course_id for the given term
-  const { data: courseOffering, error: offeringError } = await supabaseClient
+
+  const courseId = courseCodeRows[0].course_id;
+
+  const { data: courseOffering } = await supabaseClient
     .from('course_offerings')
-    .select('id, course_id, term, professors, flags')
+    .select('id, term, professors, flags, course_id')
     .eq('course_id', courseId)
     .eq('term', term)
-    .maybeSingle(); 
-  
-  if (offeringError) {
-    console.error('Error finding course offering:', offeringError);
-    return null;
-  }
-  
-  if (!courseOffering) {
-    console.log(`No offering found for course ${code} (ID: ${courseId}) in term ${term}`);
-    return null;
-  }
-  
-  return courseOffering;
-}
-
-/* Verify FYP belongs to user */
-export async function verifyFypBelongsToUser(
-  userId: string,
-  fypId: number,
-  supabaseClient: GenericSupabaseClient
-) {
-  const { data, error } = await supabaseClient
-    .from('fyp')
-    .select('id')
-    .eq('id', fypId)
-    .eq('user_id', userId)
     .maybeSingle();
-    
-  if (error) {
-    throw new Error(`Error verifying FYP ownership: ${error.message}`);
-  }
-  
-  if (!data) {
-    throw new Error('FYP not found or you do not have permission to access it');
-  }
-  
-  return true;
+
+  const { data: course } = await supabaseClient
+    .from('courses')
+    .select('*, universal_course_id')
+    .eq('id', courseId)
+    .maybeSingle();
+
+  const { data: courseCodes } = await supabaseClient
+    .from('course_codes')
+    .select('*')
+    .eq('course_id', courseId);
+
+  return { courseOffering: courseOffering ?? null, course: course ?? null, courseCodes: courseCodes ?? [] };
 }
 
-/* Adds a new student course */
-export async function addStudentCourse(params: AddStudentCourseParams) {
+async function addStudentCourse(params: AddStudentCourseParams) {
   const { fypId, courseOfferingId, term, status, result, supabaseClient } = params;
-  
-  // Create the student course record
+
   const { data, error } = await supabaseClient
     .from('student_courses')
     .insert({
@@ -101,155 +77,183 @@ export async function addStudentCourse(params: AddStudentCourseParams) {
     })
     .select('*')
     .single();
-  
-  if (error) {
-    throw new Error(`Failed to add student course: ${error.message}`);
-  }
-  
+
+  if (error) throw new Error(`Failed to add student course: ${error.message}`);
   return data;
 }
 
-/* Gets all student courses for a specific FYP */
+export async function addStudentCourses(
+  fypId: number,
+  entries: BulkCourseEntry[],
+  supabaseClient: GenericSupabaseClient
+): Promise<{ added: StudentCourse[]; errors: { entry: BulkCourseEntry; message: string }[] }> {
+  const added: StudentCourse[] = [];
+  const errors: { entry: BulkCourseEntry; message: string }[] = [];
+
+  for (const entry of entries) {
+    const { code, term_from, term_to, result } = entry;
+    try {
+      const { courseOffering, course, courseCodes } = await validateCourseExists(code, term_from, supabaseClient);
+      if (!courseOffering) throw new Error('Course offering not found');
+
+      const status = term_from === term_to ? 'DA' : 'MA';
+      const sc = await addStudentCourse({
+        fypId,
+        courseOfferingId: courseOffering.id,
+        term: term_to,
+        status,
+        result,
+        supabaseClient
+      });
+
+      added.push(
+        normalizeStudentCourse(
+          sc,
+          courseOffering,
+          course,
+          courseCodes
+        )
+      );
+    } catch (err) {
+      errors.push({ entry, message: err instanceof Error ? err.message : 'Unknown error' });
+    }
+  }
+
+  return { added, errors };
+}
+
 export async function getStudentCourses(
-  fypId: number, 
+  fypId: number,
   supabaseClient: GenericSupabaseClient
 ) {
-  // Get all student courses with related course offering data
   const { data, error } = await supabaseClient
     .from('student_courses')
     .select(`
-      id, 
-      term, 
-      status, 
-      result,
+      *,
       course_offering:course_offerings(
-        id,
-        term,
-        professors,
-        flags,
+        id, term, professors, flags, course_id,
         course:courses(
-          id,
-          title,
-          description,
-          requirements,
-          credits,
-          distributions,
-          is_colsem,
-          is_fysem
+          id, title, description, requirements,
+          credits, distributions, is_colsem, is_fysem, universal_course_id
         )
       )
     `)
     .eq('fyp_id', fypId);
-  
-  if (error) {
-    throw new Error(`Failed to get student courses: ${error.message}`);
-  }
-  
-  // Transform the data to match your frontend model
-  const transformedData = data
-    .filter(item => item.course_offering !== null && item.course_offering.course !== null)
-    .map(item => {
-      const courseOffering = item.course_offering!;
-      const abstractCourse = courseOffering.course!;
-      
-      return {
-        id: item.id,
-        status: item.status,
-        result: item.result,
-        term: item.term,
-        courseOffering: {
-          id: courseOffering.id,
-          term: courseOffering.term,
-          professors: courseOffering.professors || [],
-          flags: courseOffering.flags || [],
-          codes: [] as string[], // This will be filled in later
-          abstractCourse: {
-            id: abstractCourse.id,
-            title: abstractCourse.title,
-            description: abstractCourse.description || '',
-            requirements: abstractCourse.requirements || '',
-            credits: abstractCourse.credits || 0,
-            distributions: abstractCourse.distributions || [],
-            is_colsem: abstractCourse.is_colsem || false,
-            is_fysem: abstractCourse.is_fysem || false,
-            codes: [] as string[], // This will be filled in later
-          }
-        }
-      };
-    });
-  
-  // Now get all the course codes for these courses
-  if (transformedData.length > 0) {
-    const courseIds = [...new Set(
-      data
-        .filter(item => item.course_offering !== null && item.course_offering.course !== null)
-        .map(item => item.course_offering!.course!.id)
-    )];
-    
-    const { data: codesData, error: codesError } = await supabaseClient
-      .from('course_codes')
-      .select('code, course_id')
-      .in('course_id', courseIds);
-    
-    if (!codesError && codesData) {
-      // Create a mapping of course_id to codes
-      const courseCodesMap: Record<number, string[]> = {};
-      codesData.forEach(codeItem => {
-        if (!courseCodesMap[codeItem.course_id]) {
-          courseCodesMap[codeItem.course_id] = [];
-        }
-        courseCodesMap[codeItem.course_id].push(codeItem.code);
-      });
-      
-      // Update the transformed data with course codes
-      transformedData.forEach(item => {
-        const originalItem = data.find(d => d.id === item.id);
-        if (originalItem?.course_offering?.course) {
-          const courseId = originalItem.course_offering.course.id;
-          if (courseCodesMap[courseId]) {
-            item.courseOffering.codes = courseCodesMap[courseId];
-            item.courseOffering.abstractCourse.codes = courseCodesMap[courseId];
-          }
-        }
-      });
-    }
-  }
-  
-  return transformedData;
+
+  if (error) throw new Error(`Failed to fetch student courses: ${error.message}`);
+
+  const courseIds = [...new Set(
+    data
+      .filter(row => row.course_offering?.course)
+      .map(row => row.course_offering!.course!.id)
+  )];
+
+  const { data: codes } = await supabaseClient
+    .from('course_codes')
+    .select('*')
+    .in('course_id', courseIds);
+
+  const codeMap = new Map<number, Tables<'course_codes'>[]>();
+  codes?.forEach(code => {
+    const list = codeMap.get(code.course_id) || [];
+    list.push(code);
+    codeMap.set(code.course_id, list);
+  });
+
+  return data.map(sc =>
+    normalizeStudentCourse(
+      sc,
+      sc.course_offering!,
+      sc.course_offering?.course ?? null,
+      codeMap.get(sc.course_offering?.course?.id ?? -1) || []
+    )
+  );
 }
 
-/* Removes a student course by ID */
-export async function removeStudentCourse(
+async function removeStudentCourse(
   fypId: number,
   studentCourseId: number,
   supabaseClient: GenericSupabaseClient
 ) {
-  // Check if the course belongs to the specified FYP
-  const { data: courseToDelete, error: verifyError } = await supabaseClient
+  const { data, error } = await supabaseClient
     .from('student_courses')
     .select('id')
     .eq('id', studentCourseId)
     .eq('fyp_id', fypId)
     .maybeSingle();
-  
-  if (verifyError) {
-    throw new Error(`Error verifying course ownership: ${verifyError.message}`);
-  }
-  
-  if (!courseToDelete) {
-    throw new Error('Course not found or you do not have permission to delete it');
-  }
-  
-  // Delete the student course
+
+  if (!data) throw new Error('Course not found or unauthorized' + error);
+
   const { error: deleteError } = await supabaseClient
     .from('student_courses')
     .delete()
-    .eq('id', studentCourseId)
-    .eq('fyp_id', fypId); // Double check again for additional security
-  
-  if (deleteError) {
-    throw new Error(`Failed to delete student course: ${deleteError.message}`);
+    .eq('id', studentCourseId);
+
+  if (deleteError) throw new Error(`Failed to delete course: ${deleteError.message}`);
+  return { success: true, message: 'Deleted' };
+}
+
+export async function removeStudentCourses(
+  fypId: number,
+  courseIds: number[],
+  supabaseClient: GenericSupabaseClient
+): Promise<{ removed: number[]; errors: { id: number; message: string }[] }> {
+  const removed: number[] = [];
+  const errors: { id: number; message: string }[] = [];
+
+  for (const id of courseIds) {
+    try {
+      await removeStudentCourse(fypId, id, supabaseClient);
+      removed.push(id);
+    } catch (err) {
+      errors.push({ id, message: err instanceof Error ? err.message : 'Unknown error' });
+    }
   }
-  
-  return { success: true, message: 'Course removed successfully' };
+
+  return { removed, errors };
+}
+
+export function normalizeStudentCourse(
+  studentCourse: Tables<'student_courses'>,
+  offering: Tables<'course_offerings'>,
+  course: Tables<'courses'> | null,
+  courseCodes: Tables<'course_codes'>[]
+): StudentCourse {
+  return {
+    id: studentCourse.id,
+    term: studentCourse.term,
+    status: studentCourse.status,
+    result: studentCourse.result,
+    courseOffering: {
+      term: offering.term,
+      professors: offering.professors || [],
+      flags: offering.flags || [],
+      codes: courseCodes.map(c => c.code),
+      abstractCourse: course
+        ? {
+            id: course.id,
+            codes: courseCodes.map(c => c.code),
+            title: course.title,
+            description: course.description || '',
+            requirements: course.requirements || '',
+            credits: course.credits || 0,
+            distributions: course.distributions || [],
+            is_colsem: course.is_colsem || false,
+            is_fysem: course.is_fysem || false,
+            universal_course_id: course.universal_course_id || null
+          }
+        : {
+            id: -1,
+            codes: [],
+            title: 'Unknown Course',
+            description: '',
+            requirements: '',
+            credits: 0,
+            distributions: [],
+            is_colsem: false,
+            is_fysem: false,
+            universal_course_id: null
+          }
+    }
+  };
 }

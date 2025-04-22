@@ -1,8 +1,16 @@
 
 // types/type-user.ts
 
+export type CourseEntry = {
+  term_from: string;
+  code: string;
+  result: string;
+  term_to: string;
+};
+
 export interface AbstractCourse {
 	id: number;
+	universal_course_id: string | null;
 	codes: string[];
   title: string;
   description: string;

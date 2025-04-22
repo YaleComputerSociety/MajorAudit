@@ -1,15 +1,18 @@
+// UPDATED: frontend/hooks/useUserProfile.ts
+
 import {
   useState,
   useCallback,
   useEffect,
-  useMemo,
 } from 'react';
-import { User, StudentCourse, FYP } from '@/types/type-user';
+import { User, StudentCourse, FYP, CourseEntry } from '@/types/type-user';
 import { useAuth } from '@/context/AuthProvider';
 import {
-  fetchUserDataUtil,
-  addCourseUtil,
-  removeCourseUtil,
+  fetchUserData,
+  addCourses as apiAddCourses,
+  removeCourses as apiRemoveCourses,
+} from '@/api/userApi';
+import {
   getCurrentFYP,
   emptyUser,
 } from './useUserProfileUtils';
@@ -25,34 +28,34 @@ interface UseUserProfileReturn {
   availableFYPs: FYP[];
   setCurrentFYPIndex: (index: number) => void;
 
-  addCourse: (
-    termFrom: string,
-    code: string,
-    result: string,
-    termTo: string
-  ) => Promise<{ success: boolean; course?: StudentCourse; message: string }>;
+	addCourses: (
+		entries: CourseEntry[]
+	) => Promise<{ 
+		success: boolean; 
+		courses: StudentCourse[]; 
+		errors: { entry: CourseEntry; message: string }[] 
+	}>;
 
-  removeCourse: (
-    courseId: number
-  ) => Promise<{ success: boolean; message: string }>;
+  removeCourses: (
+    courseIds: number[]
+  ) => Promise<{ success: boolean; removed: number[]; errors: { id: number; message: string }[] }>;
 }
 
 export function useUserProfile(): UseUserProfileReturn {
-  const [user, setUser] = useState<User>(emptyUser);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [activeFYPIndex, setActiveFYPIndex] = useState(0);
-
   const { auth } = useAuth();
   const { loggedIn } = auth;
 
-  // Load selected FYP from localStorage
-  useEffect(() => {
-    const savedIndex = parseInt(localStorage.getItem('fypIndex') || '0');
-    if (!isNaN(savedIndex)) setActiveFYPIndex(savedIndex);
-  }, []);
+  const [user, setUser] = useState<User>(emptyUser);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Persist selected FYP index
+  const [activeFYPIndex, setActiveFYPIndex] = useState(() => {
+    const savedIndex = parseInt(localStorage.getItem('fypIndex') || '0');
+    return isNaN(savedIndex) ? 0 : savedIndex;
+  });
+
+  const [currentFYP, setCurrentFYP] = useState<FYP | null>(null);
+
   useEffect(() => {
     localStorage.setItem('fypIndex', activeFYPIndex.toString());
   }, [activeFYPIndex]);
@@ -61,83 +64,92 @@ export function useUserProfile(): UseUserProfileReturn {
     setActiveFYPIndex(index);
   }, []);
 
-  const fetchUserData = useCallback(async (): Promise<User | null> => {
+  const refreshUserData = useCallback(async (): Promise<User | null> => {
     if (!loggedIn) return null;
 
+    setIsLoading(true);
+    setError(null);
     try {
-      setIsLoading(true);
-      setError(null);
-      const fetched = await fetchUserDataUtil();
+      const fetched = await fetchUserData();
       setUser(fetched);
       return fetched;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      setError(message);
       return null;
     } finally {
       setIsLoading(false);
     }
   }, [loggedIn]);
 
-  const refreshUserData = useCallback(() => fetchUserData(), [fetchUserData]);
+  const withLoading = async <T>(fn: () => Promise<T | null>): Promise<T | null> => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      return await fn();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      setError(message);
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const addCourses = useCallback<UseUserProfileReturn['addCourses']>(
+    async (entries) => {
+      if (!currentFYP) return { success: false, courses: [], errors: entries.map(e => ({ entry: e, message: 'No active FYP' })) };
+
+      const response = await withLoading(() => apiAddCourses(currentFYP, entries));
+      if (response && response.success) {
+        setUser(prev => ({
+          ...prev,
+          FYPs: prev.FYPs.map(fyp =>
+            fyp.id === currentFYP.id
+              ? { ...fyp, studentCourses: [...fyp.studentCourses, ...response.courses] }
+              : fyp
+          )
+        }));
+      }
+      return response || { success: false, courses: [], errors: entries.map(e => ({ entry: e, message: 'Unexpected error' })) };
+    },
+    [currentFYP]
+  );
+
+  const removeCourses = useCallback<UseUserProfileReturn['removeCourses']>(
+    async (courseIds) => {
+      if (!currentFYP) return { success: false, removed: [], errors: courseIds.map(id => ({ id, message: 'No active FYP' })) };
+
+      const response = await withLoading(() => apiRemoveCourses(currentFYP, courseIds));
+      if (response && response.success) {
+        setUser(prev => ({
+          ...prev,
+          FYPs: prev.FYPs.map(fyp =>
+            fyp.id === currentFYP.id
+              ? {
+                  ...fyp,
+                  studentCourses: fyp.studentCourses.filter(c => !response.removed.includes(c.id))
+                }
+              : fyp
+          )
+        }));
+      }
+      return response || { success: false, removed: [], errors: courseIds.map(id => ({ id, message: 'Unexpected error' })) };
+    },
+    [currentFYP]
+  );
 
   const availableFYPs = user.FYPs ?? [];
 
-  const currentFYP = useMemo(
-    () => getCurrentFYP(user, activeFYPIndex),
-    [user.FYPs, activeFYPIndex]
-  );
-
-  const addCourse = useCallback(
-    async (
-      termFrom: string,
-      code: string,
-      result: string,
-      termTo: string
-    ) => {
-      setError(null);
-      setIsLoading(true);
-      if (!currentFYP) return { success: false, message: 'No active FYP' };
-
-      try {
-        const response = await addCourseUtil(currentFYP, termFrom, code, result, termTo);
-        if (response.success) await fetchUserData();
-        return response;
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        setError(errorMessage);
-        return { success: false, message: errorMessage };
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [currentFYP, fetchUserData]
-  );
-
-  const removeCourse = useCallback(
-    async (courseId: number) => {
-      setError(null);
-      setIsLoading(true);
-      if (!currentFYP) return { success: false, message: 'No active FYP' };
-
-      try {
-        const response = await removeCourseUtil(courseId, currentFYP);
-        if (response.success) await fetchUserData();
-        return response;
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        setError(errorMessage);
-        return { success: false, message: errorMessage };
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [currentFYP, fetchUserData]
-  );
+  useEffect(() => {
+    const fyp = getCurrentFYP(user, activeFYPIndex);
+    setCurrentFYP(fyp);
+  }, [user, activeFYPIndex]);
 
   useEffect(() => {
-    if (loggedIn) fetchUserData();
+    if (loggedIn) refreshUserData();
     else setUser(emptyUser);
-  }, [loggedIn, fetchUserData]);
+  }, [loggedIn, refreshUserData]);
 
   return {
     user,
@@ -147,7 +159,7 @@ export function useUserProfile(): UseUserProfileReturn {
     currentFYP,
     availableFYPs,
     setCurrentFYPIndex,
-    addCourse,
-    removeCourse,
+    addCourses,
+    removeCourses,
   };
 }

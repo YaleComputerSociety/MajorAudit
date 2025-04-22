@@ -1,17 +1,23 @@
 import { FYP } from "@/types/type-user";
 import { StudentYear, StudentSemester } from "./CoursesTyping";
 
+interface StudentTermArrangement {
+  first_year?: string[];
+  sophomore?: string[];
+  junior?: string[];
+  senior?: string[];
+}
+
 export function BuildStudentYears(fyp: FYP): StudentYear[] {
   const { studentCourses } = fyp;
 
-  // Parse the studentTermArrangement
-  let studentTermArrangement: any = {};
+  let studentTermArrangement: StudentTermArrangement = {};
 
   try {
     if (typeof fyp.studentTermArrangement === "object") {
-      studentTermArrangement = fyp.studentTermArrangement;
+      studentTermArrangement = fyp.studentTermArrangement as StudentTermArrangement;
     } else if (typeof fyp.studentTermArrangement === "string") {
-      studentTermArrangement = JSON.parse(fyp.studentTermArrangement);
+      studentTermArrangement = JSON.parse(fyp.studentTermArrangement) as StudentTermArrangement;
     }
   } catch (error) {
     console.error("Error parsing studentTermArrangement:", error);
