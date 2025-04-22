@@ -494,19 +494,16 @@ export type Database = {
           id: string
           name: string | null
           net_id: string
-					fyp_index: number 
         }
         Insert: {
           id: string
           name?: string | null
           net_id: string
-					fyp_index: number 
         }
         Update: {
           id?: string
           name?: string | null
           net_id?: string
-					fyp_index: number 
         }
         Relationships: []
       }
