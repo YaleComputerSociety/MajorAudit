@@ -1,70 +1,71 @@
+// frontend/app/courses/years/YearBox.tsx
 
-import { useState, useEffect } from "react";
+import React from "react";
 import { StudentYear, StudentSemester } from "../CoursesTyping";
+import SemesterBox from "./semester/SemesterBox";
 
-import SemesterBox from "./semester/SemesterBox"
-// import AddSemesterButton from "./add-semester/AddSemesterButton"
-import { useUser } from "@/context/UserProvider";
-
-function RenderSemesters(props: { 
-	edit: boolean;
-	columns: boolean; 
-	studentYear: StudentYear, 
-	setStudentYears: React.Dispatch<React.SetStateAction<StudentYear[]>>, 
-}) {
-  const newRenderedSemesters = props.studentYear.studentSemesters
-    .filter((studentSemester: StudentSemester) => studentSemester.term !== "0")
-    .map((studentSemester: StudentSemester) => (
-      <SemesterBox 
-				key={studentSemester.term} 
-				edit={props.edit} 
-				studentSemester={studentSemester} 
-			/>
-    ));
-
-  return( 
-    <div style={{ display: 'flex', flexDirection: props.columns ? 'column' : 'row' }}>
-      {newRenderedSemesters}
-    </div>
-  );
-}
-
-function YearBox(props: { 
-	edit: boolean, 
-	columns: boolean, 
-	studentYear: StudentYear, 
-	setStudentYears: React.Dispatch<React.SetStateAction<StudentYear[]>>, 
-}){
-	const { user } = useUser();
-  const [renderedSemesters, setRenderedSemesters] = useState<React.ReactNode>(null);
-	
-	useEffect(() => {
-    setRenderedSemesters(
-      <RenderSemesters 
-				edit={props.edit} 
-				columns={props.columns} 
-				studentYear={props.studentYear} 
-				setStudentYears={props.setStudentYears} 
-			/>
+const YearBox = React.memo(
+  ({
+    columns,
+    studentYear,
+  }: {
+    columns: boolean;
+    studentYear: StudentYear;
+  }) => {
+    return (
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ fontWeight: "600", fontSize: "25px", marginRight: "10px" }}>
+          {studentYear.grade}
+        </div>
+        <div style={{ display: "flex", flexDirection: columns ? "column" : "row" }}>
+          {studentYear.studentSemesters
+            .filter((s: StudentSemester) => s.term !== "0")
+            .map((studentSemester: StudentSemester) => (
+              <SemesterBox 
+                key={studentSemester.term} 
+                studentSemester={studentSemester} 
+              />
+            ))}
+        </div>
+      </div>
     );
-  }, [props.edit, props.columns, props.studentYear, user, props.setStudentYears]);
-
-  return(
-		<div style={{ display: 'flex', flexDirection: 'column' }}>
-			<div style={{ fontWeight: "600", fontSize: "25px", marginRight: "10px" }}>
-				{props.studentYear.grade}
-			</div>
-			<div style={{ display: 'flex', flexDirection: props.columns ? 'column' : 'row' }}>
-				{renderedSemesters}
-				{/* {(props.edit && (props.studentYear.studentSemesters.length < 3)) && 
-					<AddSemesterButton 
-						studentYear={props.studentYear} 
-						setStudentYears={props.setStudentYears}
-					/>
-				} */}
-			</div>
-		</div>
-  );
-}
+  },
+  // Custom comparison function to control re-renders
+  (prevProps, nextProps) => {
+    // Re-render if columns layout changed
+    if (prevProps.columns !== nextProps.columns) return false;
+    
+    // Re-render if year grade changed
+    if (prevProps.studentYear.grade !== nextProps.studentYear.grade) return false;
+    
+    // Re-render if semester count changed
+    if (prevProps.studentYear.studentSemesters.length !== 
+        nextProps.studentYear.studentSemesters.length) return false;
+    
+    // Check if any semester changed (by term or by course count)
+    for (let i = 0; i < prevProps.studentYear.studentSemesters.length; i++) {
+      const prevSem = prevProps.studentYear.studentSemesters[i];
+      const nextSem = nextProps.studentYear.studentSemesters[i];
+      
+      if (prevSem.term !== nextSem.term) return false;
+      
+      // Check if course count changed
+      if (prevSem.studentCourses.length !== nextSem.studentCourses.length) return false;
+      
+      // Check if any course IDs changed
+      const prevCourseIds = new Set(prevSem.studentCourses.map(c => c.id));
+      const nextCourseIds = new Set(nextSem.studentCourses.map(c => c.id));
+      
+      if (prevCourseIds.size !== nextCourseIds.size) return false;
+      
+      for (const id of prevCourseIds) {
+        if (!nextCourseIds.has(id)) return false;
+      }
+    }
+    
+    // No relevant changes detected, skip re-render
+    return true;
+  }
+);
 
 export default YearBox;

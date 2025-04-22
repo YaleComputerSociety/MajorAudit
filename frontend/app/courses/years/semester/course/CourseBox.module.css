@@ -39,8 +39,46 @@
 	padding: 0;
 	border: none;
 	cursor: pointer;
-
 	width: 20px;
 	height: 20px;
 	border-radius: 50%;
+}
+
+.RemovingState {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.SelectionLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.HiddenCheckbox {
+  display: none;
+}
+
+.CustomCheckbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  background-color: white;
+  color: white;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.SelectedCheckbox {
+  background-color: #0070f3;
+}
+
+.PendingState {
+  opacity: 0.7;
 }
