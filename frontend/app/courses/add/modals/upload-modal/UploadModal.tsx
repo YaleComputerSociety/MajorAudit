@@ -78,7 +78,7 @@ const UploadCoursesModal: React.FC = () => {
         uploadResults.push({
           code: course.code,
           success: false,
-          message: 'Unexpected error'
+          message: 'Unexpected error' + err
         });
       }
     }

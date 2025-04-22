@@ -1,318 +1,153 @@
-// frontend/hooks/useUserProfile.ts
-
-import { useState, useCallback, useRef, useEffect } from 'react';
+import {
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react';
 import { User, StudentCourse, FYP } from '@/types/type-user';
 import { useAuth } from '@/context/AuthProvider';
-
-// Updated empty user to match new interface
-const emptyUser: User = {
-  name: '',
-  netID: '',
-  FYPindex: -1,
-  FYPs: []
-};
+import {
+  fetchUserDataUtil,
+  addCourseUtil,
+  removeCourseUtil,
+  getCurrentFYP,
+  emptyUser,
+} from './useUserProfileUtils';
 
 interface UseUserProfileReturn {
   user: User;
   isLoading: boolean;
   error: string | null;
-  refreshUserData: () => Promise<User | null>;
-  // New function to select a specific FYP
-  selectFYP: (index: number) => void;
-  // Convenience getter for the current FYP
-  currentFYP: FYP | null;
-  addCourse: (termFrom: string, code: string, result: string, termTo: string) => Promise<{
-    success: boolean;
-    course?: StudentCourse;
-    message: string;
-  }>;
-  removeCourse: (courseId: number) => Promise<{
-    success: boolean;
-    message: string;
-  }>;
-  validateCourse: (code: string, termFrom: string) => Promise<boolean>;
-}
 
-export function useUserProfile(): UseUserProfileReturn {
-  const [user, setUser] = useState<User>(emptyUser);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const { auth } = useAuth();
-  const { loggedIn } = auth;
-  
-  // Use refs to track ongoing requests and last user data
-  const fetchInProgressRef = useRef<boolean>(false);
-  const userDataRef = useRef<User>(emptyUser);
-  
-  // Fetch user data with cache busting to ensure fresh data
-  const fetchUserData = useCallback(async (): Promise<User | null> => {
-    // Prevent duplicate fetches
-    if (fetchInProgressRef.current || !loggedIn) {
-      return userDataRef.current;
-    }
-    
-    try {
-      setIsLoading(true);
-      fetchInProgressRef.current = true;
-      
-      // Clear any previous errors
-      if (error) setError(null);
-      
-      // Add cache busting to force a fresh request
-      const url = `/api/user-profile?t=${Date.now()}`;
-      const response = await fetch(url, {
-        headers: {
-          'Cache-Control': 'no-cache'
-        }
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch user data');
-      }
-      
-      const data = await response.json();
-      
-      if (!data.user) {
-        setUser(emptyUser);
-        userDataRef.current = emptyUser;
-        return null;
-      }
-      
-      // Update the ref first
-      userDataRef.current = data.user;
-      
-      // Then update state
-      setUser(data.user);
-      
-      return data.user;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-      setError(errorMessage);
-      return null;
-    } finally {
-      setIsLoading(false);
-      fetchInProgressRef.current = false;
-    }
-  }, [loggedIn, error]);
-  
-  // Public method to refresh user data
-  const refreshUserData = useCallback(async (): Promise<User | null> => {
-    if (loggedIn) {
-      return fetchUserData();
-    }
-    return null;
-  }, [fetchUserData, loggedIn]);
-  
-  // Helper function to get current FYP based on FYPindex
-  const getCurrentFYP = useCallback((): FYP | null => {
-    if (user.FYPs.length === 0 || user.FYPindex < 0 || user.FYPindex >= user.FYPs.length) {
-      return null;
-    }
-    return user.FYPs[user.FYPindex];
-  }, [user]);
-  
-  // New function to select a specific FYP by index
-  const selectFYP = useCallback(async (index: number) => {
-		if (index >= 0 && index < user.FYPs.length && index !== user.FYPindex) {
-			const updatedUser = {
-				...user,
-				FYPindex: index
-			};
-	
-			setUser(updatedUser);
-			userDataRef.current = updatedUser;
-	
-			// Persist to backend
-			try {
-				await fetch('/api/user-profile', {
-					method: 'PATCH',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ fyp_index: index })
-				});
-			} catch (err) {
-				console.error('Failed to persist FYP index:', err);
-			}
-		}
-	}, [user]);
-  
-  // Add course with improved refresh handling
-  const addCourse = useCallback(async (
+  refreshUserData: () => Promise<User | null>;
+
+  currentFYP: FYP | null;
+  availableFYPs: FYP[];
+  setCurrentFYPIndex: (index: number) => void;
+
+  addCourse: (
     termFrom: string,
     code: string,
     result: string,
     termTo: string
-  ) => {
-    // Reset error state and set loading state
-    if (error) setError(null);
-    setIsLoading(true);
-    
-    // Get the current FYP ID
-    const currentFYP = getCurrentFYP();
-    if (!currentFYP) {
-      return {
-        success: false,
-        message: 'No active FYP found'
-      };
-    }
-    
-    try {
-      const response = await fetch('/api/student-courses', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          term_from: termFrom,
-          code,
-          result,
-          term_to: termTo,
-          fyp_id: currentFYP.id // Include the FYP ID in the request
-        }),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to add course');
-      }
-      
-      // Wait a brief moment to ensure backend processing is complete
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      // Explicitly fetch fresh data after adding a course
-      await fetchUserData();
-      
-      return {
-        success: true,
-        course: data.data,
-        message: data.message || 'Course added successfully'
-      };
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-      setError(errorMessage);
-      console.error('Error adding course:', errorMessage);
-      return {
-        success: false,
-        message: errorMessage
-      };
-    } finally {
-      setIsLoading(false);
-    }
-  }, [fetchUserData, error, getCurrentFYP]);
+  ) => Promise<{ success: boolean; course?: StudentCourse; message: string }>;
 
-  const removeCourse = useCallback(async (courseId: number) => {
-    // Reset error state and set loading state
-    if (error) setError(null);
-    setIsLoading(true);
-    
-    // Get the current FYP ID
-    const currentFYP = getCurrentFYP();
-    if (!currentFYP) {
-      return {
-        success: false,
-        message: 'No active FYP found'
-      };
-    }
-    
+  removeCourse: (
+    courseId: number
+  ) => Promise<{ success: boolean; message: string }>;
+}
+
+export function useUserProfile(): UseUserProfileReturn {
+  const [user, setUser] = useState<User>(emptyUser);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [activeFYPIndex, setActiveFYPIndex] = useState(0);
+
+  const { auth } = useAuth();
+  const { loggedIn } = auth;
+
+  // Load selected FYP from localStorage
+  useEffect(() => {
+    const savedIndex = parseInt(localStorage.getItem('fypIndex') || '0');
+    if (!isNaN(savedIndex)) setActiveFYPIndex(savedIndex);
+  }, []);
+
+  // Persist selected FYP index
+  useEffect(() => {
+    localStorage.setItem('fypIndex', activeFYPIndex.toString());
+  }, [activeFYPIndex]);
+
+  const setCurrentFYPIndex = useCallback((index: number) => {
+    setActiveFYPIndex(index);
+  }, []);
+
+  const fetchUserData = useCallback(async (): Promise<User | null> => {
+    if (!loggedIn) return null;
+
     try {
-      const response = await fetch(`/api/student-courses?id=${courseId}&fyp_id=${currentFYP.id}`, {
-        method: 'DELETE',
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to remove course');
-      }
-      
-      // Wait a brief moment to ensure backend processing is complete
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      // Explicitly fetch fresh data after removing a course
-      await fetchUserData();
-      
-      return {
-        success: true,
-        message: data.message || 'Course removed successfully'
-      };
+      setIsLoading(true);
+      setError(null);
+      const fetched = await fetchUserDataUtil();
+      setUser(fetched);
+      return fetched;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-      setError(errorMessage);
-      console.error('Error removing course:', errorMessage);
-      return {
-        success: false,
-        message: errorMessage
-      };
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      return null;
     } finally {
       setIsLoading(false);
     }
-  }, [fetchUserData, error, getCurrentFYP]);
-  
-  // Course validation
-  const validateCourse = useCallback(async (code: string, termFrom: string): Promise<boolean> => {
-    try {
-      // Get the current FYP ID
-      const currentFYP = getCurrentFYP();
-      if (!currentFYP) {
-        return false;
+  }, [loggedIn]);
+
+  const refreshUserData = useCallback(() => fetchUserData(), [fetchUserData]);
+
+  const availableFYPs = user.FYPs ?? [];
+
+  const currentFYP = useMemo(
+    () => getCurrentFYP(user, activeFYPIndex),
+    [user.FYPs, activeFYPIndex]
+  );
+
+  const addCourse = useCallback(
+    async (
+      termFrom: string,
+      code: string,
+      result: string,
+      termTo: string
+    ) => {
+      setError(null);
+      setIsLoading(true);
+      if (!currentFYP) return { success: false, message: 'No active FYP' };
+
+      try {
+        const response = await addCourseUtil(currentFYP, termFrom, code, result, termTo);
+        if (response.success) await fetchUserData();
+        return response;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError(errorMessage);
+        return { success: false, message: errorMessage };
+      } finally {
+        setIsLoading(false);
       }
-      
-      const response = await fetch(
-        `/api/student-courses/validate?code=${encodeURIComponent(code)}&term=${encodeURIComponent(termFrom)}&fyp_id=${currentFYP.id}`
-      );
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to validate course');
+    },
+    [currentFYP, fetchUserData]
+  );
+
+  const removeCourse = useCallback(
+    async (courseId: number) => {
+      setError(null);
+      setIsLoading(true);
+      if (!currentFYP) return { success: false, message: 'No active FYP' };
+
+      try {
+        const response = await removeCourseUtil(courseId, currentFYP);
+        if (response.success) await fetchUserData();
+        return response;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError(errorMessage);
+        return { success: false, message: errorMessage };
+      } finally {
+        setIsLoading(false);
       }
-      
-      const data = await response.json();
-      // Clear any previous errors if successful
-      if (error) setError(null);
-      return data.exists;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-      setError(errorMessage);
-      return false;
-    }
-  }, [error, getCurrentFYP]);
-  
-  // Initial data fetch on mount or auth change
+    },
+    [currentFYP, fetchUserData]
+  );
+
   useEffect(() => {
-    let isMounted = true;
-    
-    if (loggedIn && !fetchInProgressRef.current) {
-      fetchUserData().then(result => {
-        // Only update state if component is still mounted
-        if (isMounted && result) {
-          // State updates are already handled in fetchUserData
-        }
-      });
-    } else if (!loggedIn && isMounted) {
-      setUser(emptyUser);
-      userDataRef.current = emptyUser;
-    }
-    
-    return () => {
-      isMounted = false;
-    };
+    if (loggedIn) fetchUserData();
+    else setUser(emptyUser);
   }, [loggedIn, fetchUserData]);
-  
-  // Compute the current FYP for convenience
-  const currentFYP = getCurrentFYP();
-  
+
   return {
     user,
     isLoading,
     error,
     refreshUserData,
-    selectFYP,
     currentFYP,
+    availableFYPs,
+    setCurrentFYPIndex,
     addCourse,
     removeCourse,
-    validateCourse
   };
 }

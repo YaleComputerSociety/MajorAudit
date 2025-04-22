@@ -23,8 +23,6 @@ export async function GET(req: NextRequest)
       );
     }
 
-    const userId = authUser.id;
-    
     // Get the FYP ID from the URL
     const url = new URL(req.url);
     const fypId = url.searchParams.get('fyp_id');
@@ -72,7 +70,6 @@ export async function POST(req: NextRequest)
       );
     }
 
-    const userId = authUser.id;
     const { term_from, code, result, term_to, fyp_id } = await req.json();
 
     if (!term_from || !code || !result || !term_to || !fyp_id) {
@@ -137,8 +134,6 @@ export async function DELETE(req: NextRequest) {
         { status: 401 }
       );
     }
-    
-    const userId = authUser.id;
     
     // Get the studentCourseId and fypId from the URL
     const url = new URL(req.url);

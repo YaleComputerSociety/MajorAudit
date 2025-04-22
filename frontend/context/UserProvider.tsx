@@ -1,5 +1,3 @@
-// frontend/context/UserProvider.tsx
-
 "use client";
 import { createContext, useContext } from "react";
 import { User, StudentCourse, FYP } from "@/types/type-user";
@@ -9,16 +7,16 @@ interface UserContextType {
   user: User;
   isLoading: boolean;
   error: string | null;
-  
+
   // Core operations
   refreshUserData: () => Promise<User | null>;
-  
-  // FYP-specific operations
-  selectFYP: (index: number) => void;
+
+  // FYP state (exposed cleanly)
   currentFYP: FYP | null;
-  
-  // Course-specific operations
-  validateCourse: (code: string, termFrom: string) => Promise<boolean>;
+  availableFYPs: FYP[];
+  setCurrentFYPIndex: (index: number) => void;
+
+  // Course ops
   addCourse: (
     termFrom: string,
     code: string,
@@ -37,10 +35,9 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | null>(null);
 
-export function UserProvider({ children }: { children: React.ReactNode }) 
-{
+export function UserProvider({ children }: { children: React.ReactNode }) {
   const userProfile = useUserProfile();
-  
+
   return (
     <UserContext.Provider value={userProfile}>
       {children}
@@ -51,7 +48,7 @@ export function UserProvider({ children }: { children: React.ReactNode })
 export function useUser(): UserContextType {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
+    throw new Error("useUser must be used within a UserProvider");
   }
   return context;
 }

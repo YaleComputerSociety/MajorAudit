@@ -219,20 +219,15 @@ export async function GET(request)
     
     // Generate a secure random password
     const password = crypto.randomBytes(16).toString('hex');
-    
-    // Declare userId variable before using it
-    let userId;
     let error;
     
     if (existingUser) {
       // Handle existing user
       const result = await handleExistingUser(adminClient, existingUser, netID, password, email);
-      userId = result.userId;
       error = result.error;
     } else {
       // Create new user
       const result = await createNewUser(adminClient, netID, password, yaliesInfo);
-      userId = result.userId;
       error = result.error;
     }
     

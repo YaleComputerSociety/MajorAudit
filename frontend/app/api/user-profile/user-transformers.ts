@@ -95,7 +95,6 @@ export function transformToUser(
   return {
     name: user.name || '',
     netID: user.net_id,
-    FYPindex: user.fyp_index,
     FYPs: fyps 
   }
 }

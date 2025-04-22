@@ -39,7 +39,6 @@ export interface FYP {
 export interface User {
 	name: string;
 	netID: string;
-	FYPindex: number;
 	FYPs: FYP[];
 }
 
