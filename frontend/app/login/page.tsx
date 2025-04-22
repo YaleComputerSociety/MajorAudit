@@ -25,7 +25,7 @@ function Login()
           </ul>
           <div className={Style.loginButtons}>
             <div onClick={handleLogin} className={Style.btn}>
-							Beta Coming Soon
+							Pre-Alpha 5/1
             </div>
           </div>
         </div>
