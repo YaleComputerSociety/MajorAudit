@@ -24,7 +24,7 @@ import {
 
 const SemesterBox = ({ studentSemester }: { studentSemester: StudentSemester }) => {
   const { editMode } = useCoursesPage();
-  const { currentFYP, updateStudentCoursePosition } = useUser();
+  const {  updateStudentCoursePosition } = useUser();
   
   // Create a local state copy of the courses to ensure UI updates
   const [localCourses, setLocalCourses] = useState(studentSemester.studentCourses);
@@ -49,15 +49,6 @@ const SemesterBox = ({ studentSemester }: { studentSemester: StudentSemester }) 
   
   // Sort by sort_index
   const sortedVisibleCourses = [...visibleCourses].sort((a, b) => a.sort_index - b.sort_index);
-
-  // Debug logging
-  if(studentSemester.term === "202203"){
-    console.log(`🎨 Rendering SemesterBox for term ${studentSemester.term}`);
-    console.log(
-      "🧱 Visible courses:",
-      sortedVisibleCourses.map((c) => `${c.id}:${c.sort_index}`)
-    );
-  }
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -88,10 +79,8 @@ const SemesterBox = ({ studentSemester }: { studentSemester: StudentSemester }) 
       })),
     ];
 
-    // Update local state immediately
     setLocalCourses(updatedCourses);
     
-    // Track the drag operation
     setLastDragOperation({
       courseId: active.id as number,
       fromIndex: oldIndex,
@@ -99,12 +88,7 @@ const SemesterBox = ({ studentSemester }: { studentSemester: StudentSemester }) 
       timestamp: Date.now()
     });
     
-    // Update the global state
     updateStudentCoursePosition(updatedCourses);
-    
-    console.log('Drag completed:', 
-      `Moved ${active.id} from position ${oldIndex} to ${newIndex}`,
-      updatedCourses.map(c => `${c.id}:${c.sort_index}`));
   };
 
   return (
@@ -122,7 +106,6 @@ const SemesterBox = ({ studentSemester }: { studentSemester: StudentSemester }) 
           strategy={verticalListSortingStrategy}
         >
           <div className={Style.Column}>
-            {/* Use lastDragOperation in the key to force re-renders */}
             <div key={`courses-${lastDragOperation?.timestamp || 'initial'}`}>
               {sortedVisibleCourses.map((studentCourse) => (
                 <CourseBox 

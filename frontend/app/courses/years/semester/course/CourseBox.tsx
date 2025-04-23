@@ -121,7 +121,7 @@ const CourseBox = memo(({ studentCourse }: { studentCourse: StudentCourse }) => 
           </div>
         )}
         <RenderMark status={studentCourse.status}/>
-				{studentCourse.sort_index}
+				{/* {studentCourse.sort_index} */}
         <SeasonIcon studentCourse={studentCourse}/>
         <div className={Style.Column}>
           <div className={Style.CourseCode}>

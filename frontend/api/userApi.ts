@@ -85,16 +85,24 @@ export async function removeCourses(
   };
 }
 
-export async function updateStudentCourse(
-  courseId: number,
-  updates: Partial<{ is_hidden: boolean }>
-): Promise<{ success: boolean }> {
-  const response = await fetch(`/api/student-courses/${courseId}`, {
+export async function updateStudentCourses(
+  updates: { id: number; sort_index?: number; is_hidden?: boolean }[]
+): Promise<{ success: boolean; errors?: { id: number; message: string }[] }> {
+
+  const response = await fetch(`/api/student-courses`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(updates),
+    body: JSON.stringify(updates), // <-- send raw array, not wrapped in { updates: ... }
   });
 
-  if (!response.ok) throw new Error('Failed to update course');
-  return { success: true };
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result?.error || 'Failed to update student courses');
+  }
+
+  return {
+    success: result.success,
+    errors: result.errors ?? [],
+  };
 }

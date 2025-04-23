@@ -11,7 +11,7 @@ import {
   fetchUserData,
   addCourses as apiAddCourses,
   removeCourses as apiRemoveCourses,
-  updateStudentCourse
+  updateStudentCourses
 } from '@/api/userApi';
 
 // Moved from useUserProfileUtils.ts
@@ -172,84 +172,67 @@ export function useUserProfile(): UseUserProfileReturn {
     [currentFYP]
   );
 
-  const toggleCourseHidden = useCallback(
-    (courseId: number, hidden: boolean) => {
-      setUser(prev => ({
-        ...prev,
-        FYPs: prev.FYPs.map(fyp => {
-          if (fyp.id !== currentFYP?.id) return fyp;
-          return {
-            ...fyp,
-            studentCourses: fyp.studentCourses.map(course =>
-              course.id === courseId ? { ...course, is_hidden: hidden } : course
-            )
-          };
-        })
-      }));
+	const toggleCourseHidden = useCallback(
+		(courseId: number, hidden: boolean) => {
+			// Optimistically update local state
+			setUser(prev => ({
+				...prev,
+				FYPs: prev.FYPs.map(fyp => {
+					if (fyp.id !== currentFYP?.id) return fyp;
+					return {
+						...fyp,
+						studentCourses: fyp.studentCourses.map(course =>
+							course.id === courseId ? { ...course, is_hidden: hidden } : course
+						)
+					};
+				})
+			}));
+	
+			// Use batch backend update
+			updateStudentCourses([{ id: courseId, is_hidden: hidden }]).catch((error) => {
+				console.error("Error updating course hidden state:", error);
+				// Optional: rollback UI or show error
+			});
+		},
+		[currentFYP?.id]
+	);
 
-      // Fire-and-forget backend patch
-      updateStudentCourse(courseId, { is_hidden: hidden }).catch((error) => {
-        console.error("Error updating course hidden state:", error);
-        // Optional: revert on error, but you can skip this
-      });
-    },
-    [currentFYP?.id]
-  );
-
-  const updateStudentCoursePosition = useCallback(
-    (updatedCourses: StudentCourse[]) => {
-      if (!currentFYP) return;
-      
-      console.log('Starting course position update:', updatedCourses.map(c => `${c.id}:${c.sort_index}`));
-      
-      // Create a map of updated courses for quick lookup
-      const courseUpdates = new Map<number, StudentCourse>();
-      updatedCourses.forEach(course => {
-        courseUpdates.set(course.id, course);
-      });
-      
-      // Update user state with new course positions
-      setUser(prev => {
-        // Debug current state
-        console.log('Current state before update:', 
-          prev.FYPs.find(f => f.id === currentFYP.id)?.studentCourses.map(c => `${c.id}:${c.sort_index}`)
-        );
-        
-        const newState = {
-          ...prev,
-          FYPs: prev.FYPs.map(fyp => {
-            if (fyp.id !== currentFYP.id) return fyp;
-            
-            const updatedStudentCourses = fyp.studentCourses.map(course => {
-              const update = courseUpdates.get(course.id);
-              if (!update) return course;
-              
-              return {
-                ...course,
-                sort_index: update.sort_index
-              };
-            });
-            
-            // Debug updated courses
-            console.log('Updated courses:', 
-              updatedStudentCourses.map(c => `${c.id}:${c.sort_index}`)
-            );
-            
-            return {
-              ...fyp,
-              studentCourses: updatedStudentCourses
-            };
-          })
-        };
-        
-        return newState;
-      });
-      
-      // TODO: Implement backend call - for now just log
-      console.log('Course positions updated in state - will save to backend later');
-    },
-    [currentFYP]
-  );
+	const updateStudentCoursePosition = useCallback(
+		async (updatedCourses: StudentCourse[]) => {
+			if (!currentFYP) return;
+	
+			const courseUpdates = updatedCourses.map(course => ({
+				id: course.id,
+				sort_index: course.sort_index
+			}));
+	
+			// Optimistically update UI
+			setUser(prev => {
+				const updatedFYPs = prev.FYPs.map(fyp => {
+					if (fyp.id !== currentFYP.id) return fyp;
+	
+					const updateMap = new Map(courseUpdates.map(c => [c.id, c.sort_index]));
+					const updatedStudentCourses = fyp.studentCourses.map(course => 
+						updateMap.has(course.id)
+							? { ...course, sort_index: updateMap.get(course.id)! }
+							: course
+					);
+	
+					return { ...fyp, studentCourses: updatedStudentCourses };
+				});
+	
+				return { ...prev, FYPs: updatedFYPs };
+			});
+	
+			try {
+				await updateStudentCourses(courseUpdates);
+			} catch (err) {
+				console.error("Failed to persist course reorder:", err);
+				// Optional: rollback or show error
+			}
+		},
+		[currentFYP]
+	);
 
   const availableFYPs = user.FYPs ?? [];
 

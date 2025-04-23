@@ -68,3 +68,46 @@ export async function DELETE(req: NextRequest) {
   }
 }
 
+export async function PATCH(req: NextRequest) {
+  try {
+    const updates: { id: number; sort_index?: number; is_hidden?: boolean }[] = await req.json();
+
+    if (!Array.isArray(updates) || updates.length === 0) {
+      return NextResponse.json({ error: 'Invalid request format' }, { status: 400 });
+    }
+
+    const supabase = await getSupabaseServerClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Authentication error' }, { status: 401 });
+    }
+
+    const errors: any[] = [];
+
+    for (const update of updates) {
+      const { id, ...fields } = update;
+      if (!id || Object.keys(fields).length === 0) {
+        errors.push({ id, message: 'Missing update fields' });
+        continue;
+      }
+
+      const { error: updateError } = await supabase
+        .from('student_courses')
+        .update(fields)
+        .eq('id', id);
+
+      if (updateError) {
+        errors.push({ id, message: updateError.message });
+      }
+    }
+
+    return NextResponse.json({
+      success: errors.length === 0,
+      errors,
+    });
+  } catch (err) {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
