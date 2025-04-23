@@ -84,3 +84,17 @@ export async function removeCourses(
     errors: data.errors || [],
   };
 }
+
+export async function updateStudentCourse(
+  courseId: number,
+  updates: Partial<{ is_hidden: boolean }>
+): Promise<{ success: boolean }> {
+  const response = await fetch(`/api/student-courses/${courseId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates),
+  });
+
+  if (!response.ok) throw new Error('Failed to update course');
+  return { success: true };
+}

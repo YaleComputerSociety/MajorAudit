@@ -1,3 +1,5 @@
+// frontend/context/UserProvider.tsx
+
 "use client";
 import { createContext, useContext } from "react";
 import { User, StudentCourse, FYP } from "@/types/user";
@@ -34,6 +36,8 @@ interface UserContextType {
     removed: number[];
     errors: { id: number; message: string }[];
   }>;
+
+	toggleCourseHidden: (courseId: number, hidden: boolean) => void;
 }
 
 const UserContext = createContext<UserContextType | null>(null);

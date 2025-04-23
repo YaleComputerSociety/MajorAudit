@@ -17,6 +17,8 @@ import {
   emptyUser,
 } from './useUserProfileUtils';
 
+import { updateStudentCourse } from '@/api/userApi'; // import it
+
 interface UseUserProfileReturn {
   user: User;
   isLoading: boolean;
@@ -39,6 +41,8 @@ interface UseUserProfileReturn {
   removeCourses: (
     courseIds: number[]
   ) => Promise<{ success: boolean; removed: number[]; errors: { id: number; message: string }[] }>;
+
+	toggleCourseHidden: (courseId: number, hidden: boolean) => void;
 }
 
 export function useUserProfile(): UseUserProfileReturn {
@@ -139,6 +143,29 @@ export function useUserProfile(): UseUserProfileReturn {
     [currentFYP]
   );
 
+	const toggleCourseHidden = useCallback(
+		(courseId: number, hidden: boolean) => {
+			setUser(prev => ({
+				...prev,
+				FYPs: prev.FYPs.map(fyp => {
+					if (fyp.id !== currentFYP?.id) return fyp;
+					return {
+						...fyp,
+						studentCourses: fyp.studentCourses.map(course =>
+							course.id === courseId ? { ...course, is_hidden: hidden } : course
+						)
+					};
+				})
+			}));
+	
+			// Fire-and-forget backend patch
+			updateStudentCourse(courseId, { is_hidden: hidden }).catch(() => {
+				// Optional: revert on error, but you can skip this
+			});
+		},
+		[currentFYP?.id]
+	);
+
   const availableFYPs = user.FYPs ?? [];
 
   useEffect(() => {
@@ -161,5 +188,6 @@ export function useUserProfile(): UseUserProfileReturn {
     setCurrentFYPIndex,
     addCourses,
     removeCourses,
+		toggleCourseHidden
   };
 }

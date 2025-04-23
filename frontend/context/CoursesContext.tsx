@@ -1,7 +1,6 @@
 // frontend/context/CoursesContext.tsx
 
 'use client';
-
 import React, { createContext, useContext, useState, useCallback, useMemo, useTransition } from 'react';
 
 interface CoursesPageContextType {
@@ -22,7 +21,6 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
   const [selectedCourses, setSelectedCourses] = useState<Set<number>>(new Set());
   const [isPending, startTransition] = useTransition();
 
-  // Optimized function to toggle course selection
   const toggleCourseSelection = useCallback((courseId: number) => {
     startTransition(() => {
       setSelectedCourses(prev => {
@@ -37,7 +35,6 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
     });
   }, []);
 
-  // Memoize the context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({
     editMode,
     toggleEditMode,

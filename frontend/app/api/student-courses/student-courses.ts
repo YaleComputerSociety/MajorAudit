@@ -73,7 +73,8 @@ async function addStudentCourse(params: AddStudentCourseParams) {
       course_offering_id: courseOfferingId,
       term,
       status,
-      result
+      result,
+			is_hidden: false
     })
     .select('*')
     .single();
@@ -224,6 +225,7 @@ export function normalizeStudentCourse(
     term: studentCourse.term,
     status: studentCourse.status,
     result: studentCourse.result,
+		is_hidden: studentCourse.is_hidden,
     courseOffering: {
       term: offering.term,
       professors: offering.professors || [],

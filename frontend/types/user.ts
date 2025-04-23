@@ -34,6 +34,7 @@ export interface StudentCourse {
   status: string; 										// "DA" || "MA"
   result: string;											// "A-C" || "CR" || "D/F/W"
   term: string;
+	is_hidden: boolean;
   courseOffering: CourseOffering;
 }
 

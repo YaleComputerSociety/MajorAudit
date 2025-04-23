@@ -53,14 +53,14 @@ const YearBox = React.memo(
       if (prevSem.studentCourses.length !== nextSem.studentCourses.length) return false;
       
       // Check if any course IDs changed
-      const prevCourseIds = new Set(prevSem.studentCourses.map(c => c.id));
-      const nextCourseIds = new Set(nextSem.studentCourses.map(c => c.id));
+			const prevCourseKeys = new Set(prevSem.studentCourses.map(c => `${c.id}-${c.is_hidden}`));
+			const nextCourseKeys = new Set(nextSem.studentCourses.map(c => `${c.id}-${c.is_hidden}`));
+			
       
-      if (prevCourseIds.size !== nextCourseIds.size) return false;
-      
-      for (const id of prevCourseIds) {
-        if (!nextCourseIds.has(id)) return false;
-      }
+			if (prevCourseKeys.size !== nextCourseKeys.size) return false;
+			for (const key of prevCourseKeys) {
+				if (!nextCourseKeys.has(key)) return false;
+			}
     }
     
     // No relevant changes detected, skip re-render

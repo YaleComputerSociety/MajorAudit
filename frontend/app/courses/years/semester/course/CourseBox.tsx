@@ -45,7 +45,27 @@ const RemoveButton = memo(({ studentCourse }: { studentCourse: StudentCourse }) 
   );
 });
 
-// Separate selection component to minimize rerenders
+
+// --- 👁️ Toggle Component ---
+const EyeToggle = memo(({ studentCourse }: { studentCourse: StudentCourse }) => {
+  const { toggleCourseHidden } = useUser();
+
+	const handleClick = () => {
+		toggleCourseHidden(studentCourse.id, !studentCourse.is_hidden);
+	};
+
+  return (
+    <div
+      className={`${Style.FuncButton} ${studentCourse.is_hidden ? Style.HiddenIcon : ""}`}
+      onClick={handleClick}
+      title={studentCourse.is_hidden ? "Show course" : "Hide course"}
+    >
+      {studentCourse.is_hidden ? "🙈" : "👁️"}
+    </div>
+  );
+});
+
+// --- Checkbox Component ---
 const CourseSelection = memo(({ courseId }: { courseId: number }) => {
   const { selectedCourses, toggleCourseSelection, isPending } = useCoursesPage();
   const isSelected = selectedCourses.has(courseId);
@@ -68,8 +88,8 @@ const CourseSelection = memo(({ courseId }: { courseId: number }) => {
   );
 });
 
+// --- Main Component ---
 const CourseBox = memo(({ studentCourse }: { studentCourse: StudentCourse }) => {
-  // Get everything directly from context - no more edit prop needed
   const { editMode } = useCoursesPage();
 
   return (
@@ -80,8 +100,9 @@ const CourseBox = memo(({ studentCourse }: { studentCourse: StudentCourse }) => 
       <div className={Style.Row}>
         {editMode && (
           <div className={Style.Row}>
-            <CourseSelection courseId={studentCourse.id} />
-            <RemoveButton studentCourse={studentCourse} />
+            <CourseSelection courseId={studentCourse.id}/>
+            <EyeToggle studentCourse={studentCourse}/>
+            {/* <RemoveButton studentCourse={studentCourse}/> */}
           </div>
         )}
         <RenderMark status={studentCourse.status}/>
@@ -100,8 +121,8 @@ const CourseBox = memo(({ studentCourse }: { studentCourse: StudentCourse }) => 
   );
 });
 
-// Add display names for debugging
-RemoveButton.displayName = 'RemoveButton';
+// Debug names
+EyeToggle.displayName = 'EyeToggle';
 CourseSelection.displayName = 'CourseSelection';
 CourseBox.displayName = 'CourseBox';
 
