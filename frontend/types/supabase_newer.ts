@@ -392,6 +392,7 @@ export type Database = {
           result: string
           status: string
           term: string
+					sort_index: number
 					is_hidden: boolean
         }
         Insert: {
@@ -401,6 +402,7 @@ export type Database = {
           result: string
           status: string
           term: string
+					sort_index: number
 					is_hidden: boolean
         }
         Update: {
@@ -410,6 +412,7 @@ export type Database = {
           result?: string
           status?: string
           term?: string
+					sort_index: number
 					is_hidden: boolean
         }
         Relationships: [

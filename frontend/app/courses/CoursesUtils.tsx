@@ -1,3 +1,5 @@
+// frontend/app/courses/CoursesUtils.tsx
+
 import { FYP } from "@/types/user";
 import { StudentYear, StudentSemester } from "./CoursesTyping";
 

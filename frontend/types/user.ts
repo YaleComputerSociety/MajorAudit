@@ -6,6 +6,7 @@ export type CourseEntry = {
   code: string;
   result: string;
   term_to: string;
+	sort_index: number;
 };
 
 export interface AbstractCourse {
@@ -34,6 +35,7 @@ export interface StudentCourse {
   status: string; 										// "DA" || "MA"
   result: string;											// "A-C" || "CR" || "D/F/W"
   term: string;
+	sort_index: number;
 	is_hidden: boolean;
   courseOffering: CourseOffering;
 }

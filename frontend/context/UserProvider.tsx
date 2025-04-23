@@ -7,6 +7,7 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface UserContextType {
   user: User;
+	
   isLoading: boolean;
   error: string | null;
 
@@ -22,6 +23,7 @@ interface UserContextType {
       code: string;
       result: string;
       term_to: string;
+			sort_index: number;
     }[]
   ) => Promise<{
     success: boolean;

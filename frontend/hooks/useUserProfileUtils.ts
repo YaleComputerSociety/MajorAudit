@@ -9,6 +9,7 @@ export const emptyUser: User = {
 };
 
 export function getCurrentFYP(user: User, fypIndex: number): FYP | null {
+  console.log("🧠 getCurrentFYP recomputing:", fypIndex);
   if (
     user.FYPs.length === 0 ||
     fypIndex < 0 ||
@@ -16,5 +17,13 @@ export function getCurrentFYP(user: User, fypIndex: number): FYP | null {
   ) {
     return null;
   }
-  return user.FYPs[fypIndex];
+
+  const fyp = user.FYPs[fypIndex];
+  
+  // Create a new reference without re-sorting - preserve the existing order
+  // This avoids interfering with the sorting done in the drag handler
+  return {
+    ...fyp,
+    studentCourses: [...fyp.studentCourses]
+  };
 }

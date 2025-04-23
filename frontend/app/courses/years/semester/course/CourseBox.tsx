@@ -9,6 +9,9 @@ import { StudentCourse } from "@/types/user";
 import { RenderMark, SeasonIcon, GetCourseColor } from "../../../../../utils/course-display/CourseDisplay";
 import DistributionCircle from "../../../../../components/distribution-circle/DistributionsCircle";
 
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
 // Separated into its own memo component to prevent re-renders of parent
 const RemoveButton = memo(({ studentCourse }: { studentCourse: StudentCourse }) => {
   const { removeCourses } = useUser();
@@ -50,9 +53,9 @@ const RemoveButton = memo(({ studentCourse }: { studentCourse: StudentCourse }) 
 const EyeToggle = memo(({ studentCourse }: { studentCourse: StudentCourse }) => {
   const { toggleCourseHidden } = useUser();
 
-	const handleClick = () => {
-		toggleCourseHidden(studentCourse.id, !studentCourse.is_hidden);
-	};
+  const handleClick = () => {
+    toggleCourseHidden(studentCourse.id, !studentCourse.is_hidden);
+  };
 
   return (
     <div
@@ -92,11 +95,23 @@ const CourseSelection = memo(({ courseId }: { courseId: number }) => {
 const CourseBox = memo(({ studentCourse }: { studentCourse: StudentCourse }) => {
   const { editMode } = useCoursesPage();
 
-  return (
-    <div 
-      className={Style.CourseBox}  
-      style={{ background: GetCourseColor(studentCourse.term) }}
-    > 
+	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+		id: studentCourse.id
+	});
+	
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition
+	};
+
+	return (
+		<div 
+			ref={setNodeRef}
+			style={{ ...style, background: studentCourse.is_hidden ? "#fbfbfb" : GetCourseColor(studentCourse.term) }}
+			className={Style.CourseBox}
+			{...attributes}
+			{...listeners}
+		>
       <div className={Style.Row}>
         {editMode && (
           <div className={Style.Row}>
@@ -106,6 +121,7 @@ const CourseBox = memo(({ studentCourse }: { studentCourse: StudentCourse }) => 
           </div>
         )}
         <RenderMark status={studentCourse.status}/>
+				{studentCourse.sort_index}
         <SeasonIcon studentCourse={studentCourse}/>
         <div className={Style.Column}>
           <div className={Style.CourseCode}>

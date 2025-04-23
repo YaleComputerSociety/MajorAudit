@@ -12,6 +12,7 @@ interface AddStudentCourseParams {
   term: string;
   status: string;
   result: string;
+	sort_index: number;
   supabaseClient: GenericSupabaseClient;
 }
 
@@ -20,6 +21,7 @@ interface BulkCourseEntry {
   term_from: string;
   term_to: string;
   result: string;
+	sort_index: number;
 }
 
 export async function validateCourseExists(
@@ -64,7 +66,7 @@ export async function validateCourseExists(
 }
 
 async function addStudentCourse(params: AddStudentCourseParams) {
-  const { fypId, courseOfferingId, term, status, result, supabaseClient } = params;
+  const { fypId, courseOfferingId, term, status, result, sort_index, supabaseClient } = params;
 
   const { data, error } = await supabaseClient
     .from('student_courses')
@@ -74,6 +76,7 @@ async function addStudentCourse(params: AddStudentCourseParams) {
       term,
       status,
       result,
+			sort_index,
 			is_hidden: false
     })
     .select('*')
@@ -104,6 +107,7 @@ export async function addStudentCourses(
         term: term_to,
         status,
         result,
+				sort_index: entry.sort_index,
         supabaseClient
       });
 
@@ -225,6 +229,7 @@ export function normalizeStudentCourse(
     term: studentCourse.term,
     status: studentCourse.status,
     result: studentCourse.result,
+		sort_index: studentCourse.sort_index,
 		is_hidden: studentCourse.is_hidden,
     courseOffering: {
       term: offering.term,
