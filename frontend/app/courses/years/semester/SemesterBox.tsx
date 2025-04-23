@@ -1,6 +1,6 @@
 // frontend/app/courses/years/semester/SemesterBox.tsx
 
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Style from "./SemesterBox.module.css";
 import { StudentSemester } from "../../CoursesTyping";
 import { TransformTermNumber } from "../../../../utils/course-display/CourseDisplay";
@@ -14,6 +14,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  DragEndEvent
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -21,33 +22,51 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-const SemesterBox = React.memo(
-  ({ studentSemester }: { studentSemester: StudentSemester }) => {
-    const { editMode } = useCoursesPage();
-  	const { currentFYP } = useUser();
+const SemesterBox = ({ studentSemester }: { studentSemester: StudentSemester }) => {
+  const { editMode } = useCoursesPage();
+  const { currentFYP, updateStudentCoursePosition } = useUser();
+  
+  // Create a local state copy of the courses to ensure UI updates
+  const [localCourses, setLocalCourses] = useState(studentSemester.studentCourses);
+  
+  // Update local courses whenever studentSemester changes
+  useEffect(() => {
+    setLocalCourses(studentSemester.studentCourses);
+  }, [studentSemester]);
+  
+  // Keep track of the last drag operation for forced re-renders
+  const [lastDragOperation, setLastDragOperation] = useState<{
+    courseId: number,
+    fromIndex: number,
+    toIndex: number,
+    timestamp: number
+  } | null>(null);
 
-    // Only show non-hidden courses unless we're in edit mode
-    const visibleCourses = editMode
-      ? studentSemester.studentCourses
-      : studentSemester.studentCourses.filter(course => !course.is_hidden);
+  // Filter and sort courses using our local copy
+  const visibleCourses = editMode
+    ? localCourses
+    : localCourses.filter(course => !course.is_hidden);
+  
+  // Sort by sort_index
+  const sortedVisibleCourses = [...visibleCourses].sort((a, b) => a.sort_index - b.sort_index);
 
-	if(studentSemester.term === "202503"){
-		console.log(`🎨 Rendering SemesterBox for term ${studentSemester.term}`);
-		console.log(
-			"🧱 Visible courses:",
-			visibleCourses.map((c) => `${c.id}:${c.sort_index}`)
-		);
-	}
-
+  // Debug logging
+  if(studentSemester.term === "202203"){
+    console.log(`🎨 Rendering SemesterBox for term ${studentSemester.term}`);
+    console.log(
+      "🧱 Visible courses:",
+      sortedVisibleCourses.map((c) => `${c.id}:${c.sort_index}`)
+    );
+  }
 
   const sensors = useSensors(useSensor(PointerSensor));
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
     const coursesInTerm =
-      currentFYP?.studentCourses.filter((c) => c.term === studentSemester.term) || [];
+      localCourses.filter((c) => c.term === studentSemester.term) || [];
 
     const visible = coursesInTerm.filter((c) => !c.is_hidden);
     const hidden = coursesInTerm.filter((c) => c.is_hidden);
@@ -69,10 +88,23 @@ const SemesterBox = React.memo(
       })),
     ];
 
-    const courseUpdates = new Map();
-    updatedCourses.forEach((course) => {
-      courseUpdates.set(course.id, course);
+    // Update local state immediately
+    setLocalCourses(updatedCourses);
+    
+    // Track the drag operation
+    setLastDragOperation({
+      courseId: active.id as number,
+      fromIndex: oldIndex,
+      toIndex: newIndex,
+      timestamp: Date.now()
     });
+    
+    // Update the global state
+    updateStudentCoursePosition(updatedCourses);
+    
+    console.log('Drag completed:', 
+      `Moved ${active.id} from position ${oldIndex} to ${newIndex}`,
+      updatedCourses.map(c => `${c.id}:${c.sort_index}`));
   };
 
   return (
@@ -86,39 +118,24 @@ const SemesterBox = React.memo(
         onDragEnd={handleDragEnd}
       >
         <SortableContext
-          items={visibleCourses.map((c) => c.id)}
+          items={sortedVisibleCourses.map((c) => c.id)}
           strategy={verticalListSortingStrategy}
         >
           <div className={Style.Column}>
-            {visibleCourses.map((studentCourse) => (
-              <CourseBox key={studentCourse.id} studentCourse={studentCourse} />
-            ))}
+            {/* Use lastDragOperation in the key to force re-renders */}
+            <div key={`courses-${lastDragOperation?.timestamp || 'initial'}`}>
+              {sortedVisibleCourses.map((studentCourse) => (
+                <CourseBox 
+                  key={`course-${studentCourse.id}`} 
+                  studentCourse={studentCourse} 
+                />
+              ))}
+            </div>
           </div>
         </SortableContext>
       </DndContext>
     </div>
   );
-	},
-	(prevProps, nextProps) => {
-		// Always re-render if term changed
-		if (prevProps.studentSemester.term !== nextProps.studentSemester.term) {
-			return false;
-		}
-
-    const prevCourses = prevProps.studentSemester.studentCourses;
-    const nextCourses = nextProps.studentSemester.studentCourses;
-
-    // Re-render if course count changed
-    if (prevCourses.length !== nextCourses.length) {
-      return false;
-    }
-
-    // Check if any course changed by ID
-		const prevKeys = prevCourses.map(c => `${c.id}-${c.is_hidden}`).join(',');
-		const nextKeys = nextCourses.map(c => `${c.id}-${c.is_hidden}`).join(',');
-		
-		return prevKeys === nextKeys;
-  }
-);
+};
 
 export default SemesterBox;

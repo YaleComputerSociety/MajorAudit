@@ -23,7 +23,7 @@ interface UserContextType {
       code: string;
       result: string;
       term_to: string;
-			sort_index: number;
+      sort_index: number;
     }[]
   ) => Promise<{
     success: boolean;
@@ -39,7 +39,9 @@ interface UserContextType {
     errors: { id: number; message: string }[];
   }>;
 
-	toggleCourseHidden: (courseId: number, hidden: boolean) => void;
+  toggleCourseHidden: (courseId: number, hidden: boolean) => void;
+  
+  updateStudentCoursePosition: (updatedCourses: StudentCourse[]) => void;
 }
 
 const UserContext = createContext<UserContextType | null>(null);

@@ -1,4 +1,4 @@
-// UPDATED: frontend/hooks/useUserProfile.ts
+// frontend/hooks/useUserProfile.ts (consolidated)
 
 import {
   useState,
@@ -11,13 +11,36 @@ import {
   fetchUserData,
   addCourses as apiAddCourses,
   removeCourses as apiRemoveCourses,
+  updateStudentCourse
 } from '@/api/userApi';
-import {
-  getCurrentFYP,
-  emptyUser,
-} from './useUserProfileUtils';
 
-import { updateStudentCourse } from '@/api/userApi'; // import it
+// Moved from useUserProfileUtils.ts
+const emptyUser: User = {
+  name: '',
+  netID: '',
+  FYPs: [],
+};
+
+// Moved from useUserProfileUtils.ts and improved
+function getCurrentFYP(user: User, fypIndex: number): FYP | null {
+  console.log("🧠 getCurrentFYP recomputing:", fypIndex);
+  if (
+    user.FYPs.length === 0 ||
+    fypIndex < 0 ||
+    fypIndex >= user.FYPs.length
+  ) {
+    return null;
+  }
+
+  const fyp = user.FYPs[fypIndex];
+  
+  // Create a new reference without re-sorting - preserve the existing order
+  // This avoids interfering with the sorting done in the drag handler
+  return {
+    ...fyp,
+    studentCourses: [...fyp.studentCourses]
+  };
+}
 
 interface UseUserProfileReturn {
   user: User;
@@ -30,19 +53,25 @@ interface UseUserProfileReturn {
   availableFYPs: FYP[];
   setCurrentFYPIndex: (index: number) => void;
 
-	addCourses: (
-		entries: CourseEntry[]
-	) => Promise<{ 
-		success: boolean; 
-		courses: StudentCourse[]; 
-		errors: { entry: CourseEntry; message: string }[] 
-	}>;
+  addCourses: (
+    entries: CourseEntry[]
+  ) => Promise<{ 
+    success: boolean; 
+    courses: StudentCourse[]; 
+    errors: { entry: CourseEntry; message: string }[] 
+  }>;
 
   removeCourses: (
     courseIds: number[]
-  ) => Promise<{ success: boolean; removed: number[]; errors: { id: number; message: string }[] }>;
+  ) => Promise<{ 
+    success: boolean; 
+    removed: number[]; 
+    errors: { id: number; message: string }[] 
+  }>;
 
-	toggleCourseHidden: (courseId: number, hidden: boolean) => void;
+  toggleCourseHidden: (courseId: number, hidden: boolean) => void;
+  
+  updateStudentCoursePosition: (updatedCourses: StudentCourse[]) => void;
 }
 
 export function useUserProfile(): UseUserProfileReturn {
@@ -143,36 +172,95 @@ export function useUserProfile(): UseUserProfileReturn {
     [currentFYP]
   );
 
-	const toggleCourseHidden = useCallback(
-		(courseId: number, hidden: boolean) => {
-			setUser(prev => ({
-				...prev,
-				FYPs: prev.FYPs.map(fyp => {
-					if (fyp.id !== currentFYP?.id) return fyp;
-					return {
-						...fyp,
-						studentCourses: fyp.studentCourses.map(course =>
-							course.id === courseId ? { ...course, is_hidden: hidden } : course
-						)
-					};
-				})
-			}));
-	
-			// Fire-and-forget backend patch
-			updateStudentCourse(courseId, { is_hidden: hidden }).catch(() => {
-				// Optional: revert on error, but you can skip this
-			});
-		},
-		[currentFYP?.id]
-	);
+  const toggleCourseHidden = useCallback(
+    (courseId: number, hidden: boolean) => {
+      setUser(prev => ({
+        ...prev,
+        FYPs: prev.FYPs.map(fyp => {
+          if (fyp.id !== currentFYP?.id) return fyp;
+          return {
+            ...fyp,
+            studentCourses: fyp.studentCourses.map(course =>
+              course.id === courseId ? { ...course, is_hidden: hidden } : course
+            )
+          };
+        })
+      }));
+
+      // Fire-and-forget backend patch
+      updateStudentCourse(courseId, { is_hidden: hidden }).catch((error) => {
+        console.error("Error updating course hidden state:", error);
+        // Optional: revert on error, but you can skip this
+      });
+    },
+    [currentFYP?.id]
+  );
+
+  const updateStudentCoursePosition = useCallback(
+    (updatedCourses: StudentCourse[]) => {
+      if (!currentFYP) return;
+      
+      console.log('Starting course position update:', updatedCourses.map(c => `${c.id}:${c.sort_index}`));
+      
+      // Create a map of updated courses for quick lookup
+      const courseUpdates = new Map<number, StudentCourse>();
+      updatedCourses.forEach(course => {
+        courseUpdates.set(course.id, course);
+      });
+      
+      // Update user state with new course positions
+      setUser(prev => {
+        // Debug current state
+        console.log('Current state before update:', 
+          prev.FYPs.find(f => f.id === currentFYP.id)?.studentCourses.map(c => `${c.id}:${c.sort_index}`)
+        );
+        
+        const newState = {
+          ...prev,
+          FYPs: prev.FYPs.map(fyp => {
+            if (fyp.id !== currentFYP.id) return fyp;
+            
+            const updatedStudentCourses = fyp.studentCourses.map(course => {
+              const update = courseUpdates.get(course.id);
+              if (!update) return course;
+              
+              return {
+                ...course,
+                sort_index: update.sort_index
+              };
+            });
+            
+            // Debug updated courses
+            console.log('Updated courses:', 
+              updatedStudentCourses.map(c => `${c.id}:${c.sort_index}`)
+            );
+            
+            return {
+              ...fyp,
+              studentCourses: updatedStudentCourses
+            };
+          })
+        };
+        
+        return newState;
+      });
+      
+      // TODO: Implement backend call - for now just log
+      console.log('Course positions updated in state - will save to backend later');
+    },
+    [currentFYP]
+  );
 
   const availableFYPs = user.FYPs ?? [];
 
+  // Recalculate current FYP when user or activeFYPIndex changes
   useEffect(() => {
+    console.log("Recalculating currentFYP from user state");
     const fyp = getCurrentFYP(user, activeFYPIndex);
     setCurrentFYP(fyp);
   }, [user, activeFYPIndex]);
 
+  // Initial data fetch
   useEffect(() => {
     if (loggedIn) refreshUserData();
     else setUser(emptyUser);
@@ -188,6 +276,7 @@ export function useUserProfile(): UseUserProfileReturn {
     setCurrentFYPIndex,
     addCourses,
     removeCourses,
-		toggleCourseHidden
+    toggleCourseHidden,
+    updateStudentCoursePosition
   };
 }
