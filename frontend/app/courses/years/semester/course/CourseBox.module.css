@@ -21,6 +21,7 @@
 	border-radius: 16px;
 
 	margin-bottom: 4px;
+	/* transition: transform 200ms ease, background 200ms ease; */
 }
 
 .CourseCode {
@@ -87,4 +88,11 @@
 
 .PendingState {
   opacity: 0.7;
+}
+
+.GripIcon {
+  cursor: grab;
+  font-size: 16px;
+  margin: 0 8px;
+  user-select: none;
 }

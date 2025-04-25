@@ -1,15 +1,34 @@
 // frontend/context/CoursesContext.tsx
 
 'use client';
-import React, { createContext, useContext, useState, useCallback, useMemo, useTransition } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useTransition,
+} from 'react';
+import { StudentCourse } from '@/types/user';
 
 interface CoursesPageContextType {
   editMode: boolean;
   toggleEditMode: () => void;
+
   selectedCourses: Set<number>;
   setSelectedCourses: React.Dispatch<React.SetStateAction<Set<number>>>;
+
   toggleCourseSelection: (courseId: number) => void;
   isPending: boolean;
+
+  editableCourses: StudentCourse[] | null;
+  setEditableCourses: React.Dispatch<React.SetStateAction<StudentCourse[] | null>>;
+
+  resetEditableCourses: () => void;
+  updateEditableCourse: (courseId: number, patch: Partial<StudentCourse>) => void;
+
+	lastDragTimestamp: number;
+	setLastDragTimestamp: (ts: number) => void;
 }
 
 const CoursesPageContext = createContext<CoursesPageContextType | undefined>(undefined);
@@ -19,7 +38,10 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
   const toggleEditMode = useCallback(() => setEditMode(prev => !prev), []);
 
   const [selectedCourses, setSelectedCourses] = useState<Set<number>>(new Set());
+  const [editableCourses, setEditableCourses] = useState<StudentCourse[] | null>(null);
+
   const [isPending, startTransition] = useTransition();
+	const [lastDragTimestamp, setLastDragTimestamp] = useState(Date.now());
 
   const toggleCourseSelection = useCallback((courseId: number) => {
     startTransition(() => {
@@ -35,14 +57,39 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
     });
   }, []);
 
+  const resetEditableCourses = useCallback(() => {
+    setEditableCourses(null);
+    setSelectedCourses(new Set());
+  }, []);
+
+  const updateEditableCourse = useCallback((courseId: number, patch: Partial<StudentCourse>) => {
+    setEditableCourses(prev =>
+      prev
+        ? prev.map(c => (c.id === courseId ? { ...c, ...patch } : c))
+        : prev
+    );
+  }, []);
+
   const contextValue = useMemo(() => ({
     editMode,
     toggleEditMode,
     selectedCourses,
     setSelectedCourses,
     toggleCourseSelection,
-    isPending
-  }), [editMode, toggleEditMode, selectedCourses, setSelectedCourses, toggleCourseSelection, isPending]);
+    isPending,
+    editableCourses,
+    setEditableCourses,
+    resetEditableCourses,
+    updateEditableCourse,
+		lastDragTimestamp,
+		setLastDragTimestamp,
+  }), [
+		editMode,
+		selectedCourses,
+		isPending,
+		editableCourses,
+		lastDragTimestamp,
+  ]);
 
   return (
     <CoursesPageContext.Provider value={contextValue}>

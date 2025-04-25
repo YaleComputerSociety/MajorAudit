@@ -31,8 +31,18 @@ export async function fetchUserData(): Promise<User> {
 
 export async function addCourses(
   fyp: FYP,
-  entries: { term_from: string; code: string; result: string; term_to: string }[]
-): Promise<{ success: boolean; courses: StudentCourse[]; errors: { entry: any; message: string }[] }> {
+  entries: {
+    course_offering_id: number;
+    term: string;
+    status: string;
+    result: string;
+    sort_index: number;
+  }[]
+): Promise<{
+  success: boolean;
+  courses: StudentCourse[];
+  errors: { entry: any; message: string }[];
+}> {
   const response = await fetch('/api/student-courses', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -56,6 +66,7 @@ export async function addCourses(
     errors: data.errors || [],
   };
 }
+
 
 export async function removeCourses(
   fyp: FYP,

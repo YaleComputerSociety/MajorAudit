@@ -1,75 +1,20 @@
 // frontend/app/courses/years/semester/course/CourseBox.tsx
 
-import React, { useState, useCallback, memo } from "react";
+import React, { useMemo } from "react";
 import Style from "./CourseBox.module.css";
 import { useCoursesPage } from "@/context/CoursesContext";
-import { useUser } from "@/context/UserProvider";
-
 import { StudentCourse } from "@/types/user";
-import { RenderMark, SeasonIcon, GetCourseColor } from "../../../../../utils/course-display/CourseDisplay";
+import {
+  RenderMark,
+  SeasonIcon,
+  GetCourseColor
+} from "../../../../../utils/course-display/CourseDisplay";
 import DistributionCircle from "../../../../../components/distribution-circle/DistributionsCircle";
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-// Separated into its own memo component to prevent re-renders of parent
-const RemoveButton = memo(({ studentCourse }: { studentCourse: StudentCourse }) => {
-  const { removeCourses } = useUser();
-  const [isRemoving, setIsRemoving] = useState(false);
-
-  const handleRemoveStudentCourse = useCallback(async () => {
-    const code = studentCourse.courseOffering.abstractCourse.codes[0];
-    if (!window.confirm(`Are you sure you want to remove ${code}?`)) return;
-
-    setIsRemoving(true);
-    try {
-      const result = await removeCourses([studentCourse.id]);
-
-      if (!result.success) {
-        const errMsg = result.errors.find(e => e.id === studentCourse.id)?.message || 'Unknown error';
-        alert(`Failed to remove course: ${errMsg}`);
-      }
-    } catch (error) {
-      console.error("Error removing course:", error);
-      alert("An unexpected error occurred while removing the course.");
-    } finally {
-      setIsRemoving(false);
-    }
-  }, [studentCourse.id, studentCourse.courseOffering.abstractCourse.codes, removeCourses]);
-
-  return (
-    <div 
-      className={`${Style.FuncButton} ${isRemoving ? Style.RemovingState : ''}`}
-      onClick={isRemoving ? undefined : handleRemoveStudentCourse}
-      title="Remove course"
-    >
-      {isRemoving ? "..." : "×"}
-    </div>
-  );
-});
-
-
-// --- 👁️ Toggle Component ---
-const EyeToggle = memo(({ studentCourse }: { studentCourse: StudentCourse }) => {
-  const { toggleCourseHidden } = useUser();
-
-  const handleClick = () => {
-    toggleCourseHidden(studentCourse.id, !studentCourse.is_hidden);
-  };
-
-  return (
-    <div
-      className={`${Style.FuncButton} ${studentCourse.is_hidden ? Style.HiddenIcon : ""}`}
-      onClick={handleClick}
-      title={studentCourse.is_hidden ? "Show course" : "Hide course"}
-    >
-      {studentCourse.is_hidden ? "🙈" : "👁️"}
-    </div>
-  );
-});
-
-// --- Checkbox Component ---
-const CourseSelection = memo(({ courseId }: { courseId: number }) => {
+const CourseSelection = ({ courseId }: { courseId: number }) => {
   const { selectedCourses, toggleCourseSelection, isPending } = useCoursesPage();
   const isSelected = selectedCourses.has(courseId);
 
@@ -89,40 +34,85 @@ const CourseSelection = memo(({ courseId }: { courseId: number }) => {
       </span>
     </label>
   );
-});
+};
 
-// --- Main Component ---
-const CourseBox = memo(({ studentCourse }: { studentCourse: StudentCourse }) => {
+const EyeToggle = ({ studentCourse }: { studentCourse: StudentCourse }) => {
+  const { editableCourses, setEditableCourses } = useCoursesPage();
+
+  const handleClick = () => {
+    if (!editableCourses) return;
+
+    const updated = editableCourses.map(c => ({
+      ...c,
+      is_hidden: c.id === studentCourse.id ? !c.is_hidden : c.is_hidden
+    }));
+
+    setEditableCourses(updated);
+  };
+
+  return (
+    <div
+      className={`${Style.FuncButton} ${studentCourse.is_hidden ? Style.HiddenIcon : ""}`}
+      onClick={handleClick}
+      title={studentCourse.is_hidden ? "Show course" : "Hide course"}
+    >
+      {studentCourse.is_hidden ? "🙈" : "👁️"}
+    </div>
+  );
+};
+
+const CourseBox = ({ studentCourse }: { studentCourse: StudentCourse }) => {
   const { editMode } = useCoursesPage();
 
-	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-		id: studentCourse.id
-	});
-	
-	const style = {
-		transform: CSS.Transform.toString(transform),
-		transition
-	};
+  const sortableData = useMemo(
+    () => ({
+      term: studentCourse.term // 🔁 this updates reactively during drag-over
+    }),
+    [studentCourse.term]
+  );
 
-	return (
-		<div 
-			ref={setNodeRef}
-			style={{ ...style, background: studentCourse.is_hidden ? "#fbfbfb" : GetCourseColor(studentCourse.term) }}
-			className={Style.CourseBox}
-			{...attributes}
-			{...listeners}
-		>
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition
+  } = useSortable({
+    id: studentCourse.id,
+    data: sortableData
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{
+        ...style,
+        background: studentCourse.is_hidden ? "#fbfbfb" : GetCourseColor(studentCourse.term)
+      }}
+      className={Style.CourseBox}
+    >
       <div className={Style.Row}>
         {editMode && (
           <div className={Style.Row}>
-            <CourseSelection courseId={studentCourse.id}/>
-            <EyeToggle studentCourse={studentCourse}/>
-            {/* <RemoveButton studentCourse={studentCourse}/> */}
+            <CourseSelection courseId={studentCourse.id} />
+            <EyeToggle studentCourse={studentCourse} />
+            <div
+              className={Style.GripIcon}
+              title="Drag"
+              {...attributes}
+              {...listeners}
+            >
+              ⠿
+            </div>
           </div>
         )}
-        <RenderMark status={studentCourse.status}/>
-				{/* {studentCourse.sort_index} */}
-        <SeasonIcon studentCourse={studentCourse}/>
+        <RenderMark status={studentCourse.status} />
+        <SeasonIcon studentCourse={studentCourse} />
         <div className={Style.Column}>
           <div className={Style.CourseCode}>
             {studentCourse.courseOffering.abstractCourse.codes[0]}
@@ -132,14 +122,9 @@ const CourseBox = memo(({ studentCourse }: { studentCourse: StudentCourse }) => 
           </div>
         </div>
       </div>
-      <DistributionCircle distributions={studentCourse.courseOffering.abstractCourse.distributions}/>
+      <DistributionCircle distributions={studentCourse.courseOffering.abstractCourse.distributions} />
     </div>
   );
-});
-
-// Debug names
-EyeToggle.displayName = 'EyeToggle';
-CourseSelection.displayName = 'CourseSelection';
-CourseBox.displayName = 'CourseBox';
+};
 
 export default CourseBox;

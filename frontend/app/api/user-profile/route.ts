@@ -1,10 +1,10 @@
 // UPDATED: frontend/app/api/user-profile/route.ts
 
+import { StudentTermArrangement } from '@/types/user';
 import { NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/database/server';
 import { normalizeStudentCourse } from '../student-courses/student-courses';
 import { Tables } from '@/types/supabase_newer';
-// import { CourseEntry } from '@/types/type-user';
 
 type CourseJoin = Tables<'student_courses'> & {
   course_offering?: Tables<'course_offerings'> & {
@@ -87,11 +87,23 @@ export async function GET() {
           sc.course_offering?.course?.course_codes ?? []
         )
       );
+
+			let studentTermArrangement: StudentTermArrangement = {};
+			try {
+				if (typeof fyp.term_arrangement === "object") {
+					studentTermArrangement = fyp.term_arrangement as StudentTermArrangement;
+				} else if (typeof fyp.term_arrangement === "string") {
+					studentTermArrangement = JSON.parse(fyp.term_arrangement) as StudentTermArrangement;
+				}
+			} catch (error) {
+				console.error(`Error parsing studentTermArrangement for FYP ${fyp.id}:`, error);
+			}
+
       return {
         id: fyp.id,
         studentCourses,
         languagePlacement: fyp.language_placement || '',
-        studentTermArrangement: fyp.term_arrangement || '',
+        studentTermArrangement
       };
     });
 

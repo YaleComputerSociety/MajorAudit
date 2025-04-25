@@ -23,6 +23,7 @@ export interface AbstractCourse {
 }
 
 export interface CourseOffering {
+	id: number;
   term: string;
   professors: string[];
   flags: string[];
@@ -32,19 +33,26 @@ export interface CourseOffering {
 
 export interface StudentCourse {
 	id: number;
-  status: string; 										// "DA" || "MA"
-  result: string;											// "A-C" || "CR" || "D/F/W"
+  status: string; 										 
+  result: string;											 
   term: string;
 	sort_index: number;
 	is_hidden: boolean;
   courseOffering: CourseOffering;
 }
 
+export interface StudentTermArrangement {
+  first_year?: string[];
+  sophomore?: string[];
+  junior?: string[];
+  senior?: string[];
+}
+
 export interface FYP {
 	id: number;
 	studentCourses: StudentCourse[];
 	languagePlacement: string;
-	studentTermArrangement: string;
+	studentTermArrangement: StudentTermArrangement;
 }
 
 export interface User {

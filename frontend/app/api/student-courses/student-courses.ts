@@ -17,11 +17,11 @@ interface AddStudentCourseParams {
 }
 
 interface BulkCourseEntry {
-  code: string;
-  term_from: string;
-  term_to: string;
+  course_offering_id: number;
+  term: string;
+  status: string;
   result: string;
-	sort_index: number;
+  sort_index: number;
 }
 
 export async function validateCourseExists(
@@ -95,28 +95,38 @@ export async function addStudentCourses(
   const errors: { entry: BulkCourseEntry; message: string }[] = [];
 
   for (const entry of entries) {
-    const { code, term_from, term_to, result } = entry;
+    const { course_offering_id, term, result, status, sort_index } = entry;
     try {
-      const { courseOffering, course, courseCodes } = await validateCourseExists(code, term_from, supabaseClient);
-      if (!courseOffering) throw new Error('Course offering not found');
+      // Fetch course + offering info directly by ID
+      const { data: offering } = await supabaseClient
+        .from('course_offerings')
+        .select('*, course:courses(*)')
+        .eq('id', course_offering_id)
+        .maybeSingle();
 
-      const status = term_from === term_to ? 'DA' : 'MA';
+      if (!offering) throw new Error('Course offering not found');
+
+      const { data: courseCodes } = await supabaseClient
+        .from('course_codes')
+        .select('*')
+        .eq('course_id', offering.course_id);
+
       const sc = await addStudentCourse({
         fypId,
-        courseOfferingId: courseOffering.id,
-        term: term_to,
+        courseOfferingId: course_offering_id,
+        term,
         status,
         result,
-				sort_index: entry.sort_index,
+        sort_index,
         supabaseClient
       });
 
       added.push(
         normalizeStudentCourse(
           sc,
-          courseOffering,
-          course,
-          courseCodes
+          offering,
+          offering.course,
+          courseCodes ?? []
         )
       );
     } catch (err) {
@@ -232,6 +242,7 @@ export function normalizeStudentCourse(
 		sort_index: studentCourse.sort_index,
 		is_hidden: studentCourse.is_hidden,
     courseOffering: {
+			id: offering.id,
       term: offering.term,
       professors: offering.professors || [],
       flags: offering.flags || [],

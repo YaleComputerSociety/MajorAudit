@@ -1,122 +1,59 @@
 // frontend/app/courses/years/semester/SemesterBox.tsx
 
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import Style from "./SemesterBox.module.css";
 import { StudentSemester } from "../../CoursesTyping";
 import { TransformTermNumber } from "../../../../utils/course-display/CourseDisplay";
 import CourseBox from "./course/CourseBox";
 import { useCoursesPage } from "@/context/CoursesContext";
-import { useUser } from "@/context/UserProvider";
-
 import {
-  DndContext,
-  closestCenter,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent
-} from "@dnd-kit/core";
-import {
-  arrayMove,
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { useDroppable } from "@dnd-kit/core";
 
-const SemesterBox = ({ studentSemester }: { studentSemester: StudentSemester }) => {
-  const { editMode } = useCoursesPage();
-  const {  updateStudentCoursePosition } = useUser();
-  
-  // Create a local state copy of the courses to ensure UI updates
-  const [localCourses, setLocalCourses] = useState(studentSemester.studentCourses);
-  
-  // Update local courses whenever studentSemester changes
-  useEffect(() => {
-    setLocalCourses(studentSemester.studentCourses);
-  }, [studentSemester]);
-  
-  // Keep track of the last drag operation for forced re-renders
-  const [lastDragOperation, setLastDragOperation] = useState<{
-    courseId: number,
-    fromIndex: number,
-    toIndex: number,
-    timestamp: number
-  } | null>(null);
+const SemesterBox = ({
+  studentSemester,
+  term
+}: {
+  studentSemester: StudentSemester;
+  term: string;
+}) => {
+  const { editMode, lastDragTimestamp } = useCoursesPage();
 
-  // Filter and sort courses using our local copy
-  const visibleCourses = editMode
-    ? localCourses
-    : localCourses.filter(course => !course.is_hidden);
-  
-  // Sort by sort_index
-  const sortedVisibleCourses = [...visibleCourses].sort((a, b) => a.sort_index - b.sort_index);
+  // Do not filter out hidden courses during edit — show full set
+  const sortedCourses = [...studentSemester.studentCourses]
+    .sort((a, b) => a.sort_index - b.sort_index);
 
-  const sensors = useSensors(useSensor(PointerSensor));
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    const coursesInTerm =
-      localCourses.filter((c) => c.term === studentSemester.term) || [];
-
-    const visible = coursesInTerm.filter((c) => !c.is_hidden);
-    const hidden = coursesInTerm.filter((c) => c.is_hidden);
-
-    const oldIndex = visible.findIndex((c) => c.id === active.id);
-    const newIndex = visible.findIndex((c) => c.id === over.id);
-    if (oldIndex === -1 || newIndex === -1) return;
-
-    const reorderedVisible = arrayMove([...visible], oldIndex, newIndex);
-
-    const updatedCourses = [
-      ...reorderedVisible.map((course, idx) => ({
-        ...course,
-        sort_index: idx,
-      })),
-      ...hidden.map((course, idx) => ({
-        ...course,
-        sort_index: reorderedVisible.length + idx,
-      })),
-    ];
-
-    setLocalCourses(updatedCourses);
-    
-    setLastDragOperation({
-      courseId: active.id as number,
-      fromIndex: oldIndex,
-      toIndex: newIndex,
-      timestamp: Date.now()
-    });
-    
-    updateStudentCoursePosition(updatedCourses);
-  };
+  const { isOver, setNodeRef } = useDroppable({
+    id: term,
+    data: { term }
+  });
 
   return (
-    <div className={Style.Column} style={{ minWidth: "440px", marginBottom: "8px" }}>
+    <div
+      ref={setNodeRef}
+      className={`${Style.Column} ${isOver ? Style.Hovered : ""}`}
+      style={{
+        minWidth: "440px",
+        marginBottom: "8px",
+        transition: "background-color 0.15s ease-in-out" // ✅ smooth hover animation
+      }}
+    >
       <div style={{ marginBottom: "6px" }}>
-        {TransformTermNumber(studentSemester.term)}
+        {TransformTermNumber(term)}
       </div>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext
-          items={sortedVisibleCourses.map((c) => c.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          <div className={Style.Column}>
-            <div key={`courses-${lastDragOperation?.timestamp || 'initial'}`}>
-              {sortedVisibleCourses.map((studentCourse) => (
-                <CourseBox 
-                  key={`course-${studentCourse.id}`} 
-                  studentCourse={studentCourse} 
-                />
-              ))}
-            </div>
-          </div>
-        </SortableContext>
-      </DndContext>
+
+			<SortableContext
+				items={sortedCourses.map(c => c.id)} // keep stable
+				strategy={verticalListSortingStrategy}
+			>
+				<div className={Style.Column}>
+					{sortedCourses.map((studentCourse) => (
+						<CourseBox key={studentCourse.id} studentCourse={studentCourse} />
+					))}
+				</div>
+			</SortableContext>
     </div>
   );
 };

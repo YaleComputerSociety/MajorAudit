@@ -17,31 +17,8 @@ interface UserContextType {
   availableFYPs: FYP[];
   setCurrentFYPIndex: (index: number) => void;
 
-  addCourses: (
-    entries: {
-      term_from: string;
-      code: string;
-      result: string;
-      term_to: string;
-      sort_index: number;
-    }[]
-  ) => Promise<{
-    success: boolean;
-    courses: StudentCourse[];
-    errors: { entry: any; message: string }[];
-  }>;
-
-  removeCourses: (
-    courseIds: number[]
-  ) => Promise<{
-    success: boolean;
-    removed: number[];
-    errors: { id: number; message: string }[];
-  }>;
-
-  toggleCourseHidden: (courseId: number, hidden: boolean) => void;
-  
-  updateStudentCoursePosition: (updatedCourses: StudentCourse[]) => void;
+	getClonedStudentCourses: () => StudentCourse[];
+	updateCourses: (updatedCourses: StudentCourse[]) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | null>(null);

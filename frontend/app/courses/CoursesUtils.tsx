@@ -1,31 +1,11 @@
 // frontend/app/courses/CoursesUtils.tsx
 
-import { FYP } from "@/types/user";
+import { StudentCourse, StudentTermArrangement } from "@/types/user";
 import { StudentYear, StudentSemester } from "./CoursesTyping";
 
-interface StudentTermArrangement {
-  first_year?: string[];
-  sophomore?: string[];
-  junior?: string[];
-  senior?: string[];
-}
-
-export function BuildStudentYears(fyp: FYP): StudentYear[] {
-  const { studentCourses } = fyp;
-
-  let studentTermArrangement: StudentTermArrangement = {};
-
-  try {
-    if (typeof fyp.studentTermArrangement === "object") {
-      studentTermArrangement = fyp.studentTermArrangement as StudentTermArrangement;
-    } else if (typeof fyp.studentTermArrangement === "string") {
-      studentTermArrangement = JSON.parse(fyp.studentTermArrangement) as StudentTermArrangement;
-    }
-  } catch (error) {
-    console.error("Error parsing studentTermArrangement:", error);
-  }
-
-  const firstYearTerms = studentTermArrangement?.first_year ?? [];
+export function BuildStudentYears(studentCourses: StudentCourse[], studentTermArrangement: StudentTermArrangement): StudentYear[] {
+  
+	const firstYearTerms = studentTermArrangement?.first_year ?? [];
   const sophomoreTerms = studentTermArrangement?.sophomore ?? [];
   const juniorTerms = studentTermArrangement?.junior ?? [];
   const seniorTerms = studentTermArrangement?.senior ?? [];
