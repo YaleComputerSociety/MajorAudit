@@ -1,80 +1,190 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import Style from "./Courses.module.css";
+// frontend/app/courses/page.tsx
 
+"use client";
+import React, { useEffect, useState } from "react";
+import Style from "./Courses.module.css";
 import { useUser } from "@/context/UserProvider";
+import {
+  useCoursesPage,
+  CoursesPageProvider
+} from "../../context/CoursesContext";
+
 import { ModalProvider } from "./add/context/ModalContext";
 import ModalManager from "./add/ModalManager";
-
-import { StudentYear } from "./CoursesTyping";
 import { BuildStudentYears } from "./CoursesUtils";
-
 import NavBar from "../../components/navbar/NavBar";
 import YearBox from "./years/YearBox";
 import AddButton from "./add/button/AddButton";
-
 import Overhead from "./overhead/Overhead";
 
-function Courses() {
-  const { currentFYP } = useUser();
+import {
+  DndContext,
+  closestCenter,
+  DragEndEvent,
+  DragOverEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+	arrayMove
+} from "@dnd-kit/sortable";
 
-  const [edit, setEdit] = useState(false);
-  const toggleEdit = () => setEdit(!edit);
+const NoFYP = () => (
+  <div>
+    <NavBar />
+    <div className={Style.CoursesPage}>How do you not have an FYP?</div>
+  </div>
+);
+
+function CoursesBody() {
+  const { currentFYP, getClonedStudentCourses } = useUser();
+  const { isLoading } = useUser();
+  const {
+    editMode,
+    editableCourses,
+    setEditableCourses,
+    lastDragTimestamp,
+    setLastDragTimestamp
+  } = useCoursesPage();
 
   const [columns, setColumns] = useState(false);
-  void [setColumns];
-
-  const [studentYears, setStudentYears] = useState<StudentYear[]>(() =>
-    currentFYP ? BuildStudentYears(currentFYP) : []
-  );
-  const [renderedYears, setRenderedYears] = useState<React.ReactNode[]>([]);
 
   useEffect(() => {
-    if (currentFYP) {
-      setStudentYears(BuildStudentYears(currentFYP));
+    if (editMode && !editableCourses && currentFYP) {
+      setEditableCourses(getClonedStudentCourses());
     }
-  }, [currentFYP]);
+  }, [editMode, editableCourses, currentFYP, setEditableCourses, getClonedStudentCourses]);
 
-  useEffect(() => {
-    const newRenderedYears = studentYears.map((studentYear, index) => (
-      <YearBox
-        key={index}
-        edit={edit}
-        columns={columns}
-        studentYear={studentYear}
-        setStudentYears={setStudentYears}
-      />
-    ));
-    setRenderedYears(newRenderedYears);
-  }, [edit, columns, studentYears]);
+  const allCourses = editMode && editableCourses
+    ? editableCourses
+    : currentFYP?.studentCourses ?? [];
 
-  if (!currentFYP) {
-    return (
-      <div>
-        <NavBar />
-        <div className={Style.CoursesPage}>
-          Bro, how do you not have an FYP?
-        </div>
-      </div>
-    );
-  }
+  const studentYears = BuildStudentYears(allCourses, currentFYP?.studentTermArrangement ?? {});
+  const allCourseIds = allCourses.map(c => c.id);
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  const handleDragOver = (event: DragOverEvent) => {
+    const { active, over } = event;
+    if (!active || !over || !editableCourses) return;
+
+    const overTerm = over.data?.current?.term as string;
+    const activeIndex = editableCourses.findIndex(c => c.id === active.id);
+    if (activeIndex === -1 || !overTerm) return;
+
+    const course = editableCourses[activeIndex];
+    if (course.term === overTerm) return;
+
+    // Optimistically update term for smoother hover effect
+    const updated = [...editableCourses];
+    updated[activeIndex] = { ...course, term: overTerm };
+
+    setEditableCourses(updated);
+    setLastDragTimestamp(Date.now());
+  };
+
+	const handleDragEnd = (event: DragEndEvent) => {
+		const { active, over } = event;
+		if (!active || !over || active.id === over.id || !editMode || !editableCourses) return;
+	
+		const activeCourse = editableCourses.find(c => c.id === active.id);
+		const overCourse = editableCourses.find(c => c.id === over.id);
+		const overTerm = over.data?.current?.term as string;
+	
+		if (!activeCourse || !overTerm) return;
+	
+		const isSameTerm = activeCourse.term === overTerm;
+	
+		let updatedCourses = [...editableCourses];
+	
+		if (isSameTerm) {
+			const siblings = updatedCourses
+				.filter(c => c.term === overTerm)
+				.sort((a, b) => a.sort_index - b.sort_index);
+	
+			const oldIndex = siblings.findIndex(c => c.id === active.id);
+			const newIndex = siblings.findIndex(c => c.id === over.id);
+			const reordered = arrayMove(siblings, oldIndex, newIndex);
+	
+			updatedCourses = updatedCourses.map(course => {
+				if (course.term !== overTerm) return course;
+				const i = reordered.findIndex(c => c.id === course.id);
+				return { ...course, sort_index: i };
+			});
+	
+		} else {
+			// Inter-semester: update term + insert logic
+			updatedCourses = updatedCourses.map(course =>
+				course.id === activeCourse.id
+					? { ...course, term: overTerm, sort_index: 9999 }
+					: course
+			);
+	
+			const dragged = updatedCourses.find(c => c.id === active.id)!;
+			const siblings = updatedCourses
+				.filter(c => c.term === overTerm && c.id !== active.id)
+				.sort((a, b) => a.sort_index - b.sort_index);
+	
+			const overIndex = siblings.findIndex(c => c.id === over.id);
+			const insertIndex = overIndex === -1 ? siblings.length : overIndex;
+			siblings.splice(insertIndex, 0, dragged);
+	
+			updatedCourses = updatedCourses.map(course => {
+				if (course.term !== overTerm) return course;
+				const i = siblings.findIndex(c => c.id === course.id);
+				return { ...course, sort_index: i };
+			});
+		}
+	
+		setEditableCourses(updatedCourses.map(c => ({ ...c })));
+		setLastDragTimestamp(Date.now());
+	};
+	
+
+  if (!isLoading && !currentFYP) return <NoFYP />;
 
   return (
     <div>
       <NavBar utility={<Overhead />} />
       <div className={Style.CoursesPage}>
         <ModalProvider>
-          <AddButton />
+          {editMode && <AddButton />}
           <ModalManager />
         </ModalProvider>
-        <button
-          className={Style.ListButton}
-          style={{ marginLeft: "200px" }}
-          onClick={toggleEdit}
-        />
-        <div className={Style.Column}>{renderedYears}</div>
+
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={allCourseIds}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className={Style.Column}>
+              {studentYears.map((year) => (
+                <YearBox
+                  key={`year-${year.grade}-${lastDragTimestamp}`}
+                  columns={columns}
+                  studentYear={year}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       </div>
     </div>
+  );
+}
+
+function Courses() {
+  return (
+    <CoursesPageProvider>
+      <CoursesBody />
+    </CoursesPageProvider>
   );
 }
 

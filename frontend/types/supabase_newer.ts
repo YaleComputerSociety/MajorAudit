@@ -392,6 +392,8 @@ export type Database = {
           result: string
           status: string
           term: string
+					sort_index: number
+					is_hidden: boolean
         }
         Insert: {
           course_offering_id?: number | null
@@ -400,6 +402,8 @@ export type Database = {
           result: string
           status: string
           term: string
+					sort_index: number
+					is_hidden: boolean
         }
         Update: {
           course_offering_id?: number | null
@@ -408,6 +412,8 @@ export type Database = {
           result?: string
           status?: string
           term?: string
+					sort_index: number
+					is_hidden: boolean
         }
         Relationships: [
           {

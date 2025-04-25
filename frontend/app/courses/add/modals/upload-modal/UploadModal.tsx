@@ -1,4 +1,4 @@
-// UPDATED: UploadCoursesModal.tsx
+// frontend/app/courses/add/modal/UploadCoursesModal.tsx
 
 import React, { useState } from 'react';
 import BaseModal from '../base-modal/BaseModal';
@@ -40,46 +40,58 @@ function parseBatchCourses(raw: string) {
 }
 
 const UploadCoursesModal: React.FC = () => {
-  const { addCourses } = useUser();
+  const { addCourses, currentFYP } = useUser();
   const [input, setInput] = useState('');
   const [results, setResults] = useState<{ code: string; success: boolean; message: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
-	const handleUpload = async () => {
-		setLoading(true);
-		const parsed = parseBatchCourses(input);
-	
-		if (!parsed.length) {
-			setResults([{ code: '-', success: false, message: 'No valid input' }]);
-			setShowResults(true);
-			setLoading(false);
-			return;
-		}
-	
-		const { courses, errors } = await addCourses(parsed);
-	
-		const mergedResults = parsed.map(entry => {
-			const successEntry = courses.find(a => a.courseOffering.codes.includes(entry.code));
-			const errorEntry = errors.find(e => e.entry.code === entry.code);
-			if (successEntry) return { code: entry.code, success: true, message: 'Added' };
-			return { code: entry.code, success: false, message: errorEntry?.message || 'Unknown error' };
-		});
-	
-		setResults(mergedResults);
-		setShowResults(true);
-		setLoading(false);
-	
-		if (mergedResults.every(r => r.success)) {
-			setTimeout(() => {
-				setInput('');
-				setResults([]);
-				setShowResults(false);
-				document.querySelector('[data-close-modal]')?.dispatchEvent(new MouseEvent('click'));
-			}, 500);
-		}
-	};
-	
+  const handleUpload = async () => {
+    setLoading(true);
+    const parsed = parseBatchCourses(input);
+
+    if (!parsed.length || !currentFYP) {
+      setResults([{ code: '-', success: false, message: 'No valid input or missing FYP' }]);
+      setShowResults(true);
+      setLoading(false);
+      return;
+    }
+
+    // Count how many courses already exist per term
+    const courseCountByTerm = new Map<string, number>();
+    for (const course of currentFYP.studentCourses) {
+      courseCountByTerm.set(course.term, (courseCountByTerm.get(course.term) ?? 0) + 1);
+    }
+
+    // Assign sort_index
+    const entriesWithSort = parsed.map(entry => {
+      const count = courseCountByTerm.get(entry.term_to) ?? 0;
+      courseCountByTerm.set(entry.term_to, count + 1);
+      return { ...entry, sort_index: count };
+    });
+
+    const { courses, errors } = await addCourses(entriesWithSort);
+
+    const mergedResults = parsed.map(entry => {
+      const successEntry = courses.find(c => c.courseOffering.codes.includes(entry.code));
+      const errorEntry = errors.find(e => e.entry.code === entry.code);
+      if (successEntry) return { code: entry.code, success: true, message: 'Added' };
+      return { code: entry.code, success: false, message: errorEntry?.message || 'Unknown error' };
+    });
+
+    setResults(mergedResults);
+    setShowResults(true);
+    setLoading(false);
+
+    if (mergedResults.every(r => r.success)) {
+      setTimeout(() => {
+        setInput('');
+        setResults([]);
+        setShowResults(false);
+        document.querySelector('[data-close-modal]')?.dispatchEvent(new MouseEvent('click'));
+      }, 500);
+    }
+  };
 
   return (
     <BaseModal title="Upload Courses">

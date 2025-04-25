@@ -6,13 +6,17 @@
 }
 
 .box {
-  padding: 2px 2px;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100px;
+  border-radius: 3px;
+
+	font-size: 14px;
+
+  width: 75px;
+	height: 30px;
+
   background-color: #fff;
   cursor: pointer;
-  font-size: 14px;
+  
   text-align: left;
   transition: border-color 0.2s ease;
   display: flex;
@@ -28,10 +32,10 @@
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
-  width: 100px;
+  width: 75px;
   background-color: #fff;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 3px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   max-height: 220px;
@@ -39,7 +43,7 @@
 }
 
 .option {
-  padding: 2px 2px;
+  padding: 4px 4px;
   cursor: pointer;
   font-size: 14px;
   text-align: left;

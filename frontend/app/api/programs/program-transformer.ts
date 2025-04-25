@@ -2,8 +2,8 @@
 // transforms/program-transformer.ts
 
 import { Tables } from '@/types/supabase_newer';
-import { Program, Degree, Concentration, Requirement, Subrequirement, Option } from '@/types/type-program';
-import { AbstractCourse } from '@/types/type-user';
+import { Program, Degree, Concentration, Requirement, Subrequirement, Option } from '@/types/program';
+import { AbstractCourse } from '@/types/user';
 import { safeArray, safeBoolean, safeNumber, safeString } from '@/types/db-helpers';
 
 // Type for map keys

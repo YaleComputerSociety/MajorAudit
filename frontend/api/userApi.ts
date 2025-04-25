@@ -1,6 +1,6 @@
 // UPDATED: frontend/api/userAPI.ts
 
-import { FYP, StudentCourse, User } from '@/types/type-user';
+import { FYP, StudentCourse, User } from '@/types/user';
 
 export async function fetchUserData(): Promise<User> {
   const url = `/api/user-profile?t=${Date.now()}`;
@@ -31,8 +31,18 @@ export async function fetchUserData(): Promise<User> {
 
 export async function addCourses(
   fyp: FYP,
-  entries: { term_from: string; code: string; result: string; term_to: string }[]
-): Promise<{ success: boolean; courses: StudentCourse[]; errors: { entry: any; message: string }[] }> {
+  entries: {
+    course_offering_id: number;
+    term: string;
+    status: string;
+    result: string;
+    sort_index: number;
+  }[]
+): Promise<{
+  success: boolean;
+  courses: StudentCourse[];
+  errors: { entry: any; message: string }[];
+}> {
   const response = await fetch('/api/student-courses', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -56,6 +66,7 @@ export async function addCourses(
     errors: data.errors || [],
   };
 }
+
 
 export async function removeCourses(
   fyp: FYP,
@@ -82,5 +93,27 @@ export async function removeCourses(
     success: true,
     removed: data.removed || [],
     errors: data.errors || [],
+  };
+}
+
+export async function updateStudentCourses(
+  updates: { id: number; sort_index?: number; is_hidden?: boolean }[]
+): Promise<{ success: boolean; errors?: { id: number; message: string }[] }> {
+
+  const response = await fetch(`/api/student-courses`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates), // <-- send raw array, not wrapped in { updates: ... }
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result?.error || 'Failed to update student courses');
+  }
+
+  return {
+    success: result.success,
+    errors: result.errors ?? [],
   };
 }

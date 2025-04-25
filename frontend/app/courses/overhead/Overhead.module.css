@@ -1,6 +1,77 @@
-
 .Row {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ButtonGroup {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* --- Edit --- */
+.EditButton {
+  cursor: pointer;
+  width: 75px;
+  height: 30px;
+
+  background-color: #fff;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  transition: border-color 0.2s ease;
+}
+
+.EditButton:hover {
+  border-color: #1890ff;
+}
+
+.EditButtonActive {
+  border-color: #1890ff;
+}
+
+/* --- Select All --- */
+.SelectAllButton {
+  cursor: pointer;
+  height: 30px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111;
+  transition: background-color 0.2s ease;
+}
+
+.SelectAllButton:hover {
+  background-color: #e5e7eb;
+}
+
+/* --- Delete --- */
+.DeleteButton {
+  cursor: pointer;
+  height: 30px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.DeleteButton:hover {
+  background-color: #dc2626;
+}
+
+.DeleteButtonDisabled {
+  background-color: #f87171;
+  opacity: 0.6;
+  cursor: not-allowed;
 }

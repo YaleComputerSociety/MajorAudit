@@ -1,58 +1,61 @@
+// frontend/app/courses/years/semester/SemesterBox.tsx
 
-import React, {useState, useEffect} from "react";
-import Style from "./SemesterBox.module.css"
-
+import React from "react";
+import Style from "./SemesterBox.module.css";
 import { StudentSemester } from "../../CoursesTyping";
 import { TransformTermNumber } from "../../../../utils/course-display/CourseDisplay";
-
-import { useUser } from "@/context/UserProvider";
 import CourseBox from "./course/CourseBox";
+import { useCoursesPage } from "@/context/CoursesContext";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { useDroppable } from "@dnd-kit/core";
 
-function RenderCourses(props: { 
-	edit: boolean, 
-	studentSemester: StudentSemester 
-}){
-		const renderedCourses = props.studentSemester.studentCourses.map((studentCourse, index) => (
-      <CourseBox 
-				key={index} 
-				edit={props.edit} 
-				studentCourse={studentCourse}
-			/>
-    ));
-	
-		return( 
-			<div className={Style.Column}>
-				{renderedCourses}
-			</div>
-		);
-	}
+const SemesterBox = ({
+  studentSemester,
+  term
+}: {
+  studentSemester: StudentSemester;
+  term: string;
+}) => {
+  const { editMode, lastDragTimestamp } = useCoursesPage();
 
-function SemesterBox(props: { 
-	edit: boolean, 
-	studentSemester: StudentSemester, 
-}){
-  const { user } = useUser();
-	const [renderedCourses, setRenderedCourses] = useState<React.ReactNode>(null);
+  // Do not filter out hidden courses during edit — show full set
+  const sortedCourses = [...studentSemester.studentCourses]
+    .sort((a, b) => a.sort_index - b.sort_index);
 
- 	useEffect(() => {
-		setRenderedCourses(
-			<RenderCourses 
-				edit={props.edit} 
-				studentSemester={props.studentSemester}
-			/>
-		);
-	}, [props.edit, props.studentSemester, user]);
+  const { isOver, setNodeRef } = useDroppable({
+    id: term,
+    data: { term }
+  });
 
-  return(
-    <div className={Style.Column} style={{ minWidth: "440px", marginBottom: "8px" }}>
+  return (
+    <div
+      ref={setNodeRef}
+      className={`${Style.Column} ${isOver ? Style.Hovered : ""}`}
+      style={{
+        minWidth: "440px",
+        marginBottom: "8px",
+        transition: "background-color 0.15s ease-in-out" // ✅ smooth hover animation
+      }}
+    >
       <div style={{ marginBottom: "6px" }}>
-				{TransformTermNumber(props.studentSemester.term)}
+        {TransformTermNumber(term)}
       </div>
-			<div>
-				{renderedCourses}
-			</div>
+
+			<SortableContext
+				items={sortedCourses.map(c => c.id)} // keep stable
+				strategy={verticalListSortingStrategy}
+			>
+				<div className={Style.Column}>
+					{sortedCourses.map((studentCourse) => (
+						<CourseBox key={studentCourse.id} studentCourse={studentCourse} />
+					))}
+				</div>
+			</SortableContext>
     </div>
   );
-}
+};
 
 export default SemesterBox;

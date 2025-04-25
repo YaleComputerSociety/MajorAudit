@@ -6,7 +6,7 @@ import { useUser } from '@/context/UserProvider';
 
 const AddCourseModal: React.FC = () => {
   const { closeModal } = useModal();
-  const { addCourses, isLoading } = useUser();
+  const { addCourses, isLoading, currentFYP } = useUser();
 
   const termOptions = ["202503", "202501", "202403", "202401", "202303", "202301", "202203"];
   const resultOptions = ['A-C', 'CR', 'D/F/W'];
@@ -29,32 +29,42 @@ const AddCourseModal: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!courseData.term_from || !courseData.code || !courseData.result || !courseData.term_to) {
-      setValidationError('All fields are required');
-      return;
-    }
-
-    try {
-      const response = await addCourses([courseData]);
-
-      if (response.success && response.courses.length > 0) {
-        setCourseData({
-          term_from: "",
-          code: "",
-          result: "", 
-          term_to: ""
-        });
-        closeModal();
-      } else {
-        setValidationError(response.errors[0]?.message || 'Failed to add course');
-      }
-    } catch {
-      setValidationError('Unexpected error occurred while adding course.');
-    }
-  };
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+	
+		if (!courseData.term_from || !courseData.code || !courseData.result || !courseData.term_to) {
+			setValidationError('All fields are required');
+			return;
+		}
+	
+		// Determine current number of courses in the target term
+		const termCourses = currentFYP?.studentCourses.filter(
+			(c) => c.term === courseData.term_to
+		) ?? [];
+	
+		const sort_index = termCourses.length;
+	
+		try {
+			const response = await addCourses([
+				{ ...courseData, sort_index }  // attach calculated index
+			]);
+	
+			if (response.success && response.courses.length > 0) {
+				setCourseData({
+					term_from: "",
+					code: "",
+					result: "", 
+					term_to: ""
+				});
+				closeModal();
+			} else {
+				setValidationError(response.errors[0]?.message || 'Failed to add course');
+			}
+		} catch {
+			setValidationError('Unexpected error occurred while adding course.');
+		}
+	};
+	
 
   const handleCancel = () => {
     setCourseData({

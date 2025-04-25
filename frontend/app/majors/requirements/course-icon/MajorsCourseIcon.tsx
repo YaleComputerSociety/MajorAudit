@@ -4,8 +4,8 @@ import Style from "./MajorsCourseIcon.module.css"
 
 import Image from "next/image";
 
-import { Subrequirement } from "@/types/type-program";
-import { StudentCourse, AbstractCourse } from "@/types/type-user";
+import { Subrequirement } from "@/types/program";
+import { StudentCourse, AbstractCourse } from "@/types/user";
 
 import DistributionCircle from "../../../../components/distribution-circle/DistributionsCircle";
 

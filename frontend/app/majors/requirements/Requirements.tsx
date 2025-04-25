@@ -7,8 +7,8 @@ import { useState, useEffect } from "react";
 import Style from "./Requirements.module.css";
 
 // import { Course } from "@/types/type-user";
-import { Subrequirement, Requirement, Option } from "@/types/type-program";
-import { MajorsIndex } from "@/types/type-user";
+import { Subrequirement, Requirement, Option } from "@/types/program";
+import { MajorsIndex } from "@/types/user";
 
 // import { getStudentConcentration, removeCourseInSubreq, addCourseInSubreq, toggleSubreqSelection } from "./RequirementsUtils";
 import { MajorsIcon } from "./course-icon/MajorsCourseIcon";

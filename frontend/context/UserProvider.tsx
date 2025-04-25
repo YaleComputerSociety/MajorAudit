@@ -1,10 +1,13 @@
+// frontend/context/UserProvider.tsx
+
 "use client";
 import { createContext, useContext } from "react";
-import { User, StudentCourse, FYP } from "@/types/type-user";
+import { User, StudentCourse, FYP } from "@/types/user";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface UserContextType {
   user: User;
+	
   isLoading: boolean;
   error: string | null;
 
@@ -14,26 +17,8 @@ interface UserContextType {
   availableFYPs: FYP[];
   setCurrentFYPIndex: (index: number) => void;
 
-  addCourses: (
-    entries: {
-      term_from: string;
-      code: string;
-      result: string;
-      term_to: string;
-    }[]
-  ) => Promise<{
-    success: boolean;
-    courses: StudentCourse[];
-    errors: { entry: any; message: string }[];
-  }>;
-
-  removeCourses: (
-    courseIds: number[]
-  ) => Promise<{
-    success: boolean;
-    removed: number[];
-    errors: { id: number; message: string }[];
-  }>;
+	getClonedStudentCourses: () => StudentCourse[];
+	updateCourses: (updatedCourses: StudentCourse[]) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | null>(null);

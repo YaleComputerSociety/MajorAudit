@@ -18,9 +18,10 @@
 
 	width: 420px;
 	height: 36px;
-
-	padding: 0 10px;
 	border-radius: 16px;
+
+	margin-bottom: 4px;
+	/* transition: transform 200ms ease, background 200ms ease; */
 }
 
 .CourseCode {
@@ -39,8 +40,59 @@
 	padding: 0;
 	border: none;
 	cursor: pointer;
-
 	width: 20px;
 	height: 20px;
 	border-radius: 50%;
+}
+
+.RemovingState {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.SelectionLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.HiddenCheckbox {
+  display: none;
+}
+
+.CustomCheckbox {
+	display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 12px;
+  height: 12px;
+
+	margin-left: -5px;
+	margin-right: 5px;
+
+  border: 2px solid #ccc;
+  border-radius: 3px;
+
+  background-color: white;
+
+  font-size: 12px;
+
+  user-select: none;
+
+}
+
+.SelectedCheckbox {
+
+}
+
+.PendingState {
+  opacity: 0.7;
+}
+
+.GripIcon {
+  cursor: grab;
+  font-size: 16px;
+  margin: 0 8px;
+  user-select: none;
 }

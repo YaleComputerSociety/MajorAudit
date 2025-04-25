@@ -1,69 +1,122 @@
-import React, { useState } from "react";
+// frontend/app/courses/years/semester/course/CourseBox.tsx
+
+import React, { useMemo } from "react";
 import Style from "./CourseBox.module.css";
-
-import { StudentCourse } from "@/types/type-user";
-import { RenderMark, SeasonIcon, GetCourseColor, IsTermActive } from "../../../../../utils/course-display/CourseDisplay";
+import { useCoursesPage } from "@/context/CoursesContext";
+import { StudentCourse } from "@/types/user";
+import {
+  RenderMark,
+  SeasonIcon,
+  GetCourseColor
+} from "../../../../../utils/course-display/CourseDisplay";
 import DistributionCircle from "../../../../../components/distribution-circle/DistributionsCircle";
-import { useUser } from "@/context/UserProvider";
 
-function RemoveButton({ studentCourse }: { studentCourse: StudentCourse }) {
-  const { removeCourses } = useUser();
-  const [isRemoving, setIsRemoving] = useState(false);
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
-  const handleRemoveStudentCourse = async () => {
-    const code = studentCourse.courseOffering.abstractCourse.codes[0];
-    if (!window.confirm(`Are you sure you want to remove ${code}?`)) return;
+const CourseSelection = ({ courseId }: { courseId: number }) => {
+  const { selectedCourses, toggleCourseSelection, isPending } = useCoursesPage();
+  const isSelected = selectedCourses.has(courseId);
 
-    setIsRemoving(true);
-    try {
-      const result = await removeCourses([studentCourse.id]);
+  return (
+    <label className={Style.SelectionLabel}>
+      <input
+        type="checkbox"
+        checked={isSelected}
+        onChange={() => toggleCourseSelection(courseId)}
+        className={Style.HiddenCheckbox}
+        disabled={isPending}
+      />
+      <span
+        className={`${Style.CustomCheckbox} ${isSelected ? Style.SelectedCheckbox : ''} ${isPending ? Style.PendingState : ''}`}
+      >
+        {isSelected ? '✓' : ''}
+      </span>
+    </label>
+  );
+};
 
-      if (!result.success) {
-        const errMsg = result.errors.find(e => e.id === studentCourse.id)?.message || 'Unknown error';
-        alert(`Failed to remove course: ${errMsg}`);
-      }
-    } catch (error) {
-      console.error("Error removing course:", error);
-      alert("An unexpected error occurred while removing the course.");
-    } finally {
-      setIsRemoving(false);
-    }
+const EyeToggle = ({ studentCourse }: { studentCourse: StudentCourse }) => {
+  const { editableCourses, setEditableCourses } = useCoursesPage();
+
+  const handleClick = () => {
+    if (!editableCourses) return;
+
+    const updated = editableCourses.map(c => ({
+      ...c,
+      is_hidden: c.id === studentCourse.id ? !c.is_hidden : c.is_hidden
+    }));
+
+    setEditableCourses(updated);
   };
 
   return (
-    <div 
-      className={Style.FuncButton} 
-      style={{ 
-        background: "#ffaaaa",
-        cursor: isRemoving ? "not-allowed" : "pointer",
-        opacity: isRemoving ? 0.7 : 1
-      }}
-      onClick={isRemoving ? undefined : handleRemoveStudentCourse}
-      title="Remove course"
+    <div
+      className={`${Style.FuncButton} ${studentCourse.is_hidden ? Style.HiddenIcon : ""}`}
+      onClick={handleClick}
+      title={studentCourse.is_hidden ? "Show course" : "Hide course"}
     >
-      {isRemoving ? "..." : "×"}
+      {studentCourse.is_hidden ? "🙈" : "👁️"}
     </div>
   );
-}
+};
 
-function CourseBox({
-  edit,
-  studentCourse
-}: {
-  edit: boolean;
-  studentCourse: StudentCourse;
-}) {
+const CourseBox = ({ studentCourse }: { studentCourse: StudentCourse }) => {
+  const { editMode } = useCoursesPage();
+
+  const sortableData = useMemo(
+    () => ({
+      term: studentCourse.term // 🔁 this updates reactively during drag-over
+    }),
+    [studentCourse.term]
+  );
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition
+  } = useSortable({
+    id: studentCourse.id,
+    data: sortableData
+  });
+
+	if(!editMode && studentCourse.is_hidden) {
+		return null;
+	}
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  };
+
   return (
-    <div 
-      className={Style.CourseBox}  
-      style={{ background: GetCourseColor(studentCourse.term) }}
-    > 
+    <div
+      ref={setNodeRef}
+      style={{
+        ...style,
+        background: studentCourse.is_hidden ? "#fbfbfb" : GetCourseColor(studentCourse.term)
+      }}
+      className={Style.CourseBox}
+    >
       <div className={Style.Row}>
-        {edit && IsTermActive(studentCourse.term) && (
-          <RemoveButton studentCourse={studentCourse} />
+        {editMode && (
+          <div className={Style.Row}>
+            <CourseSelection courseId={studentCourse.id} />
+            <EyeToggle studentCourse={studentCourse} />
+            <div
+              className={Style.GripIcon}
+              title="Drag"
+              {...attributes}
+              {...listeners}
+            >
+              ⠿
+            </div>
+          </div>
         )}
-        <RenderMark status={studentCourse.status}/>
-        <SeasonIcon studentCourse={studentCourse}/>
+        <RenderMark status={studentCourse.status} />
+        <SeasonIcon studentCourse={studentCourse} />
         <div className={Style.Column}>
           <div className={Style.CourseCode}>
             {studentCourse.courseOffering.abstractCourse.codes[0]}
@@ -73,9 +126,9 @@ function CourseBox({
           </div>
         </div>
       </div>
-      <DistributionCircle distributions={studentCourse.courseOffering.abstractCourse.distributions}/>
+      <DistributionCircle distributions={studentCourse.courseOffering.abstractCourse.distributions} />
     </div>
   );
-}
+};
 
 export default CourseBox;

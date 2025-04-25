@@ -1,10 +1,15 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { useUser } from '@/context/UserProvider';
 import styles from './PlanSelector.module.css';
 
-function PlanSelector() {
+import { useUser } from '@/context/UserProvider';
+import { useCoursesPage } from '@/context/CoursesContext';
+
+function PlanSelector() 
+{
   const { currentFYP, availableFYPs, setCurrentFYPIndex } = useUser();
+	const { editMode, toggleEditMode } = useCoursesPage();
+
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -14,6 +19,9 @@ function PlanSelector() {
 
   const handleFYPSelect = (index: number) => {
     setCurrentFYPIndex(index);
+		if(editMode){
+			toggleEditMode();
+		}
     setIsOpen(false);
   };
 
@@ -33,8 +41,8 @@ function PlanSelector() {
   const selectedIndex = availableFYPs.findIndex(fyp => fyp.id === currentFYP?.id);
 
   const getCurrentFYPName = () => {
-    if (availableFYPs.length === 0) return "No FYPs Available";
-    if (selectedIndex === -1) return "Select an FYP";
+    if (availableFYPs.length === 0) return ": (";
+    if (selectedIndex === -1) return "...";
     return `FYP ${selectedIndex + 1}`;
   };
 

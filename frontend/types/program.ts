@@ -1,7 +1,7 @@
 
 // types/type-program
 
-import { AbstractCourse, StudentCourse } from "./type-user";
+import { AbstractCourse, StudentCourse } from "./user";
 
 export interface Option { 
 	option: AbstractCourse | null;

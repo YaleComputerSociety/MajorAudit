@@ -3,8 +3,8 @@
 import Style from "./Metadata.module.css";
 
 import Link from 'next/link';
-import { Program, ProgramDict } from "@/types/type-program";
-import { MajorsIndex } from "@/types/type-user";
+import { Program, ProgramDict } from "@/types/program";
+import { MajorsIndex } from "@/types/user";
 import { usePrograms } from "../../../context/ProgramProvider";
 import Image from "next/image";
 
