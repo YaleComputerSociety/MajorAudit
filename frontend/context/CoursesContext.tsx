@@ -35,13 +35,23 @@ const CoursesPageContext = createContext<CoursesPageContextType | undefined>(und
 
 export function CoursesPageProvider({ children }: { children: React.ReactNode }) {
   const [editMode, setEditMode] = useState(false);
-  const toggleEditMode = useCallback(() => setEditMode(prev => !prev), []);
-
   const [selectedCourses, setSelectedCourses] = useState<Set<number>>(new Set());
   const [editableCourses, setEditableCourses] = useState<StudentCourse[] | null>(null);
-
   const [isPending, startTransition] = useTransition();
-	const [lastDragTimestamp, setLastDragTimestamp] = useState(Date.now());
+  const [lastDragTimestamp, setLastDragTimestamp] = useState(Date.now());
+
+  const resetEditableCourses = useCallback(() => {
+    setEditableCourses(null);
+    setSelectedCourses(new Set());
+  }, []);
+
+  const toggleEditMode = useCallback(() => {
+    setEditMode(prev => {
+      const next = !prev;
+      if (!next) resetEditableCourses(); // ← Reset courses if turning OFF edit mode
+      return next;
+    });
+  }, [resetEditableCourses]);
 
   const toggleCourseSelection = useCallback((courseId: number) => {
     startTransition(() => {
@@ -55,11 +65,6 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
         return updated;
       });
     });
-  }, []);
-
-  const resetEditableCourses = useCallback(() => {
-    setEditableCourses(null);
-    setSelectedCourses(new Set());
   }, []);
 
   const updateEditableCourse = useCallback((courseId: number, patch: Partial<StudentCourse>) => {
@@ -81,14 +86,18 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
     setEditableCourses,
     resetEditableCourses,
     updateEditableCourse,
-		lastDragTimestamp,
-		setLastDragTimestamp,
+    lastDragTimestamp,
+    setLastDragTimestamp,
   }), [
-		editMode,
-		selectedCourses,
-		isPending,
-		editableCourses,
-		lastDragTimestamp,
+    editMode,
+    selectedCourses,
+    isPending,
+    editableCourses,
+    lastDragTimestamp,
+    toggleEditMode,
+    resetEditableCourses,
+    toggleCourseSelection,
+    updateEditableCourse,
   ]);
 
   return (
@@ -97,6 +106,7 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
     </CoursesPageContext.Provider>
   );
 }
+
 
 export function useCoursesPage() {
   const context = useContext(CoursesPageContext);

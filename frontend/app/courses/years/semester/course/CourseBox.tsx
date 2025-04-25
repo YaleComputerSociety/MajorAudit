@@ -82,6 +82,10 @@ const CourseBox = ({ studentCourse }: { studentCourse: StudentCourse }) => {
     data: sortableData
   });
 
+	if(!editMode && studentCourse.is_hidden) {
+		return null;
+	}
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition
