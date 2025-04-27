@@ -6,6 +6,8 @@ import { XMLParser } from 'fast-xml-parser';
 import crypto from 'crypto';
 import { getSupabaseAdminServerClient } from '@/database/server';
 import { fetchYaliesInfoByNetId, YaliesRecord } from './yalies';
+import { Database } from '@/types/supabase_newer';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,7 +21,7 @@ async function validateCasTicket(ticket: string, serviceUrl: string): Promise<{ 
   return netID ? { netID } : null;
 }
 
-async function checkExistingUser(adminClient: any, netID: string) {
+async function checkExistingUser(adminClient: SupabaseClient<Database>, netID: string) {
   const { data: existingUser, error } = await adminClient
     .from('users')
     .select('id, net_id')
@@ -28,7 +30,7 @@ async function checkExistingUser(adminClient: any, netID: string) {
   return { existingUser, error };
 }
 
-async function handleExistingUser(adminClient: any, user: any, netID: string, password: string, email: string) {
+async function handleExistingUser(adminClient: SupabaseClient<Database>, user: { id: string; net_id: string }, netID: string, password: string, email: string) {
   const { data: authData } = await adminClient.auth.admin.getUserById(user.id);
   if (authData?.user) {
     const { error } = await adminClient.auth.admin.updateUserById(user.id, { password });
@@ -40,13 +42,12 @@ async function handleExistingUser(adminClient: any, user: any, netID: string, pa
       email_confirm: true,
       user_metadata: { netid: netID },
       app_metadata: { provider: 'cas' },
-      user_id: user.id
     });
     return { userId: data?.user?.id || null, error };
   }
 }
 
-async function createNewUser(adminClient: any, netID: string, password: string, yalies: YaliesRecord) {
+async function createNewUser(adminClient: SupabaseClient<Database>, netID: string, password: string, yalies: YaliesRecord) {
   const { data, error: createError } = await adminClient.auth.admin.createUser({
     email: yalies.email,
     password,

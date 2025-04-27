@@ -83,7 +83,7 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: 'Authentication error' }, { status: 401 });
     }
 
-    const errors: any[] = [];
+    const errors: { id: number; message: string }[] = [];
 
     for (const update of updates) {
       const { id, ...fields } = update;
@@ -107,6 +107,7 @@ export async function PATCH(req: NextRequest) {
       errors,
     });
   } catch (err) {
+		void [err];
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

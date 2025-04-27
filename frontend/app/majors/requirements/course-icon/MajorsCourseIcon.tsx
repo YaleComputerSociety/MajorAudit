@@ -66,7 +66,7 @@ function StudentCourseIcon(props: {
       {/* {props.edit && (
         <RemoveButton onClick={() => props.onRemoveCourse(props.studentCourse.course, props.subreq, true)} />
       )} */}
-      ✓ {props.studentCourse.courseOffering.codes[0]}
+      ✓ {props.studentCourse.pref_code}
     </div>
   );
 }

@@ -7,13 +7,14 @@ export interface YaliesRecord {
   first_name: string;
   major: string;
   year: string;
-  [key: string]: any; // catch-all for extra fields
+  [key: string]: unknown; // catch-all for extra fields
 }
 
 export async function fetchYaliesInfoByNetId(netId: string): Promise<YaliesRecord | null> {
   try {
-    const response = await axios.post('https://api.yalies.io/v2/people', {
+    const response = await axios.post<YaliesRecord[]>('https://api.yalies.io/v2/people', {
       filters: { netid: netId },
+      limit: 1, // ✅ ask API for 1 record only
     }, {
       headers: {
         'Content-Type': 'application/json',
@@ -24,16 +25,19 @@ export async function fetchYaliesInfoByNetId(netId: string): Promise<YaliesRecor
     const data = response.data;
 
     if (Array.isArray(data) && data.length > 0) {
-      const userRecord = data.find((person: any) => person.netid === netId);
-      return userRecord || null;
+      return data[0];
     }
 
     return null;
-  } catch (error: any) {
-    console.error(`Error fetching data for ${netId}:`, error.message);
-    if (error.response) {
-      console.error('Status:', error.response.status);
-      console.error('Response data:', error.response.data);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(`Error fetching data for ${netId}:`, error.message);
+      if (error.response) {
+        console.error('Status:', error.response.status);
+        console.error('Response data:', error.response.data);
+      }
+    } else {
+      console.error(`Unknown error fetching data for ${netId}:`, error);
     }
     return null;
   }
