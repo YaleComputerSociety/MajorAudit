@@ -5,12 +5,29 @@ import BaseModal from '../base-modal/BaseModal';
 import styles from './AddModal.module.css';
 import { useModal } from '../../context/ModalContext';
 import { useCoursesPage } from '@/context/CoursesContext';
+import { useUser } from '@/context/UserProvider';
 import { tryGetNewStudentCourse } from '@/utils/studentCourseUtils'; 
 import { StudentCourse, CourseEntry } from '@/types/user';
+import { TransformTermNumber } from '@/utils/courseDisplayUtils';
 
 const AddCourseModal: React.FC = () => {
   const { closeModal } = useModal();
   const { editableCourses, setEditableCourses } = useCoursesPage();
+	const { currentFYP } = useUser();
+
+	const targetTerms = React.useMemo(() => {
+		const arrangement = currentFYP?.studentTermArrangement;
+		if (!arrangement) return [];
+	
+		const terms = [
+			...(arrangement.first_year ?? []),
+			...(arrangement.sophomore ?? []),
+			...(arrangement.junior ?? []),
+			...(arrangement.senior ?? []),
+		];
+	
+		return terms.filter(term => term !== "0");
+	}, [currentFYP]);
 
   const termOptions = ["202503", "202501", "202403", "202401", "202303", "202301", "202203"];
   const resultOptions = ['A-C', 'CR', 'D/F/W'];
@@ -92,7 +109,7 @@ const AddCourseModal: React.FC = () => {
           >
             <option value="">Select Term</option>
             {termOptions.map(term => (
-              <option key={`from-${term}`} value={term}>{term}</option>
+              <option key={`from-${term}`} value={term}>{TransformTermNumber(term)}</option>
             ))}
           </select>
         </div>
@@ -142,8 +159,8 @@ const AddCourseModal: React.FC = () => {
             disabled={isLoading}
           >
             <option value="">Select Term</option>
-            {termOptions.map(term => (
-              <option key={`to-${term}`} value={term}>{term}</option>
+            {targetTerms.map(term => (
+              <option key={`to-${term}`} value={term}>{TransformTermNumber(term)}</option>
             ))}
           </select>
         </div>

@@ -3,7 +3,7 @@
 import React from "react";
 import Style from "./SemesterBox.module.css";
 import { StudentSemester } from "../../CoursesTyping";
-import { TransformTermNumber } from "../../../../utils/course-display/CourseDisplay";
+import { TransformTermNumber } from "../../../../utils/courseDisplayUtils";
 import CourseBox from "./course/CourseBox";
 import { useCoursesPage } from "@/context/CoursesContext";
 import {

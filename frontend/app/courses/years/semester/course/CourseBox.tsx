@@ -1,17 +1,25 @@
 // frontend/app/courses/years/semester/course/CourseBox.tsx
 
 import React, { useMemo } from "react";
+import Image from "next/image";
 import Style from "./CourseBox.module.css";
 import { useCoursesPage } from "@/context/CoursesContext";
 import { StudentCourse } from "@/types/user";
-import {
-  SeasonIcon,
-  GetCourseColor
-} from "@/utils/course-display/CourseDisplay";
+import { GetCourseColor } from "@/utils/courseDisplayUtils";
 import DistributionCircle from "../../../../../components/distribution-circle/DistributionsCircle";
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+
+export function SeasonIcon(props: { studentCourse: StudentCourse })
+{
+	const getSeasonImage = () => (String(props.studentCourse.term).endsWith("3") ? "/fall.svg" : "/spring.svg");
+	return(
+		<div>
+			<Image style={{ marginTop: "3px", marginRight: "6px" }} src={getSeasonImage()} alt="" width={20} height={20}/>
+		</div>
+	)
+}
 
 const CourseSelection = ({ courseId }: { courseId: number }) => {
   const { selectedCourses, toggleCourseSelection, isPending } = useCoursesPage();
@@ -119,50 +127,70 @@ const CourseBox = ({ studentCourse }: { studentCourse: StudentCourse }) => {
     transition
   };
 
-  return (
-    <div
-      ref={setNodeRef}
-      style={{
-        ...style,
-        background: studentCourse.is_hidden ? "#fbfbfb" : GetCourseColor(studentCourse.term)
-      }}
-      className={Style.CourseBox}
-    >
-      <div className={Style.Row} style={{ alignItems: "center" }}>
-        {editMode && (
-          <div className={Style.Row}>
-            <CourseSelection courseId={studentCourse.id}/>
+	const content = (
+		<>
+			<div className={Style.Row} style={{ alignItems: "center" }}>
+				{editMode && (
+					<div className={Style.Row}>
+						<CourseSelection courseId={studentCourse.id}/>
 						<div
-              className={Style.GripIcon}
-              title="Drag"
-              {...attributes}
-              {...listeners}
-            >
-              ⠿
-            </div>
-            <EyeToggle studentCourse={studentCourse}/>
+							className={Style.GripIcon}
+							title="Drag"
+							{...attributes}
+							{...listeners}
+						>
+							⠿
+						</div>
+						<EyeToggle studentCourse={studentCourse}/>
 						<TrashButton studentCourse={studentCourse}/>
 						<div style={{ color: "grey", fontSize: "20px", marginLeft: "5px" }}>
 							|
 						</div>
-          </div>
-        )}
+					</div>
+				)}
 				<RenderMark studentCourse={studentCourse}/>
 				<SeasonIcon studentCourse={studentCourse}/>
-        <div className={Style.Column}>
-          <div className={Style.CourseCode}>
-            {studentCourse.courseOffering.abstractCourse.codes[0]}
-          </div>
-          <div className={Style.CourseTitle}>
-            {studentCourse.courseOffering.abstractCourse.title}
-          </div>
-        </div>
-      </div>
+				<div className={Style.Column}>
+					<div className={Style.CourseCode}>
+						{studentCourse.courseOffering.abstractCourse.codes[0]}
+					</div>
+					<div className={Style.CourseTitle}>
+						{studentCourse.courseOffering.abstractCourse.title}
+					</div>
+				</div>
+			</div>
 			<div style={{ marginRight: "8px" }}>
 				<DistributionCircle distributions={studentCourse.courseOffering.abstractCourse.distributions}/>
 			</div>
-    </div>
-  );
+		</>
+	);
+
+	return editMode ? (
+		<div
+			ref={setNodeRef}
+			className={Style.CourseBox}
+			style={{
+				...style,
+				background: GetCourseColor(studentCourse)
+			}}
+		>
+			{content}
+		</div>
+	) : (
+		<button
+			className={Style.CourseBoxButton}
+			style={{
+				...style,
+				background: GetCourseColor(studentCourse),
+			}}
+			onClick={() => {
+				// Optional: handle click if you want! e.g., open a modal, navigate, etc.
+			}}
+		>
+			{content}
+		</button>
+	);
+	
 };
 
 export default CourseBox;

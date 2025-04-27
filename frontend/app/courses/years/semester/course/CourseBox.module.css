@@ -24,6 +24,34 @@
 	/* transition: transform 200ms ease, background 200ms ease; */
 }
 
+.CourseBoxButton {
+	display: flex;
+	flex-direction: row;
+
+	justify-content: space-between;
+	align-items: center;
+	text-align: left;
+
+	width: 420px;
+	height: 36px;
+	border-radius: 16px;
+
+	margin-bottom: 4px;
+	padding: 0;
+
+	border: none;
+	cursor: pointer;
+	transition: opacity 0.3s ease;
+
+  letter-spacing: inherit;
+  -webkit-font-smoothing: antialiased; /* for Chrome/Safari */
+  -moz-osx-font-smoothing: grayscale; /* for Firefox on Mac */
+}
+
+.CourseBoxButton:hover {
+  opacity: 0.9;
+}
+
 .CourseCode {
 	font-size: 12px;
 	font-weight: 500;
