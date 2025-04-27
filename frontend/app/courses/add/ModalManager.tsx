@@ -4,7 +4,7 @@
 import React from 'react';
 import { useModal } from './context/ModalContext';
 import AddCourseModal from './modals/add-modal/AddModal';
-import CreateCourseModal from './modals/create-modal/CreateModel';
+import CreateCourseModal from './modals/create-modal/CreateModal';
 import UploadCoursesModal from './modals/upload-modal/UploadModal';
 
 const ModalManager: React.FC = () => {

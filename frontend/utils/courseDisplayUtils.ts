@@ -1,6 +1,4 @@
 
-import Style from "./CourseDisplay.module.css";
-import Image from "next/image";
 import { StudentCourse } from "@/types/user";
 
 export function TransformTermNumber(term: number | string): string {
@@ -31,7 +29,6 @@ export function TransformTermNumber(term: number | string): string {
 }
 
 export function IsTermActive(term: string): boolean {
-	return true;
   const currentYearMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
 
   const termStr = String(term);
@@ -50,35 +47,9 @@ export function IsTermActive(term: string): boolean {
   return currentYearMonth < seasonCutoff[season];
 }
 
-export function GetCourseColor(term: string): string {
-  return IsTermActive(term) ? "#F5F5F5" : "#E1E9F8";
-}
-
-export function RenderMark(props: { status: string })
-{
-	if(props.status === "DA"){
-    return(
-      <div className={Style.Checkmark}>
-        ✓
-      </div>
-    );
-  }else 
-	if(props.status === "MA"){
-    return(
-			<div className={Style.Checkmark}>
-				⚠
-			</div>
-    );
-  }
-  return <div></div>;
-}
-
-export function SeasonIcon(props: { studentCourse: StudentCourse })
-{
-	const getSeasonImage = () => (String(props.studentCourse.term).endsWith("3") ? "/fall.svg" : "/spring.svg");
-	return(
-		<div>
-			<Image className={Style.SeasonImage} src={getSeasonImage()} alt="" width={20} height={20}/>
-		</div>
-	)
+export function GetCourseColor(studentCourse: StudentCourse): string {
+	if (studentCourse.is_hidden) {
+		return "#fbfbfb";
+	}
+  return IsTermActive(studentCourse.term) ? "#F5F5F5" : "#E1E9F8";
 }

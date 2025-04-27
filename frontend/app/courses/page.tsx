@@ -51,6 +51,7 @@ function CoursesBody() {
   } = useCoursesPage();
 
   const [columns, setColumns] = useState(false);
+	void [setColumns];
 
   useEffect(() => {
     if (editMode && !editableCourses && currentFYP) {
@@ -90,7 +91,6 @@ function CoursesBody() {
 		if (!active || !over || active.id === over.id || !editMode || !editableCourses) return;
 	
 		const activeCourse = editableCourses.find(c => c.id === active.id);
-		const overCourse = editableCourses.find(c => c.id === over.id);
 		const overTerm = over.data?.current?.term as string;
 	
 		if (!activeCourse || !overTerm) return;

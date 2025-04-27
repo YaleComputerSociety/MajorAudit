@@ -24,9 +24,50 @@
 	/* transition: transform 200ms ease, background 200ms ease; */
 }
 
+.CourseBoxButton {
+	display: flex;
+	flex-direction: row;
+
+	justify-content: space-between;
+	align-items: center;
+	text-align: left;
+
+	width: 420px;
+	height: 36px;
+	border-radius: 16px;
+
+	margin-bottom: 4px;
+	padding: 0;
+
+	border: none;
+	cursor: pointer;
+	transition: opacity 0.3s ease;
+
+  letter-spacing: inherit;
+	font: inherit;
+  -webkit-font-smoothing: antialiased; /* for Chrome/Safari */
+  -moz-osx-font-smoothing: grayscale; /* for Firefox on Mac */
+}
+
+.CourseBoxButton:hover {
+  opacity: 0.9;
+}
+
 .CourseCode {
 	font-size: 12px;
 	font-weight: 500;
+}
+
+.CourseCodeButton {
+	font-size: 12px;
+	font-weight: 500;
+	border: none;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+	background-color: transparent;
+	text-align: left;
+	width: max-content;
 }
 
 .CourseTitle {
@@ -36,13 +77,17 @@
 
 .FuncButton {
 	border: none;
-	margin: 0;
 	padding: 0;
 	border: none;
 	cursor: pointer;
 	width: 20px;
 	height: 20px;
 	border-radius: 50%;
+	font-size: 16px;
+
+	margin-left: 2px;
+	margin-right: 2px;
+	margin-top: 2px;
 }
 
 .RemovingState {
@@ -69,9 +114,9 @@
   height: 12px;
 
 	margin-left: -5px;
-	margin-right: 5px;
+	margin-right: 2px;
 
-  border: 2px solid #ccc;
+  border: 2px solid #d8d8d8;
   border-radius: 3px;
 
   background-color: white;
@@ -82,17 +127,40 @@
 
 }
 
-.SelectedCheckbox {
-
-}
-
 .PendingState {
   opacity: 0.7;
 }
 
 .GripIcon {
   cursor: grab;
-  font-size: 16px;
-  margin: 0 8px;
+  font-size: 20px;
   user-select: none;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+.Checkmark {
+	justify-content: center;
+	text-align: center;
+
+	font-weight: 550;
+	margin-right: 2px;
+}
+
+.GradeToggle{
+	border: none;
+	padding: 0;
+	border: 1px solid #ddd;
+	background-color: white;
+	color: gray;
+	cursor: pointer;
+	width: 30px;
+	height: 20px;
+	border-radius: 4px;
+	font-size: 12px;
+	text-align: center;
+
+	margin-left: 2px;
+	margin-right: 4px;
+	margin-top: 2px;
 }

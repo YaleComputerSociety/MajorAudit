@@ -1,9 +1,11 @@
-// frontend/app/courses/add/modal/UploadCoursesModal.tsx
-
 import React, { useState } from 'react';
 import BaseModal from '../base-modal/BaseModal';
+import { useCoursesPage } from '@/context/CoursesContext';
 import { useUser } from '@/context/UserProvider';
+import { tryGetNewStudentCourse } from '@/utils/studentCourseUtils';
 import styles from './UploadModal.module.css';
+import { StudentCourse } from '@/types/user';
+import { useModal } from '../../context/ModalContext';
 
 function parseBatchCourses(raw: string) {
   const termMapping: Record<string, string> = {
@@ -40,100 +42,102 @@ function parseBatchCourses(raw: string) {
 }
 
 const UploadCoursesModal: React.FC = () => {
-  const { addCourses, currentFYP } = useUser();
+  const { currentFYP } = useUser();
+  const { editableCourses, setEditableCourses } = useCoursesPage();
+  const { closeModal } = useModal();
+
   const [input, setInput] = useState('');
-  const [results, setResults] = useState<{ code: string; success: boolean; message: string }[]>([]);
+  const [toastErrors, setToastErrors] = useState<{ id: number, message: string }[]>([]);
   const [loading, setLoading] = useState(false);
-  const [showResults, setShowResults] = useState(false);
+
+  const showToast = (message: string) => {
+    const id = Date.now();
+    setToastErrors(prev => [...prev, { id, message }]);
+    setTimeout(() => {
+      setToastErrors(prev => prev.filter(e => e.id !== id));
+    }, 5000);
+  };
 
   const handleUpload = async () => {
     setLoading(true);
     const parsed = parseBatchCourses(input);
 
+    closeModal(); // 🔐 close immediately
+
     if (!parsed.length || !currentFYP) {
-      setResults([{ code: '-', success: false, message: 'No valid input or missing FYP' }]);
-      setShowResults(true);
+      showToast('No valid input or missing FYP');
       setLoading(false);
       return;
     }
 
-    // Count how many courses already exist per term
+    const tempCourseList = editableCourses ?? currentFYP.studentCourses;
     const courseCountByTerm = new Map<string, number>();
-    for (const course of currentFYP.studentCourses) {
+    for (const course of tempCourseList) {
       courseCountByTerm.set(course.term, (courseCountByTerm.get(course.term) ?? 0) + 1);
     }
 
-    // Assign sort_index
-    const entriesWithSort = parsed.map(entry => {
+    const newCourses: StudentCourse[] = [];
+
+    for (const entry of parsed) {
       const count = courseCountByTerm.get(entry.term_to) ?? 0;
       courseCountByTerm.set(entry.term_to, count + 1);
-      return { ...entry, sort_index: count };
-    });
 
-    const { courses, errors } = await addCourses(entriesWithSort);
-
-    const mergedResults = parsed.map(entry => {
-      const successEntry = courses.find(c => c.courseOffering.codes.includes(entry.code));
-      const errorEntry = errors.find(e => e.entry.code === entry.code);
-      if (successEntry) return { code: entry.code, success: true, message: 'Added' };
-      return { code: entry.code, success: false, message: errorEntry?.message || 'Unknown error' };
-    });
-
-    setResults(mergedResults);
-    setShowResults(true);
-    setLoading(false);
-
-    if (mergedResults.every(r => r.success)) {
-      setTimeout(() => {
-        setInput('');
-        setResults([]);
-        setShowResults(false);
-        document.querySelector('[data-close-modal]')?.dispatchEvent(new MouseEvent('click'));
-      }, 500);
+      const fullEntry = { ...entry, sort_index: count };
+      const newCourse = await tryGetNewStudentCourse(fullEntry);
+      if (newCourse) {
+        newCourses.push(newCourse);
+      } else {
+        showToast(`❌ ${entry.code}: invalid or unavailable`);
+      }
     }
+
+    if (newCourses.length > 0) {
+      setEditableCourses((prev) => [...(prev ?? tempCourseList), ...newCourses]);
+    }
+
+    setInput('');
+    setLoading(false);
   };
 
   return (
-    <BaseModal title="Upload Courses">
-      <div className={styles.form}>
-        <div className={styles.formGroup}>
-          <label htmlFor="courseInput">Paste your course history</label>
-          <textarea
-            id="courseInput"
-            rows={10}
-            placeholder="e.g.\nFall 2022\nCPSC 201\tIntro to CS\tA-\t1"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className={styles.formInput}
-            disabled={loading}
-          />
-        </div>
-
-        <div className={styles.formActions}>
-          <button
-            type="button"
-            className={styles.submitButton}
-            onClick={handleUpload}
-            disabled={loading || !input.trim()}
-          >
-            {loading ? 'Uploading...' : 'Upload'}
-          </button>
-        </div>
-
-        {showResults && results.some(r => !r.success) && (
+    <>
+      <BaseModal title="Upload Courses">
+        <div className={styles.form}>
           <div className={styles.formGroup}>
-            <label>Upload Errors</label>
-            <ul style={{ fontSize: '14px', marginTop: '4px' }}>
-              {results.filter(r => !r.success).map((r, idx) => (
-                <li key={idx} style={{ color: 'red' }}>
-                  ❌ {r.code} — {r.message}
-                </li>
-              ))}
-            </ul>
+            <label htmlFor="courseInput">Paste your course history</label>
+            <textarea
+              id="courseInput"
+              rows={10}
+              placeholder=""
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className={styles.formInput}
+              disabled={loading}
+            />
           </div>
-        )}
+
+          <div className={styles.formActions}>
+            <button
+              type="button"
+              className={styles.submitButton}
+              onClick={handleUpload}
+              disabled={loading || !input.trim()}
+            >
+              {loading ? 'Uploading...' : 'Upload'}
+            </button>
+          </div>
+        </div>
+      </BaseModal>
+
+      <div className={styles.toastContainer}>
+        {toastErrors.map((e) => (
+          <div key={e.id} className={styles.toast}>
+            {e.message}
+            <button onClick={() => setToastErrors(prev => prev.filter(err => err.id !== e.id))}>×</button>
+          </div>
+        ))}
       </div>
-    </BaseModal>
+    </>
   );
 };
 

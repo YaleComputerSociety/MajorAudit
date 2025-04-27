@@ -3,9 +3,8 @@
 import React from "react";
 import Style from "./SemesterBox.module.css";
 import { StudentSemester } from "../../CoursesTyping";
-import { TransformTermNumber } from "../../../../utils/course-display/CourseDisplay";
+import { TransformTermNumber } from "../../../../utils/courseDisplayUtils";
 import CourseBox from "./course/CourseBox";
-import { useCoursesPage } from "@/context/CoursesContext";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -19,9 +18,6 @@ const SemesterBox = ({
   studentSemester: StudentSemester;
   term: string;
 }) => {
-  const { editMode, lastDragTimestamp } = useCoursesPage();
-
-  // Do not filter out hidden courses during edit — show full set
   const sortedCourses = [...studentSemester.studentCourses]
     .sort((a, b) => a.sort_index - b.sort_index);
 
@@ -37,7 +33,7 @@ const SemesterBox = ({
       style={{
         minWidth: "440px",
         marginBottom: "8px",
-        transition: "background-color 0.15s ease-in-out" // ✅ smooth hover animation
+        transition: "background-color 0.15s ease-in-out" 
       }}
     >
       <div style={{ marginBottom: "6px" }}>
@@ -45,7 +41,7 @@ const SemesterBox = ({
       </div>
 
 			<SortableContext
-				items={sortedCourses.map(c => c.id)} // keep stable
+				items={sortedCourses.map(c => c.id)} 
 				strategy={verticalListSortingStrategy}
 			>
 				<div className={Style.Column}>
