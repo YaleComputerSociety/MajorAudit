@@ -50,6 +50,7 @@ export async function addCourses(
         status: string;
         result: string;
         sort_index: number;
+				pref_code: string;
       }
   )[]
 ): Promise<{

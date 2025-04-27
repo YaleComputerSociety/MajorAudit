@@ -29,7 +29,7 @@ function Login()
             </div>
           </div>
         </div>
-        <Image src="/ma.png" alt="Landing Page" priority width={450} height={400}/>
+        <Image src="/ma.svg" alt="Landing Page" priority width={450} height={400}/>
       </div>
     </div>
   );

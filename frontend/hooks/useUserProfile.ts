@@ -105,6 +105,7 @@ export function useUserProfile(): UseUserProfileReturn {
 							result: c.result,
 							status: c.status,
 							sort_index: c.sort_index,
+							pref_code: c.pref_code,
 						};
 					} else if (c.createdCourse) {
 						return {
@@ -118,6 +119,7 @@ export function useUserProfile(): UseUserProfileReturn {
 							result: c.result,
 							status: c.status,
 							sort_index: c.sort_index,
+							pref_code: c.createdCourse.code,
 						};
 					} else {
 						throw new Error('Invalid StudentCourse: missing both courseOffering and createdCourse');
@@ -140,7 +142,8 @@ export function useUserProfile(): UseUserProfileReturn {
 									ac.term === c.term &&
 									ac.result === c.result &&
 									ac.status === c.status &&
-									ac.sort_index === c.sort_index
+									ac.sort_index === c.sort_index &&
+									ac.pref_code === c.pref_code
 								);
 							} else if (c.createdCourse && ac.createdCourse) {
 								return (

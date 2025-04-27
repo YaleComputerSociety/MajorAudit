@@ -69,7 +69,7 @@ const CreateCourseModal: React.FC = () => {
       createdCourse: {
         id: -1,
         title: title.trim(),
-        code: code.trim().toUpperCase(),
+        code: "C-" + code.trim().toUpperCase(),
         distributions: distributions.split(',').map(d => d.trim()), // crude split for now
         credits: Number(credits),
       },

@@ -36,7 +36,7 @@ function NavBar({utility, loggedIn = true }: { utility?: React.ReactNode; logged
   return(
     <div className={Style.NavBar}>
       <div className={Style.Row}>
-			<Image src="/ma.png" alt="" width={80} height={80} className={Style.Logo} priority/>        
+			<Image src="/ma.svg" alt="" width={40} height={40} style={{ marginRight: "20px" }} className={Style.Logo} priority/>        
         {utility}
       </div>
       {loggedIn && <PageLinks/>}

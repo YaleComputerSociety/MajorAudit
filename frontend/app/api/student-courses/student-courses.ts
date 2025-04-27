@@ -28,6 +28,7 @@ interface AddOfferingParams {
   status: string;
   result: string;
 	sort_index: number;
+	pref_code: string;
   supabaseClient: GenericSupabaseClient;
 }
 
@@ -38,6 +39,7 @@ type BulkCourseEntry =
       status: string;
       result: string;
       sort_index: number;
+			pref_code: string;
     }
   | {
       created_course: {
@@ -131,7 +133,7 @@ async function addCreatedStudentCourse(params: AddCreatedParams) {
 }
 
 async function addOfferingStudentCourse(params: AddOfferingParams) {
-  const { fypId, courseOfferingId, term, status, result, sort_index, supabaseClient } = params;
+  const { fypId, courseOfferingId, term, status, result, sort_index, pref_code, supabaseClient } = params;
 
   const { data, error } = await supabaseClient
     .from('student_courses')
@@ -143,7 +145,7 @@ async function addOfferingStudentCourse(params: AddOfferingParams) {
       result,
 			sort_index,
 			is_hidden: false,
-			pref_code: null
+			pref_code: pref_code
     })
     .select('*')
     .single();
@@ -163,7 +165,7 @@ export async function addStudentCourses(
   for (const entry of entries) {
     if ('course_offering_id' in entry) {
       // OFFERING path
-      const { course_offering_id, term, result, status, sort_index } = entry;
+      const { course_offering_id, term, result, status, sort_index, pref_code } = entry;
       try {
         const { data: offering } = await supabaseClient
           .from('course_offerings')
@@ -185,6 +187,7 @@ export async function addStudentCourses(
           status,
           result,
           sort_index,
+					pref_code,
           supabaseClient
         });
 
