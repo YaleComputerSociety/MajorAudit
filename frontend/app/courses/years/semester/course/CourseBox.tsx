@@ -88,6 +88,30 @@ const TrashButton = ({ studentCourse }: { studentCourse: StudentCourse }) => {
   );
 };
 
+const GradeToggle = ({ studentCourse }: { studentCourse: StudentCourse }) => {
+	const { editableCourses, setEditableCourses } = useCoursesPage();
+
+	const handleClick = () => {
+		if (!editableCourses) return;
+
+		const newResult = studentCourse.result === "A-C" ? "CR" : "A-C";
+		const updated = editableCourses.map(c => ({
+			...c,
+			result: c.id === studentCourse.id ? newResult : c.result
+		}));
+		setEditableCourses(updated);
+	};
+
+	return (
+		<button
+			className={Style.GradeToggle}
+			onClick={handleClick}
+		>
+			{studentCourse.result}
+		</button>
+	);
+}
+
 const RenderMark = ({ studentCourse }: { studentCourse: StudentCourse }) => {
 	const { editMode } = useCoursesPage();
 	return(
@@ -141,6 +165,7 @@ const CourseBox = ({ studentCourse }: { studentCourse: StudentCourse }) => {
 						>
 							⠿
 						</div>
+						<GradeToggle studentCourse={studentCourse}/>
 						<EyeToggle studentCourse={studentCourse}/>
 						<TrashButton studentCourse={studentCourse}/>
 						<div style={{ color: "grey", fontSize: "20px", marginLeft: "5px" }}>

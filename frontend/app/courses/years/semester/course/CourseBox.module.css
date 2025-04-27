@@ -44,6 +44,7 @@
 	transition: opacity 0.3s ease;
 
   letter-spacing: inherit;
+	font: inherit;
   -webkit-font-smoothing: antialiased; /* for Chrome/Safari */
   -moz-osx-font-smoothing: grayscale; /* for Firefox on Mac */
 }
@@ -132,4 +133,22 @@
 
 	font-weight: 550;
 	margin-right: 2px;
+}
+
+.GradeToggle{
+	border: none;
+	padding: 0;
+	border: 1px solid #ddd;
+	background-color: white;
+	color: gray;
+	cursor: pointer;
+	width: 30px;
+	height: 20px;
+	border-radius: 4px;
+	font-size: 12px;
+	text-align: center;
+
+	margin-left: 2px;
+	margin-right: 4px;
+	margin-top: 2px;
 }
