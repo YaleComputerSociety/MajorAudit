@@ -1,6 +1,14 @@
 
 // types/type-user.ts
 
+export type CreatedCourse = {
+	id: number;
+	title: string;
+	code: string;
+	distributions: string[];
+	credits: number;
+}
+
 export type CourseEntry = {
   term_from: string;
   code: string;
@@ -38,7 +46,8 @@ export interface StudentCourse {
   term: string;
 	sort_index: number;
 	is_hidden: boolean;
-  courseOffering: CourseOffering;
+  courseOffering: CourseOffering | null;
+	createdCourse: CreatedCourse | null;
 }
 
 export interface StudentTermArrangement {

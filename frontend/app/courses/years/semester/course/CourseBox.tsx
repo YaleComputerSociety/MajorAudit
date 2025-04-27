@@ -152,15 +152,25 @@ const CourseBox = ({ studentCourse }: { studentCourse: StudentCourse }) => {
 				<SeasonIcon studentCourse={studentCourse}/>
 				<div className={Style.Column}>
 					<div className={Style.CourseCode}>
-						{studentCourse.courseOffering.abstractCourse.codes[0]}
+						{studentCourse.courseOffering
+							? studentCourse.courseOffering.abstractCourse.codes[0]
+							: studentCourse.createdCourse?.code || 'Unknown'}
 					</div>
 					<div className={Style.CourseTitle}>
-						{studentCourse.courseOffering.abstractCourse.title}
+						{studentCourse.courseOffering
+							? studentCourse.courseOffering.abstractCourse.title
+							: studentCourse.createdCourse?.title || 'Untitled'}
 					</div>
 				</div>
 			</div>
 			<div style={{ marginRight: "8px" }}>
-				<DistributionCircle distributions={studentCourse.courseOffering.abstractCourse.distributions}/>
+				<DistributionCircle
+					distributions={
+						studentCourse.courseOffering
+							? studentCourse.courseOffering.abstractCourse.distributions
+							: studentCourse.createdCourse?.distributions || []
+					}
+				/>
 			</div>
 		</>
 	);

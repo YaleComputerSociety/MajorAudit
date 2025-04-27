@@ -3,7 +3,7 @@
 import { StudentTermArrangement } from '@/types/user';
 import { NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/database/server';
-import { normalizeStudentCourse } from '../student-courses/student-courses';
+import { normalizeStudentCourseCreated, normalizeStudentCourseOffering } from '../student-courses/student-courses';
 import { Tables } from '@/types/supabase_newer';
 
 type CourseJoin = Tables<'student_courses'> & {
@@ -12,6 +12,7 @@ type CourseJoin = Tables<'student_courses'> & {
       course_codes?: Tables<'course_codes'>[];
     };
   };
+  created_course?: Tables<'created_courses'>;
 };
 
 export async function GET() {
@@ -50,19 +51,22 @@ export async function GET() {
 
     const fypIds = fypList.map(fyp => fyp.id);
 
-    const courseQueryRes = await supabase
-      .from('student_courses')
-      .select(`
-        *,
-        course_offering:course_offerings(
-          id, term, professors, flags, course_id,
-          course:courses(
-            *,
-            course_codes:course_codes(*)
-          )
-        )
-      `)
-      .in('fyp_id', fypIds);
+		const courseQueryRes = await supabase
+		.from('student_courses')
+		.select(`
+			*,
+			course_offering:course_offerings(
+				id, term, professors, flags, course_id,
+				course:courses(
+					*,
+					course_codes:course_codes(*)
+				)
+			),
+			created_course:created_courses(
+				id, title, code, distributions, credits
+			)
+		`)
+		.in('fyp_id', fypIds);
 
     if (courseQueryRes.error || !courseQueryRes.data) {
       return NextResponse.json({ error: 'Failed to fetch student courses' }, { status: 500 });
@@ -79,14 +83,20 @@ export async function GET() {
     });
 
     const transformedFYPs = fypList.map(fyp => {
-      const studentCourses = (grouped[fyp.id] || []).map(sc =>
-        normalizeStudentCourse(
-          sc,
-          sc.course_offering!,
-          sc.course_offering?.course ?? null,
-          sc.course_offering?.course?.course_codes ?? []
-        )
-      );
+			const studentCourses = (grouped[fyp.id] || []).map(sc => {
+				if (sc.created_course) {
+					return normalizeStudentCourseCreated(sc, sc.created_course);
+				} else if (sc.course_offering) {
+					return normalizeStudentCourseOffering(
+						sc,
+						sc.course_offering,
+						sc.course_offering?.course ?? null,
+						sc.course_offering?.course?.course_codes ?? []
+					);
+				} else {
+					throw new Error('Student course is missing both offering and created course');
+				}
+			});
 
 			let studentTermArrangement: StudentTermArrangement = {};
 			try {

@@ -97,13 +97,32 @@ export function useUserProfile(): UseUserProfileReturn {
 
       // Add new courses
 			if (toAdd.length > 0) {
-				const entries = toAdd.map(c => ({
-					course_offering_id: c.courseOffering.id,
-					term: c.term,
-					result: c.result,
-					status: c.status,
-					sort_index: c.sort_index,
-				}));
+				const entries = toAdd.map(c => {
+					if (c.courseOffering) {
+						return {
+							course_offering_id: c.courseOffering.id,
+							term: c.term,
+							result: c.result,
+							status: c.status,
+							sort_index: c.sort_index,
+						};
+					} else if (c.createdCourse) {
+						return {
+							created_course: {
+								title: c.createdCourse.title,
+								code: c.createdCourse.code,
+								distributions: c.createdCourse.distributions,
+								credits: c.createdCourse.credits,
+							},
+							term: c.term,
+							result: c.result,
+							status: c.status,
+							sort_index: c.sort_index,
+						};
+					} else {
+						throw new Error('Invalid StudentCourse: missing both courseOffering and createdCourse');
+					}
+				});
 
 				const response = await apiAddCourses(currentFYP, entries);
 				if (response.success) {
@@ -114,13 +133,28 @@ export function useUserProfile(): UseUserProfileReturn {
 						const c = newStateCourses[i];
 						if (c.id !== -1) continue;
 
-						const match = addedCourses.find(ac =>
-							ac.courseOffering.id === c.courseOffering.id &&
-							ac.term === c.term &&
-							ac.result === c.result &&
-							ac.status === c.status &&
-							ac.sort_index === c.sort_index
-						);
+						const match = addedCourses.find(ac => {
+							if (c.courseOffering && ac.courseOffering) {
+								return (
+									ac.courseOffering.id === c.courseOffering.id &&
+									ac.term === c.term &&
+									ac.result === c.result &&
+									ac.status === c.status &&
+									ac.sort_index === c.sort_index
+								);
+							} else if (c.createdCourse && ac.createdCourse) {
+								return (
+									ac.createdCourse.title === c.createdCourse.title &&
+									ac.createdCourse.code === c.createdCourse.code &&
+									ac.term === c.term &&
+									ac.result === c.result &&
+									ac.status === c.status &&
+									ac.sort_index === c.sort_index
+								);
+							} else {
+								return false; // Don't match if types don't match
+							}
+						});
 
 						if (match) {
 							newStateCourses[i] = match;

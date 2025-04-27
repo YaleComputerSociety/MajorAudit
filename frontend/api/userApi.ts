@@ -31,13 +31,27 @@ export async function fetchUserData(): Promise<User> {
 
 export async function addCourses(
   fyp: FYP,
-  entries: {
-    course_offering_id: number;
-    term: string;
-    status: string;
-    result: string;
-    sort_index: number;
-  }[]
+  entries: (
+    | {
+        course_offering_id: number;
+        term: string;
+        status: string;
+        result: string;
+        sort_index: number;
+      }
+    | {
+        created_course: {
+          title: string;
+          code: string;
+          distributions: string[];
+          credits: number;
+        };
+        term: string;
+        status: string;
+        result: string;
+        sort_index: number;
+      }
+  )[]
 ): Promise<{
   success: boolean;
   courses: StudentCourse[];
@@ -66,7 +80,6 @@ export async function addCourses(
     errors: data.errors || [],
   };
 }
-
 
 export async function removeCourses(
   fyp: FYP,

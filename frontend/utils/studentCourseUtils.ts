@@ -1,25 +1,40 @@
 // frontend/utils/studentCourseUtils.ts
 
 import { CourseEntry, StudentCourse } from "@/types/user";
-import { normalizeStudentCourse } from "@/app/api/student-courses/student-courses";
+import { normalizeStudentCourseOffering } from "@/app/api/student-courses/student-courses";
 
 export function cloneStudentCoursesDeep(courses: StudentCourse[]): StudentCourse[] {
-  return courses.map(course => ({
-    ...course,
-    courseOffering: {
-      ...course.courseOffering,
-      professors: [...course.courseOffering.professors],
-      flags: [...course.courseOffering.flags],
-      codes: [...course.courseOffering.codes],
-      abstractCourse: {
-        ...course.courseOffering.abstractCourse,
-        codes: [...course.courseOffering.abstractCourse.codes],
-        distributions: [...course.courseOffering.abstractCourse.distributions]
-      }
+  return courses.map(course => {
+    if (course.courseOffering) {
+      return {
+        ...course,
+        courseOffering: {
+          ...course.courseOffering,
+          professors: [...course.courseOffering.professors],
+          flags: [...course.courseOffering.flags],
+          codes: [...course.courseOffering.codes],
+          abstractCourse: {
+            ...course.courseOffering.abstractCourse,
+            codes: [...course.courseOffering.abstractCourse.codes],
+            distributions: [...course.courseOffering.abstractCourse.distributions]
+          }
+        },
+        createdCourse: null
+      };
+    } else if (course.createdCourse) {
+      return {
+        ...course,
+        createdCourse: {
+          ...course.createdCourse,
+          distributions: [...course.createdCourse.distributions]
+        },
+        courseOffering: null
+      };
+    } else {
+      throw new Error('Invalid StudentCourse: missing both courseOffering and createdCourse');
     }
-  }));
+  });
 }
-
 
 export async function tryGetNewStudentCourse(entry: CourseEntry): Promise<StudentCourse | null> {
   const { code, term_from, term_to, result, sort_index } = entry;
@@ -41,7 +56,7 @@ export async function tryGetNewStudentCourse(entry: CourseEntry): Promise<Studen
 
     const status = term_from === term_to ? "DA" : "MA";
 
-    return normalizeStudentCourse(
+    return normalizeStudentCourseOffering(
       {
         id: -1,
         fyp_id: -1,
@@ -50,7 +65,8 @@ export async function tryGetNewStudentCourse(entry: CourseEntry): Promise<Studen
         status,
         result,
         sort_index,
-        is_hidden: false
+        is_hidden: false,
+				created_course_id: null
       },
       courseOffering,
       course,
@@ -61,7 +77,6 @@ export async function tryGetNewStudentCourse(entry: CourseEntry): Promise<Studen
     return null;
   }
 }
-
 
 export function diffStudentCourses(
   oldCourses: StudentCourse[],
