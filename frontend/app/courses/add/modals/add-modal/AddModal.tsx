@@ -1,12 +1,16 @@
+// frontend/app/courses/add/modals/add-modal/AddModal.tsx
+
 import React, { useState } from 'react';
 import BaseModal from '../base-modal/BaseModal';
 import styles from './AddModal.module.css';
 import { useModal } from '../../context/ModalContext';
-import { useUser } from '@/context/UserProvider';
+import { useCoursesPage } from '@/context/CoursesContext';
+import { tryGetNewStudentCourse } from '@/utils/studentCourseUtils'; 
+import { StudentCourse, CourseEntry } from '@/types/user';
 
 const AddCourseModal: React.FC = () => {
   const { closeModal } = useModal();
-  const { addCourses, isLoading, currentFYP } = useUser();
+  const { editableCourses, setEditableCourses } = useCoursesPage();
 
   const termOptions = ["202503", "202501", "202403", "202401", "202303", "202301", "202203"];
   const resultOptions = ['A-C', 'CR', 'D/F/W'];
@@ -18,53 +22,44 @@ const AddCourseModal: React.FC = () => {
     term_to: "" 
   });
 
+  const [isLoading, setIsLoading] = useState(false);
   const [validationError, setValidationError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setCourseData(prev => ({ ...prev, [name]: value }));
-
-    if (validationError) {
-      setValidationError('');
-    }
+    if (validationError) setValidationError('');
   };
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-	
-		if (!courseData.term_from || !courseData.code || !courseData.result || !courseData.term_to) {
-			setValidationError('All fields are required');
-			return;
-		}
-	
-		// Determine current number of courses in the target term
-		const termCourses = currentFYP?.studentCourses.filter(
-			(c) => c.term === courseData.term_to
-		) ?? [];
-	
-		const sort_index = termCourses.length;
-	
-		try {
-			const response = await addCourses([
-				{ ...courseData, sort_index }  // attach calculated index
-			]);
-	
-			if (response.success && response.courses.length > 0) {
-				setCourseData({
-					term_from: "",
-					code: "",
-					result: "", 
-					term_to: ""
-				});
-				closeModal();
-			} else {
-				setValidationError(response.errors[0]?.message || 'Failed to add course');
-			}
-		} catch {
-			setValidationError('Unexpected error occurred while adding course.');
-		}
-	};
-	
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const { term_from, term_to, code, result } = courseData;
+
+    if (!term_from || !term_to || !code || !result) {
+      setValidationError('All fields are required');
+      setIsLoading(false);
+      return;
+    }
+
+    const sort_index =
+      editableCourses?.filter(c => c.term === term_to).length ?? 0;
+
+    const courseEntry: CourseEntry = { ...courseData, sort_index };
+
+    const newCourse: StudentCourse | null = await tryGetNewStudentCourse(courseEntry);
+
+    if (!newCourse) {
+      setValidationError('Could not find or add course.');
+      setIsLoading(false);
+      return;
+    }
+
+    setEditableCourses(prev => (prev ? [...prev, newCourse] : [newCourse]));
+    closeModal();
+    setIsLoading(false);
+  };
 
   const handleCancel = () => {
     setCourseData({
@@ -91,8 +86,8 @@ const AddCourseModal: React.FC = () => {
             name="term_from"
             value={courseData.term_from}
             onChange={handleChange}
-            required
             className={styles.formInput}
+            required
             disabled={isLoading}
           >
             <option value="">Select Term</option>
@@ -124,8 +119,8 @@ const AddCourseModal: React.FC = () => {
             name="result"
             value={courseData.result}
             onChange={handleChange}
-            required
             className={styles.formInput}
+            required
             disabled={isLoading}
           >
             <option value="">Select Result</option>
@@ -142,8 +137,8 @@ const AddCourseModal: React.FC = () => {
             name="term_to"
             value={courseData.term_to}
             onChange={handleChange}
-            required
             className={styles.formInput}
+            required
             disabled={isLoading}
           >
             <option value="">Select Term</option>
@@ -154,16 +149,16 @@ const AddCourseModal: React.FC = () => {
         </div>
 
         <div className={styles.formActions}>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className={styles.submitButton}
             disabled={isLoading}
           >
             {isLoading ? 'Adding...' : 'Add Course'}
           </button>
-          <button 
-            type="button" 
-            className={styles.cancelButton} 
+          <button
+            type="button"
+            className={styles.cancelButton}
             onClick={handleCancel}
             disabled={isLoading}
           >

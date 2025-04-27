@@ -29,6 +29,10 @@ interface CoursesPageContextType {
 
 	lastDragTimestamp: number;
 	setLastDragTimestamp: (ts: number) => void;
+
+	collapsedYears: Set<string>;
+	toggleYearCollapsed: (yearGrade: string) => void;
+	isYearCollapsed: (yearGrade: string) => boolean;
 }
 
 const CoursesPageContext = createContext<CoursesPageContextType | undefined>(undefined);
@@ -39,6 +43,23 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
   const [editableCourses, setEditableCourses] = useState<StudentCourse[] | null>(null);
   const [isPending, startTransition] = useTransition();
   const [lastDragTimestamp, setLastDragTimestamp] = useState(Date.now());
+	const [collapsedYears, setCollapsedYears] = useState<Set<string>>(new Set());
+
+	const toggleYearCollapsed = useCallback((yearGrade: string) => {
+		setCollapsedYears(prev => {
+			const updated = new Set(prev);
+			if (updated.has(yearGrade)) {
+				updated.delete(yearGrade);
+			} else {
+				updated.add(yearGrade);
+			}
+			return updated;
+		});
+	}, []);
+
+	const isYearCollapsed = useCallback((yearGrade: string) => {
+		return collapsedYears.has(yearGrade);
+	}, [collapsedYears]);
 
   const resetEditableCourses = useCallback(() => {
     setEditableCourses(null);
@@ -88,16 +109,22 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
     updateEditableCourse,
     lastDragTimestamp,
     setLastDragTimestamp,
+		collapsedYears,
+		toggleYearCollapsed,
+		isYearCollapsed,
   }), [
-    editMode,
-    selectedCourses,
-    isPending,
-    editableCourses,
-    lastDragTimestamp,
-    toggleEditMode,
-    resetEditableCourses,
-    toggleCourseSelection,
-    updateEditableCourse,
+		editMode,
+		selectedCourses,
+		isPending,
+		editableCourses,
+		lastDragTimestamp,
+		collapsedYears,
+		toggleEditMode,
+		resetEditableCourses,
+		toggleCourseSelection,
+		updateEditableCourse,
+		toggleYearCollapsed,
+		isYearCollapsed,
   ]);
 
   return (

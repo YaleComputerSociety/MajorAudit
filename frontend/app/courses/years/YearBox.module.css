@@ -1,0 +1,20 @@
+.Row {
+	display: flex;
+	flex-direction: row;
+}
+
+.Column {
+	display: flex;
+	flex-direction: column;
+}
+
+.YearButton {
+	font-weight: 600;
+	font-size: 25px;
+	margin: 0;
+	background: none;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+	text-align: left;
+}
