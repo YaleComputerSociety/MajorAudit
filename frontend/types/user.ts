@@ -46,6 +46,7 @@ export interface StudentCourse {
   term: string;
 	sort_index: number;
 	is_hidden: boolean;
+	pref_code: string;
   courseOffering: CourseOffering | null;
 	createdCourse: CreatedCourse | null;
 }

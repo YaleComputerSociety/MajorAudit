@@ -119,7 +119,8 @@ async function addCreatedStudentCourse(params: AddCreatedParams) {
       status,
       result,
       sort_index,
-      is_hidden: false
+      is_hidden: false,
+			pref_code: createdCourse.code
     })
     .select('*')
     .single();
@@ -141,7 +142,8 @@ async function addOfferingStudentCourse(params: AddOfferingParams) {
       status,
       result,
 			sort_index,
-			is_hidden: false
+			is_hidden: false,
+			pref_code: null
     })
     .select('*')
     .single();
@@ -342,6 +344,7 @@ export function normalizeStudentCourseOffering(
     result: studentCourse.result,
 		sort_index: studentCourse.sort_index,
 		is_hidden: studentCourse.is_hidden || false,
+		pref_code: studentCourse.pref_code || courseCodes[0]?.code || "",
     courseOffering: {
 			id: offering.id,
       term: offering.term,
@@ -389,6 +392,7 @@ export function normalizeStudentCourseCreated(
     result: studentCourse.result,
     sort_index: studentCourse.sort_index,
     is_hidden: studentCourse.is_hidden || false,
+		pref_code: studentCourse.pref_code || createdCourse.code,
     createdCourse: {
       id: createdCourse.id,
       title: createdCourse.title,

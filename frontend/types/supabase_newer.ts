@@ -419,6 +419,7 @@ export type Database = {
           sort_index: number
           status: string
           term: string
+					pref_code: string | null
         }
         Insert: {
           course_offering_id?: number | null
@@ -430,6 +431,7 @@ export type Database = {
           sort_index: number
           status: string
           term: string
+					pref_code: string | null
         }
         Update: {
           course_offering_id?: number | null
@@ -441,6 +443,7 @@ export type Database = {
           sort_index?: number
           status?: string
           term?: string
+					pref_code?: string | null
         }
         Relationships: [
           {

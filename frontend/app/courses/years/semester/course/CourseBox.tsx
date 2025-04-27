@@ -58,13 +58,12 @@ const EyeToggle = ({ studentCourse }: { studentCourse: StudentCourse }) => {
   };
 
   return (
-    <div
+    <button
       className={Style.FuncButton}
       onClick={handleClick}
-      title={studentCourse.is_hidden ? "Show" : "Hide"}
     >
       {studentCourse.is_hidden ? "🙈" : "👁️"}
-    </div>
+    </button>
   );
 };
 
@@ -78,13 +77,12 @@ const TrashButton = ({ studentCourse }: { studentCourse: StudentCourse }) => {
   };
 
   return (
-    <div
+    <button
       className={Style.FuncButton}
       onClick={handleRemove}
-      title="Remove course"
     >
       🗑️
-    </div>
+    </button>
   );
 };
 
@@ -120,6 +118,56 @@ const RenderMark = ({ studentCourse }: { studentCourse: StudentCourse }) => {
 		</div>
 	);
 }
+
+const CodeButton = ({ studentCourse }: { studentCourse: StudentCourse }) => {
+  const { editMode, editableCourses, setEditableCourses } = useCoursesPage();
+
+  const canSwitchCode = (() => {
+    if (!editMode) return false;
+    if (!studentCourse.courseOffering) return false;
+    const codes = studentCourse.courseOffering.abstractCourse.codes;
+    return codes.length > 1;
+  })();
+
+  const handleClick = () => {
+    if (!canSwitchCode || !editableCourses) return;
+
+    const codes = studentCourse.courseOffering!.abstractCourse.codes;
+    const currentIndex = codes.indexOf(studentCourse.pref_code);
+    const nextIndex = (currentIndex + 1) % codes.length;
+    const nextCode = codes[nextIndex];
+
+    const updated = editableCourses.map(c =>
+      c.id === studentCourse.id
+        ? { ...c, pref_code: nextCode }
+        : c
+    );
+
+    setEditableCourses(updated);
+  };
+
+  const displayCode = studentCourse.pref_code || (studentCourse.courseOffering?.abstractCourse.codes[0] ?? 'Unknown');
+
+  if (editMode) {
+    return (
+      <button
+        type="button"
+        className={Style.CourseCodeButton}
+        onClick={canSwitchCode ? handleClick : undefined}
+        style={{ cursor: canSwitchCode ? 'pointer' : 'default' }}
+      >
+        {displayCode}
+      </button>
+    );
+  } else {
+    return (
+      <div className={Style.CourseCode}>
+        {displayCode}
+      </div>
+    );
+  }
+};
+
 
 const CourseBox = ({ studentCourse }: { studentCourse: StudentCourse }) => {
   const { editMode } = useCoursesPage();
@@ -176,11 +224,7 @@ const CourseBox = ({ studentCourse }: { studentCourse: StudentCourse }) => {
 				<RenderMark studentCourse={studentCourse}/>
 				<SeasonIcon studentCourse={studentCourse}/>
 				<div className={Style.Column}>
-					<div className={Style.CourseCode}>
-						{studentCourse.courseOffering
-							? studentCourse.courseOffering.abstractCourse.codes[0]
-							: studentCourse.createdCourse?.code || 'Unknown'}
-					</div>
+					<CodeButton studentCourse={studentCourse}/>
 					<div className={Style.CourseTitle}>
 						{studentCourse.courseOffering
 							? studentCourse.courseOffering.abstractCourse.title

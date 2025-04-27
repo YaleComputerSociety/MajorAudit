@@ -65,6 +65,7 @@ const CreateCourseModal: React.FC = () => {
       status: term ? 'DA' : 'MA', // or whatever your default status logic is
       sort_index,
       is_hidden: false,
+			pref_code: "C-" + code,
       createdCourse: {
         id: -1,
         title: title.trim(),
@@ -108,7 +109,7 @@ const CreateCourseModal: React.FC = () => {
             value={form.title}
             onChange={handleChange}
             className={styles.formInput}
-            placeholder="Intro to Coolness"
+            placeholder="French In France"
             required
             disabled={isLoading}
           />
@@ -121,7 +122,7 @@ const CreateCourseModal: React.FC = () => {
             value={form.code}
             onChange={handleChange}
             className={styles.formInput}
-            placeholder="CS199"
+            placeholder="..."
             required
             disabled={isLoading}
           />

@@ -66,7 +66,8 @@ export async function tryGetNewStudentCourse(entry: CourseEntry): Promise<Studen
         result,
         sort_index,
         is_hidden: false,
-				created_course_id: null
+				created_course_id: null,
+				pref_code: code,
       },
       courseOffering,
       course,
@@ -84,14 +85,14 @@ export function diffStudentCourses(
 ): {
   toAdd: StudentCourse[];
   toRemove: number[];
-  toUpdate: { id: number; sort_index?: number; is_hidden?: boolean, result?: string }[];
+  toUpdate: { id: number; sort_index?: number; is_hidden?: boolean, result?: string, pref_code?: string }[];
 } {
   const oldMap = new Map(oldCourses.map(c => [c.id, c]));
   const newMap = new Map(newCourses.map(c => [c.id, c]));
 
   const toAdd: StudentCourse[] = [];
   const toRemove: number[] = [];
-  const toUpdate: { id: number; sort_index?: number; is_hidden?: boolean, result?: string }[] = [];
+  const toUpdate: { id: number; sort_index?: number; is_hidden?: boolean, result?: string, pref_code?: string }[] = [];
 
   for (const newCourse of newCourses) {
     if (newCourse.id === -1) {
@@ -109,7 +110,7 @@ export function diffStudentCourses(
     const old = oldMap.get(newCourse.id);
     if (!old || newCourse.id === -1) continue;
 
-    const updates: { id: number; sort_index?: number; is_hidden?: boolean, result?: string } = { id: newCourse.id };
+    const updates: { id: number; sort_index?: number; is_hidden?: boolean, result?: string, pref_code?: string } = { id: newCourse.id };
     let changed = false;
 
     if (old.sort_index !== newCourse.sort_index) {
@@ -124,6 +125,11 @@ export function diffStudentCourses(
 
 		if (old.result !== newCourse.result) {
       updates.result = newCourse.result;
+      changed = true;
+    }
+
+		if (old.pref_code !== newCourse.pref_code) {
+      updates.pref_code = newCourse.pref_code;
       changed = true;
     }
 

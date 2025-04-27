@@ -58,6 +58,18 @@
 	font-weight: 500;
 }
 
+.CourseCodeButton {
+	font-size: 12px;
+	font-weight: 500;
+	border: none;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+	background-color: transparent;
+	text-align: left;
+	width: max-content;
+}
+
 .CourseTitle {
 	font-size: 8px;
 	font-weight: 500;
