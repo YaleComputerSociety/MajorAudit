@@ -46,7 +46,10 @@ const SemesterBox = ({
 			>
 				<div className={Style.Column}>
 					{sortedCourses.map((studentCourse) => (
-						<CourseBox key={studentCourse.id} studentCourse={studentCourse} />
+						<CourseBox 
+							key={`${studentCourse.id}-${studentCourse.sort_index}-${studentCourse.pref_code}`}
+							studentCourse={studentCourse}
+						/>
 					))}
 				</div>
 			</SortableContext>
