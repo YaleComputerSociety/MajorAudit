@@ -8,7 +8,7 @@ import {
   useCoursesPage,
   CoursesPageProvider
 } from "../../context/CoursesContext";
-
+import { useAuth } from "@/context/AuthProvider";
 import { ModalProvider } from "./add/context/ModalContext";
 import ModalManager from "./add/ModalManager";
 import { BuildStudentYears } from "./CoursesUtils";
@@ -16,7 +16,8 @@ import NavBar from "../../components/navbar/NavBar";
 import YearBox from "./years/YearBox";
 import AddButton from "./add/button/AddButton";
 import Overhead from "./overhead/Overhead";
-import TopProgressBar from "./progress/Progress";
+import TopProgressBar from "../../components/progress/Progress";
+
 
 import {
   DndContext,
@@ -33,15 +34,8 @@ import {
 	arrayMove
 } from "@dnd-kit/sortable";
 
-const NoFYP = () => (
-  <div>
-    <NavBar />
-    <div className={Style.CoursesPage}>How do you not have an FYP?</div>
-  </div>
-);
-
 function CoursesBody() {
-  const { currentFYP, getClonedStudentCourses, isLoading } = useUser();
+  const { currentFYP, getClonedStudentCourses, isLoading: isUserLoading } = useUser();
   const {
     editMode,
     editableCourses,
@@ -50,6 +44,8 @@ function CoursesBody() {
     setLastDragTimestamp,
 		setActiveFYPId
   } = useCoursesPage();
+	const { isLoading: isAuthLoading, isInitialized } = useAuth();
+	const loading = isAuthLoading || isUserLoading || !isInitialized;
 
   const [columns, setColumns] = useState(false);
 	void [setColumns];
@@ -147,13 +143,14 @@ function CoursesBody() {
     setLastDragTimestamp(Date.now());
   };
 
-  // 🔥🔥🔥 THE IMPORTANT PART
-  if (isLoading || !currentFYP) {
+  if(loading){
     return (
-      <div className={Style.CoursesPage} style={{ position: 'relative' }}>
-				<NavBar/>
-        <TopProgressBar loading={true} />
-      </div>
+			<div>
+				<div className={Style.CoursesPage} style={{ position: 'relative' }}>
+					<NavBar/>
+					<TopProgressBar loading={true}/>
+				</div>
+			</div>
     );
   }
 

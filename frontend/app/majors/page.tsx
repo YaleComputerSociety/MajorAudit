@@ -10,15 +10,18 @@ import NavBar from "../../components/navbar/NavBar";
 import Overhead from "./overhead/Overhead";
 import Metadata from "./metadata/Metadata";
 import Requirements from "./requirements/Requirements";
-
+import TopProgressBar from "@/components/progress/Progress";
+import { useAuth } from "@/context/AuthProvider";
 import { useUser } from "@/context/UserProvider"; 
 import { fill } from "@/utils/fill"; 
 
 function Majors() {
-  const { progDict, setProgDict, baseProgDict, isLoading, error } = usePrograms();
+  const { progDict, setProgDict, baseProgDict, isLoading: isProgLoading, error } = usePrograms();
 	const { currentFYP } = useUser();
   const [listView, setListView] = useState<boolean>(false);
   const [index, setIndex] = useState<MajorsIndex | null>(null);
+	const { isLoading: isAuthLoading, isInitialized } = useAuth();
+	const loading = isAuthLoading || isProgLoading || !isInitialized;
 
 	useEffect(() => {
 		if (!currentFYP) return;
@@ -52,12 +55,12 @@ function Majors() {
   }, [filteredProgKeys, index]);
 
   // Display loading state while data is being fetched
-  if (isLoading) {
+  if(loading){
     return(
       <div>
-        <NavBar utility={<Overhead listView={listView} setListView={setListView}/>}/>
-        <div className={Style.MajorsPage}>
-          <div>Loading Programs</div>
+        <div className={Style.MajorsPage} style={{ position: 'relative' }}>
+					 <NavBar/>
+        	<TopProgressBar loading={true}/>
         </div>
       </div>
     );
@@ -67,7 +70,7 @@ function Majors() {
   if (error) {
     return (
       <div>
-        <NavBar utility={<Overhead listView={listView} setListView={setListView}/>}/>
+        <NavBar/>
         <div className={Style.MajorsPage}>
           <div>Error Loading Programs: {error}</div>
         </div>

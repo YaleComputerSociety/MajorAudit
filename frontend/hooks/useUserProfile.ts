@@ -9,6 +9,7 @@ import {
 } from '@/api/userApi';
 import { diffStudentCourses, cloneStudentCoursesDeep } from '@/utils/studentCourseUtils';
 
+
 const emptyUser: User = {
   name: '',
   netID: '',
@@ -52,10 +53,24 @@ export function useUserProfile(): UseUserProfileReturn {
   const [user, setUser] = useState<User>(emptyUser);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeFYPIndex, setActiveFYPIndex] = useState(() => {
-    const savedIndex = parseInt(localStorage.getItem('fypIndex') || '0');
-    return isNaN(savedIndex) ? 0 : savedIndex;
-  });
+
+
+	const [activeFYPIndex, setActiveFYPIndex] = useState<number>(0);
+
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			const saved = localStorage.getItem('fypIndex');
+			if (saved !== null) {
+				const parsed = parseInt(saved, 10);
+				if (!isNaN(parsed)) {
+					setActiveFYPIndex(parsed);
+				}
+			}
+		}
+	}, []);
+
+
+
   const [currentFYP, setCurrentFYP] = useState<FYP | null>(null);
 
   useEffect(() => {

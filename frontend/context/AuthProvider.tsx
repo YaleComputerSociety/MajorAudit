@@ -11,6 +11,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   isLoading: boolean;
   refreshSession: () => Promise<void>;
+	isInitialized: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -182,9 +183,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setAuth, 
       logout,
       refreshSession,
-      isLoading
+      isLoading,
+			isInitialized
     }}>
-      {isInitialized ? children : <div>Loading authentication...</div>}
+      {children}
     </AuthContext.Provider>
   );
 }
