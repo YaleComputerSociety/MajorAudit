@@ -125,12 +125,28 @@ export async function GET(request: Request) {
       return NextResponse.redirect(new URL('/login?error=User+Provisioning+Failed', request.url));
     }
 
-    const redirectUrl = new URL('/auth', url.origin);
-    redirectUrl.searchParams.set('email', email);
-    redirectUrl.searchParams.set('password', password);
-    redirectUrl.searchParams.set('redirectTo', '/courses');
-
-    return NextResponse.redirect(redirectUrl);
+		return new Response(`
+			<html>
+				<body>
+					<script>
+						(async () => {
+							const res = await fetch("/auth", {
+								method: "POST",
+								headers: { "Content-Type": "application/x-www-form-urlencoded" },
+								body: new URLSearchParams({
+									email: "${email}",
+									password: "${password}",
+									redirectTo: "/courses"
+								})
+							});
+							window.location.href = "/courses";
+						})();
+					</script>
+				</body>
+			</html>
+		`, {
+			headers: { "Content-Type": "text/html" },
+		});
   } catch (err) {
     console.error('Unhandled CAS callback error:', err);
     return NextResponse.redirect(new URL('/login?error=Authentication+Failed', request.url));
