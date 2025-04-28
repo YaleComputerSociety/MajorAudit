@@ -18,6 +18,10 @@ function Overhead() {
   const { currentFYP, updateCourses } = useUser();
 	const [isSaving, setIsSaving] = useState(false);
 
+	if (!currentFYP) {
+    return null; // 🔥 Hide the whole Overhead until ready
+  }
+
   const handleSelectAll = () => {
     if (!currentFYP) return;
     const allIds = currentFYP.studentCourses.map(course => course.id);

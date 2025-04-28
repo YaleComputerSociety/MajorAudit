@@ -38,6 +38,8 @@ function PlanSelector()
     };
   }, []);
 
+	if (!currentFYP) return null;
+
   const selectedIndex = availableFYPs.findIndex(fyp => fyp.id === currentFYP?.id);
 
   const getCurrentFYPName = () => {

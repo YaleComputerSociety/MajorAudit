@@ -59,8 +59,8 @@ function Majors() {
     return(
       <div>
         <div className={Style.MajorsPage} style={{ position: 'relative' }}>
-					 <NavBar/>
-        	<TopProgressBar loading={true}/>
+					<TopProgressBar loading={true}/>
+					<NavBar/>
         </div>
       </div>
     );
