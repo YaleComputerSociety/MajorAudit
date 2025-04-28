@@ -7,7 +7,7 @@ import Style from "./Overhead.module.css";
 // import Pinned from "./pinned/Pinned";
 
 // function Overhead(props: { user: User, setIndex: React.Dispatch<React.SetStateAction<MajorsIndex | null>> }) 
-function Overhead(props: { listView: boolean, setListView: Function }) 
+function Overhead(props: { listView: boolean, setListView: React.Dispatch<React.SetStateAction<boolean>> }) 
 {
   return (
 		<div className={Style.Row}>

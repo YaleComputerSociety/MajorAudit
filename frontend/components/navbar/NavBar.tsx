@@ -1,15 +1,59 @@
 
 "use client";
 import Style from "./NavBar.module.css";
-
+import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthProvider"; // ✅ import auth provider
+
 function AccountButton() {
-  return(
-    <div className={Style.Circle} style={{ marginLeft: "13px", marginRight: "35px" }}>
-			<Image src="/profile.png" alt="" width={22} height={22}/>        
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const { logout } = useAuth(); // ✅ get logout from auth provider
+  const router = useRouter();   // ✅ use Next.js router for redirect
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();         // ✅ clear client-side supabase auth
+    router.push('/login');   // ✅ redirect to /login after logout
+  };
+
+  return (
+    <div style={{ position: "relative", marginLeft: "13px", marginRight: "35px" }} ref={ref}>
+      <div
+        className={Style.Circle}
+        onClick={() => setOpen(prev => !prev)}
+        style={{ cursor: "pointer" }}
+      >
+        <Image src="/profile.png" alt="profile" width={22} height={22} />
+      </div>
+
+			{open && (
+				<div className={Style.Dropdown}>
+					<button 
+						onClick={handleLogout}
+						className={Style.DropdownItem}
+						style={{ textAlign: "center", cursor: "pointer" }} // 🔥 magic line
+					>
+						Logout
+					</button>
+				</div>
+			)}	
+
     </div>
   );
 }

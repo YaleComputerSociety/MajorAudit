@@ -23,7 +23,7 @@ const SemesterBox = ({
   const sortedCourses = [...studentSemester.studentCourses]
     .sort((a, b) => a.sort_index - b.sort_index);
 
-  const { isOver, setNodeRef } = useDroppable({
+  const { setNodeRef } = useDroppable({
     id: term,
     data: { term }
   });
