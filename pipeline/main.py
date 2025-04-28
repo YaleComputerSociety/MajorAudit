@@ -62,7 +62,7 @@ def process_terms(target_terms):
 
 def main():
     # target_terms = ["202503", "202501", "202403", "202401", "202303", "202301", "202203"]
-    target_terms = ["202203"]
+    target_terms = ["202601"]
     process_terms(target_terms)
     
 if __name__ == "__main__":

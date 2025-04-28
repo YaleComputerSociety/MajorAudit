@@ -47,9 +47,10 @@ function CourseIcon(props: {
         <RemoveButton onClick={() => props.onRemoveCourse(props.course, props.subreq, false)} />
       )} */}
       <SeasonComp seasons={["Fall", "Spring"]}/>
-      {props.showCode ? props.showCode : props.course.codes[0]}
+      {/* {props.course ? (props.showCode ? props.showCode : props.course.codes[0]) : "N/A"} */}
+			{props.course ? (props.showCode ? props.showCode : props.course.codes[0]) : "N/A"}
 			<div style={{ marginLeft: "2px", marginTop: "5px" }}>
-				<DistributionCircle distributions={props.course.distributions}/>
+				{props.course?.distributions && <DistributionCircle distributions={props.course.distributions} />}
 			</div>
     </div>
   );
@@ -178,7 +179,7 @@ export function MajorsIcon(props: {
 		return <EmptyIcon edit={props.edit}/>;
   }
 
-  const isStudentCourse = "course" in props.contentCourse;
+  const isStudentCourse = "courseOffering" in props.contentCourse || "createdCourse" in props.contentCourse;
 
   return isStudentCourse ? (
     <StudentCourseIcon 

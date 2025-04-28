@@ -353,16 +353,25 @@ export function transformPrograms(
   programDegreesMap: Map<EntityId, Degree[]>
 ): Program[] {
   return programsData.map(prog => {
-    const degrees = programDegreesMap.get(prog.id) || [];
+    let degrees = programDegreesMap.get(prog.id) || [];
+
+    // *** NEW: Sort degrees so B.A. comes before B.S. ***
+    degrees = degrees.sort((a, b) => {
+      if (a.type === b.type) return 0;
+      if (a.type === "B.A.") return -1;
+      if (b.type === "B.A.") return 1;
+      return 0;
+    });
 
     return {
       name: prog.name,
       abbreviation: prog.abbreviation,
       student_count: safeNumber(prog.student_count),
-			dus: safeString(prog.dus),
+      dus: safeString(prog.dus),
       website_link: safeString(prog.website_link),
       catolog_link: safeString(prog.catalog_link),
       degrees
     };
   });
 }
+
