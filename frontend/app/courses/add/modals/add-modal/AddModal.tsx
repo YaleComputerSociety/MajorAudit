@@ -12,7 +12,7 @@ import { TransformTermNumber } from '@/utils/courseDisplayUtils';
 
 const AddCourseModal: React.FC = () => {
   const { closeModal } = useModal();
-  const { editableCourses, setEditableCourses } = useCoursesPage();
+  const { editableCourses, setEditableCourses, isCourseInserting, setIsCourseInserting } = useCoursesPage();
 	const { currentFYP } = useUser();
 
 	const targetTerms = React.useMemo(() => {
@@ -39,7 +39,6 @@ const AddCourseModal: React.FC = () => {
     term_to: "" 
   });
 
-  const [isLoading, setIsLoading] = useState(false);
   const [validationError, setValidationError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -50,13 +49,13 @@ const AddCourseModal: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsCourseInserting(true);
 
     const { term_from, term_to, code, result } = courseData;
 
     if (!term_from || !term_to || !code || !result) {
       setValidationError('All fields are required');
-      setIsLoading(false);
+      setIsCourseInserting(false);
       return;
     }
 
@@ -69,13 +68,13 @@ const AddCourseModal: React.FC = () => {
 
     if (!newCourse) {
       setValidationError('Could not find or add course.');
-      setIsLoading(false);
+      setIsCourseInserting(false);
       return;
     }
 
     setEditableCourses(prev => (prev ? [...prev, newCourse] : [newCourse]));
     closeModal();
-    setIsLoading(false);
+    setIsCourseInserting(false);
   };
 
   const handleCancel = () => {
@@ -105,7 +104,7 @@ const AddCourseModal: React.FC = () => {
             onChange={handleChange}
             className={styles.formInput}
             required
-            disabled={isLoading}
+            disabled={isCourseInserting}
           >
             <option value="">Select Term</option>
             {termOptions.map(term => (
@@ -125,7 +124,7 @@ const AddCourseModal: React.FC = () => {
             placeholder="e.g., CS101"
             className={styles.formInput}
             required
-            disabled={isLoading}
+            disabled={isCourseInserting}
           />
         </div>
 
@@ -138,7 +137,7 @@ const AddCourseModal: React.FC = () => {
             onChange={handleChange}
             className={styles.formInput}
             required
-            disabled={isLoading}
+            disabled={isCourseInserting}
           >
             <option value="">Select Result</option>
             {resultOptions.map(result => (
@@ -156,7 +155,7 @@ const AddCourseModal: React.FC = () => {
             onChange={handleChange}
             className={styles.formInput}
             required
-            disabled={isLoading}
+            disabled={isCourseInserting}
           >
             <option value="">Select Term</option>
             {targetTerms.map(term => (
@@ -169,15 +168,15 @@ const AddCourseModal: React.FC = () => {
           <button
             type="submit"
             className={styles.submitButton}
-            disabled={isLoading}
+            disabled={isCourseInserting}
           >
-            {isLoading ? 'Adding...' : 'Add Course'}
+            {isCourseInserting ? 'Adding...' : 'Add Course'}
           </button>
           <button
             type="button"
             className={styles.cancelButton}
             onClick={handleCancel}
-            disabled={isLoading}
+            disabled={isCourseInserting}
           >
             Cancel
           </button>

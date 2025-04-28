@@ -75,3 +75,47 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* --- Save --- */
+.SaveButton {
+  cursor: pointer;
+  width: 75px;
+  height: 30px;
+  background-color: #fff;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  transition: border-color 0.2s ease;
+  position: relative; /* ensure positioning context for spinner */
+}
+
+.SaveButton:hover {
+  border-color: #1890ff;
+}
+
+.SaveButtonActive {
+  border-color: #1890ff;
+}
+
+.SaveSpinnerRing {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  border: 2px solid #d3d3d3;
+  border-top: 2px solid #61ADFE;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  pointer-events: none; /* don't block clicks */
+  z-index: 1;
+}
+
+/* already exists probably but make sure */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

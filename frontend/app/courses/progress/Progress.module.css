@@ -1,0 +1,16 @@
+.progressContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background-color: transparent;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.progressBar {
+  height: 100%;
+  background-color: #61ADFE;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}

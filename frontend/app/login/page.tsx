@@ -8,7 +8,7 @@ import Image from "next/image";
 function Login() 
 {
   const handleLogin = () => {
-    // window.location.href = "/api/auth/cas/login";
+    window.location.href = "/api/auth/cas/login";
   };
 	
   return (

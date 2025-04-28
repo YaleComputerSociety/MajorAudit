@@ -34,6 +34,9 @@ interface CoursesPageContextType {
   toggleYearCollapsed: (yearGrade: string) => void;
   isYearCollapsed: (yearGrade: string) => boolean;
   setActiveFYPId: (fypId: number) => void;
+
+	isCourseInserting: boolean;
+	setIsCourseInserting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
@@ -47,6 +50,7 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
   const [lastDragTimestamp, setLastDragTimestamp] = useState(Date.now());
 	const [collapsedYearsByFYP, setCollapsedYearsByFYP] = useState<Map<number, Set<string>>>(new Map());
 	const [currentFYPId, setCurrentFYPId] = useState<number | null>(null);
+	const [isCourseInserting, setIsCourseInserting] = useState(false);
 
 	useEffect(() => {
     const raw = sessionStorage.getItem("collapsedYearsByFYP");
@@ -152,6 +156,8 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
 		toggleYearCollapsed,
 		isYearCollapsed,
 		setActiveFYPId,
+		isCourseInserting,
+		setIsCourseInserting,
   }), [
 		editMode,
 		selectedCourses,
@@ -165,6 +171,8 @@ export function CoursesPageProvider({ children }: { children: React.ReactNode })
 		toggleYearCollapsed,
 		isYearCollapsed,
 		setActiveFYPId,
+		isCourseInserting,
+		setIsCourseInserting
   ]);
 
   return (
