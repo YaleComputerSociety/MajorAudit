@@ -44,9 +44,9 @@ function Majors() {
   if (isLoading) {
     return(
       <div>
-        <NavBar utility={<Overhead />}/>
+        <NavBar utility={<Overhead listView={listView} setListView={setListView}/>}/>
         <div className={Style.MajorsPage}>
-          <div>Loading programs data...</div>
+          <div>Loading Programs</div>
         </div>
       </div>
     );
@@ -56,9 +56,9 @@ function Majors() {
   if (error) {
     return (
       <div>
-        <NavBar utility={<Overhead />}/>
+        <NavBar utility={<Overhead listView={listView} setListView={setListView}/>}/>
         <div className={Style.MajorsPage}>
-          <div>Error loading programs: {error}</div>
+          <div>Error Loading Programs: {error}</div>
         </div>
       </div>
     );
@@ -69,12 +69,8 @@ function Majors() {
 
   return (
     <div>
-      <NavBar utility={<Overhead />}/>
+      <NavBar utility={<Overhead listView={listView} setListView={setListView}/>}/>
       <div className={Style.MajorsPage}>
-        <div 
-					className={Style.ListButton} 
-					onClick={() => setListView((prev) => !prev)}
-				/>
         <Metadata 
           listView={listView} 
           index={index} 

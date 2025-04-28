@@ -168,6 +168,27 @@ const CodeButton = ({ studentCourse }: { studentCourse: StudentCourse }) => {
   }
 };
 
+const TitleButton = ({ studentCourse }: { studentCourse: StudentCourse }) => {
+	const { editMode } = useCoursesPage();
+
+	if (editMode) {
+		return (
+			<button className={Style.CourseTitle}>
+				{studentCourse.courseOffering
+					? studentCourse.courseOffering.abstractCourse.title
+					: studentCourse.createdCourse?.title || 'You Shouldn\'t Be Able To See This'}
+			</button>
+		);
+	} else {
+		return (
+			<div className={Style.CourseTitle} style={{ cursor: "pointer" }}>
+				{studentCourse.courseOffering
+					? studentCourse.courseOffering.abstractCourse.title
+					: studentCourse.createdCourse?.title || 'You Shouldn\'t Be Able To See This'}
+			</div>
+		);
+	}
+}
 
 const CourseBox = ({ studentCourse }: { studentCourse: StudentCourse }) => {
   const { editMode } = useCoursesPage();
@@ -225,11 +246,7 @@ const CourseBox = ({ studentCourse }: { studentCourse: StudentCourse }) => {
 				<SeasonIcon studentCourse={studentCourse}/>
 				<div className={Style.Column}>
 					<CodeButton studentCourse={studentCourse}/>
-					<div className={Style.CourseTitle}>
-						{studentCourse.courseOffering
-							? studentCourse.courseOffering.abstractCourse.title
-							: studentCourse.createdCourse?.title || 'Untitled'}
-					</div>
+					<TitleButton studentCourse={studentCourse}/>
 				</div>
 			</div>
 			<div style={{ marginRight: "8px" }}>
@@ -263,7 +280,7 @@ const CourseBox = ({ studentCourse }: { studentCourse: StudentCourse }) => {
 				background: GetCourseColor(studentCourse),
 			}}
 			onClick={() => {
-				// Optional: handle click if you want! e.g., open a modal, navigate, etc.
+				// Optional
 			}}
 		>
 			{content}

@@ -12,3 +12,25 @@
 
 	margin-right: 6px;
 }
+
+.ListButton {
+  cursor: pointer;
+  width: 75px;
+  height: 30px;
+
+  background-color: #fff;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  transition: border-color 0.2s ease;
+}
+
+.ListButton:hover {
+  border-color: #1890ff;
+}
+
+.ListButtonActive {
+  border-color: #1890ff;
+}

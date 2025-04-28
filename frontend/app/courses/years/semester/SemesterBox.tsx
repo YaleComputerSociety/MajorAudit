@@ -10,6 +10,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useDroppable } from "@dnd-kit/core";
+import { useCoursesPage } from "@/context/CoursesContext";
 
 const SemesterBox = ({
   studentSemester,
@@ -17,7 +18,8 @@ const SemesterBox = ({
 }: {
   studentSemester: StudentSemester;
   term: string;
-}) => {
+}) => { 
+	const { editMode } = useCoursesPage();
   const sortedCourses = [...studentSemester.studentCourses]
     .sort((a, b) => a.sort_index - b.sort_index);
 
@@ -26,15 +28,21 @@ const SemesterBox = ({
     data: { term }
   });
 
-  return (
+	const courseBoxTotalHeight = 40; 
+	const realNumberOfCourses = studentSemester.studentCourses.length;
+	const visualNumberOfCourses = Math.max(1, realNumberOfCourses) + (editMode ? 1 : 0);
+	const calculatedMinHeight = visualNumberOfCourses * courseBoxTotalHeight;
+	
+	return (
     <div
       ref={setNodeRef}
-      className={`${Style.Column} ${isOver ? Style.Hovered : ""}`}
-      style={{
-        minWidth: "440px",
-        marginBottom: "8px",
-        transition: "background-color 0.15s ease-in-out" 
-      }}
+      className={Style.Column}
+			style={{
+				minWidth: "440px",
+				minHeight: `${calculatedMinHeight}px`,
+				marginBottom: "8px",
+				transition: "background-color 0.15s ease-in-out, min-height 0.2s ease-in-out"
+			}}
     >
       <div style={{ marginBottom: "6px" }}>
         {TransformTermNumber(term)}
