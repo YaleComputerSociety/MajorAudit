@@ -26,7 +26,15 @@ const YearBox = ({
 				{studentYear.grade}
 			</button>
 			{!collapsed && (
-				<div style={{ display: "flex", flexDirection: columns ? "column" : "row" }}>
+				<div
+					style={{
+						display: "flex",
+						flexDirection: columns ? "column" : "row",
+						gap: "8px",
+						transition: "all 0.3s ease-in-out", // 🔥 NEW: smooth flex resize
+						alignItems: "flex-start", // nice consistency
+					}}
+				>
 					{studentYear.studentSemesters
 						.filter((s: StudentSemester) => s.term !== "0")
 						.map((studentSemester: StudentSemester) => (

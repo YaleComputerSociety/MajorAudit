@@ -8,7 +8,7 @@ import {
   useCoursesPage,
   CoursesPageProvider
 } from "../../context/CoursesContext";
-
+import { useAuth } from "@/context/AuthProvider";
 import { ModalProvider } from "./add/context/ModalContext";
 import ModalManager from "./add/ModalManager";
 import { BuildStudentYears } from "./CoursesUtils";
@@ -16,6 +16,8 @@ import NavBar from "../../components/navbar/NavBar";
 import YearBox from "./years/YearBox";
 import AddButton from "./add/button/AddButton";
 import Overhead from "./overhead/Overhead";
+import TopProgressBar from "../../components/progress/Progress";
+
 
 import {
   DndContext,
@@ -32,15 +34,8 @@ import {
 	arrayMove
 } from "@dnd-kit/sortable";
 
-const NoFYP = () => (
-  <div>
-    <NavBar />
-    <div className={Style.CoursesPage}>How do you not have an FYP?</div>
-  </div>
-);
-
 function CoursesBody() {
-  const { currentFYP, getClonedStudentCourses, isLoading } = useUser();
+  const { currentFYP, getClonedStudentCourses, isLoading: isUserLoading } = useUser();
   const {
     editMode,
     editableCourses,
@@ -49,6 +44,8 @@ function CoursesBody() {
     setLastDragTimestamp,
 		setActiveFYPId
   } = useCoursesPage();
+	const { isLoading: isAuthLoading, isInitialized } = useAuth();
+	const loading = isAuthLoading || isUserLoading || !isInitialized;
 
   const [columns, setColumns] = useState(false);
 	void [setColumns];
@@ -84,7 +81,6 @@ function CoursesBody() {
     const course = editableCourses[activeIndex];
     if (course.term === overTerm) return;
 
-    // Optimistically update term for smoother hover effect
     const updated = [...editableCourses];
     updated[activeIndex] = { ...course, term: overTerm };
 
@@ -92,69 +88,77 @@ function CoursesBody() {
     setLastDragTimestamp(Date.now());
   };
 
-	const handleDragEnd = (event: DragEndEvent) => {
-		const { active, over } = event;
-		if (!active || !over || active.id === over.id || !editMode || !editableCourses) return;
-	
-		const activeCourse = editableCourses.find(c => c.id === active.id);
-		const overTerm = over.data?.current?.term as string;
-	
-		if (!activeCourse || !overTerm) return;
-	
-		const isSameTerm = activeCourse.term === overTerm;
-	
-		let updatedCourses = [...editableCourses];
-	
-		if (isSameTerm) {
-			const siblings = updatedCourses
-				.filter(c => c.term === overTerm)
-				.sort((a, b) => a.sort_index - b.sort_index);
-	
-			const oldIndex = siblings.findIndex(c => c.id === active.id);
-			const newIndex = siblings.findIndex(c => c.id === over.id);
-			const reordered = arrayMove(siblings, oldIndex, newIndex);
-	
-			updatedCourses = updatedCourses.map(course => {
-				if (course.term !== overTerm) return course;
-				const i = reordered.findIndex(c => c.id === course.id);
-				return { ...course, sort_index: i };
-			});
-	
-		} else {
-			// Inter-semester: update term + insert logic
-			updatedCourses = updatedCourses.map(course =>
-				course.id === activeCourse.id
-					? { ...course, term: overTerm, sort_index: 9999 }
-					: course
-			);
-	
-			const dragged = updatedCourses.find(c => c.id === active.id)!;
-			const siblings = updatedCourses
-				.filter(c => c.term === overTerm && c.id !== active.id)
-				.sort((a, b) => a.sort_index - b.sort_index);
-	
-			const overIndex = siblings.findIndex(c => c.id === over.id);
-			const insertIndex = overIndex === -1 ? siblings.length : overIndex;
-			siblings.splice(insertIndex, 0, dragged);
-	
-			updatedCourses = updatedCourses.map(course => {
-				if (course.term !== overTerm) return course;
-				const i = siblings.findIndex(c => c.id === course.id);
-				return { ...course, sort_index: i };
-			});
-		}
-	
-		setEditableCourses(updatedCourses.map(c => ({ ...c })));
-		setLastDragTimestamp(Date.now());
-	};
-	
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!active || !over || active.id === over.id || !editMode || !editableCourses) return;
 
-  if (!isLoading && !currentFYP) return <NoFYP />;
+    const activeCourse = editableCourses.find(c => c.id === active.id);
+    const overTerm = over.data?.current?.term as string;
 
+    if (!activeCourse || !overTerm) return;
+
+    const isSameTerm = activeCourse.term === overTerm;
+
+    let updatedCourses = [...editableCourses];
+
+    if (isSameTerm) {
+      const siblings = updatedCourses
+        .filter(c => c.term === overTerm)
+        .sort((a, b) => a.sort_index - b.sort_index);
+
+      const oldIndex = siblings.findIndex(c => c.id === active.id);
+      const newIndex = siblings.findIndex(c => c.id === over.id);
+      const reordered = arrayMove(siblings, oldIndex, newIndex);
+
+      updatedCourses = updatedCourses.map(course => {
+        if (course.term !== overTerm) return course;
+        const i = reordered.findIndex(c => c.id === course.id);
+        return { ...course, sort_index: i };
+      });
+
+    } else {
+      updatedCourses = updatedCourses.map(course =>
+        course.id === activeCourse.id
+          ? { ...course, term: overTerm, sort_index: 9999 }
+          : course
+      );
+
+      const dragged = updatedCourses.find(c => c.id === active.id)!;
+      const siblings = updatedCourses
+        .filter(c => c.term === overTerm && c.id !== active.id)
+        .sort((a, b) => a.sort_index - b.sort_index);
+
+      const overIndex = siblings.findIndex(c => c.id === over.id);
+      const insertIndex = overIndex === -1 ? siblings.length : overIndex;
+      siblings.splice(insertIndex, 0, dragged);
+
+      updatedCourses = updatedCourses.map(course => {
+        if (course.term !== overTerm) return course;
+        const i = siblings.findIndex(c => c.id === course.id);
+        return { ...course, sort_index: i };
+      });
+    }
+
+    setEditableCourses(updatedCourses.map(c => ({ ...c })));
+    setLastDragTimestamp(Date.now());
+  };
+
+  if(loading){
+    return (
+			<div>
+				<div className={Style.CoursesPage} style={{ position: 'relative' }}>
+					<NavBar/>
+					<TopProgressBar loading={true}/>
+				</div>
+			</div>
+    );
+  }
+
+  // After loaded, render real page:
   return (
     <div>
       <NavBar utility={<Overhead />} />
-      <div className={Style.CoursesPage}>
+      <div className={Style.CoursesPage} style={{ position: 'relative' }}>
         <ModalProvider>
           {editMode && <AddButton />}
           <ModalManager />

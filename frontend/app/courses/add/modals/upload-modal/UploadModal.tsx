@@ -43,12 +43,12 @@ function parseBatchCourses(raw: string) {
 
 const UploadCoursesModal: React.FC = () => {
   const { currentFYP } = useUser();
-  const { editableCourses, setEditableCourses } = useCoursesPage();
   const { closeModal } = useModal();
 
   const [input, setInput] = useState('');
   const [toastErrors, setToastErrors] = useState<{ id: number, message: string }[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { editableCourses, setEditableCourses, setIsCourseInserting, isCourseInserting } = useCoursesPage();
+
 
   const showToast = (message: string) => {
     const id = Date.now();
@@ -59,14 +59,14 @@ const UploadCoursesModal: React.FC = () => {
   };
 
   const handleUpload = async () => {
-    setLoading(true);
+    setIsCourseInserting(true);
     const parsed = parseBatchCourses(input);
 
     closeModal(); // 🔐 close immediately
 
     if (!parsed.length || !currentFYP) {
       showToast('No valid input or missing FYP');
-      setLoading(false);
+      setIsCourseInserting(false);
       return;
     }
 
@@ -96,7 +96,7 @@ const UploadCoursesModal: React.FC = () => {
     }
 
     setInput('');
-    setLoading(false);
+    setIsCourseInserting(false);
   };
 
   return (
@@ -112,7 +112,7 @@ const UploadCoursesModal: React.FC = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               className={styles.formInput}
-              disabled={loading}
+              disabled={isCourseInserting}
             />
           </div>
 
@@ -121,9 +121,9 @@ const UploadCoursesModal: React.FC = () => {
               type="button"
               className={styles.submitButton}
               onClick={handleUpload}
-              disabled={loading || !input.trim()}
+              disabled={isCourseInserting || !input.trim()}
             >
-              {loading ? 'Uploading...' : 'Upload'}
+              {isCourseInserting ? 'Uploading...' : 'Upload'}
             </button>
           </div>
         </div>

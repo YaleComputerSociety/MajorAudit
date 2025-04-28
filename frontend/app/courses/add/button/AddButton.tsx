@@ -2,11 +2,17 @@
 import { useState, useRef, useEffect } from "react";
 import { useModal } from "../context/ModalContext";
 import Style from "./AddButton.module.css";
+import { useCoursesPage } from "@/context/CoursesContext";
+
+function InnerSpinner() {
+  return <div className={Style.innerSpinner} />;
+}
 
 function AddButton() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { openModal } = useModal();
+	const { isCourseInserting } = useCoursesPage();
 
   // Handle clicks outside dropdown
   useEffect(() => {
@@ -36,13 +42,14 @@ function AddButton() {
 
   return (
     <div className={Style.addButtonContainer} ref={dropdownRef}>
-      <button 
-        className={Style.AddButton} 
-        onClick={toggleDropdown}
-        aria-label="Add options"
-      >
-        +
-      </button>
+			<button 
+				className={Style.AddButton} 
+				onClick={toggleDropdown}
+				aria-label="Add options"
+				disabled={isCourseInserting} // Disable during insertion
+			>
+				{isCourseInserting ? <InnerSpinner /> : '+'}
+			</button>
       
       {isOpen && (
         <div className={Style.dropdownMenu}>

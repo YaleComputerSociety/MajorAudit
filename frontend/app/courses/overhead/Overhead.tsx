@@ -1,5 +1,6 @@
 // frontend/app/courses/overhead/Overhead.tsx
 
+import { useState } from "react";
 import Style from "./Overhead.module.css";
 import PlanSelector from "./selector/PlanSelector";
 import { useCoursesPage } from '@/context/CoursesContext';
@@ -15,6 +16,11 @@ function Overhead() {
     resetEditableCourses
   } = useCoursesPage();
   const { currentFYP, updateCourses } = useUser();
+	const [isSaving, setIsSaving] = useState(false);
+
+	if (!currentFYP) {
+    return null; // 🔥 Hide the whole Overhead until ready
+  }
 
   const handleSelectAll = () => {
     if (!currentFYP) return;
@@ -33,16 +39,19 @@ function Overhead() {
     toggleEditMode();
   };
 
-  const handleSave = async () => {
-    if (!editableCourses) return;
-    try {
-      await updateCourses(editableCourses);
-      resetEditableCourses();
-      toggleEditMode();
-    } catch (err) {
-      console.error("Failed to save:", err);
-    }
-  };
+	const handleSave = async () => {
+		if (!editableCourses) return;
+		setIsSaving(true); // 🚀 start spinner
+		try {
+			await updateCourses(editableCourses);
+			resetEditableCourses();
+			toggleEditMode();
+		} catch (err) {
+			console.error("Failed to save:", err);
+		} finally {
+			setIsSaving(false); // ✅ stop spinner even if save fails
+		}
+	};
 
   return (
     <div className={Style.Row}>
@@ -63,12 +72,15 @@ function Overhead() {
             >
               Select
             </button>
-            <button
-              className={Style.EditButton}
-              onClick={handleSave}
-            >
-              Save
-            </button>
+						<button
+							className={Style.SaveButton}
+							onClick={handleSave}
+							disabled={isSaving}
+							style={{ position: 'relative', overflow: 'hidden' }}
+						>
+							{isSaving && <div className={Style.SaveSpinnerRing} />}
+							Save
+						</button>
           </>
         )}
       </div>

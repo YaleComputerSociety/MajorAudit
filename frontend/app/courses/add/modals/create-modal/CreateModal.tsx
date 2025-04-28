@@ -9,7 +9,7 @@ import { TransformTermNumber } from '@/utils/courseDisplayUtils';
 
 const CreateCourseModal: React.FC = () => {
   const { closeModal } = useModal();
-  const { editableCourses, setEditableCourses } = useCoursesPage();
+  const { editableCourses, setEditableCourses, setIsCourseInserting, isCourseInserting } = useCoursesPage();
   const { currentFYP } = useUser();
 
   const [form, setForm] = useState({
@@ -21,7 +21,6 @@ const CreateCourseModal: React.FC = () => {
     result: '',
   });
 
-  const [isLoading, setIsLoading] = useState(false);
   const [validationError, setValidationError] = useState('');
 
   const targetTerms = useMemo(() => {
@@ -46,13 +45,13 @@ const CreateCourseModal: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsCourseInserting(true);
 
     const { title, code, credits, distributions, term, result } = form;
 
     if (!title || !code || !term || !result) {
       setValidationError('All fields are required');
-      setIsLoading(false);
+      setIsCourseInserting(false);
       return;
     }
 
@@ -79,7 +78,7 @@ const CreateCourseModal: React.FC = () => {
     setEditableCourses(prev => (prev ? [...prev, newCreatedCourse] : [newCreatedCourse]));
 
     closeModal();
-    setIsLoading(false);
+    setIsCourseInserting(false);
   };
 
   const handleCancel = () => {
@@ -111,7 +110,7 @@ const CreateCourseModal: React.FC = () => {
             className={styles.formInput}
             placeholder="French In France"
             required
-            disabled={isLoading}
+            disabled={isCourseInserting}
           />
         </div>
 
@@ -124,7 +123,7 @@ const CreateCourseModal: React.FC = () => {
             className={styles.formInput}
             placeholder="..."
             required
-            disabled={isLoading}
+            disabled={isCourseInserting}
           />
         </div>
 
@@ -139,7 +138,7 @@ const CreateCourseModal: React.FC = () => {
             onChange={handleChange}
             className={styles.formInput}
             required
-            disabled={isLoading}
+            disabled={isCourseInserting}
           />
         </div>
 
@@ -151,7 +150,7 @@ const CreateCourseModal: React.FC = () => {
             onChange={handleChange}
             className={styles.formInput}
             placeholder="QR, WR, Sc"
-            disabled={isLoading}
+            disabled={isCourseInserting}
           />
         </div>
 
@@ -163,7 +162,7 @@ const CreateCourseModal: React.FC = () => {
             onChange={handleChange}
             className={styles.formInput}
             required
-            disabled={isLoading}
+            disabled={isCourseInserting}
           >
             <option value="">Select Term</option>
             {targetTerms.map(term => (
@@ -180,7 +179,7 @@ const CreateCourseModal: React.FC = () => {
             onChange={handleChange}
             className={styles.formInput}
             required
-            disabled={isLoading}
+            disabled={isCourseInserting}
           >
             <option value="">Select Result</option>
             {resultOptions.map(r => (
@@ -193,15 +192,15 @@ const CreateCourseModal: React.FC = () => {
           <button
             type="submit"
             className={styles.submitButton}
-            disabled={isLoading}
+            disabled={isCourseInserting}
           >
-            {isLoading ? 'Creating...' : 'Create Course'}
+            {isCourseInserting ? 'Creating...' : 'Create Course'}
           </button>
           <button
             type="button"
             className={styles.cancelButton}
             onClick={handleCancel}
-            disabled={isLoading}
+            disabled={isCourseInserting}
           >
             Cancel
           </button>
