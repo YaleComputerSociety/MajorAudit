@@ -1,245 +1,224 @@
 
-// import { StudentCourse } from "@/types/type-user";
-// import { 
-// 	Concentration,
-//   // DegreeConcentration, 
-//   // ProgramDict,
-// 	Requirement, 
-//   // ConcentrationRequirement
-// } from "@/types/type-program";
 
-// /**
-//  * Main function - updates entire `progDict` by filling student courses in each concentration.
-//  */
-// export function fill(
-//   // studentCourses: StudentCourse[], 
-//   // progDict: ProgramDict, 
-//   // setProgDict: Function
-// ): void {
-// 	return;
+function parseElectiveRange(range: string): { dept: string; min: number; max: number } | null {
+  const parts = range.split("-");
+  if (parts.length !== 3) return null;
+
+  const [dept, minStr, maxStr] = parts;
+  const min = parseInt(minStr, 10);
+  const max = parseInt(maxStr, 10);
+
+  if (isNaN(min) || isNaN(max)) return null;
+
+  return { dept, min, max };
+}
+
+function extractDeptAndNumber(code: string): { dept: string; num: number } | null {
+  // First, split by space
+  const parts = code.split(" ");
+  if (parts.length !== 2) return null;
+
+  const dept = parts[0];
+  const numberPart = parts[1];
+
+  // Try to extract leading number only
+  const numberMatch = numberPart.match(/^(\d{3,4})/);
+  if (!numberMatch) return null;
+
+  const num = parseInt(numberMatch[1], 10);
+
+  if (isNaN(num)) return null;
+
+  return { dept, num };
+}
 
 
-//   // // Create a true deep copy to avoid mutations to the original
-//   // const updatedProgDict: ProgramDict = JSON.parse(JSON.stringify(progDict));
+import { ProgramDict, Concentration, Requirement, Subrequirement, Option } from "@/types/program";
+import { StudentCourse } from "@/types/user";
 
-//   // // Process each program
-//   // Object.keys(updatedProgDict).forEach(progKey => {
-//   //   const program = updatedProgDict[progKey];
-    
-//   //   program.prog_degs = program.prog_degs.map(deg => {
-//   //     deg.deg_concs = deg.deg_concs.map(conc => {
-//   //       return processConcentration(conc, studentCourses);
-//   //     });
-//   //     return deg;
-//   //   });
-//   // });
+export function fill(
+  studentCourses: StudentCourse[], 
+  progDict: ProgramDict, 
+  setProgDict: (progDict: ProgramDict) => void
+): void {
+  const updatedProgDict: ProgramDict = JSON.parse(JSON.stringify(progDict));
 
-//   // // Update state with the completely new object
-//   // setProgDict(updatedProgDict);
-// }
+  Object.keys(updatedProgDict).forEach(progKey => {
+    const program = updatedProgDict[progKey];
 
-// /**
-//  * Process a single concentration by handling all its requirements
-//  */
-// function processConcentration(
-//   concentration: Concentration, 
-//   studentCourses: StudentCourse[]
-// ): Concentration {
-//   const usedCourses = new Set<string>();
-//   const requiredCourses = new Set<string>(); // Track courses explicitly required by `o`
+    program.degrees = program.degrees.map(degree => {
+      degree.concentrations = degree.concentrations.map(concentration => {
+        return processConcentration(concentration, studentCourses);
+      });
+      return degree;
+    });
+  });
 
-//   // Clone to avoid mutations
-//   const processedConc = JSON.parse(JSON.stringify(concentration)) as Concentration;
-  
-//   // Split requirements by type
-//   const checkboxReqs = processedConc.requirements.filter(req => req.checkbox);
-//   const nonCheckboxReqs = processedConc.requirements.filter(req => !req.checkbox);
-  
-//   // Process non-checkbox requirements in three passes
-  
-//   // ** Pass 1: Direct matches for non-checkbox `o` (Claim required courses) **
-//   const updatedNonCheckboxReqs = nonCheckboxReqs.map(req => {
-//     return processDirectMatches(req, studentCourses, usedCourses, requiredCourses);
-//   });
+  setProgDict(updatedProgDict);
+}
 
-//   // ** Pass 2: Non-Flex elective ranges for non-checkbox (Only assign courses NOT in requiredCourses) **
-//   const updatedNonCheckboxReqs2 = updatedNonCheckboxReqs.map(req => {
-//     return processElectiveRanges(req, studentCourses, usedCourses, requiredCourses, false);
-//   });
+function processConcentration(
+  concentration: Concentration, 
+  studentCourses: StudentCourse[]
+): Concentration {
+  const usedCourses = new Set<string>();
+  const requiredCourses = new Set<string>();
 
-//   // ** Pass 3: Flex elective ranges for non-checkbox (Only assign courses NOT in requiredCourses) **
-//   const updatedNonCheckboxReqs3 = updatedNonCheckboxReqs2.map(req => {
-//     return processElectiveRanges(req, studentCourses, usedCourses, requiredCourses, true);
-//   });
-  
-//   // Process checkbox requirements
-//   const updatedCheckboxReqs = checkboxReqs.map(req => {
-//     return processCheckboxReq(req, studentCourses, usedCourses);
-//   });
-  
-//   // Combine the results
-//   processedConc.requirements = [...updatedNonCheckboxReqs3, ...updatedCheckboxReqs];
-  
-//   return processedConc;
-// }
+  const processedConc = JSON.parse(JSON.stringify(concentration)) as Concentration;
 
-// /**
-//  * **Pass 1: Fill `s` where `o` is non-null (Claim required courses first).**
-//  */
-// function processDirectMatches(
-//   req: Requirement, 
-//   studentCourses: StudentCourse[], 
-//   usedCourses: Set<string>,
-//   requiredCourses: Set<string>
-// ): Requirement {
-//   return {
-//     ...req,
-//     subrequirements: req.subrequirements.map(subreq => ({
-//       ...subreq,
-//       subreq_options: subreq.options.map(option => {
-//         if (!option.option || option.satisfier) return option; // Skip null `o` or already filled `s`
+  const checkboxReqs = processedConc.requirements.filter(req => req.checkbox);
+  const nonCheckboxReqs = processedConc.requirements.filter(req => !req.checkbox);
 
-//         const courseCode = option.option.codes[0];
-//         const matchingStudentCourse = studentCourses.find(sc => 
-//           sc.course.codes.includes(courseCode) && !usedCourses.has(courseCode)
-//         );
+  const updatedNonCheckboxReqs = nonCheckboxReqs
+    .map(req => processDirectMatches(req, studentCourses, usedCourses, requiredCourses))
+    .map(req => processElectiveRanges(req, studentCourses, usedCourses, requiredCourses, false))
+    .map(req => processElectiveRanges(req, studentCourses, usedCourses, requiredCourses, true));
 
-//         // ✅ Ensure required courses are claimed FIRST before electives
-//         if (matchingStudentCourse) {
-//           usedCourses.add(courseCode); // Track as used
-//           requiredCourses.add(courseCode); // Mark as REQUIRED
-//           return { ...option, s: matchingStudentCourse };
-//         }
+  const updatedCheckboxReqs = checkboxReqs.map(req => 
+    processCheckboxReq(req, studentCourses, usedCourses)
+  );
 
-//         return option;
-//       }),
-//     })),
-//   };
-// }
+  processedConc.requirements = [...updatedNonCheckboxReqs, ...updatedCheckboxReqs];
 
-// /**
-//  * **Pass 2 & 3: Fill elective ranges (Non-Flex first, then Flex).**
-//  * - **Ensures required courses (`requiredCourses`) are NOT used for electives.**
-//  */
-// function processElectiveRanges(
-//   req: Requirement, 
-//   studentCourses: StudentCourse[], 
-//   usedCourses: Set<string>,
-//   requiredCourses: Set<string>, // 🔥 Courses reserved by direct matches
-//   flex: boolean
-// ): Requirement {
-//   return {
-//     ...req,
-//     subrequirements: req.subrequirements.map(subreq => {
-//       // if (subreq.subreq_flex !== flex) return subreq; // Skip subreqs that don't match the flex condition
+  return processedConc;
+}
 
-//       return {
-//         ...subreq,
-//         subreq_options: subreq.options.map(option => {
-//           if (option.option !== null || !option.elective_range || option.satisfier) return option; // Skip non-null `o` or already filled `s`
+function processDirectMatches(
+  req: Requirement, 
+  studentCourses: StudentCourse[], 
+  usedCourses: Set<string>,
+  requiredCourses: Set<string>
+): Requirement {
+  return {
+    ...req,
+    subrequirements: req.subrequirements.map(subreq => ({
+      ...subreq,
+      options: subreq.options.map(option => {
+        if (!option.option || option.satisfier) return option;
 
-//           // const { dept, min, max } = option.elective_range;
+        const targetUid = option.option.universal_course_id;
+        if (!targetUid) return option;
 
-//           // // ✅ Filter student courses:
-//           // // - Ensure the course is not in `usedCourses`
-//           // // - Ensure the course is not already **reserved by a required subreq**
-//           // const availableCourses = studentCourses.filter(sc => 
-//           //   !usedCourses.has(sc.course.codes[0]) &&
-//           //   !requiredCourses.has(sc.course.codes[0]) && // 🔥 PROTECT REQUIRED COURSES
-//           //   sc.course.codes.some(code => {
-//           //     if (!code.startsWith(dept)) return false;
-//           //     const courseNum = parseInt(code.replace(dept, ""), 10);
-//           //     return courseNum >= min && courseNum <= max;
-//           //   })
-//           // );
+        const matchingStudent = studentCourses.find(sc => {
+          const course = sc.courseOffering?.abstractCourse;
+          if (!course) return false; // ✅ Only match real populated courseOfferings
+          return course.universal_course_id === targetUid && !usedCourses.has(targetUid);
+        });
 
-//           // const matchingStudentCourse = availableCourses.find(sc => true); // ✅ Find first valid course
+        if (matchingStudent) {
+          usedCourses.add(targetUid);
+          requiredCourses.add(targetUid);
+          return { ...option, satisfier: matchingStudent };
+        }
 
-//           // if (matchingStudentCourse) {
-//           //   usedCourses.add(matchingStudentCourse.course.codes[0]); // ✅ Mark as used
-//           //   return { ...option, s: matchingStudentCourse };
-//           // }
+        return option;
+      }),
+    })),
+  };
+}
 
-//           return option;
-//         }),
-//       };
-//     }),
-//   };
-// }
 
-// /**
-//  * Process a checkbox requirement - allowing reuse within global pool
-//  * but preventing duplicates within the checkbox requirement
-//  */
-// function processCheckboxReq(
-//   req: Requirement,
-//   studentCourses: StudentCourse[],
-//   globalUsedCourses: Set<string>
-// ): Requirement {
-//   const usedWithinCheckboxReq = new Set<string>(); // Track courses used within this checkbox req
-  
-//   // ** Phase 1: Direct matches for checkbox requirements **
-//   let updatedReq = {
-//     ...req,
-//     subreqs_list: req.subrequirements.map(subreq => ({
-//       ...subreq,
-//       subreq_options: subreq.options.map(option => {
-//         if (!option.option || option.satisfier) return option; // Skip null `o` or already filled `s`
+function processElectiveRanges(
+  req: Requirement, 
+  studentCourses: StudentCourse[], 
+  usedCourses: Set<string>,
+  requiredCourses: Set<string>,
+  flex: boolean
+): Requirement {
+  return {
+    ...req,
+    subrequirements: req.subrequirements.map(subreq => ({
+      ...subreq,
+      options: subreq.options.map(option => {
+        if (option.option || !option.elective_range || option.satisfier) return option;
 
-//         const courseCode = option.option.codes[0];
-//         // For checkbox reqs, we only check if it's used within this same checkbox req
-//         const matchingStudentCourse = studentCourses.find(sc => 
-//           sc.course.codes.includes(courseCode) && !usedWithinCheckboxReq.has(courseCode)
-//         );
+        const range = parseElectiveRange(option.elective_range);
+        if (!range) return option;
 
-//         if (matchingStudentCourse) {
-//           usedWithinCheckboxReq.add(courseCode); // Track within checkbox req
-//           // Don't add to globalUsedCourses - intentionally allow reuse outside this req
-//           return { ...option, s: matchingStudentCourse };
-//         }
+        const { dept, min, max } = range;
 
-//         return option;
-//       }),
-//     })),
-//   };
-  
-//   // ** Phase 2: Elective ranges and null options for checkbox requirements **
-//   updatedReq = {
-//     ...updatedReq,
-//     subreqs_list: updatedReq.subreqs_list.map(subreq => ({
-//       ...subreq,
-//       subreq_options: subreq.subreq_options.map(option => {
-//         if (option.satisfier) return option; // Skip already filled slots
-        
-//         // let matchingStudentCourse: StudentCourse | undefined;
-        
-//         // if (option.elective_range) {
-//         //   // Handle elective range
-//         //   const { dept, min, max } = option.n.e;
-//         //   matchingStudentCourse = studentCourses.find(sc => 
-//         //     !usedWithinCheckboxReq.has(sc.course.codes[0]) && // Only check within this checkbox
-//         //     sc.course.codes.some(code => {
-//         //       if (!code.startsWith(dept)) return false;
-//         //       const courseNum = parseInt(code.replace(dept, ""), 10);
-//         //       return courseNum >= min && courseNum <= max;
-//         //     })
-//         //   );
-//         // } else if (!option.o) {
-//         //   // For null option.o, find any course not used within this checkbox req
-//         //   matchingStudentCourse = studentCourses.find(sc => 
-//         //     !usedWithinCheckboxReq.has(sc.course.codes[0]) // Only check within this checkbox
-//         //   );
-//         // }
+        const matchingStudent = studentCourses.find(sc => {
+          const course = sc.courseOffering?.abstractCourse;
+          if (!course) return false;
+          
+          return course.codes.some(code => {
+            const parsed = extractDeptAndNumber(code);
+            if (!parsed) return false;
+            const { dept: codeDept, num } = parsed;
+            return codeDept === dept && num >= min && num <= max && 
+              !usedCourses.has(course.universal_course_id ?? "");
+          });
+        });
 
-//         // if (matchingStudentCourse) {
-//         //   usedWithinCheckboxReq.add(matchingStudentCourse.course.codes[0]); // Track within checkbox
-//         //   return { ...option, s: matchingStudentCourse };
-//         // }
+        if (matchingStudent) {
+          const uid = matchingStudent.courseOffering?.abstractCourse.universal_course_id;
+          if (uid) usedCourses.add(uid);
+          return { ...option, satisfier: matchingStudent };
+        }
 
-//         return option;
-//       }),
-//     })),
-//   };
+        return option;
+      }),
+    })),
+  };
+}
 
-//   return updatedReq;
-// }
+function processCheckboxReq(
+  req: Requirement, 
+  studentCourses: StudentCourse[], 
+  globalUsedCourses: Set<string>
+): Requirement {
+  const usedInCheckbox = new Set<string>();
+
+  return {
+    ...req,
+    subrequirements: req.subrequirements.map(subreq => ({
+      ...subreq,
+      options: subreq.options.map(option => {
+        if (option.satisfier) return option;
+
+        if (option.option) {
+          const targetUid = option.option.universal_course_id;
+          if (!targetUid) return option;
+
+          const matchingStudent = studentCourses.find(sc => {
+            const course = sc.courseOffering?.abstractCourse;
+            return course && course.universal_course_id === targetUid && !usedInCheckbox.has(targetUid);
+          });
+
+          if (matchingStudent) {
+            usedInCheckbox.add(targetUid);
+            return { ...option, satisfier: matchingStudent };
+          }
+        } else if (option.elective_range) {
+          const range = parseElectiveRange(option.elective_range);
+          if (!range) return option;
+
+          const { dept, min, max } = range;
+
+          const matchingStudent = studentCourses.find(sc => {
+            const course = sc.courseOffering?.abstractCourse;
+            if (!course) return false;
+
+            return course.codes.some(code => {
+              const parsed = extractDeptAndNumber(code);
+              if (!parsed) return false;
+              const { dept: codeDept, num } = parsed;
+              return codeDept === dept && num >= min && num <= max && 
+                !usedInCheckbox.has(course.universal_course_id ?? "");
+            });
+          });
+
+          if (matchingStudent) {
+            const uid = matchingStudent.courseOffering?.abstractCourse.universal_course_id;
+            if (uid) usedInCheckbox.add(uid);
+            return { ...option, satisfier: matchingStudent };
+          }
+        }
+
+        return option;
+      }),
+    })),
+  };
+}
+
+

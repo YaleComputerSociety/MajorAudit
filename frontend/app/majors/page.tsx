@@ -1,3 +1,4 @@
+// frontend/app/majors/page.tsx
 
 "use client";
 import { usePrograms } from "../../context/ProgramProvider";
@@ -10,10 +11,20 @@ import Overhead from "./overhead/Overhead";
 import Metadata from "./metadata/Metadata";
 import Requirements from "./requirements/Requirements";
 
+import { useUser } from "@/context/UserProvider"; 
+import { fill } from "@/utils/fill"; 
+
 function Majors() {
-  const { progDict, isLoading, error } = usePrograms();
+  const { progDict, setProgDict, baseProgDict, isLoading, error } = usePrograms();
+	const { currentFYP } = useUser();
   const [listView, setListView] = useState<boolean>(false);
   const [index, setIndex] = useState<MajorsIndex | null>(null);
+
+	useEffect(() => {
+		if (!currentFYP) return;
+		const clonedBase = JSON.parse(JSON.stringify(baseProgDict)); // Deep clone to prevent mutation
+		fill(currentFYP.studentCourses, clonedBase, setProgDict);
+	}, [currentFYP, baseProgDict, setProgDict]);
 
 	// Memoize filtered keys to prevent unnecessary recalculations
   const filteredProgKeys = useMemo(() => {
@@ -44,9 +55,9 @@ function Majors() {
   if (isLoading) {
     return(
       <div>
-        <NavBar utility={<Overhead />}/>
+        <NavBar utility={<Overhead listView={listView} setListView={setListView}/>}/>
         <div className={Style.MajorsPage}>
-          <div>Loading programs data...</div>
+          <div>Loading Programs</div>
         </div>
       </div>
     );
@@ -56,9 +67,9 @@ function Majors() {
   if (error) {
     return (
       <div>
-        <NavBar utility={<Overhead />}/>
+        <NavBar utility={<Overhead listView={listView} setListView={setListView}/>}/>
         <div className={Style.MajorsPage}>
-          <div>Error loading programs: {error}</div>
+          <div>Error Loading Programs: {error}</div>
         </div>
       </div>
     );
@@ -69,12 +80,8 @@ function Majors() {
 
   return (
     <div>
-      <NavBar utility={<Overhead />}/>
+      <NavBar utility={<Overhead listView={listView} setListView={setListView}/>}/>
       <div className={Style.MajorsPage}>
-        <div 
-					className={Style.ListButton} 
-					onClick={() => setListView((prev) => !prev)}
-				/>
         <Metadata 
           listView={listView} 
           index={index} 

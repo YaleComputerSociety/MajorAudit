@@ -7,7 +7,7 @@ import { ProgramProvider } from "../context/ProgramProvider";
 export const metadata = {
   title: "MajorAudit",
 	icons: {
-    icon: '/favicon.png',
+    icon: '/ma.svg',
   },
 }
 

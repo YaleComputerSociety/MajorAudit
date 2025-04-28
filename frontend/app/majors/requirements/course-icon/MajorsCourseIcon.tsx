@@ -38,6 +38,7 @@ function CourseIcon(props: {
   edit: boolean; 
   course: AbstractCourse; 
   subreq: Subrequirement; 
+	showCode: string | null;
   // onRemoveCourse: Function;
 }){
   return (
@@ -45,10 +46,11 @@ function CourseIcon(props: {
       {/* {props.edit && (
         <RemoveButton onClick={() => props.onRemoveCourse(props.course, props.subreq, false)} />
       )} */}
-      <SeasonComp seasons={[]}/>
-      {props.course.codes[0]}
+      <SeasonComp seasons={["Fall", "Spring"]}/>
+      {/* {props.course ? (props.showCode ? props.showCode : props.course.codes[0]) : "N/A"} */}
+			{props.course ? (props.showCode ? props.showCode : props.course.codes[0]) : "N/A"}
 			<div style={{ marginLeft: "2px", marginTop: "5px" }}>
-				<DistributionCircle distributions={props.course.distributions}/>
+				{props.course?.distributions && <DistributionCircle distributions={props.course.distributions} />}
 			</div>
     </div>
   );
@@ -168,6 +170,7 @@ export function MajorsIcon(props: {
   edit: boolean; 
   contentCourse: AbstractCourse | StudentCourse | null; 
   subreq: Subrequirement; 
+	showCode: string | null;
   // onRemoveCourse: void;
 	// onAddCourse: void;
 }) {
@@ -176,7 +179,7 @@ export function MajorsIcon(props: {
 		return <EmptyIcon edit={props.edit}/>;
   }
 
-  const isStudentCourse = "course" in props.contentCourse;
+  const isStudentCourse = "courseOffering" in props.contentCourse || "createdCourse" in props.contentCourse;
 
   return isStudentCourse ? (
     <StudentCourseIcon 
@@ -190,6 +193,7 @@ export function MajorsIcon(props: {
       edit={props.edit} 
       course={props.contentCourse as AbstractCourse} 
       subreq={props.subreq}
+			showCode={props.showCode}
       // onRemoveCourse={props.onRemoveCourse} 
     />
   );

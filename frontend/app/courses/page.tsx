@@ -40,14 +40,14 @@ const NoFYP = () => (
 );
 
 function CoursesBody() {
-  const { currentFYP, getClonedStudentCourses } = useUser();
-  const { isLoading } = useUser();
+  const { currentFYP, getClonedStudentCourses, isLoading } = useUser();
   const {
     editMode,
     editableCourses,
     setEditableCourses,
     lastDragTimestamp,
-    setLastDragTimestamp
+    setLastDragTimestamp,
+		setActiveFYPId
   } = useCoursesPage();
 
   const [columns, setColumns] = useState(false);
@@ -58,6 +58,12 @@ function CoursesBody() {
       setEditableCourses(getClonedStudentCourses());
     }
   }, [editMode, editableCourses, currentFYP, setEditableCourses, getClonedStudentCourses]);
+
+	useEffect(() => {
+		if (currentFYP) {
+			setActiveFYPId(currentFYP.id);
+		}
+	}, [currentFYP, setActiveFYPId]);
 
   const allCourses = editMode && editableCourses
     ? editableCourses

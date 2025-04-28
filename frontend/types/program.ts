@@ -5,6 +5,7 @@ import { AbstractCourse, StudentCourse } from "./user";
 
 export interface Option { 
 	option: AbstractCourse | null;
+	show_code: string | null;
 	satisfier: StudentCourse | null;
 	elective_range?: string; 
 	flags?: string[];

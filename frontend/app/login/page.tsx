@@ -24,7 +24,7 @@ function Login()
             <li className={Style.featureItemStyle}>You Get Access Once We Add The New Programs</li>
           </ul>
           <div className={Style.loginButtons}>
-            <div onClick={handleLogin} className={Style.btn}>
+            <div onClick={handleLogin} className={Style.btn} style={{ color: "white", marginTop: "22px" }}>
 							Pre-Alpha 5/1
             </div>
           </div>

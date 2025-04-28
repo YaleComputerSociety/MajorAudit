@@ -41,7 +41,7 @@
 
 	border: none;
 	cursor: pointer;
-	transition: opacity 0.3s ease;
+	transition: filter 0.3s ease;
 
   letter-spacing: inherit;
 	font: inherit;
@@ -50,7 +50,7 @@
 }
 
 .CourseBoxButton:hover {
-  opacity: 0.9;
+	filter: brightness(95%);
 }
 
 .CourseCode {
@@ -71,6 +71,12 @@
 }
 
 .CourseTitle {
+	border: none;
+	padding: 0;
+	cursor: default;
+	margin: 0;
+	background-color: transparent;
+	text-align: left;
 	font-size: 8px;
 	font-weight: 500;
 }
@@ -78,7 +84,6 @@
 .FuncButton {
 	border: none;
 	padding: 0;
-	border: none;
 	cursor: pointer;
 	width: 20px;
 	height: 20px;

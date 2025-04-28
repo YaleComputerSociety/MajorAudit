@@ -65,3 +65,31 @@
 /* .Circle:hover {
   border-color: #cce5ff; 
 } */
+
+/* in NavBar.module.css */
+.Dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: white;
+  border-radius: 4px;
+  min-width: 50px;
+  z-index: 100;
+	border: 1px solid #ebebeb;
+}
+
+.DropdownItem {
+  padding: 7px;
+  text-align: center;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+	border-radius: 4px;
+	background-color: white;
+	border: 1px solid #ebebeb;
+}
+
+.DropdownItem:hover {
+  background-color: #ebebeb;
+
+}

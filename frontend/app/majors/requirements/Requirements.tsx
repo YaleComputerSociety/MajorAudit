@@ -14,24 +14,22 @@ import { MajorsIndex } from "@/types/user";
 import { MajorsIcon } from "./course-icon/MajorsCourseIcon";
 
 function RenderSubrequirementCourse(props: { 
-	edit?: boolean; 
-	option: Option; 
-	subreq: Subrequirement; 
-	// onRemoveCourse: void, 
-	// onAddCourse: void 
-}){
+  edit?: boolean; 
+  option: Option; 
+  subreq: Subrequirement; 
+}) {
   return (
     <div style={{ marginRight: "2px", marginBottom: "2px" }}>
       <MajorsIcon 
         edit={props.edit ?? false} 
         contentCourse={props.option.satisfier ?? props.option.option}  
         subreq={props.subreq} 
-        // onRemoveCourse={props.onRemoveCourse} 
-				// onAddCourse={props.onAddCourse} 
+        showCode={props.option.show_code}
       />
     </div>
   );
 }
+
 
 function RenderSubrequirement(props: { 
 	edit: boolean, 
@@ -185,6 +183,9 @@ function Requirements(props: {
 
 	// const userConc = getStudentConcentration(user, props.majorsIndex);
 	const program = progDict[props.majorsIndex.prog];
+	// if(program.abbreviation !== "CPSC"){
+	// 	return(<div></div>)
+	// }
 	const conc = program?.degrees[props.majorsIndex.deg].concentrations[props.majorsIndex.conc];
 	
 	// const conc = userConc 
