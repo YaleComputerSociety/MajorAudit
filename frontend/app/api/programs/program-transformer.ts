@@ -76,7 +76,8 @@ export function createOptionMap(
       is_any_okay: safeBoolean(option.is_any_okay),
       is_CR_okay: safeBoolean(option.is_CR_okay),
       is_colsem_okay: safeBoolean(option.is_colsem_okay),
-      is_fysem_okay: safeBoolean(option.is_fysem_okay)
+      is_fysem_okay: safeBoolean(option.is_fysem_okay),
+			show_code: safeString(option.show_code)
     });
   });
   

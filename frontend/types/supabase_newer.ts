@@ -268,6 +268,7 @@ export type Database = {
       options: {
         Row: {
           course_id: number | null
+					show_code: string | null
           elective_range: string | null
           flags: string[] | null
           id: number
@@ -279,6 +280,7 @@ export type Database = {
         }
         Insert: {
           course_id?: number | null
+					show_code: string | null
           elective_range?: string | null
           flags?: string[] | null
           id?: number
@@ -290,6 +292,7 @@ export type Database = {
         }
         Update: {
           course_id?: number | null
+					show_code: string | null
           elective_range?: string | null
           flags?: string[] | null
           id?: number

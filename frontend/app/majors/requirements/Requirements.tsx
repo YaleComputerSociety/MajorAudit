@@ -26,6 +26,7 @@ function RenderSubrequirementCourse(props: {
         edit={props.edit ?? false} 
         contentCourse={props.option.satisfier ?? props.option.option}  
         subreq={props.subreq} 
+				showCode={props.option.show_code}
         // onRemoveCourse={props.onRemoveCourse} 
 				// onAddCourse={props.onAddCourse} 
       />
