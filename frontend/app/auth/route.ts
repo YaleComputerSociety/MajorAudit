@@ -12,8 +12,6 @@ export async function POST(req: Request) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
-  const cookieStore = await cookies();  // <-- 🔥 correctly await it
-
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
